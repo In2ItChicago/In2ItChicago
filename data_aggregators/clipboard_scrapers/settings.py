@@ -14,11 +14,6 @@ BOT_NAME = 'clipboard'
 SPIDER_MODULES = ['clipboard_scrapers.spiders']
 NEWSPIDER_MODULE = 'clipboard_scrapers.spiders'
 
-# SPIDER_MIDDLEWARES = {
-#     'scrapy.spidermiddlewares.offsite.OffsiteMiddleware': None
-# }
-
-
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'clipboardproject (+http://www.yourdomain.com)'
 
@@ -50,9 +45,9 @@ ROBOTSTXT_OBEY = True
 
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
-#SPIDER_MIDDLEWARES = {
-#    'clipboardproject.middlewares.ClipboardprojectSpiderMiddleware': 543,
-#}
+# SPIDER_MIDDLEWARES = {
+#    'clipboard_scrapers.middlewares.HistorySpiderMiddleware': 543,
+# }
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html

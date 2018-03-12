@@ -12,20 +12,23 @@ class Event(scrapy.Item):
     price = scrapy.Field()
     category = scrapy.Field()
 
-    # def __init__(self, organization, title, description, address, date, start_time, end_time, url, price, category):
-    #     self.organization = organization
-    #     self.title = title
-    #     self.description = description
-    #     self.address = address
-    #     self.date = date
-    #     self.start_time = start_time
-    #     self.end_time = end_time
-    #     self.url = url
-    #     self.price = price
-    #     self.category = category
+    def update(self, event):
+        for key, value in event.items():
+            self[key] = value
 
     def props_to_csv(self):
         return ','.join(self.keys()) + '\n'
 
     def vals_to_csv(self):
-        return ','.join(['"{0}"'.format(str(self[key]).replace('"', '')) for key in self.keys()]) + '\n'
+        return ','.join('"{0}"'.format(str(self[key]).replace('"', '')) for key in self.keys()) + '\n'
+
+class EventManager(object):
+    def __init__(self):
+        self.events = {}
+    
+    def update(self, key, event):
+        # Add properties to the event if it has been created already, else create a new event
+        if key in self.events:
+            self.events[key].update(event)
+        else:
+            self.events[key] = event

@@ -4,13 +4,11 @@ from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 from urllib import parse
 
-import sys
-import os
-sys.path.append(os.path.abspath('..'))
 from event import Event
 from categories import Category
+from spider_base import SpiderBase
 
-class HistorySpider(CrawlSpider):
+class HistorySpider(CrawlSpider, SpiderBase):
     name = 'history'
     allowed_domains = ['www.chicagohistory.org']
 
@@ -19,18 +17,13 @@ class HistorySpider(CrawlSpider):
     )
 
     def __init__(self, start_date, end_date):
-        super().__init__()
-        self.start_date = start_date
-        self.end_date = end_date
-        self.base_url = 'https://www.chicagohistory.org/'
-
-    def get_request(self, url, request_params):
-        return scrapy.Request('{0}{1}?{2}'.format(self.base_url, url, parse.urlencode(request_params)))
+        CrawlSpider.__init__(self)
+        SpiderBase.__init__(self, 'https://www.chicagohistory.org/', start_date, end_date)
 
     def start_requests(self):
-        yield self.get_request('events/', {
-                'start_date': '20180304',
-                'end_date': '20180420'
+        yield self.get_request('events', {
+                'start_date': self.start_date,
+                'end_date': self.end_date
             })
         
 
@@ -42,6 +35,7 @@ class HistorySpider(CrawlSpider):
         descriptions = response.css('.info::text').extract()
 
         for item in zip(titles, descriptions, links):
+            #self.event_manager.update(item[2], organization = 'Chicago History Museum', title = item[0], description = item[1], url = item[2])
             yield Event(
                 organization = 'Chicago History Museum',
                 title = item[0],
@@ -51,10 +45,12 @@ class HistorySpider(CrawlSpider):
 
     def parse_item(self, response):
         location = response.selector.xpath('//h3[contains(text(), "Event Location")]/following-sibling::div/p/text()').extract()
+        #self.event_manager.update(response.url, address = location)
         return Event(
             url = response.url,
             address = location
         )
 
     def closed(self, reason):
+        #print(self.event_manager.events)
         print(reason)

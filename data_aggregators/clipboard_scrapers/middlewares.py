@@ -23,7 +23,7 @@ class HistorySpiderMiddleware(object):
     def process_spider_input(self, response, spider):
         # Called for each response that goes through the spider
         # middleware and into the spider.
-
+        
         # Should return None or raise an exception.
         return None
 
