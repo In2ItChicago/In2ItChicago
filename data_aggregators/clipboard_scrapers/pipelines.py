@@ -17,4 +17,4 @@ class ClipboardPipeline(object):
         return item
 
     def close_spider(self, spider):
-        ScraperData.add_data(self.event_manager.events)
+        ScraperData.add_data(self.event_manager.events.values())
