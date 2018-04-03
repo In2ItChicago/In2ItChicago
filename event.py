@@ -4,6 +4,7 @@ from time_utils import TimeUtils
 
 class Event(scrapy.Item):
     date = scrapy.Field()
+    # setting start_time or end_time will also update time_range when __setitem__ is called and vice versa
     start_time = scrapy.Field()
     end_time = scrapy.Field()
     time_range = scrapy.Field()
@@ -16,6 +17,13 @@ class Event(scrapy.Item):
     category = scrapy.Field()
 
     time_helper = TimeUtils(date_format = '%m-%d-%Y', time_format = '%H:%M')
+
+    @classmethod
+    def from_dict(cls, event_dict):
+        event = cls()
+        for key, value in event_dict.items():
+            event[key] = value
+        return event
 
     def get_item_with_default(self, key, default = ''):
         try:

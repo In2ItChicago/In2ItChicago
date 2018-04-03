@@ -14,9 +14,9 @@ class LibraryEvents(ApiBase):
     def get_next_events_json(self, start):
         request_params = {
             'client_scope': 'events', 
-            'query': 'start={0}&rows={1}'.format(start, self.MAX_ROWS), 
+            'query': f'start={start}&rows={self.MAX_ROWS}',
             'facet_fields': 'branch_location_id', 
-            'local_start': '{0} TO {1}'.format(self.start_date, self.end_date),
+            'local_start': f'{self.start_date} TO {self.end_date}',
             'include_near_location': 'false'
         }
         return self.get_response_json('events/events/search', request_params, property_to_return = 'events')
@@ -66,12 +66,7 @@ class LibraryEvents(ApiBase):
 
     def get_address_string(self, location):
         # Any data that isn't included will be set to 'None', so just replace it with an empty string
-        return ('{0} {1} {2}, {3} {4}'.format(
-            location['number'], 
-            location['street'], 
-            location['city'], 
-            location['state'], 
-            location['zip'])).replace('None', '')
+        return f"{location['number']} {location['street']} {location['city']}, {location['state']} {location['zip']}".replace('None', '')
 
     def get_events(self):
         events_json = self.get_events_json()
@@ -107,7 +102,7 @@ class LibraryEvents(ApiBase):
                 date = details['start'],
                 start_time = start_time,
                 end_time = end_time,
-                url = ('{0}events/{1}').format(self.base_url, event['id']),
+                url = f'{self.base_url}/{event["id"]}',
                 price = 0.0,
                 category = Category.LIBRARY
             ))

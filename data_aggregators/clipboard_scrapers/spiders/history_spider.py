@@ -28,39 +28,41 @@ class HistorySpider(CrawlSpider, SpiderBase):
 
     def parse_start_url(self, response):
         def get_full_date(xpath_result):
+            result = []
             current_month = ''
-            for text in xpath_result:
+            for text in xpath_result.value:
+                # Month names are all greater than 2 characters
+                # Days of the month are all 2 characters or less
                 if len(text) > 2:
                     current_month = text
                 else:
-                    yield '{0} {1}'.format(text, current_month)
+                    result.append(f'{text} {current_month}')
+            return self.KeyValuePair(xpath_result.key, result)
 
-        titles = self.css_extract(response, 'a.title::text')
-        links = self.css_extract(response, 'a.title::attr(href)')
+        titles = self.css_extract('title', response, 'a.title::text')
+        urls = self.css_extract('url', response, 'a.title::attr(href)')
         # xpath doesn't return anything when the text is empty
-        times = self.css_remove_html(response, '.time')
+        times = self.css_remove_html('time_range', response, '.time')
         # xpath splits up the text when it contains html tags
-        days = get_full_date(self.xpath_extract(response, '''//div[contains(@class, "xcalendar-row")]//div[@class="number" or @class="month"]/span/text() |
+        dates = get_full_date(self.xpath_extract('date', response, '''//div[contains(@class, "xcalendar-row")]//div[@class="number" or @class="month"]/span/text() |
                                         //div[contains(@class, "xcalendar-row")]//div[@class="number" or @class="month"]/text()'''))
-        descriptions = self.css_remove_html(response, '.info')
+        descriptions = self.css_remove_html('description', response, '.info')
 
-        for item in zip(titles, descriptions, links, times, days):
-            yield Event(
-                organization = 'Chicago History Museum',
-                title = item[0],
-                description = item[1],
-                url = item[2],
-                time_range = item[3],
-                date = item[4]
-            )
+        for event in self.create_events(titles, descriptions, urls, times, dates):
+            event['organization'] = 'Chicago History Museum'
+            yield event
 
     def link_request(self, request):
+        # Store the original url in case it gets redirected later
         request.meta['clicked_url'] = request.url
         return request
 
     def parse_item(self, response):
-        location = self.xpath_remove_html(response, '//h3[contains(text(), "Event Location")]/following-sibling::div/p')
+        location = self.xpath_remove_html('location', response, '//h3[contains(text(), "Event Location")]/following-sibling::div/p')
+        price = self.css_remove_html('price', response, '.price', remove_all=True)
+
         return Event(
             url = response.meta['clicked_url'],
-            address = location
+            address = location.value,
+            price = price.value[0] if len(price.value) > 0 else '0'
         )

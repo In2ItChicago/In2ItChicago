@@ -28,17 +28,14 @@ class WpbccSpider(CrawlSpider, SpiderBase):
         return self.parse_link(response)
 
     def parse_link(self, response):
-        titles = self.css_extract(response, '.listerItem h2 a::text')
-        links = self.css_extract(response, '.listerItem h2 a::attr(href)')
-        times = self.xpath_extract(response, '//span[contains(text(), "Time: ")]/following-sibling::text()')
-        days = self.xpath_extract(response, '//span[contains(text(), "Date: ")]/following-sibling::text()')
-        locations = self.xpath_extract(response, '//span[contains(text(), "Address: ")]/following-sibling::text()')
-        descriptions = self.css_extract(response, '.blurb::text')
+        titles = self.css_extract('title', response, '.listerItem h2 a::text')
+        urls = self.css_extract('url', response, '.listerItem h2 a::attr(href)')
+        times = self.xpath_extract('time_range', response, '//span[contains(text(), "Time: ")]/following-sibling::text()')
+        dates = self.xpath_extract('date', response, '//span[contains(text(), "Date: ")]/following-sibling::text()')
+        addresses = self.xpath_extract('address', response, '//span[contains(text(), "Address: ")]/following-sibling::text()')
+        descriptions = self.css_extract('description', response, '.blurb::text')
 
-        for item in zip(titles, descriptions, links, days):
-            yield Event(
-                organization = 'Wicker Park and Bucktown Chamber of Commerce',
-                title = item[0],
-                description = item[1],
-                url = item[2]
-            )
+        for event in self.create_events(titles, urls, times, dates, addresses, descriptions):
+            if self.time_utils.day_is_between(event['date'], self.start_date, self.end_date):
+                event['organization'] = 'Wicker Park and Bucktown Chamber of Commerce'
+                yield event

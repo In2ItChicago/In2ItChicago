@@ -36,6 +36,7 @@ class TimeUtils:
         # Add an AM/PM suffix if required, else just add an empty string    
         times = list(map((lambda time: time.strip() + add_am_pm), times))
         
+        # If only one time supplied, return '' for the second one
         return times if len(times) > 1 else [times[0], '']
 
     def get_times(self, time_string):
@@ -43,4 +44,7 @@ class TimeUtils:
         return (self.get_time(start_time), self.get_time(end_time))
 
     def format_start_end(self, start, end):
-        return '{0} - {1}'.format(start, end)
+        return f'{start} - {end}'
+
+    def day_is_between(self, test_date, min_date, max_date):
+        return parse(min_date) <= parse(test_date) <= parse(max_date)
