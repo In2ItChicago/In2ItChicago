@@ -12,8 +12,8 @@ if __name__ == '__main__':
     # get_project_settings() can't find the settings unless we execute in the same directory as scrapy.cfg
     os.chdir('data_aggregators')
 
-    start_date = '2018-03-18'
-    end_date = '2018-04-20'
+    start_date = '2018-04-09'
+    end_date = '2018-05-20'
 
     process = CrawlerProcess(get_project_settings())
     process.crawl(HistorySpider, start_date, end_date)

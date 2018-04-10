@@ -28,11 +28,16 @@ class WpbccSpider(CrawlSpider, SpiderBase):
         return self.parse_link(response)
 
     def parse_link(self, response):
+        base_selector = response.css('.listerContent')
+        
         titles = self.css_extract('title', response, '.listerItem h2 a::text')
         urls = self.css_extract('url', response, '.listerItem h2 a::attr(href)')
-        times = self.xpath_extract('time_range', response, '//span[contains(text(), "Time: ")]/following-sibling::text()')
-        dates = self.xpath_extract('date', response, '//span[contains(text(), "Date: ")]/following-sibling::text()')
-        addresses = self.xpath_extract('address', response, '//span[contains(text(), "Address: ")]/following-sibling::text()')
+        times = self.xpath_empty_check_extract('time_range', base_selector, 'div/span[contains(text(), "Time: ")]/following-sibling::text()')
+        #times = self.xpath_extract('time_range', response, '//span[contains(text(), "Time: ")]/following-sibling::text()')
+        dates = self.xpath_empty_check_extract('date', base_selector, 'div/span[contains(text(), "Date: ")]/following-sibling::text()')
+        #dates = self.xpath_extract('date', response, '//span[contains(text(), "Date: ")]/following-sibling::text()')
+        addresses = self.xpath_empty_check_extract('address', base_selector, 'div/span[contains(text(), "Address: ")]/following-sibling::text()')
+        #addresses = self.xpath_extract('address', response, '//span[contains(text(), "Address: ")]/following-sibling::text()')
         descriptions = self.css_extract('description', response, '.blurb::text')
 
         for event in self.create_events(titles, urls, times, dates, addresses, descriptions):
