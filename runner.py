@@ -4,6 +4,7 @@ from scrapy.cmdline import execute
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 from data_aggregators.apis.library_events import LibraryEvents
+from data_aggregators.clipboard_scrapers.spiders.greatlakes_spider import GreatLakesSpider
 from data_aggregators.clipboard_scrapers.spiders.history_spider import HistorySpider
 from data_aggregators.clipboard_scrapers.spiders.wpbcc_spider import WpbccSpider
 from scraper_data import ScraperData
@@ -18,6 +19,7 @@ if __name__ == '__main__':
     process = CrawlerProcess(get_project_settings())
     process.crawl(HistorySpider, start_date, end_date)
     process.crawl(WpbccSpider, start_date, end_date)
+    process.crawl(GreatLakesSpider, start_date, end_date)
     process.start()
 
     library_events = LibraryEvents(start_date, end_date)

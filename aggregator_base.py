@@ -23,7 +23,7 @@ class AggregatorBase:
             return [self.remove_html(data, remove_all) for data in html_data]
 
         html_removed = BeautifulSoup(html_data, 'lxml').extract().text
-        misc_removed = re.sub(self.misc_text_to_remove, '', html_removed, re.UNICODE)
+        misc_removed = re.sub(self.misc_text_to_remove, '', html_removed, re.UNICODE).strip()
         if not remove_all:
             return misc_removed
         # Optionally remove all non-word characters and newlines (everything except numbers and letters)

@@ -22,7 +22,7 @@ class SpiderBase(AggregatorBase):
         return self.KeyValuePair(name, self.remove_html(css_result.value, remove_all))
 
     def extract(self, name, response, path, extractor):
-        return self.KeyValuePair(name, extractor(path).extract())
+        return self.KeyValuePair(name, list(map(lambda s: s.strip(), extractor(path).extract())))
     
     def empty_check_extract(self, name, base_selector, path, extractor):
         # Search for all values within the base selector and add a default value if nothing is found
