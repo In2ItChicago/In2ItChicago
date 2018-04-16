@@ -3,6 +3,7 @@ from event import Event
 from categories import Category
 from api_base import ApiBase
 from scraper_data import ScraperData
+from data_utils import DataUtils
 
 class LibraryEvents(ApiBase):
     # This is the max amount of rows that the API can return at one time
@@ -84,27 +85,29 @@ class LibraryEvents(ApiBase):
             else:
                 location = branch_locations[branch_location_id]
 
-            start_time = details['start']
-            end_time = details['end']
-            # Assume event is all day if no time is supplied
-            if start_time == end_time == '00:00':
+            try:
+                date, start_time = details['start'].split('T')
+                end_time = details['end'].split('T')[1]
+            except ValueError:
+                # Assume event is all day if no time is supplied
+                date = details['start']
                 start_time = end_time = 'All Day'
 
             # Don't show cancelled or full events
             if details['is_cancelled'] == True or event['is_full'] == True:
                 continue
 
-            events.append(Event(
-                organization = 'Chicago Public Library',
-                title = details['title'],
-                description = self.remove_html(details['description']),
-                address = self.get_address_string(location),
-                date = details['start'],
-                start_time = start_time,
-                end_time = end_time,
-                url = f'{self.base_url}/{event["id"]}',
-                price = 0.0,
-                category = Category.LIBRARY
-            ))
+            events.append(Event.from_dict(self.time_utils.old_date_format, {
+                'organization': 'Chicago Public Library',
+                'title': details['title'],
+                'description': DataUtils.remove_html(details['description']),
+                'address': self.get_address_string(location),
+                'date': date,
+                'start_time': start_time,
+                'end_time': end_time,
+                'url': f'{self.base_url}/{event["id"]}',
+                'price': 0.0,
+                'category': Category.LIBRARY
+            }))
 
         ScraperData.add_data(events)

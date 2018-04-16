@@ -3,7 +3,7 @@ import scrapy
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 
-from event import Event
+from event import Event, EventFieldData
 from categories import Category
 from spider_base import SpiderBase
 
@@ -17,7 +17,7 @@ class HistorySpider(CrawlSpider, SpiderBase):
 
     def __init__(self, start_date, end_date):
         CrawlSpider.__init__(self)
-        SpiderBase.__init__(self, 'https://www.chicagohistory.org/', start_date, end_date, date_format = '%Y%m%d')
+        SpiderBase.__init__(self, 'https://www.chicagohistory.org/', start_date, end_date, date_format = '%d %B %Y', request_date_format = '%Y%m%d')
 
     def start_requests(self):
         yield self.get_request('events', {
@@ -30,23 +30,21 @@ class HistorySpider(CrawlSpider, SpiderBase):
         def get_full_date(xpath_result):
             result = []
             current_month = ''
-            for text in xpath_result.value:
+            for text in xpath_result.data:
                 # Month names are all greater than 2 characters
-                # Days of the month are all 2 characters or less
+                # Days of the month are all 2 characters or fewer
                 if len(text) > 2:
                     current_month = text
                 else:
                     result.append(f'{text} {current_month}')
-            return self.KeyValuePair(xpath_result.key, result)
+            return EventFieldData(xpath_result.item, result)
 
-        titles = self.css_extract('title', response, 'a.title::text')
-        urls = self.css_extract('url', response, 'a.title::attr(href)')
-        # xpath doesn't return anything when the text is empty
-        times = self.css_remove_html('time_range', response, '.time')
-        # xpath splits up the text when it contains html tags
-        dates = get_full_date(self.xpath_extract('date', response, '''//div[contains(@class, "xcalendar-row")]//div[@class="number" or @class="month"]/span/text() |
+        titles = self.extract('title', response.css, 'a.title::text')
+        urls = self.extract('url', response.css, 'a.title::attr(href)')
+        times = self.extract('time_range', response.css, '.time').remove_html()
+        dates = get_full_date(self.extract('date', response.xpath, '''//div[contains(@class, "xcalendar-row")]//div[@class="number" or @class="month"]/span/text() |
                                         //div[contains(@class, "xcalendar-row")]//div[@class="number" or @class="month"]/text()'''))
-        descriptions = self.css_remove_html('description', response, '.info')
+        descriptions = self.extract('description', response.css, '.info').remove_html()
 
         for event in self.create_events(titles, descriptions, urls, times, dates):
             event['organization'] = 'Chicago History Museum'
@@ -58,11 +56,11 @@ class HistorySpider(CrawlSpider, SpiderBase):
         return request
 
     def parse_item(self, response):
-        location = self.xpath_remove_html('location', response, '//h3[contains(text(), "Event Location")]/following-sibling::div/p')
-        price = self.css_remove_html('price', response, '.price', remove_all=True)
+        location = self.extract('location', response.xpath, '//h3[contains(text(), "Event Location")]/following-sibling::div/p').remove_html()
+        price = self.extract('price', response.css, '.price').remove_html(True)
 
         return Event(
             url = response.meta['clicked_url'],
-            address = location.value,
-            price = price.value[0] if len(price.value) > 0 else '0'
+            address = location.data,
+            price = price.data[0] if len(price.data) > 0 else '0'
         )

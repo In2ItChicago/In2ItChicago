@@ -23,22 +23,16 @@ class WpbccSpider(CrawlSpider, SpiderBase):
         yield self.get_request('events/', {
                 'mrkrs': 'Chamber'
             })
-        
-    def parse_start_url(self, response):
-        return self.parse_link(response)
 
-    def parse_link(self, response):
+    def parse_start_url(self, response):
         base_selector = response.css('.listerContent')
         
-        titles = self.css_extract('title', response, '.listerItem h2 a::text')
-        urls = self.css_extract('url', response, '.listerItem h2 a::attr(href)')
-        times = self.xpath_empty_check_extract('time_range', base_selector, 'div/span[contains(text(), "Time: ")]/following-sibling::text()')
-        #times = self.xpath_extract('time_range', response, '//span[contains(text(), "Time: ")]/following-sibling::text()')
-        dates = self.xpath_empty_check_extract('date', base_selector, 'div/span[contains(text(), "Date: ")]/following-sibling::text()')
-        #dates = self.xpath_extract('date', response, '//span[contains(text(), "Date: ")]/following-sibling::text()')
-        addresses = self.xpath_empty_check_extract('address', base_selector, 'div/span[contains(text(), "Address: ")]/following-sibling::text()')
-        #addresses = self.xpath_extract('address', response, '//span[contains(text(), "Address: ")]/following-sibling::text()')
-        descriptions = self.css_extract('description', response, '.blurb::text')
+        titles = self.extract('title', response.css, '.listerItem h2 a::text')
+        urls = self.extract('url', response.css, '.listerItem h2 a::attr(href)')
+        times = self.empty_check_extract('time_range', base_selector, 'xpath', 'div/span[contains(text(), "Time: ")]/following-sibling::text()')
+        dates = self.empty_check_extract('date', base_selector, 'xpath', 'div/span[contains(text(), "Date: ")]/following-sibling::text()')
+        addresses = self.empty_check_extract('address', base_selector, 'xpath', 'div/span[contains(text(), "Address: ")]/following-sibling::text()')
+        descriptions = self.extract('description', response.css, '.blurb::text')
 
         for event in self.create_events(titles, urls, times, dates, addresses, descriptions):
             if self.time_utils.day_is_between(event['date'], self.start_date, self.end_date):
