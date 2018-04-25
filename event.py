@@ -4,7 +4,6 @@ from time_utils import TimeUtils
 from data_utils import DataUtils
 
 class Event(scrapy.Item):
-    date = scrapy.Field()
     # setting start_time or end_time will also update time_range when __setitem__ is called and vice versa
     start_time = scrapy.Field()
     end_time = scrapy.Field()
