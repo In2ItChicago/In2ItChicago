@@ -4,12 +4,7 @@ This repository contains the code for spiders that scrape the data off calendar 
 
 ## Dependencies
 
-Install with `pip3 install`:
-Scrapy
-DateRangeParser
-python-dateutil
-bs4
-requests
+Install dependencies with `pip3 install Scrapy DateRangeParser python-dateutil bs4 requests`
 
 ## Running scrapers
 
