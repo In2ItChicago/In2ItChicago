@@ -118,3 +118,6 @@ venv.bak/
 # Visual Studio Code
 .settings/
 .vscode/
+
+# Couchbase data
+clipboard_db/db_data

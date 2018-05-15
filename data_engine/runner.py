@@ -45,8 +45,8 @@ if __name__ == '__main__':
     crawlerProcess.crawl(GreatLakesSpider, start_date, end_date)
     crawlerProcess.crawl(LWVchicago, start_date, end_date)
 
-    #library_events = LibraryEvents(start_date, end_date)
-    #library_events.get_events()
+    library_events = LibraryEvents(start_date, end_date)
+    library_events.get_events()
     apiProcess.start_api_calls(start_date, end_date, LibraryEvents)
     crawlerProcess.start()
     crawlerProcess.join()

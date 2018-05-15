@@ -40,11 +40,11 @@ class LWVchicago(Spider, SpiderBase):
         #Full name and description
         #self.response.xpath('//td[@scope]/following-sibling::*[name() = "td" and (position() = 2)]').extract()
 
-        def _parse_description(self):
-            all_descriptions = self.extract('description', 'xpath', '//td[@scope]/following-sibling::*[name() = "td" and (position() = 2)]').remove_html()
-            
-            output = []
-            for desc in all_descriptions:
-                strip = desc.split('</span>')[1].strip('[\n</td></p></a></b>]')
+    def _parse_description(self):
+        all_descriptions = self.extract('description', 'xpath', '//td[@scope]/following-sibling::*[name() = "td" and (position() = 2)]').remove_html()
+        
+        output = []
+        for desc in all_descriptions:
+            strip = desc.split('</span>')[1].strip('[\n</td></p></a></b>]')
 
-            return output
+        return output

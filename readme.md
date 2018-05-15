@@ -10,3 +10,39 @@ Install dependencies with `pip3 install Scrapy DateRangeParser python-dateutil b
 
 In command line: `python3 -m runner`
 This will print out the results of the scrape. To debug one specific scraper, comment out the other scrapers in runner.py
+
+# Clipboard App
+
+## Setup
+
+### Python
+For Windows, I recommend using [Anaconda](https://www.anaconda.com/download/) to manage your Python environments because it comes with a lot of packages preinstalled that are difficult to set up without Anaconda.
+For Mac and Linux, it's not nearly as necessary.
+
+### Setup Docker
+For Windows, download from [here](https://docs.docker.com/toolbox/toolbox_install_windows/). Documentation is [here](https://docs.docker.com/toolbox/overview/)
+For Mac, download from [here](https://www.docker.com/docker-mac). Documentation is [here](https://docs.docker.com/docker-for-mac/).
+For Linux, download from your package manager. Documentation is [here](https://docs.docker.com/install/linux/docker-ce/ubuntu/) (Other distros have links on the side)
+When installing the Windows version, I was unable to get Kinematic to work, so I would recommend skipping that.
+Make sure you follow any OS and distro-specific instructions for setting up Docker. It may be helpful to go through the getting started guide [here](https://docs.docker.com/get-started/).
+
+If you're running Windows, make sure virtualization is enabled in the BIOS. After changing those settings, do a full reboot cycle, otherwise Windows may not report that the settings have changed. If you're running Windows 10 Professional, you'll need to disable Hyper-V from the "Turn Windows Features On or Off" dialog. Also, when you start Windows, you'll want to start the VirtualBox instance manually before starting Docker or Docker will complain about not having an IP address.
+
+There is a newer version of Docker for Windows, but it only works on Windows Professional, and at the time of writing this, currently contains a bug which prevents Couchbase from mounting its storage volume.
+
+Next, we need to set some environment variables. For Windows, go to the environment variables section in the control panel. Look for a variable called DOCKER_HOST. Add another variable called DOCKER_IP which is the same as DOCKER_HOST, 
+but with the tcp prefix and the port number removed. For example, if DOCKER_HOST is tcp://192.168.1.11:2376, DOCKER_IP should be 192.168.1.11. Add another one called DB_CLIENT_IP with a value of 127.0.0.1. 
+I believe Mac and Linux can use localhost to connect to Docker. If so, add the lines `export DOCKER_IP=localhost` and `export DB_CLIENT_IP=127.0.0.1` to your `.bashrc` file. The DOCKER_IP variable is necessary because the versions of Docker that run on 
+VirtualBox generate an IP address that is dependent on the host's configuration, so the code will read this variable to know where to make HTTP requests. The DB_CLIENT_IP variable is because the client needs to 
+run on 0.0.0.0 inside the Docker container, which is the internal IP address that Docker containers use to communicate with each other, but it needs to run on 127.0.0.1 outside the container.
+
+Open a Docker terminal on Windows or a normal terminal otherwise, and `cd` into the directory you pulled the code into.
+`cd` again into the `build_client_image` directory and run `./build.sh` script to create the base image that will run the Couchbase client. 
+This will take a few minutes to run. After it completes, run `docker image ls` and verify that an image called `clipboarddbclient` exists.
+
+`cd ..` to get back to the main directory and run `docker-compose build` then `docker-compose up`. This will eventually throw an error about an invalid username/password combination, but that is only because the database is set up.
+Open a web browser and navigate to `your.docker.ip:8091` if on Windows or `localhost:8091` if not. It may take a minute or two, but eventually you should be able to connect and a webpage that says "Couchbase Server" will appear.
+Once this happens, `cd` into the `clipboard_db` directory and run `./create_db.sh`. Once that completes, refresh the Couchbase web page. If all went well, you should see a login prompt. Login with username "admin" and password "clipboard".
+Click on "Buckets" on the sidebar and verify that a bucket called "event" exists. Now, go back to the command prompt and run `./create_indexes.sh`. Go to the "Indexes" tab on the web page and verify that an index was created. 
+This script has to be run after the database creation script because it takes a minute for the index service to initialize and it'll throw an error if you try to create the index too quickly. Once the database is configured, 
+press `Ctrl+C` in the terminal running Docker to close the container, then run `docker-compose up` again to start the newly-configued container. 
