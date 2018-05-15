@@ -41,13 +41,17 @@ class SpiderBase(AggregatorBase):
         
         return EventFieldData(name, data)
 
-    def create_events(self, *args):
+    def create_events(self, organization, *args):
         count = len(args[0].data)
         for arg in args:
             if len(arg.data) != count:
                 # All selectors must return the same amount of data because it's impossible to know which event is missing data otherwise
                 raise ValueError('Selectors returned data of differing lengths')
 
-        return [Event.from_dict(self.time_utils.old_date_format, {arg.item: arg.data[i] for arg in args}) for i in range(count)]
+        events = (Event.from_dict({arg.item: arg.data[i] for arg in args}, self.time_utils.date_format) for i in range(count))
+        for event in events:
+            if self.time_utils.time_range_is_between(event['start_timestamp'], event['end_timestamp'], self.start_timestamp, self.end_timestamp):
+                event['organization'] = organization
+                yield event
             
 

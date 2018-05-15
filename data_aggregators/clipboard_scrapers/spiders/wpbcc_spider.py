@@ -34,7 +34,4 @@ class WpbccSpider(CrawlSpider, SpiderBase):
         addresses = self.empty_check_extract('address', base_selector, 'xpath', 'div/span[contains(text(), "Address: ")]/following-sibling::text()')
         descriptions = self.extract('description', response.css, '.blurb::text')
 
-        for event in self.create_events(titles, urls, times, dates, addresses, descriptions):
-            if self.time_utils.day_is_between(event['date'], self.start_date, self.end_date):
-                event['organization'] = 'Wicker Park and Bucktown Chamber of Commerce'
-                yield event
+        return self.create_events('Wicker Park/Bucktown Chamber of Commerce', titles, urls, times, dates, addresses, descriptions)

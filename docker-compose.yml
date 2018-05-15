@@ -1,0 +1,16 @@
+version: '3.6'
+services:
+  clipboard_db:
+    build: "./clipboard_db"
+    ports:
+      - "8091-8094:8091-8094"
+      - "11210:11210"
+    volumes:
+      - ./clipboard_db/db_data:/opt/couchbase/var
+  clipboard_db_client:
+    build: "./clipboard_db_client"
+    ports:
+      - "5000:5000"
+    environment:
+      - DOCKER_IP=${DOCKER_IP}
+      - DB_CLIENT_IP=0.0.0.0

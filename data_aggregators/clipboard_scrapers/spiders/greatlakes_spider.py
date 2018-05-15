@@ -31,8 +31,4 @@ class GreatLakesSpider(Spider, SpiderBase):
             DataUtils.remove_excess_spaces)
         descriptions = self.extract('description', response.css, '.tribe-events-list-event-description').remove_html()
 
-        for event in self.create_events(titles, urls, dates, time_ranges, addresses, descriptions):
-            if self.time_utils.day_is_between(event['date'], self.start_date, self.end_date) and ' IL ' in event[
-                'address']:
-                event['organization'] = 'Alliance for the Great Lakes'
-                yield event
+        return self.create_events('Alliance for the Great Lakes', titles, urls, dates, time_ranges, addresses, descriptions)

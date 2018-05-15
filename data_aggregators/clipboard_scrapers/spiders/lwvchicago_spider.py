@@ -9,7 +9,7 @@ from spider_base import SpiderBase
 
 class LWVchicago(Spider, SpiderBase):
     name = 'lwvchicago'
-    allowed_domains = ['http://lwvchicago.org/']
+    allowed_domains = ['lwvchicago.org']
 
     # My understanding is that the rule sets parameters for crawling, 
     # since this site uses a static table for events, no rule is needed
@@ -32,7 +32,4 @@ class LWVchicago(Spider, SpiderBase):
         # Need to figure out how to extract text in a block, not breaking on newlines
         addresses = self.extract('address', response.xpath, '//td[@scope]/following-sibling::*[name() = "td" and (position() = 1)]').remove_html()
 
-        for event in self.create_events(titles, times, dates, addresses, descriptions):
-            if self.time_utils.day_is_between(event['date'], self.start_date, self.end_date):
-                event['organization'] = 'League of Women Voters of Chicago'
-                yield event
+        return self.create_events('League of Women Voters of Chicago', titles, times, dates, addresses, descriptions)

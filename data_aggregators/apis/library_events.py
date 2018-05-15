@@ -2,7 +2,6 @@ import time
 from event import Event
 from categories import Category
 from api_base import ApiBase
-from scraper_data import ScraperData
 from data_utils import DataUtils
 
 class LibraryEvents(ApiBase):
@@ -97,7 +96,7 @@ class LibraryEvents(ApiBase):
             if details['is_cancelled'] == True or event['is_full'] == True:
                 continue
 
-            events.append(Event.from_dict(self.time_utils.old_date_format, {
+            events.append(Event.from_dict({
                 'organization': 'Chicago Public Library',
                 'title': details['title'],
                 'description': DataUtils.remove_html(details['description']),
@@ -108,6 +107,6 @@ class LibraryEvents(ApiBase):
                 'url': f'{self.base_url}/{event["id"]}',
                 'price': 0.0,
                 'category': Category.LIBRARY
-            }))
-
-        ScraperData.add_data(events)
+            }, self.time_utils.date_format))
+        self.save_events(events)
+        #ScraperData.add_data(events)

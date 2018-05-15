@@ -26,5 +26,14 @@ class ApiBase(AggregatorBase):
         
     def get_response_json(self, url, request_params, property_to_return = None):
         response = self.get_response(url, request_params)
+        if not response.ok:
+            raise ValueError(response.text)
         response_json = self.parse_response_json(response)
         return response_json if property_to_return == None else response_json[property_to_return]
+
+    def get_events(self):
+        # Override me
+        pass
+
+    def save_events(self, events):
+        return super(ApiBase, self).save_events([event.to_dict() for event in events])

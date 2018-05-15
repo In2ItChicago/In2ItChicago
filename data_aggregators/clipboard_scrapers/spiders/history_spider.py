@@ -46,9 +46,7 @@ class HistorySpider(CrawlSpider, SpiderBase):
                                         //div[contains(@class, "xcalendar-row")]//div[@class="number" or @class="month"]/text()'''))
         descriptions = self.extract('description', response.css, '.info').remove_html()
 
-        for event in self.create_events(titles, descriptions, urls, times, dates):
-            event['organization'] = 'Chicago History Museum'
-            yield event
+        return self.create_events('Chicago History Museum', titles, descriptions, urls, times, dates)
 
     def link_request(self, request):
         # Store the original url in case it gets redirected later

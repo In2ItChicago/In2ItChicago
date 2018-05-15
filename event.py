@@ -4,10 +4,8 @@ from time_utils import TimeUtils
 from data_utils import DataUtils
 
 class Event(scrapy.Item):
-    # setting start_time or end_time will also update time_range when __setitem__ is called and vice versa
-    start_time = scrapy.Field()
-    end_time = scrapy.Field()
-    time_range = scrapy.Field()
+    start_timestamp = scrapy.Field()
+    end_timestamp = scrapy.Field()
     organization = scrapy.Field()
     title = scrapy.Field()
     description = scrapy.Field()
@@ -15,25 +13,43 @@ class Event(scrapy.Item):
     url = scrapy.Field()
     price = scrapy.Field()
     category = scrapy.Field()
-    # start_date and end_date will automatically be updated based on whether date contains one or two dates
-    date = scrapy.Field()
-    start_date = scrapy.Field()
-    end_date = scrapy.Field()
-    is_multiple_days = scrapy.Field()
-    time_helper = TimeUtils()
 
-    def set_time_format(self, old_date_format):
-        self.time_helper.old_date_format = old_date_format
-        self.time_helper.new_date_format = '%m-%d-%Y'
+    time_utils = TimeUtils()
+
+    def set_time_format(self, date_format):
+        self.time_utils.date_format = date_format
+
+    @staticmethod
+    def create_time_data():
+        return {
+            'time': None,
+            'start_time': None,
+            'end_time': None,
+            'time_range': None,
+            'date': None,
+            'start_date': None,
+            'end_date': None,
+            'start_timestamp': None,
+            'end_timestamp': None
+        }
 
     @classmethod
-    def from_dict(cls, old_date_format, event_dict):
+    def from_dict(cls, event_dict, date_format=''):
         event = cls()
-        event.set_time_format(old_date_format)
+        event.set_time_format(date_format)
+
+        time_data = Event.create_time_data()
         
         for key, value in event_dict.items():
-            event[key] = value
+            if key in time_data:
+                time_data[key] = value
+            else:
+                event[key] = value
+        event['time_data'] = time_data
         return event
+
+    def to_dict(self):
+        return { key: self[key] for key in self.keys() }
 
     def get_item_with_default(self, key, default = ''):
         try:
@@ -45,31 +61,17 @@ class Event(scrapy.Item):
         # Unfortunately, property decorators don't work with dictionary keys
         # Instead, intercept the __setitem__ call for certain properties and format them before saving
         scrapy_set_item = super().__setitem__
-        if key == 'date':
-            start, end = self.time_helper.get_dates(value)
-            scrapy_set_item('is_multiple_days', end != None)
-            scrapy_set_item('date', self.time_helper.format_start_end(start, end) if end != None else start)
-            if end == None:
-                end = start
-            scrapy_set_item('start_date', start)
-            scrapy_set_item('end_date', end)
-
-        # time_range = start_time - end_time
-        # Whenever one property changes, also update the other one(s)
-        elif key in ('start_time', 'end_time'):
-            scrapy_set_item(key, self.time_helper.get_time(value))
-            start = self.get_item_with_default('start_time')
-            end = self.get_item_with_default('end_time')
-            scrapy_set_item('time_range', self.time_helper.format_start_end(start, end))
-
-        elif key == 'time_range':
-            start, end = self.time_helper.get_times(value)
-            scrapy_set_item('start_time', start)
-            scrapy_set_item('end_time', end)
-            scrapy_set_item('time_range', self.time_helper.format_start_end(start, end))
+        if key == 'time_data':
+            start_timestamp, end_timestamp = self.time_utils.get_timestamps(value)
+            scrapy_set_item('start_timestamp', start_timestamp)
+            scrapy_set_item('end_timestamp', end_timestamp)
 
         elif key == 'url':
             scrapy_set_item(key, value.strip().rstrip('//'))
+
+        elif key == 'category':
+            # Can't serialze enums to json
+            scrapy_set_item(key, value.name)
 
         else:
             super().__setitem__(key, value)

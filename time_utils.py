@@ -1,33 +1,101 @@
 import dateutil.parser
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
+import time
 import daterangeparser
 import re
 import pyparsing
 from data_utils import DataUtils
 
 class TimeUtils:
-    def __init__(self, old_date_format = '', new_date_format = ''):
-        self.old_date_format = old_date_format
-        self.new_date_format = new_date_format
-        self.new_time_format = '%H:%M'
+    def __init__(self, date_format=''):
+        # date_format is the format string that represents the formatting of the date strings 
+        # that will be passed in to methods in this class
+        self.date_format = date_format
 
-    def parse_new_or_old(self, test_string):
+    def get_timestamp(self, date, time=None):
+        if time != None:
+            date += relativedelta(hour=time.hour, minute=time.minute)
+        return self.datetime_to_timestamp(date)
+    
+    def get_timestamps(self, time_data):
+        parsed_start_date = None
+        parsed_end_date = None
+        parsed_start_time = None
+        parsed_end_time = None
+
+        min_timestamp = None
+        max_timestamp = None
+
+        if time_data['start_timestamp'] != None:
+            return time_data['start_timestamp'], time_data['end_timestamp']
+
+        if time_data['date'] != None:
+            parsed_start_date, parsed_end_date = self.parse_date(time_data['date'])
+        elif time_data['start_date'] != None and time_data['end_date'] != None:
+            parsed_start_date = self.parse_date_string(time_data['start_date'])
+            parsed_end_date = self.parse_date_string(time_data['end_date'])
+        else:
+            raise ValueError('Either date or start and end date must be set')
+
+        if time_data['start_time'] != None:
+            parsed_start_time = self.parse_time(time_data['start_time'])
+            parsed_end_time = self.parse_time(time_data['end_time'])
+        elif time_data['time_range'] != None:
+            parsed_start_time, parsed_end_time = self.parse_times(time_data['time_range'])
+        
+        if parsed_start_time == None:
+            min_timestamp = self.min_timestamp_for_day(parsed_start_date)
+        else:
+            min_timestamp = self.get_timestamp(parsed_start_date, parsed_start_time)
+
+        if parsed_end_time == None:
+            max_timestamp = self.max_timestamp_for_day(parsed_end_date)
+        else:
+            max_timestamp = self.get_timestamp(parsed_end_date, parsed_end_time)
+
+        return min_timestamp, max_timestamp
+
+    def min_timestamp_for_day(self, date):
+        if isinstance(date, str):
+            date = self.parse_date_string(date)
+        return self.get_timestamp(date + relativedelta(hour=0, minute=0))
+    
+    def max_timestamp_for_day(self, date):
+        if isinstance(date, str):
+            date = self.parse_date_string(date)
+        return self.get_timestamp(date + relativedelta(hour=23, minute=59))
+    
+    def datetime_to_timestamp(self, date):
+        return int(time.mktime(date.timetuple()))
+
+    def convert_date_format(self, date_string, new_format):
+        parsed_date = self.parse_date_string(date_string)
+        if parsed_date == None:
+            return None
+        return parsed_date.strftime(new_format)
+
+    def parse_date_string(self, test_string):
         try:
-            return datetime.strptime(test_string, self.old_date_format)
+            parsed_date = datetime.strptime(test_string, self.date_format)
+            parsed_date = self.set_year(parsed_date)
+            now = datetime.now().replace(hour = 0, minute = 0, second = 0, microsecond = 0)
+
+            # We won't be querying for any dates in the past
+            # If the year isn't explicitly set and the month is in the past,
+            # then the event must be in the next year
+            if parsed_date < now:
+                parsed_date += relativedelta(years = +1)
+            return parsed_date
         except ValueError:
-            try:
-                return datetime.strptime(test_string, self.new_date_format)
-            except ValueError:
-                return None
+            return None
 
     def parse_date(self, test_string):
         test_string = DataUtils.remove_excess_spaces(test_string)
-        # First, try to parse the date according the the specified formats
-        parsed_date = self.parse_new_or_old(test_string)
+        # First, try to parse the date according the the specified format
+        parsed_date = self.parse_date_string(test_string)
         if parsed_date != None:
-            return parsed_date, None
-
+            return parsed_date, parsed_date
         try:
             # If that fails, try to parse the date as a date range string
             return daterangeparser.parse(test_string)
@@ -42,9 +110,9 @@ class TimeUtils:
             end = None
             while test_end < len(test_string):
                 if start == None:
-                    start = self.parse_new_or_old(test_string[0:test_end])
+                    start = self.parse_date_string(test_string[0:test_end])
                 if end == None:
-                    end = self.parse_new_or_old(test_string[test_start:len(test_string)])
+                    end = self.parse_date_string(test_string[test_start:len(test_string)])
 
                 if start != None and end != None:
                     break
@@ -57,35 +125,19 @@ class TimeUtils:
             
             return start, end
 
-    def get_dates(self, date_string):
-        if date_string == None or len(date_string) == 0:
-            return None, None
-        
-        start, end = self.parse_date(date_string)
-        if end == None:
-            return self.convert_parsed_date_format(start), None
-        else:
-            return self.convert_parsed_date_format(start), self.convert_parsed_date_format(end)
-    
-    def convert_parsed_date_format(self, parsed_date):
-        now = datetime.now().replace(hour = 0, minute = 0, second = 0, microsecond = 0)
+    def set_year(self, date_obj):
+        if date_obj.year == 1900:
+            date_obj += relativedelta(year=datetime.now().year)
+        return date_obj
 
-        # We won't be querying for any dates in the past
-        # If the year isn't explicitly set and the month is in the past,
-        # then the event must be in the next year
-        if parsed_date < now:
-            parsed_date += relativedelta(years = +1)
-
-        return parsed_date.strftime(self.new_date_format)
-
-    def get_time(self, time_string):
+    def parse_time(self, time_string):
         if time_string == None:
             return None
         try:
-            return dateutil.parser.parse(time_string).strftime(self.new_time_format)
+            return dateutil.parser.parse(time_string) #.strftime(self.new_time_format)
         # Time possibly set to something like 'All Day'
         except ValueError:
-            return time_string
+            return None
 
     def split_time(self, time_string):
         # Find instances of AM or PM
@@ -108,24 +160,18 @@ class TimeUtils:
         # If only one time supplied, return None for the second one
         return times if len(times) > 1 else (times[0], None)
 
-    def get_times(self, time_string):
+    def parse_times(self, time_string):
         start_time, end_time = self.split_time(time_string)
-        return self.get_time(start_time), self.get_time(end_time)
+        return self.parse_time(start_time), self.parse_time(end_time)
 
     def format_start_end(self, start, end):
         if end == None:
             end = ''
         return f'{start} - {end}'
 
-    def parsed_day_is_between(self, parsed_test, parsed_min, parsed_max):
-        if parsed_test == None:
-            return False
-        return parsed_min <= parsed_test <= parsed_max
+    def time_is_between(self, timestamp, min_timestamp, max_timestamp):
+        return min_timestamp <= timestamp <= max_timestamp
 
-    def day_is_between(self, test_date, min_date, max_date):
-        parsed_min = dateutil.parser.parse(min_date)
-        parsed_max = dateutil.parser.parse(max_date)
-        start, end = self.parse_date(test_date)
-
-        return self.parsed_day_is_between(start, parsed_min, parsed_max) or \
-            self.parsed_day_is_between(end, parsed_min, parsed_max)
+    def time_range_is_between(self, start_timestamp, end_timestamp, min_timestamp, max_timestamp):
+        return self.time_is_between(start_timestamp, min_timestamp, max_timestamp) and \
+            self.time_is_between(end_timestamp, min_timestamp, max_timestamp)

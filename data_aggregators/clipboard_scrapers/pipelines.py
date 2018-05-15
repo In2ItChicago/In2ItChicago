@@ -5,7 +5,8 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 from event import EventManager
-from scraper_data import ScraperData
+import requests
+import json
 
 class ClipboardPipeline(object):
     def __init__(self):
@@ -17,4 +18,6 @@ class ClipboardPipeline(object):
         return item
 
     def close_spider(self, spider):
-        ScraperData.add_data(self.event_manager.events.values())
+        if len(self.event_manager.events) == 0:
+            print('No data returned for ' + spider.base_url)
+        spider.save_events([event.to_dict() for event in list(self.event_manager.events.values())])

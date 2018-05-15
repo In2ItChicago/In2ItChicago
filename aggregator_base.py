@@ -3,6 +3,7 @@ import json
 import re
 from time_utils import TimeUtils
 from bs4 import BeautifulSoup
+import requests
 
 class AggregatorBase:
     # This class includes functionality that should be shared by spiders and API-based classes
@@ -12,9 +13,24 @@ class AggregatorBase:
         if request_date_format == None:
             request_date_format = date_format
 
-        self.time_utils = TimeUtils(old_date_format=date_format, new_date_format='%m-%d-%Y')
+        self.time_utils = TimeUtils(date_format)
         self.base_url = base_url
         
-        request_format_utils = TimeUtils(old_date_format='%m-%d-%Y', new_date_format=request_date_format)
-        self.start_date = request_format_utils.get_dates(start_date)[0]
-        self.end_date = request_format_utils.get_dates(end_date)[0]
+        request_format_utils = TimeUtils('%m-%d-%Y')
+        self.start_date = request_format_utils.convert_date_format(start_date, request_date_format)
+        self.end_date = request_format_utils.convert_date_format(end_date, request_date_format)
+        self.start_timestamp = request_format_utils.min_timestamp_for_day(start_date)
+        self.end_timestamp = request_format_utils.max_timestamp_for_day(end_date)
+
+        try:
+            self.docker_ip = os.environ['DOCKER_IP']
+        except KeyError:
+            print('Error: DOCKER_IP not set. If this value was recently set, close all python processes and try again')
+
+    def save_events(self, event_list):
+        if len(event_list) == 0:
+            return
+        
+        response = requests.post(f'http://{self.docker_ip}:5000/putevents', json = event_list)
+        if not response.ok:
+            raise ValueError(response.content)
