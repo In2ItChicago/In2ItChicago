@@ -53,13 +53,10 @@ If you're new to Docker or you're recovering from a failed installation attempt,
 ## Docker Installation
 Run: `sudo apt-get update`<br/>
 Install the following packages:<br/>
-`
-sudo apt-get install \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    software-properties-common
-`<br/>
+`sudo apt-get install apt-transport-https`<br/>
+`sudo apt-get install ca-certificates`<br/>
+`sudo apt-get install curl`<br/>
+`sudo apt-get install software-properties-common`<br/>
 These allow apt to use a repository over HTTPs
 
 Add Docker's official GNU Privacy Guard (GPG) key<br/>
@@ -83,6 +80,8 @@ Verify that Docker installed correctly with: `sudo docker run hello-world`<br/>
 You should see, "Hello from Docker!"
 
 When docker was installed, the docker user group was created, but no users were added to it, you'll need to run docker commands with sudo.
+
+Add the lines to the ~/.bashrc file `export DOCKER_IP=localhost` and `export DB_CLIENT_IP=127.0.0.1`
 
 ### Installation Problems
 If there were problems during the installation, try removing docker and starting over.<br/>
