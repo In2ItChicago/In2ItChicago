@@ -51,42 +51,42 @@ press `Ctrl+C` in the terminal running Docker to close the container, then run `
 If you're new to Docker or you're recovering from a failed installation attempt, it's best to start by uninstalling older versions of Docker: `sudo apt-get remove docker docker-engine docker.io`
 
 ## Docker Installation
-Run: `sudo apt-get update`
-Install the following packages:
+Run: `sudo apt-get update`<br/>
+Install the following packages:<br/>
 `
 sudo apt-get install \
     apt-transport-https \
     ca-certificates \
     curl \
     software-properties-common
-`
+`<br/>
 These allow apt to use a repository over HTTPs
 
-Add Docker's official GNU Privacy Guard (GPG) key
-`curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -`
+Add Docker's official GNU Privacy Guard (GPG) key<br/>
+`curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -`<br/>
 This should print, "OK" to the terminal.
 
-Run: `sudo apt-key fingerprint 0EBFCD88`
+Run: `sudo apt-key fingerprint 0EBFCD88`<br/>
 Verify that the Key Fingerprint line shows: 9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88
 
-Set up the stable Docker repository:
+Set up the stable Docker repository:<br/>
 `
 sudo add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
    $(lsb_release -cs) \
    stable"
 `
-Run: `sudo apt-get update` again.
+Run: `sudo apt-get update` again.<br/>
 Install the latest version of Docker CE: `sudo apt-get install docker-ce`
 
-Verify that Docker installed correctly with: `sudo docker run hello-world`
+Verify that Docker installed correctly with: `sudo docker run hello-world`<br/>
 You should see, "Hello from Docker!"
 
 When docker was installed, the docker user group was created, but no users were added to it, you'll need to run docker commands with sudo.
 
 ### Installation Problems
-If there were problems during the installation, try removing docker and starting over.
-`sudo apt-get purge docker-ce`
+If there were problems during the installation, try removing docker and starting over.<br/>
+`sudo apt-get purge docker-ce`<br/>
 `sudo rm -rf /var/lib/docker`
 
 ## Docker Compose installation
@@ -97,40 +97,40 @@ Add executable permissions to the docker-compose binary: `sudo chmod +x /usr/loc
 Run `docker-compose --version` to verify it installed correctly. It should show a version and build number similar to:
 "docker-compose version 1.21.2, build 1719ceb"
 
-If the docker-compose command doesn't work, add the following line to your ~/.bashrc file
-`export PATH="/usr/bin/docker-compose:$PATH"`
+If the docker-compose command doesn't work, add the following line to your ~/.bashrc file<br/>
+`export PATH="/usr/bin/docker-compose:$PATH"`<br/>
 Close and reopen your terminal(s) to apply the changes.
 
 ## Running the ClipboardApp Docker project
-Clone the ClipboardApp repository: `git clone https://github.com/ClipboardProject/ClipboardApp.git`
-Switch to the dockerconfig branch: `git checkout remotes/origin/dockerconfig`
-Cd into the build_client_image directory: `cd build_client_image`
-Make the build.sh file executable by running: `chmod +x build.sh`
-Run the build.sh file: `./build.sh`
-The build process will take a few minutes but it should end with:
-  "Successfully built c0a3ca505876
-  Successfully tagged clipboarddbclient:latest"
-To verify that the image was built successfully, run: `sudo docker image ls`
+Clone the ClipboardApp repository: `git clone https://github.com/ClipboardProject/ClipboardApp.git`<br/>
+Switch to the dockerconfig branch: `git checkout remotes/origin/dockerconfig`<br/>
+Cd into the build_client_image directory: `cd build_client_image`<br/>
+Make the build.sh file executable by running: `chmod +x build.sh`<br/>
+Run the build.sh file: `./build.sh`<br/>
+The build process will take a few minutes but it should end with:<br/>
+  "Successfully built c0a3ca505876<br/>
+  Successfully tagged clipboarddbclient:latest"<br/>
+To verify that the image was built successfully, run: `sudo docker image ls`<br/>
 Make sure that "clipboarddbclient" is present
 
-Cd back into the ClipboardApp root directory and run: `sudo docker-compose build`
-Then run: `sudo docker-compose up`
+Cd back into the ClipboardApp root directory and run: `sudo docker-compose build`<br/>
+Then run: `sudo docker-compose up`<br/>
 Sudo is required for both of the previous commands, if they're not run as sudo, you'll see the following, "ERROR: Couldn't connect to Docker daemon at http+docker://localhost - is it running?"
 
 It may take 1-2mins after running sudo docker-compose up before the server is ready to start serving requests.
 
 Navigate to: `http://localhost:8091` in your browser and when the server is ready, it'll show a webpage that says, "Couchbase Server."
 
-Once you're able to see the webpage, open a new terminal and cd into the clipboard_db directory and make the create_db.sh file executable by running: `chmod +x create_db.sh`
-Then run: `./create_db.sh`
-Refresh the Couchbase webpage and you should see a login prompt.
+Once you're able to see the webpage, open a new terminal and cd into the clipboard_db directory and make the create_db.sh file executable by running: `chmod +x create_db.sh`<br/>
+Then run: `./create_db.sh`<br/>
+Refresh the Couchbase webpage and you should see a login prompt.<br/>
 Use the following login credentials: `Username: admin, Password: clipboard`
 
 Click on "Buckets" on the sidebar to verify that a bucket called "event" exists. 
 
-Go back to the terminal and make the create_indexes.sh file executable by running: `chmod +x create_indexes.sh`
-Then run: `./create_indexes.sh`
+Go back to the terminal and make the create_indexes.sh file executable by running: `chmod +x create_indexes.sh`<br/>
+Then run: `./create_indexes.sh`<br/>
 Go to the "Indexes" tab on the Couchbase web page and verify that an index was created.
 
-Go back to the terminal where the: sudo docker-compose up command is running and close the container: `CTRL + C`
+Go back to the terminal where the: sudo docker-compose up command is running and close the container: `CTRL + C`<br/>
 Run: `sudo docker-compose up` again to restart the newly-configured container.
