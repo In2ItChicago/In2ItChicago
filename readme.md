@@ -46,3 +46,91 @@ Once this happens, `cd` into the `clipboard_db` directory and run `./create_db.s
 Click on "Buckets" on the sidebar and verify that a bucket called "event" exists. Now, go back to the command prompt and run `./create_indexes.sh`. Go to the "Indexes" tab on the web page and verify that an index was created. 
 This script has to be run after the database creation script because it takes a minute for the index service to initialize and it'll throw an error if you try to create the index too quickly. Once the database is configured, 
 press `Ctrl+C` in the terminal running Docker to close the container, then run `docker-compose up` again to start the newly-configued container. 
+
+### Linux Complete Step by Step Setup Process
+If you're new to Docker or you're recovering from a failed installation attempt, it's best to start by uninstalling older versions of Docker: `sudo apt-get remove docker docker-engine docker.io`
+
+## Docker Installation
+Run: `sudo apt-get update`
+Install the following packages:
+`
+sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    software-properties-common
+`
+These allow apt to use a repository over HTTPs
+
+Add Docker's official GNU Privacy Guard (GPG) key
+`curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -`
+This should print, "OK" to the terminal.
+
+Run: `sudo apt-key fingerprint 0EBFCD88`
+Verify that the Key Fingerprint line shows: 9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88
+
+Set up the stable Docker repository:
+`
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+`
+Run: `sudo apt-get update` again.
+Install the latest version of Docker CE: `sudo apt-get install docker-ce`
+
+Verify that Docker installed correctly with: `sudo docker run hello-world`
+You should see, "Hello from Docker!"
+
+When docker was installed, the docker user group was created, but no users were added to it, you'll need to run docker commands with sudo.
+
+# Installation Problems
+If there were problems during the installation, try removing docker and starting over.
+`sudo apt-get purge docker-ce`
+`sudo rm -rf /var/lib/docker`
+
+## Docker Compose installation
+Run: `sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose`
+
+Add executable permissions to the docker-compose binary: `sudo chmod +x /usr/local/bin/docker-compose`
+
+Run `docker-compose --version` to verify it installed correctly. It should show a version and build number similar to:
+"docker-compose version 1.21.2, build 1719ceb"
+
+If the docker-compose command doesn't work, add the following line to your ~/.bashrc file
+`export PATH="/usr/bin/docker-compose:$PATH"`
+Close and reopen your terminal(s) to apply the changes.
+
+## Running the ClipboardApp Docker project
+Clone the ClipboardApp repository: `git clone https://github.com/ClipboardProject/ClipboardApp.git`
+Switch to the dockerconfig branch: `git checkout remotes/origin/dockerconfig`
+Cd into the build_client_image directory: `cd build_client_image`
+Make the build.sh file executable by running: `chmod +x build.sh`
+Run the build.sh file: `./build.sh`
+The build process will take a few minutes but it should end with:
+  "Successfully built c0a3ca505876
+  Successfully tagged clipboarddbclient:latest"
+To verify that the image was built successfully, run: `sudo docker image ls`
+Make sure that "clipboarddbclient" is present
+
+Cd back into the ClipboardApp root directory and run: `sudo docker-compose build`
+Then run: `sudo docker-compose up`
+Sudo is required for both of the previous commands, if they're not run as sudo, you'll see the following, "ERROR: Couldn't connect to Docker daemon at http+docker://localhost - is it running?"
+
+It may take 1-2mins after running sudo docker-compose up before the server is ready to start serving requests.
+
+Navigate to: `http://localhost:8091` in your browser and when the server is ready, it'll show a webpage that says, "Couchbase Server."
+
+Once you're able to see the webpage, open a new terminal and cd into the clipboard_db directory and make the create_db.sh file executable by running: `chmod +x create_db.sh`
+Then run: `./create_db.sh`
+Refresh the Couchbase webpage and you should see a login prompt.
+Use the following login credentials: `Username: admin, Password: clipboard`
+
+Click on "Buckets" on the sidebar to verify that a bucket called "event" exists. 
+
+Go back to the terminal and make the create_indexes.sh file executable by running: `chmod +x create_indexes.sh`
+Then run: `./create_indexes.sh`
+Go to the "Indexes" tab on the Couchbase web page and verify that an index was created.
+
+Go back to the terminal where the: sudo docker-compose up command is running and close the container: `CTRL + C`
+Run: `sudo docker-compose up` again to restart the newly-configured container.
