@@ -47,7 +47,7 @@ Click on "Buckets" on the sidebar and verify that a bucket called "event" exists
 This script has to be run after the database creation script because it takes a minute for the index service to initialize and it'll throw an error if you try to create the index too quickly. Once the database is configured, 
 press `Ctrl+C` in the terminal running Docker to close the container, then run `docker-compose up` again to start the newly-configued container. 
 
-### Linux Complete Step by Step Setup Process
+# Linux Complete Step by Step Setup Process
 If you're new to Docker or you're recovering from a failed installation attempt, it's best to start by uninstalling older versions of Docker: `sudo apt-get remove docker docker-engine docker.io`
 
 ## Docker Installation
@@ -84,7 +84,7 @@ You should see, "Hello from Docker!"
 
 When docker was installed, the docker user group was created, but no users were added to it, you'll need to run docker commands with sudo.
 
-# Installation Problems
+### Installation Problems
 If there were problems during the installation, try removing docker and starting over.
 `sudo apt-get purge docker-ce`
 `sudo rm -rf /var/lib/docker`
