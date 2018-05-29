@@ -74,12 +74,11 @@ def get_events():
         try:
             # TODO: add organization
             start_timestamp = int(args.get('start_timestamp'))
-            print(start_timestamp)
             end_timestamp = int(args.get('end_timestamp'))
-            print(end_timestamp)
+            organization = args.get('organization')
+
             # Yo dawg, we heard you like json so we put json in your query language so you can query with json while you query for json
-            result = clipboard_db.event.find({ 
-                '$and': [ 
+            and_clause = [ 
                     {
                         'start_timestamp': { 
                             '$gte': start_timestamp 
@@ -89,8 +88,17 @@ def get_events():
                         'end_timestamp': { 
                             '$lte': end_timestamp 
                         } 
-                    } 
-                ] 
+                    }
+                ]
+            if organization != None and len(organization) > 0:
+                and_clause.append({
+                    'organization': {
+                        '$eq': organization
+                    }
+                })
+            
+            result = clipboard_db.event.find({ 
+                '$and': and_clause
             })
             
             result_list = [r for r in result]

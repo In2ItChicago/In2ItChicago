@@ -1,7 +1,7 @@
 version: '3.6'
 services:
   clipboard_db:
-    build: "./clipboard_db"
+    image: "mongo:latest"
     ports:
       - "27017:27017"
     volumes:
