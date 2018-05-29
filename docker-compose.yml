@@ -3,10 +3,9 @@ services:
   clipboard_db:
     build: "./clipboard_db"
     ports:
-      - "8091-8094:8091-8094"
-      - "11210:11210"
+      - "27017:27017"
     volumes:
-      - ./clipboard_db/db_data:/opt/couchbase/var
+      - mongodata:/data/db
   clipboard_db_client:
     build: "./clipboard_db_client"
     ports:
@@ -14,3 +13,5 @@ services:
     environment:
       - DOCKER_IP=${DOCKER_IP}
       - DB_CLIENT_IP=0.0.0.0
+volumes:
+  mongodata:

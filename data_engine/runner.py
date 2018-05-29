@@ -55,5 +55,4 @@ if __name__ == '__main__':
         'end_timestamp': 10000000000, 
         'organization': ''
     })
-    for event in events:
-        print(event)
+    print(events.json())

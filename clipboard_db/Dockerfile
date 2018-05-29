@@ -1,1 +1,1 @@
-FROM couchbase:community
+FROM mongo:latest

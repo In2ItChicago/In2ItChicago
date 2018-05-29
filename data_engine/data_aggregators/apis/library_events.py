@@ -109,4 +109,3 @@ class LibraryEvents(ApiBase):
                 'category': Category.LIBRARY
             }, self.time_utils.date_format))
         self.save_events(events)
-        #ScraperData.add_data(events)

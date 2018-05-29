@@ -1,2 +1,2 @@
-couchbase
+pymongo
 flask

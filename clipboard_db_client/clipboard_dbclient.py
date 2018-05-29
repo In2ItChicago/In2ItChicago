@@ -1,15 +1,17 @@
-from couchbase.cluster import Cluster, PasswordAuthenticator
-from couchbase.n1ql import N1QLQuery
-from couchbase.exceptions import ArgumentError, CouchbaseNetworkError
-from flask import Flask, request, jsonify
+from pymongo import MongoClient, errors, ASCENDING
+from flask import Flask, request, jsonify, Response, make_response
+from db_locks import UpdateLock, QueryLock
+from bson import json_util, ObjectId, BSON
+from bson.json_util import dumps
 import uuid
 import json
 import time
 import os
 import sys
+import itertools
 
 app = Flask(__name__)
-bucket = None
+events = None
 
 def get_env_var(name):
     try:
@@ -18,70 +20,88 @@ def get_env_var(name):
         print('Error: {0} not set. If this value was recently set, close all python processes and try again'.format(name))
         sys.exit(1)
 
-num_retries = 10
 docker_ip = get_env_var('DOCKER_IP')
 db_client_ip = get_env_var('DB_CLIENT_IP')
 
-connection_string = 'couchbase://' + docker_ip
-print('Couchbase connection string is ' + connection_string)
-# It takes a while for couchbase to accept incoming connections, so give it several tries
-for _ in range(num_retries):
-    try:
-        print('Attempting to connect to couchbase...')
-        cluster = Cluster(connection_string)
-        cluster.authenticate(PasswordAuthenticator('admin', 'clipboard'))
-        bucket = cluster.open_bucket('event')
-        break
-    except CouchbaseNetworkError:
-        time.sleep(5)
-if bucket == None:
-    print('Could not connect to couchbase. Exiting.')
+print(f'Docker IP is {docker_ip}')
+
+try:
+    print('Attempting to connect to MongoDB...')
+    client = MongoClient(docker_ip, 27017)
+    clipboard_db = client.clipboard
+    if not 'clipboard' in client.database_names():
+        print('No configuration found for clipboard database. Creating...')
+        clipboard_db.create_collection('event')
+        # TODO: Figure out if we should use a value besides ASCENDING
+        clipboard_db.event.create_index([('start_timestamp', ASCENDING), ('end_timestamp', ASCENDING), ('organization', ASCENDING)])
+        print('Database creation successful')
+    else:
+        print('Connection successful')
+    events = clipboard_db.event
+except errors.ServerSelectionTimeoutError as ex:
+    print(f'Could not connect to MongoDB: {ex.args[0]}. Exiting.')
     sys.exit(1)
-else:
-    print('Connection successful')
+
+update_lock = UpdateLock()
+query_lock = QueryLock()
 
 @app.route('/putevents', methods=['POST'])
 def put_events():
-    request_obj = request.get_json()
-    try:
-        data = bucket.insert_multi({str(uuid.uuid4()): val for val in request_obj})
-        errors = [value.errstr for value in data.values() if not value.success]
-        if len(errors) > 0:
-            return jsonify(errors), 500
-        return 'success', 200
-    except ArgumentError as ex:
-        return jsonify(ex.message), 400
+    with update_lock:
+        query_lock.wait_for_clearance()
+        request_obj = request.get_json()
+        events = clipboard_db.event
+        #try:
+        if len(request_obj) == 0:
+            return 'Error: request contains no data', 400
+        try:
+            organizations = list({ obj['organization'] for obj in request_obj })
+            print(organizations)
+            events.remove({'organization' : {'$eq': organizations }})
+            # Using ordered=False may increase performance and we don't care about the order of inserts
+            events.insert_many(request_obj, ordered=False)
+            
+            return 'success', 200
+        except KeyError:
+            return 'One or more documents sent for insertion do not contain the "organization" property', 400
 
 @app.route('/getevents', methods=['GET'])
 def get_events():
-    args = request.args
-    
-    try:
-        query = N1QLQuery('''
-            SELECT
-                address,
-                category,
-                description,
-                start_timestamp,
-                end_timestamp,
-                organization,
-                price,
-                title,
-                url
-            FROM event 
-            WHERE start_timestamp >= $start_timestamp
-            AND end_timestamp <= $end_timestamp
-            AND (organization = $organization OR $organization = "")''',
-            start_timestamp=int(args.get('start_timestamp')),
-            end_timestamp=int(args.get('end_timestamp')),
-            organization=args.get('organization', ''))
+    update_lock.wait_for_clearance()
+    with query_lock:
+        args = request.args
         
-        result = bucket.n1ql_query(query)
-        #for row in result:
-        #    print(row)
-        return jsonify([row for row in result]), 200
-    except ValueError as v:
-        return jsonify(v.args[0]), 400
+        try:
+            # TODO: add organization
+            start_timestamp = int(args.get('start_timestamp'))
+            print(start_timestamp)
+            end_timestamp = int(args.get('end_timestamp'))
+            print(end_timestamp)
+            # Yo dawg, we heard you like json so we put json in your query language so you can query with json while you query for json
+            result = clipboard_db.event.find({ 
+                '$and': [ 
+                    {
+                        'start_timestamp': { 
+                            '$gte': start_timestamp 
+                        } 
+                    }, 
+                    { 
+                        'end_timestamp': { 
+                            '$lte': end_timestamp 
+                        } 
+                    } 
+                ] 
+            })
+            
+            result_list = [r for r in result]
+            for r in result_list:
+                # _id objects can't be serialized to json, so use the str representation
+                r['_id'] = str(r['_id'])
+            
+            return jsonify(result_list), 200
+        except Exception as ex:
+            print(ex)
+            return jsonify(ex), 400
 
     
 

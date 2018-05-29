@@ -3,6 +3,7 @@ import json
 import re
 from time_utils import TimeUtils
 from bs4 import BeautifulSoup
+from multiprocessing import Lock
 import requests
 
 class AggregatorBase:
@@ -15,6 +16,8 @@ class AggregatorBase:
 
         self.time_utils = TimeUtils(date_format)
         self.base_url = base_url
+
+        self.update_mutex = Lock()
         
         request_format_utils = TimeUtils('%m-%d-%Y')
         self.start_date = request_format_utils.convert_date_format(start_date, request_date_format)
@@ -30,7 +33,7 @@ class AggregatorBase:
     def save_events(self, event_list):
         if len(event_list) == 0:
             return
-        
-        response = requests.post(f'http://{self.docker_ip}:5000/putevents', json = event_list)
+        with self.update_mutex:
+            response = requests.post(f'http://{self.docker_ip}:5000/putevents', json = event_list)
         if not response.ok:
-            raise ValueError(response.content)
+            raise ValueError(response.text)
