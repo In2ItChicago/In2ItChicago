@@ -37,18 +37,18 @@ if __name__ == '__main__':
     start_date = datetime.now().strftime('%m-%d-%Y')
     end_date = (datetime.now() + relativedelta(months=+1)).strftime('%m-%d-%Y')
 
-    # crawlerProcess = CrawlerProcess(get_project_settings())
-    # apiProcess = ApiProcess()
+    crawlerProcess = CrawlerProcess(get_project_settings())
+    apiProcess = ApiProcess()
 
-    # crawlerProcess.crawl(HistorySpider, start_date, end_date)
-    # crawlerProcess.crawl(WpbccSpider, start_date, end_date)
-    # crawlerProcess.crawl(GreatLakesSpider, start_date, end_date)
-    # crawlerProcess.crawl(LWVchicago, start_date, end_date)
+    crawlerProcess.crawl(HistorySpider, start_date, end_date)
+    crawlerProcess.crawl(WpbccSpider, start_date, end_date)
+    crawlerProcess.crawl(GreatLakesSpider, start_date, end_date)
+    crawlerProcess.crawl(LWVchicago, start_date, end_date)
 
-    # apiProcess.start_api_calls(start_date, end_date, LibraryEvents)
-    # crawlerProcess.start()
-    # crawlerProcess.join()
-    # apiProcess.join()
+    apiProcess.start_api_calls(start_date, end_date, LibraryEvents)
+    crawlerProcess.start()
+    crawlerProcess.join()
+    apiProcess.join()
  
     events = requests.get(f'http://{os.environ["DOCKER_IP"]}:5000/getevents', params= {
         'start_timestamp': 0, 
