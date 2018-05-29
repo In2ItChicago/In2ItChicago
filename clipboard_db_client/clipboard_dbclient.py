@@ -55,7 +55,7 @@ def put_events():
         try:
             organizations = list({ obj['organization'] for obj in request_obj })
             print(organizations)
-            events.remove({'organization' : {'$eq': organizations }})
+            events.remove({'organization' : {'$in': organizations }})
             # Using ordered=False may increase performance and we don't care about the order of inserts
             events.insert_many(request_obj, ordered=False)
             
