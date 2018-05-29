@@ -20,14 +20,12 @@ def get_env_var(name):
         print('Error: {0} not set. If this value was recently set, close all python processes and try again'.format(name))
         sys.exit(1)
 
-docker_ip = get_env_var('DOCKER_IP')
 db_client_ip = get_env_var('DB_CLIENT_IP')
-
-print(f'Docker IP is {docker_ip}')
 
 try:
     print('Attempting to connect to MongoDB...')
-    client = MongoClient(docker_ip, 27017)
+    # 'clipboard_db' is the name of the database service in docker-config.yaml. This value will resolve to the IP given to the database by Docker
+    client = MongoClient('clipboard_db', 27017)
     clipboard_db = client.clipboard
     if not 'clipboard' in client.database_names():
         print('No configuration found for clipboard database. Creating...')
