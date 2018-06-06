@@ -20,10 +20,11 @@ class ICal:
         return ICal(Calendar.from_ical(r.text), default_timezone)
 
     def parse_events(self):
-        return [self.create_event(event) for event in self.cal.subcomponents if event.name == 'VEVENT']
+        org = self.cal.get('X-WR-CALNAME', 'Unknown Organization')
+        return [self.create_event(event, org) for event in self.cal.subcomponents if event.name == 'VEVENT']
 
     # TODO Double-check that unicode is handled correctly
-    def create_event(self, event):
+    def create_event(self, event, org):
         start_time = int(self.localize(event.get('DTSTART', '').dt).timestamp())
         end_time = int(self.localize(event.get('DTEND', '').dt).timestamp())
         return Event.from_dict({
@@ -32,7 +33,8 @@ class ICal:
             'title': '' + event.get('SUMMARY', ''),
             'description': '' + event.get('DESCRIPTION', ''),
             'address': '' + event.get('LOCATION', ''),
-            'url': '' + event.get('URL', '')
+            'url': '' + event.get('URL', ''),
+            'organization': '' + org
         })
 
     def localize(self, time):
