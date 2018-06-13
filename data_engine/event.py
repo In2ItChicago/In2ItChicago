@@ -4,6 +4,11 @@ from time_utils import TimeUtils
 from data_utils import DataUtils
 
 class Event(scrapy.Item):
+    # When creating an event, use these values as keys
+    # The exception to this is start_timestamp and end_timestamp
+    # You can pass those in directly if the data is already formatted
+    # as a Unix timestamp, otherwise, pass in the data as defined in the
+    # create_time_data function below
     start_timestamp = scrapy.Field()
     end_timestamp = scrapy.Field()
     organization = scrapy.Field()
@@ -21,14 +26,23 @@ class Event(scrapy.Item):
 
     @staticmethod
     def create_time_data():
+        # When creating an event, you'll want to pass in the data that matches
+        # how the data is formatted on the site you're pulling from
         return {
+            # Use time if only one time is supplied for the event (not time range)
             'time': None,
+            # Use start_time and end_time if the site supplies distinct data for these two values
             'start_time': None,
             'end_time': None,
+            # Use time_range if the start and end time is supplied in a single string ex: 6:00-8:00 PM
             'time_range': None,
+            # Use date if the event is only one day or it could be multiple days but it is contained in a single string
+            # This is done this way because some sites have data that could be single days or multiple days
             'date': None,
+            # Use start_date and end_date if the site supplies distinct data for these two values
             'start_date': None,
             'end_date': None,
+            # Use start_timestamp and end_timestamp if the data is formatted like a Unix timestamp
             'start_timestamp': None,
             'end_timestamp': None
         }
