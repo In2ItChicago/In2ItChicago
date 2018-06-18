@@ -60,14 +60,14 @@ If the docker-compose command doesn't work, add the following line to your ~/.ba
 Close and reopen your terminal(s) to apply the changes.
 
 #### Extra Installation Steps for Windows
-I was unable to get Kinematic to work on Docker Toolbox, so I would recommend skipping that. Make sure virtualization is enabled in the BIOS. After changing those settings, do a full reboot cycle,   
-otherwise Windows may not report that the settings have changed. If you're running Windows 10 Professional, you'll need to make sure Hyper-V is enabled in the "Turn Windows Features On or Off" dialog.   
+I was unable to get Kinematic to work on Docker Toolbox, so I would recommend skipping that. Make sure virtualization is enabled in the BIOS. After changing those settings, do a full reboot cycle,
+otherwise Windows may not report that the settings have changed. If you're running Windows 10 Professional, you'll need to make sure Hyper-V is enabled in the "Turn Windows Features On or Off" dialog.
 If you're using Docker Toolbox on Windows Home edition, when you start Windows, you'll want to start the VirtualBox instance manually before starting Docker or Docker will complain about not having an IP address.
 
 ### Docker Setup
 #### Windows
-For Docker Toolbox on Windows Home, go to the environment variables section in the control panel. Look for a variable called DOCKER_HOST. Add another variable called DOCKER_IP which is the same as DOCKER_HOST,  
-but with the tcp prefix and the port number removed. For example, if DOCKER_HOST is tcp://192.168.1.11:2376, DOCKER_IP should be 192.168.1.11. Add another variable called DB_CLIENT_IP with a value of localhost.  
+For Docker Toolbox on Windows Home, go to the environment variables section in the control panel. Look for a variable called DOCKER_HOST. Add another variable called DOCKER_IP which is the same as DOCKER_HOST,
+but with the tcp prefix and the port number removed. For example, if DOCKER_HOST is tcp://192.168.1.11:2376, DOCKER_IP should be 192.168.1.11. Add another variable called DB_CLIENT_IP with a value of localhost.
 For Docker on Windows Professional, do those same steps, except both DOCKER_IP and DB_CLIENT_IP should be localhost.
 
 #### Max and Linux
@@ -80,27 +80,26 @@ fi
 to your `~/.bash_profile`.
 
 ### Running Docker
-If you are using Linux, all of the subsequent Docker commands in this guide must be run with `sudo`. If you would like to be able to use Docker without sudo,  
-look through the answers [here](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo)
+If you are using Linux, all of the subsequent Docker commands in this guide must be run with `sudo`. If you would like to be able to use Docker without sudo, look through the answers [here](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo)
 
 Verify that Docker installed correctly with: `docker run hello-world`. You should see, "Hello from Docker!"
 
-After setting the environment variables, close all terminals and every editor or process that's running Python. This is needed to ensure that your Python environment correctly reloads your environment variables.  
-The DOCKER_IP variable is necessary because the versions of Docker that run on VirtualBox generate an IP address that is dependent on the host's configuration,   
-so the code will read this variable to know where to make HTTP requests. The DB_CLIENT_IP variable is necessary because the client needs to run on 0.0.0.0 inside the Docker container,  
-which is the internal IP address that Docker containers use to communicate with each other, but it needs to run on localhost outside the container.  
+After setting the environment variables, close all terminals and every editor or process that's running Python. This is needed to ensure that your Python environment correctly reloads your environment variables.
+The DOCKER_IP variable is necessary because the versions of Docker that run on VirtualBox generate an IP address that is dependent on the host's configuration,
+so the code will read this variable to know where to make HTTP requests. The DB_CLIENT_IP variable is necessary because the client needs to run on 0.0.0.0 inside the Docker container,
+which is the internal IP address that Docker containers use to communicate with each other, but it needs to run on localhost outside the container.
 
-Open a Docker terminal on Windows Home, Powershell on Windows Professional, or a normal terminal otherwise, and `cd` into the Git repo. Run `docker-compose build` then `docker-compose up`. 
+Open a Docker terminal on Windows Home, Powershell on Windows Professional, or a normal terminal otherwise, and `cd` into the Git repo. Run `docker-compose build` then `docker-compose up`.
 
-Download Robo 3T from [here](https://robomongo.org/download) using the link on the right. You can use another MongoDB client if you'd prefer. When you start Robo 3T, a popup to configure connections should appear.  
-If you're on Windows Home, right click on the New Connection row and click "Edit". Change localhost to your Docker IP and hit "Save". Now press "Connect". Otherwise, leave the settings alone.  
-It should connect successfully and you should see a database called Clipboard on the pane on the right. The database should contain a collection called "event" and an index that includes the start and end timestamp, along with other field(s).  
+Download Robo 3T from [here](https://robomongo.org/download) using the link on the right. You can use another MongoDB client if you'd prefer. When you start Robo 3T, a popup to configure connections should appear.
+If you're on Windows Home, right click on the New Connection row and click "Edit". Change localhost to your Docker IP and hit "Save". Now press "Connect". Otherwise, leave the settings alone.
+It should connect successfully and you should see a database called Clipboard on the pane on the right. The database should contain a collection called "event" and an index that includes the start and end timestamp, along with other field(s).
 
 ### Running scrapers
-`cd` into the ClipboardApp repository. If you're using Anaconda, open up an Anaconda terminal and run `conda install --file anaconda-requirements-conda.txt` and `pip install -r anaconda-requirements-pip.txt`.  
-Otherwise, run `pip3 install -r requirements.txt`. Use `pip` instead of `pip3` if Python 3 is your default Python version. Now, run `python3 runner.py`. You should see data being sent to the output window.  
-When the program is finished running, go to your Robo 3T instance, right click on the "event" collection, and click "View Documents". The screen should populate with data.  
-For development, you'll want to open the `data_engine` folder in an IDE or text editor of your choice. Any editor should work as long as the `data_engine` folder is set as the base folder for the project.  
+`cd` into the ClipboardApp repository. If you're using Anaconda, open up an Anaconda terminal and run `conda install --file anaconda-requirements-conda.txt` and `pip install -r anaconda-requirements-pip.txt`.
+Otherwise, run `pip3 install -r requirements.txt`. Use `pip` instead of `pip3` if Python 3 is your default Python version. Now, run `python3 runner.py`. You should see data being sent to the output window.
+When the program is finished running, go to your Robo 3T instance, right click on the "event" collection, and click "View Documents". The screen should populate with data.
+For development, you'll want to open the `data_engine` folder in an IDE or text editor of your choice. Any editor should work as long as the `data_engine` folder is set as the base folder for the project.
 This is important because the imports will not work if the base folder for the project is different.
 
 ## Development Guide
@@ -124,15 +123,15 @@ This holds a single collection of all data from the sites. Only the database cli
 This is not integrated with the Clipboard App yet. Soon, this will be used to display all of the data gathered by the data engine.
 
 ### Getting Started
-As stated previously, adding a scraper is the best way to start contributing. If you're not familiar with web scraping, 
-[this](https://www.upwork.com/hiring/for-clients/web-scraping-tutorial/) gives a decent overview about what web scraping is.  
-We're using Scrapy for this project, which is a complex and sophisticated web scraping framework. If you'd to start with a tutorial that will help you learn more about how to write a scraper without worrying about the complexities of Scrapy,  
-take a look at [this](https://www.analyticsvidhya.com/blog/2015/10/beginner-guide-web-scraping-beautiful-soup-python/) guide which uses a library called BeautifulSoup.  
-If you're comfortable with the concepts used in web scraping, take a look at [this](https://www.analyticsvidhya.com/blog/2017/07/web-scraping-in-python-using-scrapy/) tutorial.  
+As stated previously, adding a scraper is the best way to start contributing. If you're not familiar with web scraping,
+[this](https://www.upwork.com/hiring/for-clients/web-scraping-tutorial/) gives a decent overview about what web scraping is.
+We're using Scrapy for this project, which is a complex and sophisticated web scraping framework. If you'd to start with a tutorial that will help you learn more about how to write a scraper without worrying about the complexities of Scrapy,
+take a look at [this](https://www.analyticsvidhya.com/blog/2015/10/beginner-guide-web-scraping-beautiful-soup-python/) guide which uses a library called BeautifulSoup.
+If you're comfortable with the concepts used in web scraping, take a look at [this](https://www.analyticsvidhya.com/blog/2017/07/web-scraping-in-python-using-scrapy/) tutorial.
 Ignore the installation instructions because you should have installed Scrapy earlier in this guide.
 
 #### Knowing when to use a scraper and when to use an API
-Most websites that we're dealing with will need to be scraped because the data on them is statically loaded from the server as html. However, some sites use APIs to dynamically load data.  
+Most websites that we're dealing with will need to be scraped because the data on them is statically loaded from the server as html. However, some sites use APIs to dynamically load data.
 We should use these whenever possible because scrapers are fragile and need to be changed any time the content on the page changes. APIs are more stable and are less likely to have breaking changes introduced often.
 
 Here is an example of how to detect if a site has an API we can use. 
