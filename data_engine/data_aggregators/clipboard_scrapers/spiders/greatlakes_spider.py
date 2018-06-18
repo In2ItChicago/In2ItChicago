@@ -23,8 +23,9 @@ class GreatLakesSpider(Spider, SpiderBase):
         titles = self.extract('title', response.css, '.tribe-event-url::text')
         urls = self.extract('url', response.css, '.tribe-event-url::attr(href)')
         dates, time_ranges = self.extract_multiple(
-            {'date': lambda s: s.split('@')[0], 'time_range': lambda s: s.split('@')[1]}, response.css,
-            '.tribe-event-schedule-details')
+            {'date': lambda s: s.split('@')[0], 
+            'time_range': lambda s: s.split('@')[1]}, 
+            response.css, '.tribe-event-schedule-details')
         dates.remove_html()
         time_ranges.remove_html()
         addresses = self.extract('address', response.css, '.tribe-address').remove_html().map(

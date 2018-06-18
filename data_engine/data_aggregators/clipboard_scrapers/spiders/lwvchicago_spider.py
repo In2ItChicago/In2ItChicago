@@ -29,7 +29,7 @@ class LWVchicago(Spider, SpiderBase):
         # Correct text plus leading newline, is missing one element that doesn't have a description
         #descriptions = self.extract('description', response.xpath, '//td[span]/text()[starts-with(., "\n")][normalize-space()]')
         #descriptions = self.empty_check_extract('description', base_selector, 'xpath', '//td[span]/text()[starts-with(., "\n")][normalize-space()]')
-        descriptions = self._parse_description()
+        descriptions = self._parse_description(response)
         
         # Need to figure out how to extract text in a block, not breaking on newlines
         addresses = self.extract('address', response.xpath, '//td[@scope]/following-sibling::*[name() = "td" and (position() = 1)]').remove_html()
@@ -40,11 +40,11 @@ class LWVchicago(Spider, SpiderBase):
         #Full name and description
         #self.response.xpath('//td[@scope]/following-sibling::*[name() = "td" and (position() = 2)]').extract()
 
-    def _parse_description(self):
-        all_descriptions = self.extract('description', 'xpath', '//td[@scope]/following-sibling::*[name() = "td" and (position() = 2)]').remove_html()
+    def _parse_description(self, response):
+        all_descriptions = self.extract('description', response.xpath, '//td[@scope]/following-sibling::*[name() = "td" and (position() = 2)]').remove_html()
         
         output = []
-        for desc in all_descriptions:
+        for desc in all_descriptions.data:
             strip = desc.split('</span>')[1].strip('[\n</td></p></a></b>]')
 
         return output

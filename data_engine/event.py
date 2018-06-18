@@ -36,7 +36,7 @@ class Event(scrapy.Item):
             'end_time': None,
             # Use time_range if the start and end time is supplied in a single string ex: 6:00-8:00 PM
             'time_range': None,
-            # Use date if the event is only one day or it could be multiple days but it is contained in a single string
+            # Use date if the event could be one or multiple days but it is contained in a single string
             # This is done this way because some sites have data that could be single days or multiple days
             'date': None,
             # Use start_date and end_date if the site supplies distinct data for these two values
