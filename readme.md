@@ -72,11 +72,11 @@ For Docker on Windows Professional, do those same steps, except both DOCKER_IP a
 
 #### Max and Linux
 Add the lines `export DOCKER_IP=localhost` and `export DB_CLIENT_IP=localhost` to your `~/.bashrc` file. If you haven't used your `.bashrc` file before, you may need to source it. To do so, add  
-`
+```
 if [ -f ~/.bashrc ]; then  
    source ~/.bashrc  
 fi  
-`
+```
 to your `~/.bash_profile`.
 
 ### Running Docker
@@ -157,20 +157,20 @@ All new scrapers should inherit from [SpiderBase](https://github.com/ClipboardPr
 All new API clients should inherit from [ApiBase](https://github.com/ClipboardProject/ClipboardApp/blob/master/data_engine/api_base.py)
 
 The end goal of all scrapers and API clients is to transform the raw data into event objects that conform to [this class](https://github.com/ClipboardProject/ClipboardApp/blob/master/data_engine/event.py).  
-For each item, you'll want to parse out the following data (as much as is available):
-- **`Organization`**: The name of the organization that's putting on the event
-- **`Title`**: The name of the event
-- **`Description`**: Detailed description of the event
-- **`Address`**: Location of the event (okay if exact address is not known)
-- **`Url`**: Link to url for event. Link to specific event is preferred, but a link to a page containing the event with many others is okay
-- **`Price`**: Cost to attend, if provided
-- **`Category`**: Category of event, as defined [here](https://github.com/ClipboardProject/ClipboardApp/blob/master/data_engine/categories.py). (Work in progress. We'll flesh out categories more eventually)  
+For each item, you'll want to parse out the following data (as much as is available). You'll notice that these fields correspond to the first parameter in the extract methods in `SpiderBase.py`.
+- **`organization`**: The name of the organization that's putting on the event
+- **`title`**: The name of the event
+- **`description`**: Detailed description of the event
+- **`address`**: Location of the event (okay if exact address is not known)
+- **`url`**: Link to url for event. Link to specific event is preferred, but a link to a page containing the event with many others is okay
+- **`price`**: Cost to attend, if provided
+- **`category`**: Category of event, as defined [here](https://github.com/ClipboardProject/ClipboardApp/blob/master/data_engine/categories.py). (Work in progress. We'll flesh out categories more eventually)  
 - **Start/End Time and Date**: Dates and times can be supplied with several parameters. Choose one date formate and one time format. Eventually, all dates and times will be converted into Unix timestamps.
-    - **`Time`**: Use if only one time is supplied for the event (not time range)
-    - **`Start_Time` and `End_Time`**: Use if the site supplies distinct data for these two values
-    - **`Time_Range`**: Use if the start and end time is supplied in a single string ex: 6:00-8:00 PM
-    - **`Date`**:  Use if the event could be one day or multiple days but it is contained in a single string. This is done this way because some sites have data that could be single days or multiple days.
-    - **`Start_Date` and `End_Date`**: Use if the site supplies distinct data for these two values
-    - **`Start_Timestamp` and `End_Timestamp`**: Use if the data is formatted like a Unix timestamp (Unlikely for scrapers but possible for an API)
+    - **`time`**: Use if only one time is supplied for the event (not time range)
+    - **`start_Time` and `End_Time`**: Use if the site supplies distinct data for these two values
+    - **`time_Range`**: Use if the start and end time is supplied in a single string ex: 6:00-8:00 PM
+    - **`date`**:  Use if the event could be one day or multiple days but it is contained in a single string. This is done this way because some sites have data that could be single days or multiple days.
+    - **`start_date` and `end_date`**: Use if the site supplies distinct data for these two values
+    - **`start_timestamp` and `end_timestamp`**: Use if the data is formatted like a Unix timestamp (Unlikely for scrapers but possible for an API)
 
-Once you've decided how to find these fields for your site, look at the methods in SpiderBase or ApiBase and how they're used in existing spiders and API clients to see how to process the data.
+Once you've decided how to find these fields for your site, look at the methods in `SpiderBase.py` or `ApiBase.py` and how they're used in existing spiders and API clients to see how to process the data.
