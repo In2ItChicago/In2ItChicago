@@ -25,7 +25,7 @@ Install the following packages:
 `sudo apt-get install ca-certificates`  
 `sudo apt-get install curl`  
 `sudo apt-get install software-properties-common`  
-These allow apt to use a repository over HTTPs
+These allow apt to use a repository over HTTPS
 
 Add Docker's official GNU Privacy Guard (GPG) key  
 `curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -`  
@@ -67,8 +67,8 @@ If you're using Docker Toolbox on Windows Home edition, when you start Windows, 
 ### Docker Setup
 #### Windows
 For Docker Toolbox on Windows Home, go to the environment variables section in the control panel. Look for a variable called DOCKER_HOST. Add another variable called DOCKER_IP which is the same as DOCKER_HOST,
-but with the tcp prefix and the port number removed. For example, if DOCKER_HOST is tcp://192.168.1.11:2376, DOCKER_IP should be 192.168.1.11. Add another variable called DB_CLIENT_IP with a value of localhost.
-For Docker on Windows Professional, do those same steps, except both DOCKER_IP and DB_CLIENT_IP should be localhost.
+but with the tcp prefix and the port number removed. For example, if DOCKER_HOST is `tcp://192.168.1.11:2376`, DOCKER_IP should be `192.168.1.11`. Add another variable called DB_CLIENT_IP with a value of `localhost`.
+For Docker on Windows Professional, do those same steps, except both DOCKER_IP and DB_CLIENT_IP should be `localhost`.
 
 #### Max and Linux
 Add the lines `export DOCKER_IP=localhost` and `export DB_CLIENT_IP=localhost` to your `~/.bashrc` file. If you haven't used your `.bashrc` file before, you may need to source it. To do so, add  
@@ -80,7 +80,7 @@ fi
 to your `~/.bash_profile`.
 
 ### Running Docker
-If you are using Linux, all of the subsequent Docker commands in this guide must be run with `sudo`. If you would like to be able to use Docker without sudo, look through the answers [here](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo)
+If you are using Linux, all of the subsequent Docker commands in this guide must be run with `sudo`. If you would like to be able to use Docker without `sudo`, look through the answers [here](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo)
 
 Verify that Docker installed correctly with: `docker run hello-world`. You should see, "Hello from Docker!"
 
@@ -99,6 +99,7 @@ It should connect successfully and you should see a database called Clipboard on
 `cd` into the ClipboardApp repository. If you're using Anaconda, open up an Anaconda terminal and run `conda install --file anaconda-requirements-conda.txt` and `pip install -r anaconda-requirements-pip.txt`.
 Otherwise, run `pip3 install -r requirements.txt`. Use `pip` instead of `pip3` if Python 3 is your default Python version. Now, run `python3 runner.py`. You should see data being sent to the output window.
 When the program is finished running, go to your Robo 3T instance, right click on the "event" collection, and click "View Documents". The screen should populate with data.
+
 For development, you'll want to open the `data_engine` folder in an IDE or text editor of your choice. Any editor should work as long as the `data_engine` folder is set as the base folder for the project.
 This is important because the imports will not work if the base folder for the project is different.
 
@@ -150,7 +151,7 @@ Here is an example of how to detect if a site has an API we can use.
 [This](https://github.com/ClipboardProject/ClipboardApp/blob/master/data_engine/data_aggregators/apis/library_events.py) is the code that was used to create an API client for that site.  
 You can use this as a guide if you need to create your own API client. Some sites have APIs that are well-documented and designed for external use. These should be used if they are available.
 
-Some sites may provider an iCalendar feed. Try to use the [iCal reader](https://github.com/ClipboardProject/ClipboardApp/blob/master/data_engine/data_aggregators/apis/ical_reader.py) if it is possible to do so. 
+Some sites may provide an iCalendar feed. Try to use the [iCal reader](https://github.com/ClipboardProject/ClipboardApp/blob/master/data_engine/data_aggregators/apis/ical_reader.py) if it is possible to do so. 
 
 ### How to integrate new scrapers and API clients with the core code
 All new scrapers should inherit from [SpiderBase](https://github.com/ClipboardProject/ClipboardApp/blob/master/data_engine/spider_base.py)
@@ -162,7 +163,7 @@ For each item, you'll want to parse out the following data (as much as is availa
 - **`title`**: The name of the event
 - **`description`**: Detailed description of the event
 - **`address`**: Location of the event (okay if exact address is not known)
-- **`url`**: Link to url for event. Link to specific event is preferred, but a link to a page containing the event with many others is okay
+- **`url`**: Link to url for event. Link to specific event is preferred, but a link to a page containing general event listings is okay.
 - **`price`**: Cost to attend, if provided
 - **`category`**: Category of event, as defined [here](https://github.com/ClipboardProject/ClipboardApp/blob/master/data_engine/categories.py). (Work in progress. We'll flesh out categories more eventually)  
 - **Start/End Time and Date**: Dates and times can be supplied with several parameters. Choose one date formate and one time format. Eventually, all dates and times will be converted into Unix timestamps.
