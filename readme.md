@@ -70,7 +70,7 @@ For Docker Toolbox on Windows Home, go to the environment variables section in t
 but with the tcp prefix and the port number removed. For example, if DOCKER_HOST is `tcp://192.168.1.11:2376`, DOCKER_IP should be `192.168.1.11`. Add another variable called DB_CLIENT_IP with a value of `localhost`.
 For Docker on Windows Professional, do those same steps, except both DOCKER_IP and DB_CLIENT_IP should be `localhost`.
 
-#### Max and Linux
+#### Mac
 Add the lines `export DOCKER_IP=localhost` and `export DB_CLIENT_IP=localhost` to your `~/.bashrc` file. If you haven't used your `.bashrc` file before, you may need to source it. To do so, add  
 ```
 if [ -f ~/.bashrc ]; then  
@@ -79,8 +79,11 @@ fi
 ```
 to your `~/.bash_profile`.
 
+#### Linux
+Add the lines `DOCKER_IP=localhost` and `DB_CLIENT_IP=localhost` to `/etc/environment`. This file may be in a different location on some distros.
+
 ### Running Docker
-If you are using Linux, all of the subsequent Docker commands in this guide must be run with `sudo`. If you would like to be able to use Docker without `sudo`, look through the answers [here](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo)
+If you are using Linux, all of the subsequent Docker commands in this guide must be run with `sudo`. If you would like to be able to use Docker without `sudo`, look through the answers [here](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo). You will also need to move your environment variables to your `~/.bashrc` file if you go this route.
 
 Verify that Docker installed correctly with: `docker run hello-world`. You should see, "Hello from Docker!"
 
