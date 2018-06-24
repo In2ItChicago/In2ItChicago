@@ -98,6 +98,8 @@ Download Robo 3T from [here](https://robomongo.org/download) using the link on t
 If you're on Windows Home, right click on the New Connection row and click "Edit". Change localhost to your Docker IP and hit "Save". Now press "Connect". Otherwise, leave the settings alone.
 It should connect successfully and you should see a database called Clipboard on the pane on the right. The database should contain a collection called "event" and an index that includes the start and end timestamp, along with other field(s).
 
+On Linux, you'll probably want to move the extracted Robo 3T folder to `/opt/your-extracted-folder-name` and run `sudo ln -s /opt/your-extracted-folder-name/bin/robo3t /usr/local/bin/robo3t`. Then you can run `robo3t` from the command line.
+
 ### Running scrapers
 `cd` into the ClipboardApp repository. If you're using Anaconda, open up an Anaconda terminal and run `conda install --file anaconda-requirements-conda.txt` and `pip install -r anaconda-requirements-pip.txt`.
 Otherwise, run `pip3 install -r requirements.txt`. Use `pip` instead of `pip3` if Python 3 is your default Python version. Now, run `python3 runner.py`. You should see data being sent to the output window.
