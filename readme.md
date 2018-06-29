@@ -93,6 +93,7 @@ so the code will read this variable to know where to make HTTP requests. The DB_
 which is the internal IP address that Docker containers use to communicate with each other, but it needs to run on localhost outside the container.
 
 Open a Docker terminal on Windows Home, Powershell on Windows Professional, or a normal terminal otherwise, and `cd` into the Git repo. Run `docker-compose build` then `docker-compose up`.
+If all goes well, the database will be created and the scrapers will start running. You should start seeing messages saying data was saved successfully.
 
 Download Robo 3T from [here](https://robomongo.org/download) using the link on the right. You can use another MongoDB client if you'd prefer. When you start Robo 3T, a popup to configure connections should appear.
 If you're on Windows Home, right click on the New Connection row and click "Edit". Change localhost to your Docker IP and hit "Save". Now press "Connect". Otherwise, leave the settings alone.
@@ -100,13 +101,20 @@ It should connect successfully and you should see a database called Clipboard on
 
 On Linux, you'll probably want to move the extracted Robo 3T folder to `/opt/your-extracted-folder-name` and run `sudo ln -s /opt/your-extracted-folder-name/bin/robo3t /usr/local/bin/robo3t`. Then you can run `robo3t` from the command line.
 
-### Running scrapers
-`cd` into the ClipboardApp repository. If you're using Anaconda, open up an Anaconda terminal and run `conda install --file anaconda-requirements-conda.txt` and `pip install -r anaconda-requirements-pip.txt`.
-Otherwise, run `pip3 install -r requirements.txt`. Use `pip` instead of `pip3` if Python 3 is your default Python version. Now, run `python3 runner.py`. You should see data being sent to the output window.
 When the program is finished running, go to your Robo 3T instance, right click on the "event" collection, and click "View Documents". The screen should populate with data.
 
-For development, you'll want to open the `data_engine` folder in an IDE or text editor of your choice. Any editor should work as long as the `data_engine` folder is set as the base folder for the project.
-This is important because the imports will not work if the base folder for the project is different.
+### Setting up the code to run locally
+For debugging, you'll want to run some or all of the code locally instead of inside Docker. To set up the dependencies, `cd` into the ClipboardApp repository. 
+If you're using Anaconda, open up an Anaconda terminal and run `conda install --file anaconda-requirements-conda.txt` and `pip install -r anaconda-requirements-pip.txt`.
+Otherwise, run `pip3 install -r requirements.txt`. Use `pip` instead of `pip3` if Python 3 is your default Python version. 
+On Windows, you'll need to have Visual Studio installed if you don't already because Scrapy has a dependency to Visual Studio's C++ compiler.
+You can use the shell script `up-db-and-client.sh` to run the database and database client inside of docker, allowing you to run the data engine locally instead of inside Docker. 
+`up-db-only.sh` only runs the database inside Docker, allowing you to run the data engine and database client locally. These scripts are just shortcuts for running specific `docker-compose up` commands. 
+When running the data engine and the database client locally, you'll need to configure your IDE to pass `--local-dbclient` as an argument
+to `runner.py`. This tells the data engine to look for the client running on `localhost` instead of at its Docker url.
+
+IMPORTANT: When running the data engine or the database client from an IDE or text editor, you must have the `data_engine` folder or the `clipboard_db_client` folder set as the base project folder. 
+Opening the entire clipboard app folder will not work because of how Python looks for files to import.
 
 ## Development Guide
 Our current development tasks and bugs are kept in the issues list [here](https://github.com/ClipboardProject/ClipboardApp/issues).  

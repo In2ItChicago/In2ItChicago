@@ -4,6 +4,7 @@ import re
 from time_utils import TimeUtils
 from bs4 import BeautifulSoup
 from multiprocessing import Lock
+from config import Config
 import requests
 
 class AggregatorBase:
@@ -25,15 +26,17 @@ class AggregatorBase:
         self.start_timestamp = request_format_utils.min_timestamp_for_day(start_date)
         self.end_timestamp = request_format_utils.max_timestamp_for_day(end_date)
 
-        try:
-            self.docker_ip = os.environ['DOCKER_IP']
-        except KeyError:
-            print('Error: DOCKER_IP not set. If this value was recently set, close all python processes and try again')
+        # try:
+        #     self.docker_ip = os.environ['DOCKER_IP']
+        # except KeyError:
+        #     print('Error: DOCKER_IP not set. If this value was recently set, close all python processes and try again')
 
     def save_events(self, event_list):
         if len(event_list) == 0:
             return
         with self.update_mutex:
-            response = requests.post(f'http://{self.docker_ip}:5000/putevents', json = event_list)
+            response = requests.post(f'http://{Config.db_client_ip}:5000/putevents', json = event_list)
         if not response.ok:
             raise ValueError(response.text)
+        else:
+            print(f'Saved events for {event_list[0]["organization"]}')

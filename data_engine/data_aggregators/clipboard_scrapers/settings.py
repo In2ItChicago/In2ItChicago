@@ -88,4 +88,6 @@ HTTPCACHE_EXPIRATION_SECS = 3600
 HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
-#LOG_LEVEL = 'ERROR'
+
+# Comment this out to see all data being scraped
+LOG_LEVEL = 'ERROR'

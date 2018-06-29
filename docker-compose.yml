@@ -13,5 +13,10 @@ services:
     environment:
       - DOCKER_IP=${DOCKER_IP}
       - DB_CLIENT_IP=0.0.0.0
+  data_engine:
+    build: "./data_engine"
+    environment:
+      - DOCKER_IP=${DOCKER_IP}
+      - DB_CLIENT_IP=0.0.0.0
 volumes:
   mongodata:

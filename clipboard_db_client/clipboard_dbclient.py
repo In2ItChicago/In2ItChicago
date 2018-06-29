@@ -25,7 +25,8 @@ db_client_ip = get_env_var('DB_CLIENT_IP')
 try:
     print('Attempting to connect to MongoDB...')
     # 'clipboard_db' is the name of the database service in docker-config.yaml. This value will resolve to the IP given to the database by Docker
-    client = MongoClient('clipboard_db', 27017)
+    mongo_ip = 'clipboard_db' if db_client_ip == '0.0.0.0' else get_env_var('DOCKER_IP')
+    client = MongoClient(mongo_ip, 27017)
     clipboard_db = client.clipboard
     if not 'clipboard' in client.database_names():
         print('No configuration found for clipboard database. Creating...')
@@ -43,18 +44,22 @@ except errors.ServerSelectionTimeoutError as ex:
 update_lock = UpdateLock()
 query_lock = QueryLock()
 
+@app.route('/status', methods=['GET'])
+def status():
+    # This is used to ping the service and wait for it to become available on startup
+    return 'available', 200
+
 @app.route('/putevents', methods=['POST'])
 def put_events():
     with update_lock:
         query_lock.wait_for_clearance()
         request_obj = request.get_json()
         events = clipboard_db.event
-        #try:
+        
         if len(request_obj) == 0:
             return 'Error: request contains no data', 400
         try:
             organizations = list({ obj['organization'] for obj in request_obj })
-            print(organizations)
             events.remove({'organization' : {'$in': organizations }})
             # Using ordered=False may increase performance and we don't care about the order of inserts
             events.insert_many(request_obj, ordered=False)
@@ -70,7 +75,6 @@ def get_events():
         args = request.args
         
         try:
-            # TODO: add organization
             start_timestamp = int(args.get('start_timestamp'))
             end_timestamp = int(args.get('end_timestamp'))
             organization = args.get('organization')

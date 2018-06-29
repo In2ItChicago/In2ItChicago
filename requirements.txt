@@ -4,3 +4,5 @@ python-dateutil
 bs4 
 requests
 icalendar
+pymongo
+flask

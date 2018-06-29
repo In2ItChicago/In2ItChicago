@@ -35,7 +35,7 @@ class LibraryEvents(ApiBase):
             # Keep querying until no more data is returned
             more_data = num_results > 0
             if (more_data):
-                print('got events', start, 'to', start + num_results)
+                #print('got events', start, 'to', start + num_results)
                 # Events are returned in fixed increments
                 start += num_results
         
