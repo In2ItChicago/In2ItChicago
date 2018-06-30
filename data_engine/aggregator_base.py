@@ -2,7 +2,6 @@ import os
 import json
 import re
 from time_utils import TimeUtils
-from bs4 import BeautifulSoup
 from multiprocessing import Lock
 from config import Config
 import requests

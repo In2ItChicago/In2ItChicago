@@ -22,19 +22,19 @@ from config import Config
 
 class ApiProcess:
     def __init__(self):
-        self.processes = []
+        self.threads = []
 
     def start_api_calls(self, start_date, end_date, *args):
         for arg in args:
             # All api classes should take start_date and end_date as parameters to the constructor have a method called "get_events" that runs all required logic
             api_class = arg(start_date, end_date)
-            p = Process(target = api_class.get_events)
-            p.start()
-            self.processes.append(p)
+            thread = Thread(target = api_class.get_events)
+            thread.start()
+            self.threads.append(thread)
 
     def join(self):
-        for p in self.processes:
-            p.join()
+        for thread in self.threads:
+            thread.join()
 
 def connect_to_client():
     num_attempts = 10
@@ -51,12 +51,29 @@ def connect_to_client():
                 sys.exit(1)
             time.sleep(0.5)
 
+def get_env_var(name):
+    try:
+        return os.environ[name]
+    except KeyError:
+        print('Error: {0} not set. If this value was recently set, close all python processes and try again'.format(name))
+        sys.exit(1)
+
+def set_client_ip(local_dbclient):
+    if local_dbclient:
+        Config.db_client_ip = 'localhost'
+    elif get_env_var('DB_CLIENT_IP') == '0.0.0.0':
+        # data engine is running in Docker
+        Config.db_client_ip = 'clipboard_db_client'
+    else:
+        Config.db_client_ip = get_env_var('DOCKER_IP')
+    
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--local-dbclient', action='store_true')
     args = parser.parse_args()
-    Config.db_client_ip = 'localhost' if args.local_dbclient else 'clipboard_db_client'
     
+    set_client_ip(args.local_dbclient)
     connect_to_client()
 
     # get_project_settings() can't find the settings unless we execute in the same directory as scrapy.cfg
