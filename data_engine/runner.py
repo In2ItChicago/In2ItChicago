@@ -2,7 +2,6 @@ import scrapy
 import os
 import sys
 import requests
-import argparse
 import time
 from threading import Thread
 from multiprocessing import Process
@@ -51,29 +50,8 @@ def connect_to_client():
                 sys.exit(1)
             time.sleep(0.5)
 
-def get_env_var(name):
-    try:
-        return os.environ[name]
-    except KeyError:
-        print('Error: {0} not set. If this value was recently set, close all python processes and try again'.format(name))
-        sys.exit(1)
-
-def set_client_ip(local_dbclient):
-    if local_dbclient:
-        Config.db_client_ip = 'localhost'
-    elif get_env_var('DB_CLIENT_IP') == '0.0.0.0':
-        # data engine is running in Docker
-        Config.db_client_ip = 'clipboard_db_client'
-    else:
-        Config.db_client_ip = get_env_var('DOCKER_IP')
-    
-
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--local-dbclient', action='store_true')
-    args = parser.parse_args()
-    
-    set_client_ip(args.local_dbclient)
+    Config.initialize()
     connect_to_client()
 
     # get_project_settings() can't find the settings unless we execute in the same directory as scrapy.cfg
@@ -108,3 +86,5 @@ if __name__ == '__main__':
 
     if len(events.json()) > 0:
         print('Data retrieved successfully')
+    else:
+        print('No data retrieved')

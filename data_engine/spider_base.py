@@ -5,7 +5,7 @@ from event import Event, EventFieldData
 
 class SpiderBase(AggregatorBase):
     # This class includes all functionality that should be shared by spiders
-
+    
     def get_request(self, url, request_params):
         return scrapy.Request(f'{self.base_url}{url}?{parse.urlencode(request_params)}')
 

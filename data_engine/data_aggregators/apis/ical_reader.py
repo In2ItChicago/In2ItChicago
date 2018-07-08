@@ -1,7 +1,7 @@
 from icalendar import Calendar
 from event import Event
+from cache_call import cache_call
 import requests
-
 
 class ICal:
     def __init__(self, cal, default_timezone):
@@ -15,6 +15,7 @@ class ICal:
         return ICal(Calendar.from_ical(data), default_timezone)
 
     @staticmethod
+    @cache_call
     def from_url(url, default_timezone):
         r = requests.get(url)
         return ICal(Calendar.from_ical(r.text), default_timezone)

@@ -28,16 +28,13 @@ class LibraryEvents(ApiBase):
 
         while more_data:
             # Sleep to avoid overloading the server
-            time.sleep(0.1)
+            self.wait()
             next_events_json = self.get_next_events_json(start)
             num_results = len(next_events_json)
             events_json.extend(next_events_json)
             # Keep querying until no more data is returned
             more_data = num_results > 0
-            if (more_data):
-                #print('got events', start, 'to', start + num_results)
-                # Events are returned in fixed increments
-                start += num_results
+            start += num_results
         
         return events_json
 

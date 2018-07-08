@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from config import ENABLE_SCRAPY_CACHE, VERBOSE_SCRAPY_OUTPUT, SCRAPY_CACHE_EXPIRATION
 
 # Scrapy settings for clipboardproject project
 #
@@ -82,12 +83,12 @@ AUTOTHROTTLE_ENABLED = True
 
 # Enable and configure HTTP caching (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
-HTTPCACHE_ENABLED = True
+HTTPCACHE_ENABLED = ENABLE_SCRAPY_CACHE
 # Expire cache every hour
-HTTPCACHE_EXPIRATION_SECS = 3600
+HTTPCACHE_EXPIRATION_SECS = SCRAPY_CACHE_EXPIRATION
 HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 # Comment this out to see all data being scraped
-LOG_LEVEL = 'ERROR'
+LOG_LEVEL = 'DEBUG' if VERBOSE_SCRAPY_OUTPUT else 'ERROR'

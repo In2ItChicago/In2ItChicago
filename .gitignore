@@ -119,5 +119,9 @@ venv.bak/
 .settings/
 .vscode/
 
-# Couchbase data
-clipboard_db/db_data
+# Visual Studio
+.vs/
+
+# Beaker files
+data_engine/data_aggregators/data/
+data_engine/data_aggregators/lock/

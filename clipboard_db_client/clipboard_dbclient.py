@@ -51,22 +51,31 @@ def status():
 
 @app.route('/putevents', methods=['POST'])
 def put_events():
+    request_obj = request.get_json()
+    if len(request_obj) == 0:
+        return 'Error: request contains no data', 400
+    try:
+        organizations = list({ obj['organization'] for obj in request_obj })
+    except KeyError:
+        return 'One or more documents sent for insertion do not contain the "organization" property', 400
     with update_lock:
         query_lock.wait_for_clearance()
-        request_obj = request.get_json()
         events = clipboard_db.event
-        
-        if len(request_obj) == 0:
-            return 'Error: request contains no data', 400
+
+        query = {'organization' : {'$in': organizations }}
+        events_to_delete = [event for event in events.find(query)]
+        events.delete_many(query)
         try:
-            organizations = list({ obj['organization'] for obj in request_obj })
-            events.remove({'organization' : {'$in': organizations }})
             # Using ordered=False may increase performance and we don't care about the order of inserts
             events.insert_many(request_obj, ordered=False)
-            
-            return 'success', 200
-        except KeyError:
-            return 'One or more documents sent for insertion do not contain the "organization" property', 400
+        except Exception:
+            #TODO: Make sure this exception is logged when we figure out a logging system
+            inserted_events = [event for event in events.find(query)]
+            if len(inserted_events) == 0 and len(events_to_delete) > 0:
+                events.insert_many(events_to_delete)
+
+        return 'success', 200
+        
 
 @app.route('/getevents', methods=['GET'])
 def get_events():

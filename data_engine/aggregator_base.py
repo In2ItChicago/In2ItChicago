@@ -34,8 +34,8 @@ class AggregatorBase:
         if len(event_list) == 0:
             return
         with self.update_mutex:
-            response = requests.post(f'http://{Config.db_client_ip}:5000/putevents', json = event_list)
+            response = requests.post(f'http://{Config.db_client_ip}:5000/putevents', json=event_list)
         if not response.ok:
             raise ValueError(response.text)
         else:
-            print(f'Saved events for {event_list[0]["organization"]}')
+            print(f'Saved {len(event_list)} events for {event_list[0]["organization"]}')

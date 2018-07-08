@@ -42,8 +42,7 @@ class HistorySpider(CrawlSpider, SpiderBase):
         titles = self.extract('title', response.css, 'a.title::text')
         urls = self.extract('url', response.css, 'a.title::attr(href)')
         times = self.extract('time_range', response.css, '.time').remove_html()
-        dates = get_full_date(self.extract('date', response.xpath, '''//div[contains(@class, "xcalendar-row")]//div[@class="number" or @class="month"]/span/text() |
-                                        //div[contains(@class, "xcalendar-row")]//div[@class="number" or @class="month"]/text()'''))
+        dates = get_full_date(self.extract('date', response.css, '.xcalendar-row .number,.month').remove_html())
         descriptions = self.extract('description', response.css, '.info').remove_html()
 
         return self.create_events('Chicago History Museum', titles, descriptions, urls, times, dates)
