@@ -1,4 +1,4 @@
-FROM python:latest
+FROM python:3.6.6
 
 WORKDIR /dataengine
 ADD ./*.py /dataengine/

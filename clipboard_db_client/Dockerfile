@@ -1,4 +1,4 @@
-FROM python:latest
+FROM python:3.6.6
 
 WORKDIR /clipboarddbclient
 ADD ./clipboard_dbclient.py /clipboarddbclient
