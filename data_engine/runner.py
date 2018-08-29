@@ -13,6 +13,7 @@ from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 from data_aggregators.apis.library_events import LibraryEvents
 from data_aggregators.apis.greatlakes_ical import GreatLakesReader
+from data_aggregators.apis.park_district import ParkDistrict
 from data_aggregators.clipboard_scrapers.spiders.history_spider import HistorySpider
 from data_aggregators.clipboard_scrapers.spiders.wpbcc_spider import WpbccSpider
 from data_aggregators.clipboard_scrapers.spiders.lwvchicago_spider import LWVchicago
@@ -63,18 +64,19 @@ if __name__ == '__main__':
 
     print('Running data engine...')
 
-    crawlerProcess = CrawlerProcess(get_project_settings())
+    # crawlerProcess = CrawlerProcess(get_project_settings())
     apiProcess = ApiProcess()
 
-    crawlerProcess.crawl(HistorySpider, start_date, end_date)
-    crawlerProcess.crawl(WpbccSpider, start_date, end_date)
-    crawlerProcess.crawl(LWVchicago, start_date, end_date)
+    # crawlerProcess.crawl(HistorySpider, start_date, end_date)
+    # crawlerProcess.crawl(WpbccSpider, start_date, end_date)
+    # crawlerProcess.crawl(LWVchicago, start_date, end_date)
 
-    apiProcess.start_api_calls(start_date, end_date, LibraryEvents)
-    apiProcess.start_api_calls(start_date, end_date, GreatLakesReader)
+    # apiProcess.start_api_calls(start_date, end_date, LibraryEvents)
+    # apiProcess.start_api_calls(start_date, end_date, GreatLakesReader)
+    apiProcess.start_api_calls(start_date, end_date, ParkDistrict)
 
-    crawlerProcess.start()
-    crawlerProcess.join()
+    # crawlerProcess.start()
+    # crawlerProcess.join()
     apiProcess.join()
 
     print('Data engine complete')

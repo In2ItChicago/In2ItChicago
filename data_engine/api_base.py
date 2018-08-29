@@ -26,6 +26,13 @@ class ApiBase(AggregatorBase):
             time.sleep(sleep_time)
 
     @cache_call
+    def post_response(self, url = '', request_data=None, headers=None):
+        response = self.session.post(self.base_url + url, data = request_data, headers = headers)
+        if not response.ok:
+            raise ValueError(response.text)
+        return response
+
+    @cache_call
     def get_response(self, url = '', request_params=None, headers=None):
         response = self.session.get(self.base_url + url, params = request_params, headers = headers)
         if not response.ok:
@@ -44,6 +51,14 @@ class ApiBase(AggregatorBase):
         response_json = self.parse_response_json(response)
         return response_json if property_to_return == None else response_json[property_to_return]
 
+    def post_response_json(self, url, request_data, property_to_return=None):
+        response = self.post_response(url, request_data=request_data, headers={
+                                     'Accept': 'application/json, text/javascript, */*; q=0.01'})
+        if not response.ok:
+            raise ValueError(response.text)
+        response_json = self.parse_response_json(response)
+        return response_json if property_to_return == None else response_json[property_to_return]
+    
     def get_events(self):
         # Override me
         pass
