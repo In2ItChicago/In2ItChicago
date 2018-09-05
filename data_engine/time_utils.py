@@ -32,6 +32,8 @@ class TimeUtils:
 
         if time_data['date'] != None:
             parsed_start_date, parsed_end_date = self.parse_date(time_data['date'])
+            if(parsed_end_date == None and parsed_start_date != None):
+                parsed_end_date = parsed_start_date
         elif time_data['start_date'] != None and time_data['end_date'] != None:
             parsed_start_date = self.parse_date_string(time_data['start_date'])
             parsed_end_date = self.parse_date_string(time_data['end_date'])

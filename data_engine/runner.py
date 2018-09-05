@@ -16,6 +16,7 @@ from data_aggregators.apis.greatlakes_ical import GreatLakesReader
 from data_aggregators.clipboard_scrapers.spiders.history_spider import HistorySpider
 from data_aggregators.clipboard_scrapers.spiders.wpbcc_spider import WpbccSpider
 from data_aggregators.clipboard_scrapers.spiders.lwvchicago_spider import LWVchicago
+from data_aggregators.clipboard_scrapers.spiders.lakeviewpantry_spider import LakeviewPantry
 
 from config import Config
 
@@ -69,6 +70,7 @@ if __name__ == '__main__':
     crawlerProcess.crawl(HistorySpider, start_date, end_date)
     crawlerProcess.crawl(WpbccSpider, start_date, end_date)
     crawlerProcess.crawl(LWVchicago, start_date, end_date)
+    crawlerProcess.crawl(LakeviewPantry, start_date, end_date)
 
     apiProcess.start_api_calls(start_date, end_date, LibraryEvents)
     apiProcess.start_api_calls(start_date, end_date, GreatLakesReader)
