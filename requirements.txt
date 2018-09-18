@@ -6,4 +6,5 @@ requests
 icalendar
 pymongo
 flask
+flask_pymongo
 beaker
