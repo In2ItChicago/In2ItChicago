@@ -1,7 +1,7 @@
 version: '3.6'
 services:
   clipboard_db:
-    image: "mongo:latest"
+    image: "mongo:4.1.3"
     ports:
       - "27017:27017"
     volumes:
@@ -15,6 +15,14 @@ services:
       - DB_CLIENT_IP=0.0.0.0
   data_engine:
     build: "./data_engine"
+    environment:
+      - DOCKER_IP=${DOCKER_IP}
+      - DB_CLIENT_IP=0.0.0.0
+  clipboard_site:
+    build: "./clipboard_site"
+    ports:
+      - "8000:8000"
+      - "80:80"
     environment:
       - DOCKER_IP=${DOCKER_IP}
       - DB_CLIENT_IP=0.0.0.0
