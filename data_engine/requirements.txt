@@ -1,4 +1,4 @@
-Scrapy 
+Scrapy
 DateRangeParser 
 python-dateutil 
 bs4 

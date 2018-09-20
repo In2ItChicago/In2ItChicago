@@ -41,7 +41,7 @@ def create_db():
 def setup_db():
     print('Attempting to connect to MongoDB...')
     try:
-        if not 'clipboard' in mongo.db.client.database_names():
+        if not 'clipboard' in mongo.db.client.list_database_names():
             create_db()
         else:
             print('Connection successful')
