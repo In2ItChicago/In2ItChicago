@@ -7,24 +7,35 @@ services:
     volumes:
       - mongodata:/data/db
   clipboard_db_client:
-    build: "./clipboard_db_client"
+    build: 
+      context: ./
+      dockerfile: ./clipboard_db_client/Dockerfile
     ports:
       - "5000:5000"
     environment:
       - DOCKER_IP=${DOCKER_IP}
-      - DB_CLIENT_IP=0.0.0.0
+      - DB_CLIENT_IP=clipboard_db_client
+    depends_on:
+      - clipboard_db
   data_engine:
-    build: "./data_engine"
+    build: 
+      context: ./
+      dockerfile: ./data_engine/Dockerfile
     environment:
       - DOCKER_IP=${DOCKER_IP}
-      - DB_CLIENT_IP=0.0.0.0
+      - DB_CLIENT_IP=clipboard_db_client
+    depends_on:
+      - clipboard_db_client
   clipboard_site:
-    build: "./clipboard_site"
+    build: 
+      context: ./
+      dockerfile: ./clipboard_site/Dockerfile
     ports:
       - "8000:8000"
-      - "80:80"
     environment:
       - DOCKER_IP=${DOCKER_IP}
-      - DB_CLIENT_IP=0.0.0.0
+      - DB_CLIENT_IP=clipboard_db_client
+    depends_on:
+      - clipboard_db_client
 volumes:
   mongodata:

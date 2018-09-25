@@ -1,5 +1,6 @@
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404
+from clipboard.settings import config
 #from .models import Event
 import requests
 import os
@@ -12,17 +13,8 @@ class EventData:
 	def get_event(event_id):
 		return next(e for e in EventData.events if e['id'] == event_id)
 
-def get_env_var(name):
-    try:
-        return os.environ[name]
-    except KeyError:
-        print('Error: {0} not set. If this value was recently set, close all python processes and try again'.format(name))
-        sys.exit(1)
-
-db_client_ip = get_env_var('DB_CLIENT_IP')
-
 def index(request):
-	events_response = requests.get(f'http://clipboard_db_client:5000/getevents', params= {
+	events_response = requests.get(config.db_get_events, params= {
         'start_timestamp': 0, 
         'end_timestamp': 10000000000
     })

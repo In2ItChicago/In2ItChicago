@@ -17,42 +17,44 @@ from data_aggregators.clipboard_scrapers.spiders.history_spider import HistorySp
 from data_aggregators.clipboard_scrapers.spiders.wpbcc_spider import WpbccSpider
 from data_aggregators.clipboard_scrapers.spiders.lwvchicago_spider import LWVchicago
 
-from config import Config
+from config import config
 
 class ApiProcess:
     def __init__(self):
         self.threads = []
 
-    def start_api_calls(self, start_date, end_date, *args):
-        for arg in args:
-            # All api classes should take start_date and end_date as parameters to the constructor have a method called "get_events" that runs all required logic
-            api_class = arg(start_date, end_date)
-            thread = Thread(target = api_class.get_events)
-            thread.start()
-            self.threads.append(thread)
+    def start_api_calls(self, class_name, start_date, end_date):
+        # All api classes should take start_date and end_date as parameters to the constructor have a method called "get_events" that runs all required logic
+        api_class = class_name(start_date, end_date)
+        thread = Thread(target = api_class.get_events)
+        thread.start()
+        self.threads.append(thread)
 
     def join(self):
         for thread in self.threads:
             thread.join()
 
-def connect_to_client():
-    num_attempts = 10
-    client_url = f'http://{Config.db_client_ip}:5000'
-    for i in range(num_attempts):
-        try:
-            print(f'Connecting to database client at {client_url}...')
-            requests.get(client_url + '/status')
-            print('Connection successful')
-            break
-        except requests.exceptions.ConnectionError:
-            if i == num_attempts - 1:
-                print('Connection to db client failed. Make sure the service is running and the url is set correctly.')
-                sys.exit(1)
-            time.sleep(0.5)
+# def connect_to_client():
+#     num_attempts = 10
+#     client_url = f'http://{Config.db_client_ip}:5000'
+#     for i in range(num_attempts):
+#         try:
+#             print(f'Connecting to database client at {client_url}...')
+#             requests.get(client_url + '/status')
+#             print('Connection successful')
+#             break
+#         except requests.exceptions.ConnectionError:
+#             if i == num_attempts - 1:
+#                 print('Connection to db client failed. Make sure the service is running and the url is set correctly.')
+#                 sys.exit(1)
+#             time.sleep(0.5)
 
 if __name__ == '__main__':
-    Config.initialize()
-    connect_to_client()
+    #Config.initialize()
+    status, msg = config.connect_to_client()
+    if not status:
+        print(msg)
+        sys.exit(1)
 
     # get_project_settings() can't find the settings unless we execute in the same directory as scrapy.cfg
     os.chdir('data_aggregators')
@@ -70,8 +72,8 @@ if __name__ == '__main__':
     crawlerProcess.crawl(WpbccSpider, start_date, end_date)
     crawlerProcess.crawl(LWVchicago, start_date, end_date)
 
-    apiProcess.start_api_calls(start_date, end_date, LibraryEvents)
-    apiProcess.start_api_calls(start_date, end_date, GreatLakesReader)
+    apiProcess.start_api_calls(LibraryEvents, start_date, end_date)
+    apiProcess.start_api_calls(GreatLakesReader, start_date, end_date)
 
     crawlerProcess.start()
     crawlerProcess.join()
@@ -79,7 +81,7 @@ if __name__ == '__main__':
 
     print('Data engine complete')
  
-    events = requests.get(f'http://{Config.db_client_ip}:5000/getevents', params= {
+    events = requests.get(config.db_get_events, params = {
         'start_timestamp': 0, 
         'end_timestamp': 10000000000
     })

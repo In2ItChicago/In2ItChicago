@@ -5,6 +5,7 @@ from db_locks import UpdateLock, QueryLock
 from bson import json_util, ObjectId, BSON
 from bson.json_util import dumps
 from datetime import datetime
+from clipboardcommonlib import shared_config
 import uuid
 import json
 import time
@@ -19,15 +20,15 @@ def get_env_var(name):
         print('Error: {0} not set. If this value was recently set, close all python processes and try again'.format(name))
         sys.exit(1)
 
+config = shared_config.Config()
 app = Flask(__name__)
-date_format = '%Y-%m-%d'
-time_format = '%H:%M'
-db_client_ip = get_env_var('DB_CLIENT_IP')
-mongo_ip = 'clipboard_db' if db_client_ip == '0.0.0.0' else get_env_var('DOCKER_IP')
-mongo_port = 27017
+#date_format = '%Y-%m-%d'
+#time_format = '%H:%M'
+#mongo_ip = 'clipboard_db' if db_client_ip == 'clipboard_db_client' else get_env_var('DOCKER_IP')
+#mongo_port = 27017
 
 app.config['MONGO_DBNAME'] = 'clipboard'
-app.config['MONGO_URI'] = f'mongodb://{mongo_ip}:{mongo_port}/clipboard'
+app.config['MONGO_URI'] = config.db_url
 
 mongo = PyMongo(app)
 
@@ -50,10 +51,10 @@ def setup_db():
         sys.exit(1)
 
 def date_from_timestamp(timestamp):
-    return datetime.utcfromtimestamp(timestamp).strftime(date_format)
+    return datetime.utcfromtimestamp(timestamp).strftime(config.display_date_format)
 
 def time_from_timestamp(timestamp):
-    return datetime.utcfromtimestamp(timestamp).strftime(time_format)
+    return datetime.utcfromtimestamp(timestamp).strftime(config.display_time_format)
 
 def transform_result(mongo_result):
     # _id objects can't be serialized to json, so use the str representation
@@ -153,4 +154,4 @@ if __name__ == '__main__':
     app.debug = True
     with app.app_context():
         setup_db()
-    app.run(host=db_client_ip, port=5000)
+    app.run(host=config.db_client_ip, port=5000)
