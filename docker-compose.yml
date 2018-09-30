@@ -30,12 +30,20 @@ services:
     build: 
       context: ./
       dockerfile: ./clipboard_site/Dockerfile
-    ports:
-      - "8000:8000"
+    #ports:
+    #  - "8000:8000"
     environment:
       - DOCKER_IP=${DOCKER_IP}
       - DB_CLIENT_IP=clipboard_db_client
     depends_on:
       - clipboard_db_client
+  nginx:
+    image: "nginx:1.15.4"
+    volumes:
+      - ./nginx:/etc/nginx
+    ports:
+      - "0.0.0.0:80:80"
+    depends_on:
+      - clipboard_site
 volumes:
   mongodata:

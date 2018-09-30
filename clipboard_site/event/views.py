@@ -7,11 +7,11 @@ import os
 import sys
 
 class EventData:
-	events = None
+	#events = None
 
 	@staticmethod
-	def get_event(event_id):
-		return next(e for e in EventData.events if e['id'] == event_id)
+	def get_event(events, event_id):
+		return next(e for e in events if e['id'] == event_id)
 
 def index(request):
 	events_response = requests.get(config.db_get_events, params= {
@@ -20,14 +20,15 @@ def index(request):
     })
 	#all_events = [Event.objects.create(**event) for event in events.json()]
 	#all_events = Event.objects.all()
-	EventData.events = events_response.json()
+	#EventData.events = events_response.json()
+	request.session['events'] = events_response.json()
 	#request.session['events'] = events
-	return render(request, 'event/index.html', {'all_events': EventData.events})
+	return render(request, 'event/index.html', {'all_events': request.session['events']})
 
 def detail(request, event_id):
-	#events = request.session['events']
+	events = request.session['events']
 
-	event = EventData.get_event(event_id)
+	event = EventData.get_event(events, event_id)
 	#event = get_object_or_404(Event, pk=event_id)
 	return render(request, 'event/detail.html', {'event': event})
 

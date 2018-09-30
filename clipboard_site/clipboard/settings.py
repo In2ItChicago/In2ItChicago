@@ -76,6 +76,11 @@ WSGI_APPLICATION = 'clipboard.wsgi.application'
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
 DATABASES = {
+    'default': {
+        'ENGINE': 'djongo',
+        'NAME': 'clipboard',
+        'HOST': '192.168.99.100'
+    }
     # 'default': {
     #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
     #     'NAME': 'clipboard',
