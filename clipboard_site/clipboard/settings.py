@@ -79,7 +79,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'djongo',
         'NAME': 'clipboard',
-        'HOST': '192.168.99.100'
+        'HOST': 'clipboard_db'
     }
     # 'default': {
     #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
