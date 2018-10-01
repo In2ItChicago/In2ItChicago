@@ -19,20 +19,20 @@ from data_aggregators.clipboard_scrapers.spiders.lwvchicago_spider import LWVchi
 
 from config import config
 
-class ApiProcess:
-    def __init__(self):
-        self.threads = []
+# class ApiProcess:
+#     def __init__(self):
+#         self.threads = []
 
-    def start_api_calls(self, class_name, start_date, end_date):
-        # All api classes should take start_date and end_date as parameters to the constructor have a method called "get_events" that runs all required logic
-        api_class = class_name(start_date, end_date)
-        thread = Thread(target = api_class.get_events)
-        thread.start()
-        self.threads.append(thread)
+#     def start_api_calls(self, class_name, start_date, end_date):
+#         # All api classes should take start_date and end_date as parameters to the constructor have a method called "get_events" that runs all required logic
+#         api_class = class_name(start_date, end_date)
+#         thread = Thread(target = api_class.get_events)
+#         thread.start()
+#         self.threads.append(thread)
 
-    def join(self):
-        for thread in self.threads:
-            thread.join()
+#     def join(self):
+#         for thread in self.threads:
+#             thread.join()
 
 # def connect_to_client():
 #     num_attempts = 10
@@ -66,18 +66,19 @@ if __name__ == '__main__':
     print('Running data engine...')
 
     crawlerProcess = CrawlerProcess(get_project_settings())
-    apiProcess = ApiProcess()
+    #apiProcess = ApiProcess()
 
     crawlerProcess.crawl(HistorySpider, start_date, end_date)
     crawlerProcess.crawl(WpbccSpider, start_date, end_date)
     crawlerProcess.crawl(LWVchicago, start_date, end_date)
-
-    apiProcess.start_api_calls(LibraryEvents, start_date, end_date)
-    apiProcess.start_api_calls(GreatLakesReader, start_date, end_date)
+    crawlerProcess.crawl(LibraryEvents, start_date, end_date)
+    crawlerProcess.crawl(GreatLakesReader, start_date, end_date)
+    #apiProcess.start_api_calls(LibraryEvents, start_date, end_date)
+    #apiProcess.start_api_calls(GreatLakesReader, start_date, end_date)
 
     crawlerProcess.start()
     crawlerProcess.join()
-    apiProcess.join()
+    #apiProcess.join()
 
     print('Data engine complete')
  
