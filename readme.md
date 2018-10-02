@@ -108,8 +108,7 @@ When the program is finished running, go to your Robo 3T instance, right click o
 For debugging, you'll want to run some or all of the code locally instead of inside Docker. To set up the dependencies, `cd` into the ClipboardApp repository. 
 On Windows, you'll need to have Visual Studio installed if you don't already because Scrapy is dependent on Visual Studio's C++ compiler.
 If you're using Anaconda, open up an Anaconda terminal and run `conda install -c anaconda python=3.7` to ensure you're running python 3.7 and then `anaconda-install.sh`.
-Otherwise, run `pip3 install -r requirements.txt`. Use `pip` instead of `pip3` if Python 3 is your default Python version. 
-You can use the shell script `up-db-and-client.sh` to run the database and database client inside of docker, allowing you to run the other components instead of inside Docker. 
+Otherwise, run `./install.sh`. You can use the shell script `up-db-and-client.sh` to run the database and database client inside of docker, allowing you to run the other components instead of inside Docker. 
 `up-db-only.sh` only runs the database inside Docker, allowing you to run the data engine and database client locally. These scripts are just shortcuts for running specific `docker-compose up` commands. You can use `docker-compose up` with any combination of services like this: `docker-compose up clipboard_db clipboard_site` to run just the database and site in Docker.
 
 IMPORTANT: When running a component from an IDE or text editor, you must have the component (eg `data_engine`) folder set as the base project folder. 
