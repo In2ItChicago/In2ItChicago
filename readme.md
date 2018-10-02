@@ -135,6 +135,8 @@ ime in seconds that Scrapy data will be cached for.
 - **VERBOSE_SCRAPY_OUTPUT**:
 If `True`, Scrapy will show verbose logs during the scraping process. This may be useful for debugging, but the vast amount of data shown makes it difficult to spot errors as they occur.
 
+`clipboard_common_lib/clipboardcommonlib/shared_config.py` contains settings that are shared by multiple services. This file is distributed as a pip package. After modifying this file, re-install it with `clipboard_common_lib/install-common-libs.sh`
+
 ## Development Guide
 Our current development tasks and bugs are kept in the issues list [here](https://github.com/ClipboardProject/ClipboardApp/issues).  
 The easiest way to learn the code base and get started contributing is to add a new scraper as defined in [this](https://github.com/ClipboardProject/ClipboardApp/issues/14) issue.  
