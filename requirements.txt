@@ -8,3 +8,5 @@ pymongo
 flask
 flask_pymongo
 beaker
+djongo
+gunicorn
