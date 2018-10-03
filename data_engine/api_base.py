@@ -8,6 +8,9 @@ from config import API_DELAY_SECONDS
 
 
 class ApiBase(AggregatorBase):
+    allowed_domains = ['wikipedia.org','en.wikipedia.org']
+    start_urls = ['https://www.wikipedia.org/']
+    
     def __init__(self, base_url, start_date, end_date, date_format):
         super().__init__(base_url, start_date, end_date, date_format)
 
@@ -48,5 +51,5 @@ class ApiBase(AggregatorBase):
         # Override me
         pass
 
-    def save_events(self, events):
-        return super(ApiBase, self).save_events([event.to_dict() for event in events])
+    #def save_events(self, events):
+    #    return super(ApiBase, self).save_events([event.to_dict() for event in events])

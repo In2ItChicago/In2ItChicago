@@ -1,22 +1,55 @@
 version: '3.6'
 services:
   clipboard_db:
-    image: "mongo:latest"
+    image: "mongo:4.1.3"
     ports:
       - "27017:27017"
     volumes:
       - mongodata:/data/db
   clipboard_db_client:
-    build: "./clipboard_db_client"
+    build: 
+      context: ./
+      dockerfile: ./clipboard_db_client/Dockerfile
+    volumes:
+      - ./clipboard_common_lib:/usr/src/app/clipboard_common_lib
     ports:
       - "5000:5000"
     environment:
       - DOCKER_IP=${DOCKER_IP}
-      - DB_CLIENT_IP=0.0.0.0
+      - DB_CLIENT_IP=clipboard_db_client
+    depends_on:
+      - clipboard_db
   data_engine:
-    build: "./data_engine"
+    build: 
+      context: ./
+      dockerfile: ./data_engine/Dockerfile
     environment:
       - DOCKER_IP=${DOCKER_IP}
-      - DB_CLIENT_IP=0.0.0.0
+      - DB_CLIENT_IP=clipboard_db_client
+    volumes:
+      - ./clipboard_common_lib:/usr/src/app/clipboard_common_lib
+    depends_on:
+      - clipboard_db_client
+  clipboard_site:
+    build: 
+      context: ./
+      dockerfile: ./clipboard_site/Dockerfile
+    #ports:
+    #  - "8000:8000"
+    environment:
+      - DOCKER_IP=${DOCKER_IP}
+      - DB_CLIENT_IP=clipboard_db_client
+    volumes:
+      - ./clipboard_common_lib:/usr/src/app/clipboard_common_lib
+    depends_on:
+      - clipboard_db_client
+  nginx:
+    image: "nginx:1.15.4"
+    volumes:
+      - ./nginx:/etc/nginx
+    ports:
+      - "0.0.0.0:80:80"
+    depends_on:
+      - clipboard_site
 volumes:
   mongodata:

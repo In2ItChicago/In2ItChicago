@@ -1,2 +1,4 @@
 pymongo
 flask
+flask_pymongo
+requests

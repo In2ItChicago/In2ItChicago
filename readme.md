@@ -60,7 +60,7 @@ If the docker-compose command doesn't work, add the following line to your ~/.ba
 Close and reopen your terminal(s) to apply the changes.
 
 #### Extra Installation Steps for Windows
-I was unable to get Kinematic to work on Docker Toolbox, so I would recommend skipping that. Make sure virtualization is enabled in the BIOS. After changing those settings, do a full reboot cycle,
+I was unable to get Kinematic to work on Docker Toolbox, so I would recommend skipping that. Make sure virtualization is enabled in the BIOS. If you need to change virtualization settings, do a full reboot cycle,
 otherwise Windows may not report that the settings have changed. If you're running Windows 10 Professional, you'll need to make sure Hyper-V is enabled in the "Turn Windows Features On or Off" dialog.
 If you're using Docker Toolbox on Windows Home edition, when you start Windows, you'll want to start the VirtualBox instance manually before starting Docker or Docker will complain about not having an IP address.
 
@@ -92,10 +92,11 @@ The DOCKER_IP variable is necessary because the versions of Docker that run on V
 so the code will read this variable to know where to make HTTP requests. The DB_CLIENT_IP variable is necessary because the client needs to run on 0.0.0.0 inside the Docker container,
 which is the internal IP address that Docker containers use to communicate with each other, but it needs to run on localhost outside the container.
 
-Open a Docker terminal on Windows Home, Powershell on Windows Professional, or a normal terminal otherwise, and `cd` into the Git repo. Run `docker-compose build` then `docker-compose up`.
-If all goes well, the database will be created and the scrapers will start running. You should start seeing messages saying data was saved successfully.
+Open a Docker terminal on Windows Home, Git Bash or some kind of bash emulator on Windows Professional, or a normal terminal otherwise, and `cd` into the Git repo. Run `./start.bash`. If you get a permissions error, you may need to run `chmod +x start.bash`. 
+This will grant execution permissions to the file. If all goes well, the database will be created, the scrapers will start running, and the website will start up. This process will take some time.
+Eventually, you should start seeing messages like `POST /putevents`. That means the data is being saved. Once a message says `Data retrieved successfully`, the code is done running. You can go to your Docker IP on Windows (usually `192.168.99.100`) or `localhost` otherwise to see the site.
 
-Download Robo 3T from [here](https://robomongo.org/download) using the link on the right. You can use another MongoDB client if you'd prefer. When you start Robo 3T, a popup to configure connections should appear.
+If you want to see the data in the database, download Robo 3T from [here](https://robomongo.org/download) using the link on the right. You can use another MongoDB client if you'd prefer. When you start Robo 3T, a popup to configure connections should appear.
 If you're on Windows Home, right click on the New Connection row and click "Edit". Change localhost to your Docker IP and hit "Save". Now press "Connect". Otherwise, leave the settings alone.
 It should connect successfully and you should see a database called Clipboard on the pane on the right. The database should contain a collection called "event" and an index that includes the start and end timestamp, along with other field(s).
 
@@ -106,18 +107,15 @@ When the program is finished running, go to your Robo 3T instance, right click o
 ### Setting up the code to run locally
 For debugging, you'll want to run some or all of the code locally instead of inside Docker. To set up the dependencies, `cd` into the ClipboardApp repository. 
 On Windows, you'll need to have Visual Studio installed if you don't already because Scrapy is dependent on Visual Studio's C++ compiler.
-If you're using Anaconda, open up an Anaconda terminal and run `anaconda-install.sh`.
-Otherwise, run `pip3 install -r requirements.txt`. Use `pip` instead of `pip3` if Python 3 is your default Python version. 
-You can use the shell script `up-db-and-client.sh` to run the database and database client inside of docker, allowing you to run the data engine locally instead of inside Docker. 
-`up-db-only.sh` only runs the database inside Docker, allowing you to run the data engine and database client locally. These scripts are just shortcuts for running specific `docker-compose up` commands. 
+If you're using Anaconda, open up an Anaconda terminal and run `conda install -c anaconda python=3.7` to ensure you're running python 3.7 and then `anaconda-install.sh`.
+Otherwise, run `./install.sh`. You can use the shell script `up-db-and-client.sh` to run the database and database client inside of docker, allowing you to run the other components instead of inside Docker. 
+`up-db-only.sh` only runs the database inside Docker, allowing you to run the data engine and database client locally. These scripts are just shortcuts for running specific `docker-compose up` commands. You can use `docker-compose up` with any combination of services like this: `docker-compose up clipboard_db clipboard_site` to run just the database and site in Docker.
 
-IMPORTANT: When running the data engine or the database client from an IDE or text editor, you must have the `data_engine` folder or the `clipboard_db_client` folder set as the base project folder. 
+IMPORTANT: When running a component from an IDE or text editor, you must have the component (eg `data_engine`) folder set as the base project folder. 
 Opening the entire clipboard app folder will not work because of how Python looks for files to import.
 
 ### Settings
 The folling settings are defined in `data_engine/config.py`:  
-- **LOCAL_DB_CLIENT**:
-Set this to `True` if you're running the database client on your local computer instead of inside of Docker. This tells the data engine to look for the client running on `localhost` instead of at its Docker url.
 
 - **ENABLE_API_CACHE**:
 If `True`, any API calls made will be cached to a local file. This is useful to speed up development and to prevent hitting sites repeatedly.
@@ -137,6 +135,8 @@ ime in seconds that Scrapy data will be cached for.
 - **VERBOSE_SCRAPY_OUTPUT**:
 If `True`, Scrapy will show verbose logs during the scraping process. This may be useful for debugging, but the vast amount of data shown makes it difficult to spot errors as they occur.
 
+`clipboard_common_lib/clipboardcommonlib/shared_config.py` contains settings that are shared by multiple services. This file is distributed as a pip package. After modifying this file, re-install it with `clipboard_common_lib/install-common-libs.sh`
+
 ## Development Guide
 Our current development tasks and bugs are kept in the issues list [here](https://github.com/ClipboardProject/ClipboardApp/issues).  
 The easiest way to learn the code base and get started contributing is to add a new scraper as defined in [this](https://github.com/ClipboardProject/ClipboardApp/issues/14) issue.  
@@ -155,7 +155,7 @@ Any time data is received from a website, the old data from that site is deleted
 This holds a single collection of all data from the sites. Only the database client interacts with the database.
 
 - **Clipboard Site**:
-This is not integrated with the Clipboard App yet. Soon, this will be used to display all of the data gathered by the data engine.
+The website that displays the aggregated data. Interacts with the database via the database client.
 
 ### Getting Started
 As stated previously, adding a scraper is the best way to start contributing. If you're not familiar with web scraping,

@@ -3,7 +3,7 @@ import json
 import re
 from time_utils import TimeUtils
 from multiprocessing import Lock
-from config import Config
+from config import config
 import requests
 
 class AggregatorBase:
@@ -34,7 +34,7 @@ class AggregatorBase:
         if len(event_list) == 0:
             return
         with self.update_mutex:
-            response = requests.post(f'http://{Config.db_client_ip}:5000/putevents', json=event_list)
+            response = requests.post(config.db_put_events, json=event_list)
         if not response.ok:
             raise ValueError(response.text)
         else:

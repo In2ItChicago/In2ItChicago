@@ -1,9 +1,11 @@
-FROM python:3.6.6
+FROM python:3.7
 
-WORKDIR /clipboarddbclient
-ADD ./clipboard_dbclient.py /clipboarddbclient
-ADD ./db_locks.py /clipboarddbclient
-ADD ./requirements.txt /clipboarddbclient
+WORKDIR /usr/src/app
+COPY ./clipboard_common_lib ./clipboard_common_lib
+COPY ./clipboard_db_client ./clipboard_db_client
+RUN chmod +x ./clipboard_common_lib/install-common-libs.sh
+RUN ["bash", "./clipboard_common_lib/install-common-libs.sh"]
 
+WORKDIR /usr/src/app/clipboard_db_client
 RUN pip3 install -r requirements.txt
 ENTRYPOINT ["python3", "clipboard_dbclient.py"]

@@ -1,9 +1,13 @@
-FROM python:3.6.6
+FROM python:3.7
 
-WORKDIR /dataengine
-ADD ./*.py /dataengine/
-ADD data_aggregators /dataengine/data_aggregators
-ADD ./requirements.txt /dataengine
+WORKDIR /usr/src/app
+COPY ./clipboard_common_lib ./clipboard_common_lib
+COPY ./data_engine ./data_engine
+RUN chmod +x ./clipboard_common_lib/install-common-libs.sh
+RUN ["bash", "./clipboard_common_lib/install-common-libs.sh"]
 
+WORKDIR /usr/src/app/data_engine
+# Move this back into requirements.txt when new twisted version is released
+RUN pip3 install git+https://github.com/twisted/twisted@992a841506d18a77f8fa15efe4b957e02075a1a1 --upgrade
 RUN pip3 install -r requirements.txt
 ENTRYPOINT ["python3", "runner.py"]

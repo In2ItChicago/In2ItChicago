@@ -1,0 +1,4 @@
+.vscode
+__pycache__
+data_aggregators/data
+data_aggregators/lock

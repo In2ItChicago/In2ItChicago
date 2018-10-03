@@ -3,13 +3,24 @@ from event import Event
 from categories import Category
 from api_base import ApiBase
 from data_utils import DataUtils
+from scrapy.spiders import Spider
+import scrapy
 
-class LibraryEvents(ApiBase):
+class LibraryEvents(Spider, ApiBase):
     # This is the max amount of rows that the API can return at one time
     MAX_ROWS = 50
 
+    name = 'library'
+    
     def __init__(self, start_date, end_date):
-        super().__init__('https://chipublib.bibliocommons.com/', start_date, end_date, date_format = '%Y-%m-%d')
+        Spider.__init__(self)
+        ApiBase.__init__(self, 'https://chipublib.bibliocommons.com/', start_date, end_date, date_format = '%Y-%m-%d')
+    
+    #def start_requests(self):
+    #    yield scrapy.Request('https://google.com')
+    
+    def parse(self, response):
+        return self.get_events()
 
     def get_next_events_json(self, start):
         request_params = {
@@ -93,7 +104,7 @@ class LibraryEvents(ApiBase):
             if details['is_cancelled'] == True or event['is_full'] == True:
                 continue
 
-            events.append(Event.from_dict({
+            yield Event.from_dict({
                 'organization': 'Chicago Public Library',
                 'title': details['title'],
                 'description': DataUtils.remove_html(details['description']),
@@ -104,5 +115,5 @@ class LibraryEvents(ApiBase):
                 'url': f'{self.base_url}events/search/index/event/{event["id"]}',
                 'price': 0.0,
                 'category': Category.LIBRARY
-            }, self.time_utils.date_format))
-        self.save_events(events)
+            }, self.time_utils.date_format)
+        #self.save_events(events)

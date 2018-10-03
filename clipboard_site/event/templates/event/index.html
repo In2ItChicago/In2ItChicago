@@ -1,0 +1,17 @@
+{% extends 'event/base.html' %}
+
+{% block body %}
+	{% if all_events %}
+		{% for event in all_events %}
+			<div class="list-group">
+				<a href="{% url 'event:detail' event.id %}" class="list-group-item">
+					<h4 class="list-group-item-heading">{{ event.title }}</h4>
+					<b><p class="list-group-item-text">{{ event.start_date }}</p></b><br>
+					<p class="list-group-item-text">{{ event.description }}</p>
+				</a>
+			</div>
+		{% endfor %}
+	{% else %}
+		<h3>No events available</h3>
+	{% endif %}
+{% endblock %}
