@@ -101,7 +101,7 @@ class LibraryEvents(ApiBase):
                 'date': date,
                 'start_time': start_time,
                 'end_time': end_time,
-                'url': f'{self.base_url}/{event["id"]}',
+                'url': f'{self.base_url}events/search/index/event/{event["id"]}',
                 'price': 0.0,
                 'category': Category.LIBRARY
             }, self.time_utils.date_format))
