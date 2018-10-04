@@ -165,6 +165,9 @@ take a look at [this](https://www.analyticsvidhya.com/blog/2015/10/beginner-guid
 If you're comfortable with the concepts used in web scraping, take a look at [this](https://www.analyticsvidhya.com/blog/2017/07/web-scraping-in-python-using-scrapy/) tutorial.
 Ignore the installation instructions because you should have installed Scrapy earlier in this guide.
 
+Scrapy uses the CssSelect module to implement css selectors. Docs can be found [here](https://cssselect.readthedocs.io/en/latest/).
+CssSelect defines its selectors according to the w3 specification [here](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/) with a few exceptions that are listed in CssSelect's documentation.
+
 #### Knowing when to use a scraper and when to use an API
 Most websites that we're dealing with will need to be scraped because the data on them is statically loaded from the server as html. However, some sites use APIs to dynamically load data.
 We should use these whenever possible because scrapers are fragile and need to be changed any time the content on the page changes. APIs are more stable and are less likely to have breaking changes introduced often.
