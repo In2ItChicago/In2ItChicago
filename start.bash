@@ -7,6 +7,7 @@ case "$(uname)" in
      ./dos2unix.exe *.sh */*.sh
      ;;
 esac
+./build-images.sh
 docker-compose build
 ./check-all-image-updates.sh
 docker-compose up
