@@ -5,20 +5,26 @@ import os
 
 class DataUtils:
     @staticmethod
-    def remove_html(html_data, remove_all = False):
+    def remove_html(html_data):
         # \xa0 is returned when a &nbsp is encountered
         # Add any extraneous html data not removed by lxml here
         misc_text_to_remove = r'[\xa0]'
-
+        
         if isinstance(html_data, list):
-            return [DataUtils.remove_html(data, remove_all) for data in html_data]
+            return [DataUtils.remove_html(data) for data in html_data]
+
+        if not isinstance(html_data, str):
+            return html_data
 
         html_removed = BeautifulSoup(html_data, 'lxml').extract().text.strip()
-        misc_removed = re.sub(misc_text_to_remove, '', html_removed, re.UNICODE)
-        if not remove_all:
-            return misc_removed
-        # Optionally remove all non-word characters and newlines (everything except numbers and letters)
-        return re.sub(r'\W+', '', misc_removed , re.UNICODE)
+        return re.sub(misc_text_to_remove, '', html_removed, re.UNICODE)
+
+    @staticmethod
+    def remove_whitespace(html_data):
+        if isinstance(html_data, list):
+            return [DataUtils.remove_html(data) for data in html_data]
+
+        return re.sub(r'\W+', '', html_data , re.UNICODE)
 
     @staticmethod
     def remove_excess_spaces(string):

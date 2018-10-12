@@ -6,6 +6,7 @@ from scrapy.linkextractors import LinkExtractor
 from event import Event, EventFieldData
 from categories import Category
 from spider_base import SpiderBase
+from data_utils import DataUtils
 
 class HistorySpider(CrawlSpider, SpiderBase):
     name = 'history'
@@ -31,6 +32,7 @@ class HistorySpider(CrawlSpider, SpiderBase):
             result = []
             current_month = ''
             for text in xpath_result.data:
+                text = DataUtils.remove_html(text)
                 # Month names are all greater than 2 characters
                 # Days of the month are all 2 characters or fewer
                 if len(text) > 2:
@@ -41,9 +43,9 @@ class HistorySpider(CrawlSpider, SpiderBase):
 
         titles = self.extract('title', response.css, 'a.title::text')
         urls = self.extract('url', response.css, 'a.title::attr(href)')
-        times = self.extract('time_range', response.css, '.time').remove_html()
-        dates = get_full_date(self.extract('date', response.css, '.xcalendar-row .number,.month').remove_html())
-        descriptions = self.extract('description', response.css, '.info').remove_html()
+        times = self.extract('time_range', response.css, '.time')
+        dates = get_full_date(self.extract('date', response.css, '.xcalendar-row .number,.month'))
+        descriptions = self.extract('description', response.css, '.info')
 
         return self.create_events('Chicago History Museum', titles, descriptions, urls, times, dates)
 
@@ -53,11 +55,11 @@ class HistorySpider(CrawlSpider, SpiderBase):
         return request
 
     def parse_item(self, response):
-        location = self.extract('location', response.xpath, '//h3[contains(text(), "Event Location")]/following-sibling::div/p').remove_html()
-        price = self.extract('price', response.css, '.price').remove_html(True)
+        location = self.extract('location', response.xpath, '//h3[contains(text(), "Event Location")]/following-sibling::div/p')
+        price = self.extract('price', response.css, '.price').remove_whitespace()
 
-        return Event(
-            url = response.meta['clicked_url'],
-            address = location.data,
-            price = price.data[0] if len(price.data) > 0 else '0'
-        )
+        return Event.from_dict({
+            'url': response.meta['clicked_url'],
+            'address': location.data,
+            'price': price.data[0] if len(price.data) > 0 else '0'
+        })

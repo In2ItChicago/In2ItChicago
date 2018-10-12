@@ -26,7 +26,9 @@ SECRET_KEY = 'g-ipo79-u0*b-2^^eafv37^ljw5ci!9_kjkaf(r-5d1e7umlah'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ec2-18-221-163-213.us-east-2.compute.amazonaws.com', '18.221.163.213', 'localhost', '[::1]', '127.0.0.1', '192.168.99.100']
+ALLOWED_HOSTS = ['ec2-18-221-163-213.us-east-2.compute.amazonaws.com', '18.221.163.213', 'localhost', '[::1]', '127.0.0.1']
+# Django is dumb and doesn't support wildcards for ip ranges
+ALLOWED_HOSTS += [f'192.168.{i}.{j}' for i in range(256) for j in range(256)]
 
 
 # Application definition

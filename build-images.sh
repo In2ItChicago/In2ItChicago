@@ -1,3 +1,3 @@
-docker build -t data_engine -f data_engine/Dockerfile .
-docker build -t clipboard_db_client -f clipboard_db_client/Dockerfile .
-docker build -t clipboard_site -f clipboard_site/Dockerfile .
+docker build -t data_engine images/data_engine
+docker build -t clipboard_db_client images/clipboard_db_client
+docker build -t clipboard_site images/clipboard_site

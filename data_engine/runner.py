@@ -11,11 +11,13 @@ from dateutil.relativedelta import relativedelta
 from scrapy.cmdline import execute
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
-from data_engine.data_aggregators.apis.library_events import LibraryEvents
-from data_engine.data_aggregators.apis.greatlakes_ical import GreatLakesReader
-from data_engine.data_aggregators.clipboard_scrapers.spiders.history_spider import HistorySpider
-from data_engine.data_aggregators.clipboard_scrapers.spiders.wpbcc_spider import WpbccSpider
-from data_engine.data_aggregators.clipboard_scrapers.spiders.lwvchicago_spider import LWVchicago
+
+from data_aggregators.apis.library_events import LibraryEvents
+from data_aggregators.apis.greatlakes_ical import GreatLakesReader
+from data_aggregators.clipboard_scrapers.spiders.history_spider import HistorySpider
+from data_aggregators.clipboard_scrapers.spiders.wpbcc_spider import WpbccSpider
+from data_aggregators.clipboard_scrapers.spiders.lwvchicago_spider import LWVchicago
+
 
 from config import config
 
@@ -26,7 +28,7 @@ if __name__ == '__main__':
         sys.exit(1)
 
     # get_project_settings() can't find the settings unless we execute in the same directory as scrapy.cfg
-    os.chdir('data_engine/data_aggregators')
+    os.chdir('data_aggregators')
 
     # Look for one month of events for testing purposes
     start_date = datetime.now().strftime('%m-%d-%Y')
@@ -35,19 +37,15 @@ if __name__ == '__main__':
     print('Running data engine...')
 
     crawlerProcess = CrawlerProcess(get_project_settings())
-    #apiProcess = ApiProcess()
 
     crawlerProcess.crawl(HistorySpider, start_date, end_date)
     crawlerProcess.crawl(WpbccSpider, start_date, end_date)
     crawlerProcess.crawl(LWVchicago, start_date, end_date)
     crawlerProcess.crawl(LibraryEvents, start_date, end_date)
     crawlerProcess.crawl(GreatLakesReader, start_date, end_date)
-    #apiProcess.start_api_calls(LibraryEvents, start_date, end_date)
-    #apiProcess.start_api_calls(GreatLakesReader, start_date, end_date)
 
     crawlerProcess.start()
     crawlerProcess.join()
-    #apiProcess.join()
 
     print('Data engine complete')
  

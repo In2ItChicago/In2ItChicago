@@ -107,7 +107,7 @@ class LibraryEvents(Spider, ApiBase):
             yield Event.from_dict({
                 'organization': 'Chicago Public Library',
                 'title': details['title'],
-                'description': DataUtils.remove_html(details['description']),
+                'description': details['description'],
                 'address': self.get_address_string(location),
                 'date': date,
                 'start_time': start_time,

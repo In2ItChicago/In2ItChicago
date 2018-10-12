@@ -53,13 +53,16 @@ class Event(scrapy.Item):
         event.set_time_format(date_format)
 
         time_data = Event.create_time_data()
-        
+        time_data_set = False
         for key, value in event_dict.items():
+            value = DataUtils.remove_html(value)
             if key in time_data:
                 time_data[key] = value
+                time_data_set = True
             else:
                 event[key] = value
-        event['time_data'] = time_data
+        if time_data_set:
+            event['time_data'] = time_data
         return event
 
     def to_dict(self):
@@ -88,7 +91,7 @@ class Event(scrapy.Item):
             scrapy_set_item(key, value.name)
 
         else:
-            super().__setitem__(key, value)
+            scrapy_set_item(key, value)
 
     def update(self, event):
         for key, value in event.items():
@@ -116,8 +119,12 @@ class EventFieldData:
         self.item = item
         self.data = data
 
-    def remove_html(self, remove_all_whitespace = False):
-        self.data = DataUtils.remove_html(self.data, remove_all_whitespace)
+    def remove_html(self):
+        self.data = DataUtils.remove_html(self.data)
+        return self
+
+    def remove_whitespace(self):
+        self.data = DataUtils.remove_whitespace(self.data)
         return self
     
     def map(self, func):

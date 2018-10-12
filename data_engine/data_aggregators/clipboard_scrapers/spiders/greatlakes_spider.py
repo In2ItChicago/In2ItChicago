@@ -4,6 +4,7 @@ from scrapy.spiders import Spider
 from data_utils import DataUtils
 from spider_base import SpiderBase
 
+# This spider is unused but is being kept for now for test purposes
 
 # greatlakes.org has an iCal feed: https://greatlakes.org/events/?ical=1&tribe_display=list
 # Parsing that instead of the website would fix many of the imperfections of this scraper.
