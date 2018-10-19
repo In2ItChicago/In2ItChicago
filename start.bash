@@ -8,6 +8,7 @@ case "$(uname)" in
      ;;
 esac
 ./build-images.sh
+./render.sh
 docker-compose build
 ./check-all-image-updates.sh
 docker-compose up
