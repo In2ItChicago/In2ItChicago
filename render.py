@@ -12,7 +12,7 @@ for file in files:
 
     with open(file, 'r') as f:
         template = f.read()
-        rendered = Template(template).render(env=os.environ)
+        rendered = Template(template).render(**dict(os.environ))
 
     with open(new_file, 'w') as f:
         f.write(rendered)

@@ -66,7 +66,7 @@ http {
 	
 	server {
 		listen 80;
-		{% if server_name %}server_name {{ server_name }};{% endif %}
+		{% if SERVER_NAME %}server_name {{ SERVER_NAME }};{% endif %}
 		#location = /favicon.ico {access_log off; log_not_found off; }
 		#location /static/ {
 		#	root /usr/src/app/clipboard_site;
