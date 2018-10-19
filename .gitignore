@@ -125,3 +125,6 @@ venv.bak/
 # Beaker files
 data_engine/data_aggregators/data/
 data_engine/data_aggregators/lock/
+
+# Generated files
+nginx/nginx.conf
