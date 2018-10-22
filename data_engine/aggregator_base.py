@@ -4,7 +4,9 @@ import re
 from time_utils import TimeUtils
 from multiprocessing import Lock
 from config import config
+from event_hashes import EventHashes
 import requests
+import hashlib
 
 class AggregatorBase:
     # This class includes functionality that should be shared by spiders and API-based classes
@@ -16,7 +18,7 @@ class AggregatorBase:
 
         self.time_utils = TimeUtils(date_format)
         self.base_url = base_url
-
+        self.identifier = re.sub(r'\W', '', base_url)
         self.update_mutex = Lock()
         
         request_format_utils = TimeUtils('%m-%d-%Y')
@@ -25,14 +27,16 @@ class AggregatorBase:
         self.start_timestamp = request_format_utils.min_timestamp_for_day(start_date)
         self.end_timestamp = request_format_utils.max_timestamp_for_day(end_date)
 
-        # try:
-        #     self.docker_ip = os.environ['DOCKER_IP']
-        # except KeyError:
-        #     print('Error: DOCKER_IP not set. If this value was recently set, close all python processes and try again')
-
     def save_events(self, event_list):
         if len(event_list) == 0:
             return
+        str_events = str(event_list).encode('utf-8')
+        new_hash = hashlib.sha512(str_events).hexdigest()
+        if new_hash == EventHashes.get(self.identifier):
+            print(f'Found {len(event_list)} events for {event_list[0]["organization"]}. Nothing to update.')
+            return
+        EventHashes.set(self.identifier, new_hash)
+
         with self.update_mutex:
             response = requests.post(config.db_put_events, json=event_list)
         if not response.ok:
