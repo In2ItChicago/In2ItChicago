@@ -1,5 +1,11 @@
+import hashlib
 class EventHashes:
     hash_list = dict()
+
+    @staticmethod
+    def create_hash(obj):
+        str_obj = str(obj).encode('utf-8')
+        return hashlib.md5(str_obj).hexdigest()
 
     @staticmethod
     def get(key):

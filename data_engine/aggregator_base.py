@@ -6,7 +6,6 @@ from multiprocessing import Lock
 from config import config
 from event_hashes import EventHashes
 import requests
-import hashlib
 
 class AggregatorBase:
     # This class includes functionality that should be shared by spiders and API-based classes
@@ -30,8 +29,7 @@ class AggregatorBase:
     def save_events(self, event_list):
         if len(event_list) == 0:
             return
-        str_events = str(event_list).encode('utf-8')
-        new_hash = hashlib.sha512(str_events).hexdigest()
+        new_hash = EventHashes.create_hash(event_list)
         if new_hash == EventHashes.get(self.identifier):
             print(f'Found {len(event_list)} events for {event_list[0]["organization"]}. Nothing to update.')
             return
