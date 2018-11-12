@@ -35,7 +35,6 @@
 			};
 		},
 		asyncData ({ params }) {
-
             //Ensure get request goes to an endpoint that returns an array or json object
             //If a regular HTML page is returned, the v-for in the view above will try to
             //render each character in the HTML page string as a separate event and nuxt
@@ -45,8 +44,10 @@
                 .then((res) => {
                     return { events: res.data }
 				})*/
-			return events.find({start_timestamp: 0, end_timestamp: 10000000000000});
-
+			return events.find({start_timestamp: 0, end_timestamp: 10000000000000})
+				.then(res => {
+					return {events: res.data };
+				});
 			//Hardcoded test data until JSON api is linked
 			// return {
 			// 	events: [

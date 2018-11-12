@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "NUXT_HOST=0.0.0.0 NUXT_PORT=3000 nuxt",
+    "dev-debug": "NUXT_HOST=0.0.0.0 NUXT_PORT=3000 node --inspect=[::]:5858 ./node_modules/.bin/nuxt",
     "build": "nuxt build",
     "start": "NUXT_HOST=0.0.0.0 NUXT_PORT=3000 nuxt start",
     "generate": "nuxt generate",

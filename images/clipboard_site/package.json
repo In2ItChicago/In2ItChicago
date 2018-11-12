@@ -5,7 +5,8 @@
   "author": "WesThorburn",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
+    "dev": "NUXT_HOST=0.0.0.0 NUXT_PORT=3000 nuxt",
+    "dev-debug": "NUXT_HOST=0.0.0.0 NUXT_PORT=3000 node --inspect=[::]:5858 ./node_modules/.bin/nuxt",
     "build": "nuxt build",
     "start": "NUXT_HOST=0.0.0.0 NUXT_PORT=3000 nuxt start",
     "generate": "nuxt generate",
@@ -13,11 +14,13 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
-    "cross-env": "^5.2.0",
-    "nuxt": "^2.0.0",
-    "bootstrap-vue": "^2.0.0-beta",
+    "@feathersjs/feathers": "^3.2.3",
+    "@feathersjs/rest-client": "^1.4.5",
+    "@nuxtjs/axios": "^5.0.0",
     "bootstrap": "^4.1.3",
-    "@nuxtjs/axios": "^5.0.0"
+    "bootstrap-vue": "^2.0.0-beta",
+    "cross-env": "^5.2.0",
+    "nuxt": "^2.0.0"
   },
   "devDependencies": {
     "nodemon": "^1.11.0",

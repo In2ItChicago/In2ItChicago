@@ -37,6 +37,9 @@ services:
     environment:
       - DOCKER_IP=${DOCKER_IP}
       - DB_CLIENT_IP=clipboard_db_client
+    ports:
+      - "3000:3000"
+      - "5858:5858"
     volumes:
       - ./clipboard_common_lib:/usr/src/app/clipboard_common_lib
     depends_on:
