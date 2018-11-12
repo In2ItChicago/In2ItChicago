@@ -1,4 +1,4 @@
-FROM python:3.7
+FROM python:3.7.1
 
 RUN pip3 install -U pip
 # Move this back into requirements.txt when new twisted version is released

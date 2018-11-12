@@ -8,9 +8,9 @@ fi
 echo
 echo "============================="
 echo "Checking for image updates..."
-$pythoncmd check_image_updates.py python 3.7
-$pythoncmd check_image_updates.py mongo 4.1.4
-$pythoncmd check_image_updates.py nginx 1.15.5
-$pythoncmd check_image_updates.py node 8.12.0
+$pythoncmd check_image_updates.py python 3.7.1
+$pythoncmd check_image_updates.py mongo 4.1.5
+$pythoncmd check_image_updates.py nginx 1.15.6
+$pythoncmd check_image_updates.py node 11.1
 echo "=============================="
 echo

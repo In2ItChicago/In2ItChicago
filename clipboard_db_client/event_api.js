@@ -5,21 +5,62 @@ const MongoClient = require('mongodb').MongoClient;
 const service = require('feathers-mongodb');
 
 const port = 5000;
+const timeout = 1000;
+const retries = 20;
 
-MongoClient.connect('mongodb://192.168.99.100:27017/clipboard', {useNewUrlParser: true})
-    .then(client => {
-        setup(client);
+(async () => {
+    let client = new MongoClient('mongodb://clipboard_db:27017/clipboard', {
+        useNewUrlParser: true,
     });
+    let currentTries = 0;
+    async function connect() {
+        try {
+            await client.connect();
+            setup(client);
+        }
+        catch (error) {
+            if (error.name === 'MongoNetworkError' && currentTries < retries) {
+                currentTries++;
+                console.log('DB connection attempt: ' + currentTries);
+                setTimeout(connect, timeout);
+            }
+            else {
+                console.log(error);
+            }
+        }
+    }
+    connect();
+})();
+
+
+// MongoClient.connect('mongodb://192.168.99.100:27017/clipboard', {
+//     useNewUrlParser: true,
+//     reconnectTries: retries,
+//     reconnectInterval: waitTime
+// }, 
+// function (error, db) {
+//     setup(db);
+// })
+// .then(client => {
+//     setup(client);
+// })
+// .catch(error => console.log(error));
 
 function setup(client) {
     const app = express(feathers());
 
     // Turn on JSON body parsing for REST services
-    app.use(express.json())
+    app.use(express.json({limit: '50mb'}))
     // Turn on URL-encoded body parsing for REST services
     app.use(express.urlencoded({ extended: true }));
     // Set up REST transport using Express
     app.configure(express.rest());
+
+    app.use('/status', {
+        async find(params) {
+            return 'available'
+        }
+    })
 
     app.use('/events', service({
         Model: client.db('clipboard').collection('event'),

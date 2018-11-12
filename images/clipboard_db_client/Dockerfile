@@ -1,5 +1,4 @@
-FROM python:3.7
+FROM node:11.1
 
-COPY requirements.txt ./
-RUN pip3 install -U pip
-RUN pip3 install -r requirements.txt
+COPY package.json ./
+RUN npm install -g

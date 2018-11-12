@@ -11,8 +11,8 @@ class Config:
         self.db_client_port = 5000
         self.db_client_url = f'http://{self.db_client_ip}:{self.db_client_port}'
 
-        self.db_get_events = self.db_client_url + '/getevents'
-        self.db_put_events = self.db_client_url + '/putevents'
+        self.db_get_events = self.db_client_url + '/events'
+        self.db_put_events = self.db_client_url + '/events'
         self.db_client_status = self.db_client_url + '/status'
         
         self.docker_ip = self.get_env_var('DOCKER_IP')

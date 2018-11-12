@@ -1,6 +1,7 @@
-FROM node:8.12.0
+FROM clipboard_db_client
 
 WORKDIR /usr/src/app/clipboard_db_client
-RUN npm install
+
+COPY ./clipboard_db_client ./
 
 ENTRYPOINT ["npm", "start"]
