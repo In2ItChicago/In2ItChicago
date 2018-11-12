@@ -128,3 +128,6 @@ data_engine/data_aggregators/lock/
 
 # Generated files
 nginx/nginx.conf
+
+# node
+node_modules/

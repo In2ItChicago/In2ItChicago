@@ -1,0 +1,19 @@
+{
+  "name": "event_api",
+  "version": "1.0.0",
+  "description": "Data Access Layer for the event database",
+  "main": "event_api.js",
+  "scripts": {
+    "start": "node event_api",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@feathersjs/errors": "^3.3.4",
+    "@feathersjs/express": "^1.2.7",
+    "@feathersjs/feathers": "^3.2.3",
+    "feathers-mongodb": "^3.3.0",
+    "mongodb": "^3.1.9"
+  }
+}

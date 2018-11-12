@@ -1,6 +1,6 @@
 FROM node:8.12.0
 
 WORKDIR /usr/src/app/clipboard_db_client
-RUN npm install @feathersjs/feathers mongodb feathers-mongodb
+RUN npm install
 
-ENTRYPOINT ["node", "event_api.js"]
+ENTRYPOINT ["npm", "start"]

@@ -6,11 +6,12 @@ const service = require('feathers-mongodb');
 
 const port = 5000;
 
-MongoClient.connect('mongodb://192.168.99.100:27017/clipboard', {useNewUrlParser: true}).then(client => {
-  setup(client);
-});
+MongoClient.connect('mongodb://192.168.99.100:27017/clipboard', {useNewUrlParser: true})
+    .then(client => {
+        setup(client);
+    });
 
-function configureApp() {
+function setup(client) {
     const app = express(feathers());
 
     // Turn on JSON body parsing for REST services
@@ -20,17 +21,8 @@ function configureApp() {
     // Set up REST transport using Express
     app.configure(express.rest());
 
-    // Set up an error handler that gives us nicer errors
-    app.use(express.errorHandler());
-
-    return app;
-}
-
-function setup(client) {
-    const app = configureApp();
-
     app.use('/events', service({
-        Model: client.db('clipboard').collection('event'),
+        Model: client.db('clipboard2').collection('event2'),
         paginate: {
             default: 25,
             max: 100
@@ -43,6 +35,41 @@ function setup(client) {
 
     server.on('listening', () => 
         console.log(`Event service started at http://localhost:${port}`));
+
+    // Set up an error handler that gives us nicer errors
+    // This only works at the bottom of the setup logic for some reason
+    app.use(express.errorHandler());
+}
+
+function timestampToDate(timestamp) {
+    return new Date(timestamp * 1000);
+}
+function date_from_timestamp(timestamp) {
+    return timestampToDate(timestamp).toLocaleDateString();
+}
+
+function time_from_timestamp(timestamp) {
+    return timestampToDate(timestamp).toLocaleTimeString();
+}
+
+function transformResult(mongo_result) {
+    start_timestamp = mongo_result.start_timestamp;
+    end_timestamp = mongo_result.end_timestamp;
+    id = mongo_result._id.toString();
+
+    delete mongo_result.start_timestamp;
+    delete mongo_result.end_timestamp;
+    delete mongo_result._id;
+    
+    Object.assign(mongo_result, {
+        start_time: time_from_timestamp(start_timestamp),
+        start_date: date_from_timestamp(start_timestamp),
+        end_time: time_from_timestamp(end_timestamp),
+        end_date: date_from_timestamp(end_timestamp),
+        id: id
+    })
+    
+    return mongo_result;
 }
 
 const eventHooks = {
@@ -64,14 +91,29 @@ const eventHooks = {
                     [param.func]: param.val
                 }
             }));
-
-            let and_clause = {'$and': filters};
-
+            // Remove old query parameters as they will be replaced with the entire mongo query
             for (val of search_fields) {
                 delete query[val.name];
             }
             
+            let and_clause = {'$and': filters};
             Object.assign(context.params.query, and_clause);
+            return context;
+        },
+
+        async create(context) {
+            var invalid = context.data.filter(data => !(data.organization && data.start_timestamp && data.end_timestamp));
+            if (invalid.length > 0) {
+                throw new errors.BadRequest('Invalid events', invalid);
+            }
+            var organizations = context.data.map(data => data.organization);
+            await this.remove(null, {'organization': {'$in': organizations}});
+            return context;
+        }
+    },
+    after: {
+        async find(context) {
+            context.result.data = context.result.data.map(mongo_result => transformResult(mongo_result));
             return context;
         }
     }
