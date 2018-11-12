@@ -1,0 +1,33 @@
+header {
+    background-color: #934211;
+}
+
+h1 {
+    font-family: "Permanent Marker";
+}
+h2, h3 {
+    font-family: 'Signika', sans-serif;
+}
+p {
+    font-family: sans-serif;
+}
+aside {
+    float: left;
+    width: 27%;
+    padding-left: 1em;
+    padding-right: 1em;
+    background-color: #888;
+}
+main {
+    width: 66%;
+    float: right;
+    padding: 1em;
+    background-color: #999;
+}
+.sharing-saving img {
+    border-radius: 22%;
+    padding: .2em;
+}
+.filterType {
+     
+}
