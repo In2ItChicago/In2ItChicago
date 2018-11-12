@@ -22,7 +22,7 @@ function setup(client) {
     app.configure(express.rest());
 
     app.use('/events', service({
-        Model: client.db('clipboard2').collection('event2'),
+        Model: client.db('clipboard').collection('event'),
         paginate: {
             default: 25,
             max: 100
