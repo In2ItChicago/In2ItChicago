@@ -32,20 +32,6 @@ const retries = 20;
     connect();
 })();
 
-
-// MongoClient.connect('mongodb://192.168.99.100:27017/clipboard', {
-//     useNewUrlParser: true,
-//     reconnectTries: retries,
-//     reconnectInterval: waitTime
-// }, 
-// function (error, db) {
-//     setup(db);
-// })
-// .then(client => {
-//     setup(client);
-// })
-// .catch(error => console.log(error));
-
 function setup(client) {
     const app = express(feathers());
 

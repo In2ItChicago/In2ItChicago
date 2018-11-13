@@ -44,9 +44,10 @@
                 .then((res) => {
                     return { events: res.data }
 				})*/
-			return events.find({start_timestamp: 0, end_timestamp: 10000000000000})
+			return events.find({query: {start_timestamp: 0, end_timestamp: 10000000000000}})
 				.then(res => {
-					return {events: res.data };
+					console.log('data: ' + res.data);
+					return { events: res.data };
 				});
 			//Hardcoded test data until JSON api is linked
 			// return {
