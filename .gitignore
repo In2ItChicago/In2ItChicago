@@ -131,3 +131,6 @@ nginx/nginx.conf
 
 # node
 node_modules/
+
+# keys
+*.pem
