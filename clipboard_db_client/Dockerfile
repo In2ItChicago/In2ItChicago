@@ -4,4 +4,4 @@ WORKDIR /usr/src/app/clipboard_db_client
 
 COPY ./clipboard_db_client ./
 
-ENTRYPOINT ["npm", "start"]
+ENTRYPOINT ["npm", "run", "debug"]

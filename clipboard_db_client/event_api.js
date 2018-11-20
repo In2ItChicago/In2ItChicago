@@ -3,6 +3,7 @@ const express = require('@feathersjs/express');
 const errors = require('@feathersjs/errors');
 const MongoClient = require('mongodb').MongoClient;
 const service = require('feathers-mongodb');
+const _ = require('lodash');
 
 const port = 5000;
 const timeout = 1000;
@@ -50,10 +51,10 @@ function setup(client) {
 
     app.use('/events', service({
         Model: client.db('clipboard').collection('event'),
-        paginate: {
-            default: 25,
-            max: 100
-        }
+        // paginate: {
+        //     default: 25,
+        //     max: 100
+        // }
     }));
 
     app.service('events').hooks(eventHooks);
@@ -112,7 +113,7 @@ const eventHooks = {
             ]
             
             let filters = search_fields
-            .filter(param => param.val !== NaN && param.val !== undefined && param.val !== null)
+            .filter(param => !Number.isNaN(param.val) && param.val !== undefined && param.val !== null)
             .map(param => ({
                 [param.name]: {
                     [param.func]: param.val
@@ -123,24 +124,31 @@ const eventHooks = {
                 delete query[val.name];
             }
             
-            let and_clause = {'$and': filters};
-            Object.assign(context.params.query, and_clause);
+            if (filters.length > 0) {
+                let and_clause = {'$and': filters};
+                Object.assign(context.params.query, and_clause);
+            }
             return context;
         },
 
         async create(context) {
-            var invalid = context.data.filter(data => !(data.organization && data.start_timestamp && data.end_timestamp));
+            let invalid = context.data.filter(data => !(data.organization && data.start_timestamp && data.end_timestamp));
             if (invalid.length > 0) {
                 throw new errors.BadRequest('Invalid events', invalid);
             }
-            var organizations = context.data.map(data => data.organization);
-            await this.remove(null, {'organization': {'$in': organizations}});
+            let organizations = _(context.data)
+                .groupBy(d => d.organization)
+                .map((value, key) => key)
+                .value();
+            
+            //var organizations = context.data.map(data => data.organization);
+            await this.remove(null, {'query': {'organization': {'$in': organizations}}});
             return context;
         }
     },
     after: {
         async find(context) {
-            context.result.data = context.result.data.map(mongo_result => transformResult(mongo_result));
+            context.result = context.result.map(mongo_result => transformResult(mongo_result));
             return context;
         }
     }
