@@ -43,18 +43,25 @@ function setup(client) {
     // Set up REST transport using Express
     app.configure(express.rest());
 
+    let model = client.db('clipboard').collection('event');
+    model.ensureIndex({'start_timestamp': 1, 'end_timestamp': 1, 'organization': 1}, function(errorMsg, indexName) {
+        if (!indexName) {
+            throw errors.GeneralError(errorMsg);
+        }
+    });
+
     app.use('/status', {
         async find(params) {
             return 'available'
         }
-    })
+    });
 
     app.use('/events', service({
-        Model: client.db('clipboard').collection('event'),
-        // paginate: {
-        //     default: 25,
-        //     max: 100
-        // }
+        Model: model,
+        paginate: {
+            default: 25,
+            max: 100
+        }
     }));
 
     app.service('events').hooks(eventHooks);
@@ -141,14 +148,14 @@ const eventHooks = {
                 .map((value, key) => key)
                 .value();
             
-            //var organizations = context.data.map(data => data.organization);
+            
             await this.remove(null, {'query': {'organization': {'$in': organizations}}});
             return context;
         }
     },
     after: {
         async find(context) {
-            context.result = context.result.map(mongo_result => transformResult(mongo_result));
+            context.result.data = context.result.data.map(mongo_result => transformResult(mongo_result));
             return context;
         }
     }
