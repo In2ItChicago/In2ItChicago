@@ -40,6 +40,7 @@ services:
       - DB_CLIENT_IP=clipboard_db_client
     ports:
       - "3000:3000"
+      - "5859:5859"
     volumes:
       - ./clipboard_common_lib:/usr/src/app/clipboard_common_lib
     depends_on:
