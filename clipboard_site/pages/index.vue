@@ -39,7 +39,7 @@
             //Ensure get request goes to an endpoint that returns an array or json object
             //If a regular HTML page is returned, the v-for in the view above will try to
             //render each character in the HTML page string as a separate event and nuxt
-			//will run out of memory
+            //will run out of memory
             if (process.env.DUMMY_DATA) {
                 return { events: dummyData };
             }
