@@ -5,8 +5,8 @@
   "author": "WesThorburn",
   "private": true,
   "scripts": {
-    "dev-debug": "DUMMY_DATA=1 node --inspect=[::]:5858 ./node_modules/.bin/nuxt",
-    "docker-debug": "NUXT_HOST=0.0.0.0 NUXT_PORT=3000 node --inspect=[::]:5858 ./node_modules/.bin/nuxt",
+    "dev-debug": "cross-env DUMMY_DATA=1 node --inspect=[::]:5858 ./node_modules/nuxt/bin/nuxt",
+    "docker-debug": "NUXT_HOST=0.0.0.0 NUXT_PORT=3000 node --inspect=[::]:5858 ./node_modules/nuxt/bin/nuxt",
     "build": "nuxt build",
     "start": "NUXT_HOST=0.0.0.0 NUXT_PORT=3000 nuxt start",
     "generate": "nuxt generate",
@@ -19,10 +19,10 @@
     "@nuxtjs/axios": "^5.0.0",
     "bootstrap": "^4.1.3",
     "bootstrap-vue": "^2.0.0-beta",
-    "cross-env": "^5.2.0",
     "nuxt": "^2.0.0"
   },
   "devDependencies": {
+    "cross-env": "^5.2.0",
     "eslint-config-prettier": "^3.1.0",
     "eslint-plugin-prettier": "2.6.2",
     "nuxt-typescript": "^0.11.0",
