@@ -1,12 +1,2 @@
-Scrapy 
-DateRangeParser 
-python-dateutil 
-bs4 
+jinja2
 requests
-icalendar
-pymongo
-flask
-flask_pymongo
-beaker
-djongo
-gunicorn
