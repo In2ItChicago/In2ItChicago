@@ -1,4 +1,4 @@
-pip3 install -f requirements.txt
+pip3 install -r requirements.txt
 docker-compose down
 docker system prune -f
 ./render.sh
