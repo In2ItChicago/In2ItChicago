@@ -7,42 +7,48 @@ services:
     volumes:
       - mongodata:/data/db
   clipboard_db_client:
-    build: 
-      context: ./
-      dockerfile: ./clipboard_db_client/Dockerfile
-    volumes:
-      - ./clipboard_common_lib:/usr/src/app/clipboard_common_lib
+    image: "clipboard_db_client"
     ports:
       - "5000:5000"
       - "5858:5858"
+    deploy:
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: "0.2"
+          memory: "100M"
     environment:
       - DOCKER_IP=${DOCKER_IP}
       - DB_CLIENT_IP=clipboard_db_client
     depends_on:
       - clipboard_db
   data_engine:
-    build: 
-      context: ./
-      dockerfile: ./data_engine/Dockerfile
+    image: "data_engine"
+    deploy:
+      restart_policy:
+        condition: none
     environment:
       - DOCKER_IP=${DOCKER_IP}
       - DB_CLIENT_IP=clipboard_db_client
     volumes:
-      - ./clipboard_common_lib:/usr/src/app/clipboard_common_lib
+      - ./data_engine/clipboard_common_lib:/usr/src/app/clipboard_common_lib
     depends_on:
       - clipboard_db_client
   clipboard_site:
-    build: 
-      context: ./
-      dockerfile: ./clipboard_site/Dockerfile
+    image: "clipboard_site"
+    deploy:
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: "0.2"
     environment:
       - DOCKER_IP=${DOCKER_IP}
       - DB_CLIENT_IP=clipboard_db_client
     ports:
       - "3000:3000"
       - "5859:5859"
-    volumes:
-      - ./clipboard_common_lib:/usr/src/app/clipboard_common_lib
     depends_on:
       - clipboard_db_client
   nginx:
