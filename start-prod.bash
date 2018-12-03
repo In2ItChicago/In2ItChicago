@@ -1,6 +1,4 @@
 pip3 install -r requirements.txt
-docker-compose down
+docker stack rm ClipboardApp
 docker system prune -f
-./render.sh
-docker-compose build
-docker-compose up -d
+./stack-deploy.sh prod

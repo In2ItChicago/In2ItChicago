@@ -25,7 +25,7 @@ services:
       - DOCKER_IP=${DOCKER_IP}
       - DB_CLIENT_IP=clipboard_db_client
   nginx:
-    image: "nginx:1.15.6"
+    image: "nginx:1.15.7"
     volumes:
       - ./nginx:/etc/nginx
     ports:
