@@ -5,4 +5,3 @@ RUN npm install
 
 FROM clipboard_db_client_deps
 COPY . ./
-CMD ["npm", "run", "debug"]

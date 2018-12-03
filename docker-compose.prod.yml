@@ -1,0 +1,6 @@
+version: '3.6'
+services:
+  clipboard_db_client:
+    command: ["npm", "run", "start"]
+  clipboard_site:
+    command: ["npm", "run", "start"]

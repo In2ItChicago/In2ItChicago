@@ -2,27 +2,13 @@ version: '3.6'
 services:
   clipboard_db:
     image: "mongo:4.1.5"
-    ports:
-      - "27017:27017"
     volumes:
       - mongodata:/data/db
   clipboard_db_client:
     image: "clipboard_db_client"
-    ports:
-      - "5000:5000"
-      - "5858:5858"
-    deploy:
-      restart_policy:
-        condition: on-failure
-      resources:
-        limits:
-          cpus: "0.2"
-          memory: "100M"
     environment:
       - DOCKER_IP=${DOCKER_IP}
       - DB_CLIENT_IP=clipboard_db_client
-    depends_on:
-      - clipboard_db
   data_engine:
     image: "data_engine"
     deploy:
@@ -33,31 +19,16 @@ services:
       - DB_CLIENT_IP=clipboard_db_client
     volumes:
       - ./data_engine/clipboard_common_lib:/usr/src/app/clipboard_common_lib
-    depends_on:
-      - clipboard_db_client
   clipboard_site:
     image: "clipboard_site"
-    deploy:
-      restart_policy:
-        condition: on-failure
-      resources:
-        limits:
-          cpus: "0.2"
     environment:
       - DOCKER_IP=${DOCKER_IP}
       - DB_CLIENT_IP=clipboard_db_client
-    ports:
-      - "3000:3000"
-      - "5859:5859"
-    depends_on:
-      - clipboard_db_client
   nginx:
     image: "nginx:1.15.6"
     volumes:
       - ./nginx:/etc/nginx
     ports:
       - "0.0.0.0:80:80"
-    depends_on:
-      - clipboard_site
 volumes:
   mongodata:

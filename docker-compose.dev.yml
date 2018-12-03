@@ -1,0 +1,15 @@
+version: '3.6'
+services:
+  clipboard_db:
+    ports:
+      - "27017:27017"
+  clipboard_db_client:
+    command: ["npm", "run", "debug"]
+    ports:
+      - "5000:5000"
+      - "5858:5858"
+  clipboard_site:
+    command: ["npm", "run", "docker-debug"]
+    ports:
+      - "3000:3000"
+      - "5859:5859"
