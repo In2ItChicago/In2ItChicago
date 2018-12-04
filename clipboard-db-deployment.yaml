@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.17.0 (a74acad)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: clipboard-db
+  name: clipboard-db
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: clipboard-db
+    spec:
+      containers:
+      - image: mongo:4.1.5
+        name: clipboard-db
+        resources: {}
+        volumeMounts:
+        - mountPath: /data/db
+          name: mongodata
+      restartPolicy: Always
+      volumes:
+      - name: mongodata
+        persistentVolumeClaim:
+          claimName: mongodata
+status: {}
