@@ -84,10 +84,7 @@ class Scheduler:
     @last_scheduled.setter
     def last_scheduled(self, value):
         self._last_scheduled = value
-
-    def init_scheduling(self):
-        self.last_scheduled
-
+        
     def schedule_missed(self, event):
         print(f'{event.job_id} missed. Interval time: {self.interval_seconds}')
         self.interval_seconds += 1
