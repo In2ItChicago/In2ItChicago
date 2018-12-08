@@ -30,8 +30,9 @@ class AggregatorBase:
         if len(event_list) == 0:
             return
         new_hash = EventHashes.create_hash(event_list)
+        print(f'Found {len(event_list)} events for {event_list[0]["organization"]}.')
         if new_hash == EventHashes.get(self.identifier):
-            print(f'Found {len(event_list)} events for {event_list[0]["organization"]}. Nothing to update.')
+            print('Nothing to update.')
             return
         EventHashes.set(self.identifier, new_hash)
 

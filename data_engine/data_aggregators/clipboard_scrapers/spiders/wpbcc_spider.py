@@ -12,7 +12,7 @@ class WpbccSpider(CrawlSpider, SpiderBase):
     allowed_domains = ['www.wickerparkbucktown.com']
 
     rules = (
-        Rule(LinkExtractor(restrict_css = ('.prevnextWindow', '.prevnextWindowArrow')), callback = 'parse_start_url', follow = True),
+        Rule(LinkExtractor(restrict_css = ('.prevnextLink')), callback = 'parse_start_url', follow = True),
     )
 
     def __init__(self, start_date, end_date):
@@ -32,6 +32,6 @@ class WpbccSpider(CrawlSpider, SpiderBase):
         times = self.empty_check_extract('time_range', base_selector, 'xpath', 'div/span[contains(text(), "Time: ")]/following-sibling::text()')
         dates = self.empty_check_extract('date', base_selector, 'xpath', 'div/span[contains(text(), "Date: ")]/following-sibling::text()')
         addresses = self.empty_check_extract('address', base_selector, 'xpath', 'div/span[contains(text(), "Address: ")]/following-sibling::text()')
-        descriptions = self.extract('description', response.css, '.blurb::text')
+        descriptions = self.empty_check_extract('description', base_selector, 'css', '.blurb::text')
 
         return self.create_events('Wicker Park/Bucktown Chamber of Commerce', titles, urls, times, dates, addresses, descriptions)

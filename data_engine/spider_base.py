@@ -75,7 +75,7 @@ class SpiderBase(AggregatorBase):
         for arg in args:
             if len(arg.data) != count:
                 # All selectors must return the same amount of data because it's impossible to know which event is missing data otherwise
-                raise ValueError('Selectors returned data of differing lengths')
+                raise ValueError(f'{organization}: Selectors returned data of differing lengths')
 
         events = (Event.from_dict({arg.item: arg.data[i] for arg in args}, self.time_utils.date_format) for i in range(count))
         for event in events:
