@@ -3,12 +3,13 @@ import os
 import sys
 import requests
 import time
-from threading import Thread, Lock
-from multiprocessing import Process
+from threading import Lock
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 from apscheduler.schedulers.twisted import TwistedScheduler
+from apscheduler.events import EVENT_JOB_MISSED
+from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 from twisted.internet import reactor
 
 from scrapy.cmdline import execute
@@ -65,32 +66,54 @@ def run():
 class Scheduler:
     def __init__(self):
         self.scrapers = [HistorySpider, WpbccSpider, LWVchicago, LibraryEvents, GreatLakesReader]
-        self.scheduler = TwistedScheduler()
         self.start_date = datetime.now().strftime('%m-%d-%Y')
         self.end_date = (datetime.now() + relativedelta(months=+1)).strftime('%m-%d-%Y')
-        self.interval_seconds = 5
-        self.delta = self.interval_seconds / len(self.scrapers)
+        self.interval_seconds = 1
         self.add_schedule_lock = Lock()
+        self._last_scheduled = None
+
+        self.scheduler = TwistedScheduler()
+        self.scheduler.add_listener(self.schedule_missed, EVENT_JOB_MISSED)
+
+    @property
+    def last_scheduled(self):
+        if self._last_scheduled == None:
+            self._last_scheduled = datetime.now()
+        return self._last_scheduled
+    
+    @last_scheduled.setter
+    def last_scheduled(self, value):
+        self._last_scheduled = value
+
+    def init_scheduling(self):
+        self.last_scheduled
+
+    def schedule_missed(self, event):
+        print(f'{event.job_id} missed. Interval time: {self.interval_seconds}')
+        self.interval_seconds += 1
+        self.add_run(eval(event.job_id))
 
     def run_scraper(self, scraper):
         print('starting ' + scraper.__name__)
         runner = CrawlerRunner()
         runner.crawl(scraper, self.start_date, self.end_date)
-        d = runner.join()
-        next_run = datetime.now() + relativedelta(seconds=self.interval_seconds)
-        d.addBoth(lambda _: self.add_run(scraper, next_run))
-        print('finished ' + scraper.__name__)
 
-    def add_run(self, scraper, date):
-        with self.add_schedule_lock:
-            self.scheduler.add_job(self.run_scraper, trigger='date', args=[scraper], run_date=date)
-            print(f'schedule added: {scraper.__name__} at {date}')
+        crawl_result = runner.join()
+        crawl_result.addBoth(lambda _: self.add_run(scraper))
+
+    def add_run(self, scraper):
+        self.add_schedule_lock.acquire()
+        next_run = self.last_scheduled + relativedelta(seconds=self.interval_seconds)
+        self.last_scheduled = next_run
+        self.scheduler.add_job(self.run_scraper, id=scraper.__name__, trigger='date', args=[scraper], run_date=next_run)
+        print(f'schedule added: {scraper.__name__} at {next_run}')
+        self.add_schedule_lock.release()
 
     def run_schedule(self):
         now = datetime.now()
-        for count, scraper in enumerate(self.scrapers):
-            first_run = now + relativedelta(seconds=count*self.delta)
-            self.add_run(scraper, first_run)
+        self.last_scheduled = now
+        for scraper in self.scrapers:
+            self.add_run(scraper)
         
         self.scheduler.start()
         reactor.run()
