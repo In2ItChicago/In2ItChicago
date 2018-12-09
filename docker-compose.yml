@@ -11,9 +11,6 @@ services:
       - DB_CLIENT_IP=clipboard_db_client
   data_engine:
     image: "data_engine"
-    deploy:
-      restart_policy:
-        condition: none
     environment:
       - DOCKER_IP=${DOCKER_IP}
       - DB_CLIENT_IP=clipboard_db_client

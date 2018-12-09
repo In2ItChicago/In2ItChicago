@@ -2,6 +2,10 @@ from bs4 import BeautifulSoup
 import re
 import json
 import os
+import warnings
+# Don't show warnings about parsing urls
+# This is just a side effect of passing all data to BeautifulSoup
+warnings.filterwarnings("ignore", category=UserWarning, module='bs4')
 
 class DataUtils:
     @staticmethod
