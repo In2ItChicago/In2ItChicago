@@ -4,6 +4,7 @@ const errors = require('@feathersjs/errors');
 const MongoClient = require('mongodb').MongoClient;
 const service = require('feathers-mongodb');
 const _ = require('lodash');
+const axios = require('axios');
 
 const port = 5000;
 const timeout = 1000;
@@ -55,6 +56,14 @@ function setup(client) {
             return 'available'
         }
     });
+
+    app.use('/geocode', {
+        async find(params) {
+            let base_url = 'https://nominatim.openstreetmap.org/search';
+            let response = await axios.get(`${base_url}?q=${params.query.address}&format=json`);
+            return response.data;
+        }
+    })
 
     app.use('/events', service({
         Model: model,
