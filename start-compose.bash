@@ -7,8 +7,8 @@ case "$(uname)" in
      ./dos2unix.exe *.sh */*.sh
      ;;
 esac
-ENV=${1:-dev}
+
 ./render.sh
-./build-images.sh $ENV
+./build-images.sh dev
 ./check-all-image-updates.sh
-./compose-deploy.sh $ENV
+./compose-deploy.sh dev "$@"

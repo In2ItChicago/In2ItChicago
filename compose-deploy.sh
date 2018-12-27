@@ -1,1 +1,2 @@
-docker-compose -f docker-compose.yml -f docker-compose.$1.yml up
+ARGS=("$@")
+docker-compose -f docker-compose.yml -f docker-compose.${ARGS[0]}.yml up ${ARGS[@]:1}

@@ -44,8 +44,9 @@ function setup(client) {
     // Set up REST transport using Express
     app.configure(express.rest());
 
-    let model = client.db('clipboard').collection('event');
-    model.ensureIndex({'start_timestamp': 1, 'end_timestamp': 1, 'organization': 1}, function(errorMsg, indexName) {
+    let eventModel = client.db('clipboard').collection('event');
+    let geocodeModel = client.db('clipboard').collection('geocode');
+    eventModel.ensureIndex({'start_timestamp': 1, 'end_timestamp': 1, 'organization': 1}, function(errorMsg, indexName) {
         if (!indexName) {
             throw errors.GeneralError(errorMsg);
         }
@@ -57,16 +58,14 @@ function setup(client) {
         }
     });
 
-    app.use('/geocode', {
-        async find(params) {
-            let base_url = 'https://nominatim.openstreetmap.org/search';
-            let response = await axios.get(`${base_url}?q=${params.query.address}&format=json`);
-            return response.data;
-        }
-    })
+    app.use('/geocode', service({
+        Model: geocodeModel
+    }));
+
+    app.service('geocode').hooks(geocodeHooks);
 
     app.use('/events', service({
-        Model: model,
+        Model: eventModel,
         paginate: {
             default: 25,
             max: 100
@@ -88,32 +87,32 @@ function setup(client) {
 function timestampToDate(timestamp) {
     return new Date(timestamp * 1000);
 }
-function date_from_timestamp(timestamp) {
+function dateFromTimestamp(timestamp) {
     return timestampToDate(timestamp).toLocaleDateString();
 }
 
-function time_from_timestamp(timestamp) {
+function timeFromTimestamp(timestamp) {
     return timestampToDate(timestamp).toLocaleTimeString();
 }
 
-function transformResult(mongo_result) {
-    start_timestamp = mongo_result.start_timestamp;
-    end_timestamp = mongo_result.end_timestamp;
-    id = mongo_result._id.toString();
+function transformResult(mongoResult) {
+    start_timestamp = mongoResult.start_timestamp;
+    end_timestamp = mongoResult.end_timestamp;
+    id = mongoResult._id.toString();
 
-    delete mongo_result.start_timestamp;
-    delete mongo_result.end_timestamp;
-    delete mongo_result._id;
+    delete mongoResult.start_timestamp;
+    delete mongoResult.end_timestamp;
+    delete mongoResult._id;
     
-    Object.assign(mongo_result, {
-        start_time: time_from_timestamp(start_timestamp),
-        start_date: date_from_timestamp(start_timestamp),
-        end_time: time_from_timestamp(end_timestamp),
-        end_date: date_from_timestamp(end_timestamp),
+    Object.assign(mongoResult, {
+        start_time: timeFromTimestamp(start_timestamp),
+        start_date: dateFromTimestamp(start_timestamp),
+        end_time: timeFromTimestamp(end_timestamp),
+        end_date: dateFromTimestamp(end_timestamp),
         id: id
     })
     
-    return mongo_result;
+    return mongoResult;
 }
 
 const eventHooks = {
@@ -164,7 +163,34 @@ const eventHooks = {
     },
     after: {
         async find(context) {
-            context.result.data = context.result.data.map(mongo_result => transformResult(mongo_result));
+            context.result.data = context.result.data.map(mongoResult => transformResult(mongoResult));
+            return context;
+        }
+    }
+}
+
+const geocodeHooks = {
+    before: {
+        async find(context) {
+            let query = context.params.query;
+            context.params.query = { 'address': {'$eq': query.address }};
+            return context;
+        }
+    },
+    after: {
+        async find(context) {
+            if (context.result.length > 0) {
+                return context;
+            }
+            let address = context.params.query.address.$eq;
+            let base_url = 'https://nominatim.openstreetmap.org/search';
+            let response = await axios.get(`${base_url}?q=${address}&format=json`);
+            let data = response.data[0];
+            let result = {'lat': data.lat, 'lon': data.lon};
+
+            await this.create({'address': address, 'coordinates': result});
+            context.result = [result];
+
             return context;
         }
     }
