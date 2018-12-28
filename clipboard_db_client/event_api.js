@@ -8,6 +8,7 @@ const axios = require('axios');
 
 const port = 5000;
 const timeout = 1000;
+// OpenStreetMaps only allows 1 query per second
 const geocodeApiDelayMilliseconds = 1000;
 const retries = 20;
 const sleep = require('util').promisify(setTimeout)
