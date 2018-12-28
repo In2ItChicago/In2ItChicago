@@ -8,7 +8,10 @@ const axios = require('axios');
 
 const port = 5000;
 const timeout = 1000;
+const geocodeApiDelayMilliseconds = 1000;
 const retries = 20;
+const sleep = require('util').promisify(setTimeout)
+let lastExecuted = new Date();
 
 (async () => {
     let client = new MongoClient('mongodb://clipboard_db:27017/clipboard', {
@@ -115,6 +118,19 @@ function transformResult(mongoResult) {
     return mongoResult;
 }
 
+async function getGeocode(address) {
+    let base_url = 'https://nominatim.openstreetmap.org/search';
+    let diff = new Date() - lastExecuted;
+    if (diff <= geocodeApiDelayMilliseconds) {
+        await sleep(diff);
+    }
+    let response = await axios.get(`${base_url}?q=${address}&format=json`);
+    lastExecuted = new Date();
+    let data = response.data[0];
+    let result = {'lat': data.lat, 'lon': data.lon};
+    return result;
+}
+
 const eventHooks = {
     before: {
         async find(context) {
@@ -174,6 +190,7 @@ const geocodeHooks = {
         async find(context) {
             let query = context.params.query;
             context.params.query = { 'address': {'$eq': query.address }};
+            context.params.address = query.address;
             return context;
         }
     },
@@ -182,13 +199,8 @@ const geocodeHooks = {
             if (context.result.length > 0) {
                 return context;
             }
-            let address = context.params.query.address.$eq;
-            let base_url = 'https://nominatim.openstreetmap.org/search';
-            let response = await axios.get(`${base_url}?q=${address}&format=json`);
-            let data = response.data[0];
-            let result = {'lat': data.lat, 'lon': data.lon};
-
-            await this.create({'address': address, 'coordinates': result});
+            let address = context.params.address;
+            let result = await getGeocode(address);
             context.result = [result];
 
             return context;
