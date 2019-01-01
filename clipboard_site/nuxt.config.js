@@ -65,9 +65,14 @@ module.exports = {
 		** You can extend webpack config here
 		*/
 		extend(config, ctx) {
-            return Object.assign({}, config, {
-                devtool: 'source-map'
-              });
+            if (ctx.isClient)
+                config.devtool = 'eval-source-map'
+            else
+                config.devtool = 'inline-source-map'
+            return config;
+            // return Object.assign({}, config, {
+            //     devtool: 'source-map'
+            //   });
 		}
 	}
 }

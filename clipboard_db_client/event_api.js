@@ -137,29 +137,32 @@ const eventHooks = {
         async find(context) {
             let query = context.params.query;
             
-            // Yo dawg, we heard you like json so we put json in your query language so you can query with json while you query for json
-            var search_fields = [
-                { name: 'start_timestamp', func: '$gte', val: parseInt(query.start_timestamp) },
-                { name: 'end_timestamp', func: '$lte', val: parseInt(query.end_timestamp) },
-                { name:'organization', func: '$eq', val: query.organization }
-            ]
-            
-            let filters = search_fields
-            .filter(param => !Number.isNaN(param.val) && param.val !== undefined && param.val !== null)
-            .map(param => ({
-                [param.name]: {
-                    [param.func]: param.val
-                }
-            }));
-            // Remove old query parameters as they will be replaced with the entire mongo query
-            for (val of search_fields) {
-                delete query[val.name];
+            var search_fields = {
+                'start_timestamp': { func: '$gte', val: parseInt(query.start_timestamp) },
+                'end_timestamp': { func: '$lte', val: parseInt(query.end_timestamp) },
+                //{ name:'organization', func: '$eq', val: query.organization }
             }
-            
-            if (filters.length > 0) {
-                let and_clause = {'$and': filters};
-                Object.assign(context.params.query, and_clause);
+
+            function mapParams(param) {
+                let field = search_fields[param]
+                let ret = field ? { [field.func]: field.val }: { ['$eq']: query[param] }
+                return {
+                    [param]: ret
+                }; 
             }
+            let keys = _.keys(query)
+
+            let newParams = _.pickBy(query, (value, key) => key.startsWith('$'))
+
+            let mongoFilters = keys
+            .filter(key => !key.startsWith('$'))
+            .map(mapParams);
+            
+            if (mongoFilters.length > 0) {
+                let and_clause = {'$and': mongoFilters};
+                Object.assign(newParams, and_clause);
+            }
+            context.params.query = newParams;
             return context;
         },
 

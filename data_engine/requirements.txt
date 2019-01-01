@@ -6,3 +6,5 @@ requests
 icalendar
 beaker
 apscheduler
+feedparser
+ptvsd

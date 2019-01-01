@@ -13,21 +13,21 @@
 	</div>
 </template>
 
-<script>
+<script lang='ts'>
 	import axios from 'axios';
 	import feathers from '@feathersjs/feathers';
 	import rest from '@feathersjs/rest-client';
-	import ControlColumn from '~/components/ControlColumn';
-	import EventListing from '~/components/EventListing';
-	import PageHeader from '~/components/PageHeader';
-	import MapView from '~/components/MapView';
-    import EventResults from '~/components/EventResults';
+	import ControlColumn from '~/components/ControlColumn.vue';
+	import EventListing from '~/components/EventListing.vue';
+	import PageHeader from '~/components/PageHeader.vue';
+	import MapView from '~/components/MapView.vue';
+    import EventResults from '~/components/EventResults.vue';
     import { dummyData } from '~/store/dummydata.js';
 
 	const app = feathers();
 	const restClient = rest('http://clipboard_db_client:5000');
 	app.configure(restClient.axios(axios));
-	const events = app.service('events');
+    const events = app.service('events');
 
 	export default {
 		data() {

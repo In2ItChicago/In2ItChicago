@@ -20,8 +20,11 @@ class DataUtils:
         if not isinstance(html_data, str):
             return html_data
 
-        html_removed = BeautifulSoup(html_data, 'lxml').extract().text.strip()
-        return re.sub(misc_text_to_remove, '', html_removed, re.UNICODE)
+        lxml_removed = BeautifulSoup(html_data, 'lxml').extract().text.strip()
+        html_removed = re.sub(misc_text_to_remove, '', lxml_removed, re.UNICODE)
+        spaces_removed = DataUtils.remove_excess_spaces(html_removed)
+
+        return spaces_removed
 
     @staticmethod
     def remove_whitespace(html_data):
@@ -32,7 +35,7 @@ class DataUtils:
 
     @staticmethod
     def remove_excess_spaces(string):
-        return re.sub(r'\s+', ' ', string.strip())
+        return re.sub(r'[ \t]+', ' ', string.strip())
 
     @staticmethod
     def pretty_json(json_data):

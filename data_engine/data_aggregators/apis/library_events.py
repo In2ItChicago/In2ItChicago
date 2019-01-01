@@ -1,23 +1,19 @@
 import time
-from event import Event
+from scrapy import Item
+from scrapy.loader import ItemLoader
 from categories import Category
-from api_base import ApiBase
 from data_utils import DataUtils
-from scrapy.spiders import Spider
+from custom_spiders import ApiSpider
 import scrapy
 
-class LibraryEvents(Spider, ApiBase):
+class LibraryEvents(ApiSpider):
     # This is the max amount of rows that the API can return at one time
     MAX_ROWS = 50
 
     name = 'library'
     
     def __init__(self, start_date, end_date):
-        Spider.__init__(self)
-        ApiBase.__init__(self, 'https://chipublib.bibliocommons.com/', start_date, end_date, date_format = '%Y-%m-%d')
-    
-    #def start_requests(self):
-    #    yield scrapy.Request('https://google.com')
+        super().__init__(self, 'Chicago Public Library', 'https://chipublib.bibliocommons.com/', start_date, end_date, date_format = '%Y-%m-%d')
     
     def parse(self, response):
         return self.get_events()
@@ -81,7 +77,6 @@ class LibraryEvents(Spider, ApiBase):
         branch_locations = self.get_branch_locations_list()
         nonbranch_locations = self.get_nonbranch_locations_list()
 
-        events = []
         for event in events_json:
             details = event['definition']
             branch_location_id = details['branch_location_id']
@@ -103,17 +98,17 @@ class LibraryEvents(Spider, ApiBase):
             # Don't show cancelled or full events
             if details['is_cancelled'] == True or event['is_full'] == True:
                 continue
-
-            yield Event.from_dict({
-                'organization': 'Chicago Public Library',
+            
+            yield {
                 'title': details['title'],
                 'description': details['description'],
                 'address': self.get_address_string(location),
-                'date': date,
-                'start_time': start_time,
-                'end_time': end_time,
+                'event_time': {
+                    'date': date,
+                    'start_time': start_time,
+                    'end_time': end_time
+                },
                 'url': f'{self.base_url}events/search/index/event/{event["id"]}',
                 'price': 0.0,
                 'category': Category.LIBRARY
-            }, self.time_utils.date_format)
-        #self.save_events(events)
+            }

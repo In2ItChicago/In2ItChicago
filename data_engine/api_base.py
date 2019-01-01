@@ -11,8 +11,8 @@ class ApiBase(AggregatorBase):
     allowed_domains = ['wikipedia.org','en.wikipedia.org']
     start_urls = ['https://www.wikipedia.org/']
     
-    def __init__(self, base_url, start_date, end_date, date_format):
-        super().__init__(base_url, start_date, end_date, date_format)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
         self.session = requests.Session()
         # Request headers to send

@@ -10,12 +10,20 @@ import requests
 
 class AggregatorBase:
     # This class includes functionality that should be shared by spiders and API-based classes
+    custom_settings = {
+        'ITEM_PIPELINES': {
+            'clipboard_scrapers.pipelines.EventBuildPipeline': 300,
+            'clipboard_scrapers.pipelines.EventSavePipeline': 400
+        }
+    }
 
-    def __init__(self, base_url, start_date, end_date, date_format, request_date_format = None):
+    def __init__(self, organization, base_url, start_date, end_date, date_format, request_date_format = None):
+        self.organization = organization
         # date_format is the string that specifies the date style of the target website
         if request_date_format == None:
             request_date_format = date_format
 
+        self.date_format = date_format
         self.time_utils = TimeUtils(date_format)
         self.base_url = base_url
         self.identifier = re.sub(r'\W', '', base_url)

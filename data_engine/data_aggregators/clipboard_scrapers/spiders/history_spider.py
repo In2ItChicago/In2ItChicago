@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 import scrapy
-from scrapy.spiders import CrawlSpider, Rule
+from scrapy.spiders import Rule
+from custom_spiders import ScraperCrawlSpider
 from scrapy.linkextractors import LinkExtractor
 
-from event import Event, EventFieldData
 from categories import Category
 from spider_base import SpiderBase
 from data_utils import DataUtils
 
-class HistorySpider(CrawlSpider, SpiderBase):
+class HistorySpider(ScraperCrawlSpider):
     name = 'history'
     allowed_domains = ['www.chicagohistory.org']
 
@@ -17,8 +17,7 @@ class HistorySpider(CrawlSpider, SpiderBase):
     )
 
     def __init__(self, start_date, end_date):
-        CrawlSpider.__init__(self)
-        SpiderBase.__init__(self, 'https://www.chicagohistory.org/', start_date, end_date, date_format = '%d %B %Y', request_date_format = '%Y%m%d')
+        super().__init__(self, 'Chicago History Museum', 'https://www.chicagohistory.org/', start_date, end_date, date_format = '%d %B %Y', request_date_format = '%Y%m%d')
 
     def start_requests(self):
         yield self.get_request('events', {
@@ -31,7 +30,7 @@ class HistorySpider(CrawlSpider, SpiderBase):
         def get_full_date(xpath_result):
             result = []
             current_month = ''
-            for text in xpath_result.data:
+            for text in xpath_result:
                 text = DataUtils.remove_html(text)
                 # Month names are all greater than 2 characters
                 # Days of the month are all 2 characters or fewer
@@ -39,15 +38,17 @@ class HistorySpider(CrawlSpider, SpiderBase):
                     current_month = text
                 else:
                     result.append(f'{text} {current_month}')
-            return EventFieldData(xpath_result.item, result)
-
-        titles = self.extract('title', response.css, 'a.title::text')
-        urls = self.extract('url', response.css, 'a.title::attr(href)')
-        times = self.extract('time_range', response.css, '.time')
-        dates = get_full_date(self.extract('date', response.css, '.xcalendar-row .number,.month'))
-        descriptions = self.extract('description', response.css, '.info')
-
-        return self.create_events('Chicago History Museum', titles, descriptions, urls, times, dates)
+            return result
+        
+        return {
+            'title': response.css('a.title::text').extract(),
+            'url': response.css('a.title::attr(href)').extract(),
+            'event_time': self.create_time_data(
+                time_range=response.css('.time').extract(),
+                date=get_full_date(response.css('.xcalendar-row .number,.month').extract())
+            ),
+            'description': response.css('.info').extract()
+        }
 
     def link_request(self, request):
         # Store the original url in case it gets redirected later
@@ -55,11 +56,9 @@ class HistorySpider(CrawlSpider, SpiderBase):
         return request
 
     def parse_item(self, response):
-        location = self.extract('location', response.xpath, '//h3[contains(text(), "Event Location")]/following-sibling::div/p')
-        price = self.extract('price', response.css, '.price').remove_whitespace()
-
-        return Event.from_dict({
-            'url': response.meta['clicked_url'],
-            'address': location.data,
-            'price': price.data[0] if len(price.data) > 0 else '0'
-        })
+        prices = response.css('.price').extract()
+        return {
+            'url': [response.meta['clicked_url']],
+            'address': [response.xpath('//h3[contains(text(), "Event Location")]/following-sibling::div/p').extract()[0]],
+            'price': [prices[0] if len(prices) > 0 else '0']
+        }

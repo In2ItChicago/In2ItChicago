@@ -28,7 +28,7 @@ class ICal:
     def create_event(self, event, org):
         start_time = int(self.localize(event.get('DTSTART', '').dt).timestamp())
         end_time = int(self.localize(event.get('DTEND', '').dt).timestamp())
-        return Event.from_dict({
+        return {
             'start_timestamp': start_time,
             'end_timestamp': end_time,
             'title': '' + event.get('SUMMARY', ''),
@@ -36,7 +36,7 @@ class ICal:
             'address': '' + event.get('LOCATION', ''),
             'url': '' + event.get('URL', ''),
             'organization': '' + org
-        })
+        }
 
     def localize(self, time):
         if time.tzinfo is None:

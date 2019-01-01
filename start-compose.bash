@@ -11,4 +11,4 @@ esac
 ./render.sh
 ./build-images.sh dev
 ./check-all-image-updates.sh
-./compose-deploy.sh dev "$@"
+./compose-deploy.sh --env dev "$@"

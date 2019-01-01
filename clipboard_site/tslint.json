@@ -57,7 +57,7 @@
 		"no-string-literal": false,
 		"no-switch-case-fall-through": false,
 		"trailing-comma": [false, {"multiline": "always", "singleline": "never"}],
-		"no-trailing-whitespace": true,
+		"no-trailing-whitespace": false,
 		"no-unused-expression": false,
 		"no-use-before-declare": true,
 		"no-var-keyword": true,

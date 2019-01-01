@@ -4,16 +4,14 @@ API_DELAY_SECONDS = .1
 
 ENABLE_SCRAPY_CACHE = True
 SCRAPY_CACHE_EXPIRATION = 3600
-VERBOSE_SCRAPY_OUTPUT = False
+VERBOSE_SCRAPY_OUTPUT = True
 
 import os
 import requests
 import time
 class Config:
-    def __init__(self, local_db_client=False):
-        self.local_db_client = local_db_client
-
-        self.db_client_ip = self.get_client_ip()
+    def __init__(self):
+        self.db_client_ip = 'clipboard_db_client'
         self.db_client_port = 5000
         self.db_client_url = f'http://{self.db_client_ip}:{self.db_client_port}'
 
@@ -22,6 +20,7 @@ class Config:
         self.db_client_status = self.db_client_url + '/status'
         
         self.docker_ip = self.get_env_var('DOCKER_IP')
+        self.debug = self.get_env_var('DEBUG', False, "0")
 
         self.db_ip = 'clipboard_db' if self.db_client_ip == 'clipboard_db_client' else self.docker_ip
         self.db_port = 27017
@@ -32,21 +31,14 @@ class Config:
         self.display_date_format = '%Y-%m-%d'
         self.display_time_format = '%H:%M'
 
-    def get_env_var(self, name):
+    def get_env_var(self, name, error_if_null=True, default_value=None):
         try:
             return os.environ[name]
         except KeyError:
-            raise KeyError(f'Error: environment variable {name} not set. If this value was recently set, close all python processes and try again')
-
-    def get_client_ip(self):
-        if self.local_db_client:
-                return 'localhost'
-        elif self.get_env_var('DB_CLIENT_IP') == 'clipboard_db_client':
-            # data engine is running in Docker
-            return 'clipboard_db_client'
-        else:
-            # db client is running in Docker but data engine is not
-            return self.get_env_var('DOCKER_IP')
+            if error_if_null:
+                raise KeyError(f'Error: environment variable {name} not set. If this value was recently set, close all python processes and try again')
+            else:
+                return default_value
     
     def connect_to_client(self):
         for _ in range(self.num_connect_attempts):

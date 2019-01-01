@@ -8,6 +8,11 @@ services:
     ports:
       - "5000:5000"
       - "5858:5858"
+  data_engine:
+    environment:
+      - DEBUG=${DATA_ENGINE_DEBUG}
+    ports:
+      - "5860:5860"
   clipboard_site:
     command: ["npm", "run", "docker-debug"]
     ports:
