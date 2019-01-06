@@ -19,13 +19,7 @@ class Config:
         self.db_put_events = self.db_client_url + '/events'
         self.db_client_status = self.db_client_url + '/status'
         
-        self.docker_ip = self.get_env_var('DOCKER_IP')
-        self.debug = self.get_env_var('DEBUG', False, "0")
-
-        self.db_ip = 'clipboard_db' if self.db_client_ip == 'clipboard_db_client' else self.docker_ip
-        self.db_port = 27017
-        self.db_url = f'mongodb://{self.db_ip}:{self.db_port}/clipboard'
-        
+        self.debug = self.get_env_var('DEBUG', False, '0')
         self.num_connect_attempts = 10
 
         self.display_date_format = '%Y-%m-%d'

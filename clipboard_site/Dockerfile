@@ -1,6 +1,6 @@
 ARG BUILD_ENV=dev
 
-FROM node:11.3 AS clipboard_site_dependencies
+FROM node:11.6 AS clipboard_site_dependencies
 WORKDIR /usr/src/app/clipboard_site
 COPY package.json ./
 RUN npm install

@@ -1,28 +1,17 @@
 version: '3.6'
 services:
   clipboard_db:
-    image: "mongo:4.1.5"
+    image: "mongo:4.1.6"
     volumes:
       - mongodata:/data/db
   clipboard_db_client:
     image: "clipboard_db_client"
-    environment:
-      - DOCKER_IP=${DOCKER_IP}
-      - DB_CLIENT_IP=clipboard_db_client
   data_engine:
     image: "data_engine"
-    environment:
-      - DOCKER_IP=${DOCKER_IP}
-      - DB_CLIENT_IP=clipboard_db_client
-    volumes:
-      - ./data_engine/clipboard_common_lib:/usr/src/app/clipboard_common_lib
   clipboard_site:
     image: "clipboard_site"
-    environment:
-      - DOCKER_IP=${DOCKER_IP}
-      - DB_CLIENT_IP=clipboard_db_client
   nginx:
-    image: "nginx:1.15.7"
+    image: "nginx:1.15.8"
     volumes:
       - ./nginx:/etc/nginx
     ports:

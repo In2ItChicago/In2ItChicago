@@ -27,5 +27,4 @@ while (( "$#" )); do
 done
 # set positional arguments in their proper place
 eval set -- "$PARAMS"
-echo $DATA_ENGINE_DEBUG
 DATA_ENGINE_DEBUG=$DATA_ENGINE_DEBUG docker-compose -f docker-compose.yml -f docker-compose.${ENV}.yml up $PARAMS
