@@ -5,4 +5,4 @@ else
 	pythoncmd=python
 fi
 
-$pythoncmd render.py nginx/nginx.conf.j2
+$pythoncmd $(dirname "$0")/render.py nginx/nginx.conf.j2

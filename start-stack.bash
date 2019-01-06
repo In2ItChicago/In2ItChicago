@@ -8,7 +8,7 @@ case "$(uname)" in
      ;;
 esac
 ENV=${1:-dev}
-./render.sh
-./build-images.sh $ENV
-./check-all-image-updates.sh
-./stack-deploy.sh $ENV
+./scripts/render.sh
+./scripts/build-images.sh $ENV
+./scripts/check-all-image-updates.sh
+./scripts/stack-deploy.sh $ENV

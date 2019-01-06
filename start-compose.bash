@@ -8,7 +8,7 @@ case "$(uname)" in
      ;;
 esac
 
-./render.sh
-./build-images.sh dev
-./check-all-image-updates.sh
-./compose-deploy.sh --env dev "$@"
+./scripts/render.sh
+./scripts/build-images.sh dev
+./scripts/check-all-image-updates.sh
+./scripts/compose-deploy.sh --env dev "$@"

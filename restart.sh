@@ -31,5 +31,5 @@ eval set -- "$PARAMS"
 
 docker-compose stop $PARAMS
 docker-compose rm -f -v $PARAMS
-./build-images.sh dev
-./compose-deploy.sh --env dev $PARAMS_COPY
+./scripts/build-images.sh dev
+./scripts/compose-deploy.sh --env dev $PARAMS_COPY
