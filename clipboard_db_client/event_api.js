@@ -10,7 +10,12 @@ const port = 5000;
 const timeout = 1000;
 // OpenStreetMaps only allows 1 query per second
 const geocodeApiDelayMilliseconds = 1000;
+// Expire geo data after a set amount of time to prevent the database from getting too big
+// Use a random expiration time between min and max to avoid too much data expiring at the same time
+const minExpireAfterDays = 15;
+const maxExpireAfterDays = 30;
 const retries = 20;
+const additionalMongoFilters = ['$eq', '$and'];
 const sleep = require('util').promisify(setTimeout)
 let lastExecuted = new Date();
 
@@ -56,6 +61,12 @@ function setup(client) {
         }
     });
 
+    geocodeModel.ensureIndex({ "expireAt": 1 }, { expireAfterSeconds: 0 }, function(errorMsg, indexName) {
+        if (!indexName) {
+            throw errors.GeneralError(errorMsg);
+        }
+    });
+
     app.use('/status', {
         async find(params) {
             return 'available'
@@ -63,7 +74,8 @@ function setup(client) {
     });
 
     app.use('/geocode', service({
-        Model: geocodeModel
+        Model: geocodeModel,
+        whitelist: additionalMongoFilters
     }));
 
     app.service('geocode').hooks(geocodeHooks);
@@ -73,7 +85,8 @@ function setup(client) {
         paginate: {
             default: 25,
             max: 100
-        }
+        },
+        whitelist: additionalMongoFilters
     }));
 
     app.service('events').hooks(eventHooks);
@@ -128,8 +141,29 @@ async function getGeocode(address) {
     let response = await axios.get(`${base_url}?q=${address}&format=json`);
     lastExecuted = new Date();
     let data = response.data[0];
-    let result = {'lat': data.lat, 'lon': data.lon};
+    let result = {
+        'address': address,
+        'lat': data.lat, 
+        'lon': data.lon
+    };
     return result;
+}
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+
+function daysToMilliseconds(days) {
+    return days * 24 * 60 * 60 * 1000;
+}
+
+function addDaysToDate(date, days) {
+    return new Date(date.getTime() + daysToMilliseconds(days));
+}
+
+function randomExpirationTime() {
+    let expirationTime = getRandomInt(minExpireAfterDays, maxExpireAfterDays);
+    return addDaysToDate(new Date(), expirationTime);
 }
 
 const eventHooks = {
@@ -194,19 +228,26 @@ const geocodeHooks = {
         async find(context) {
             let query = context.params.query;
             context.params.query = { 'address': {'$eq': query.address }};
+            // This is only here so it's easier to access
             context.params.address = query.address;
+            return context;
+        },
+
+        async create(context) {
+            context.data.expireAt = randomExpirationTime();
             return context;
         }
     },
     after: {
         async find(context) {
+            // Geocode already found in database. No need to query web service.
             if (context.result.length > 0) {
                 return context;
             }
             let address = context.params.address;
             let result = await getGeocode(address);
             context.result = [result];
-
+            await this.create(result);
             return context;
         }
     }

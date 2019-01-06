@@ -1,1 +1,0 @@
-docker-compose up clipboard_db clipboard_db_client
