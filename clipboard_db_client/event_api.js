@@ -3,6 +3,7 @@ const express = require('@feathersjs/express');
 const errors = require('@feathersjs/errors');
 const MongoClient = require('mongodb').MongoClient;
 const service = require('feathers-mongodb');
+const swagger = require('feathers-swagger');
 const _ = require('lodash');
 const axios = require('axios');
 
@@ -47,11 +48,20 @@ function setup(client) {
     const app = express(feathers());
 
     // Turn on JSON body parsing for REST services
-    app.use(express.json({limit: '50mb'}))
-    // Turn on URL-encoded body parsing for REST services
-    app.use(express.urlencoded({ extended: true }));
-    // Set up REST transport using Express
-    app.configure(express.rest());
+    app
+        .use(express.json({limit: '50mb'}))
+        // Turn on URL-encoded body parsing for REST services
+        .use(express.urlencoded({ extended: true }))
+        // Set up REST transport using Express
+        .configure(express.rest())
+        .configure(swagger({
+            docsPath: '/docs',
+            uiIndex: true,
+            info: {
+                title: 'Event API',
+                description: 'Event API'
+              }
+        }))
 
     let eventModel = client.db('clipboard').collection('event');
     let geocodeModel = client.db('clipboard').collection('geocode');
@@ -73,21 +83,115 @@ function setup(client) {
         }
     });
 
-    app.use('/geocode', service({
+    let geoService = Object.assign(service({
         Model: geocodeModel,
         whitelist: additionalMongoFilters
-    }));
+    }), {
+        docs: {
+            description: 'Geocoding service',
+            definitions: {
+                'geocode list': {
+                    $ref: '#/definitions/geocode' 
+                },
+                geocode: {
+                    "type": "object"
+                }
+            },
+            find: {
+                parameters: [
+                    {
+                        description: 'Address',
+                        in: 'query',
+                        name: 'address',
+                        type: 'string'
+                    }
+                ]
+            }
+        }
+    });
+
+    app.use('/geocode', geoService);
 
     app.service('geocode').hooks(geocodeHooks);
 
-    app.use('/events', service({
+    let eventService = Object.assign(service({
         Model: eventModel,
         paginate: {
             default: 25,
             max: 100
         },
         whitelist: additionalMongoFilters
-    }));
+    }), {
+        docs: {
+            description: 'Event service',
+            definitions: {
+                'events list': {
+                    $ref: '#/definitions/events' 
+                },
+                event: {
+                    type: 'object',
+                    required: [ 'organization', 'start_timestamp', 'end_timestamp' ],
+                    properties: {
+                        organization: {
+                            type: "string",
+                            description: "organization"
+                        },
+                        start_timestamp: {
+                            type: "integer",
+                            "description": "event start time"
+                        },
+                        end_timestamp: {
+                            type: "integer",
+                            "description": "event end time"
+                        }
+                    }
+                },
+                events: {
+                    type: 'array',
+                    items: {
+                        type: 'object',
+                        $ref: '#/definitions/event' 
+                    }
+                }
+            },
+            find: {
+                parameters: [
+                    {
+                        description: 'start_timestamp',
+                        in: 'query',
+                        name: 'start_timestamp',
+                        type: 'integer'
+                    },
+                    {
+                        description: 'end_timestamp',
+                        in: 'query',
+                        name: 'end_timestamp',
+                        type: 'integer'
+                    },
+                    {
+                        description: 'organization',
+                        in: 'query',
+                        name: 'organization',
+                        type: 'string'
+                    },
+                    {
+                        description: 'limit',
+                        in: 'query',
+                        name: '$limit',
+                        type: 'string'
+                    },
+                    {
+                        description: 'skip',
+                        in: 'query',
+                        name: '$skip',
+                        type: 'string'
+                    },
+                ]
+            }
+        }
+    });
+
+    app.use('/events', eventService);
 
     app.service('events').hooks(eventHooks);
 
@@ -173,8 +277,7 @@ const eventHooks = {
             
             var search_fields = {
                 'start_timestamp': { func: '$gte', val: parseInt(query.start_timestamp) },
-                'end_timestamp': { func: '$lte', val: parseInt(query.end_timestamp) },
-                //{ name:'organization', func: '$eq', val: query.organization }
+                'end_timestamp': { func: '$lte', val: parseInt(query.end_timestamp) }
             }
 
             function mapParams(param) {
@@ -203,7 +306,7 @@ const eventHooks = {
         async create(context) {
             let invalid = context.data.filter(data => !(data.organization && data.start_timestamp && data.end_timestamp));
             if (invalid.length > 0) {
-                throw new errors.BadRequest('Invalid events', invalid);
+                throw new errors.BadRequest('Invalid events. organization, start_timestamp, and end_timestamp are required', invalid);
             }
             let organizations = _(context.data)
                 .groupBy(d => d.organization)
