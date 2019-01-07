@@ -71,7 +71,7 @@ function setup(client) {
         }
     });
 
-    geocodeModel.ensureIndex({ "expireAt": 1 }, { expireAfterSeconds: 0 }, function(errorMsg, indexName) {
+    geocodeModel.ensureIndex({ 'expireAt': 1 }, { expireAfterSeconds: 0 }, function(errorMsg, indexName) {
         if (!indexName) {
             throw errors.GeneralError(errorMsg);
         }
@@ -120,6 +120,7 @@ function setup(client) {
             default: 25,
             max: 100
         },
+        multi: true,
         whitelist: additionalMongoFilters
     }), {
         docs: {
@@ -217,12 +218,11 @@ function timeFromTimestamp(timestamp) {
 }
 
 function transformResult(mongoResult) {
-    start_timestamp = mongoResult.start_timestamp;
-    end_timestamp = mongoResult.end_timestamp;
+    start_timestamp = mongoResult.event_time.start_timestamp;
+    end_timestamp = mongoResult.event_time.end_timestamp;
     id = mongoResult._id.toString();
 
-    delete mongoResult.start_timestamp;
-    delete mongoResult.end_timestamp;
+    delete mongoResult.event_time;
     delete mongoResult._id;
     
     Object.assign(mongoResult, {
@@ -304,7 +304,7 @@ const eventHooks = {
         },
 
         async create(context) {
-            let invalid = context.data.filter(data => !(data.organization && data.start_timestamp && data.end_timestamp));
+            let invalid = context.data.filter(data => !(data.organization && data.event_time.start_timestamp && data.event_time.end_timestamp));
             if (invalid.length > 0) {
                 throw new errors.BadRequest('Invalid events. organization, start_timestamp, and end_timestamp are required', invalid);
             }
@@ -314,7 +314,13 @@ const eventHooks = {
                 .value();
             
             
-            await this.remove(null, {'query': {'organization': {'$in': organizations}}});
+            await this.remove(null, {
+                'query': {
+                    'organization': {
+                        '$in': organizations
+                    }
+                }
+            });
             return context;
         }
     },

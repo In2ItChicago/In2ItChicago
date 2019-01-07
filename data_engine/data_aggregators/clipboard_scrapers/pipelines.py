@@ -39,7 +39,6 @@ class EventTransformPipeline:
 
 class ScraperTransformPipeline:
     def process_item(self, item, spider):
-
         event_count = self.get_event_count(item, spider)
         for processed_item in ({key: value[i]} for key, value in item.items() for i in range(event_count)):
             yield processed_item
@@ -63,19 +62,20 @@ class EventSavePipeline:
     def close_spider(self, spider):
         if len(spider.event_manager.events) == 0:
             print('No data returned for ' + spider.base_url)
-        self.save_events(spider.identifier, spider.event_manager.to_dicts())
+        else:
+            self.save_events(spider.identifier, spider.event_manager.to_dicts())
 
     def save_events(self, identifier, event_list):
         new_hash = EventHashes.create_hash(event_list)
         print(f'Found {len(event_list)} events for {event_list[0]["organization"]}.')
         if new_hash == EventHashes.get(identifier):
-            print('Nothing to update.')
-            return
+           print('Nothing to update.')
+           return
         EventHashes.set(identifier, new_hash)
 
-        # with self.update_mutex:
-        #     response = requests.post(config.db_put_events, json=event_list)
-        # if not response.ok:
-        #     raise ValueError(response.text)
-        # else:
-        print(f'Saved {len(event_list)} events for {event_list[0]["organization"]}')
+        with self.update_mutex:
+            response = requests.post(config.db_put_events, json=event_list)
+        if not response.ok:
+            raise ValueError(response.text)
+        else:
+            print(f'Saved {len(event_list)} events for {event_list[0]["organization"]}')
