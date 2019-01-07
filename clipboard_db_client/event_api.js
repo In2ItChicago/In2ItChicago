@@ -65,7 +65,7 @@ function setup(client) {
 
     let eventModel = client.db('clipboard').collection('event');
     let geocodeModel = client.db('clipboard').collection('geocode');
-    eventModel.ensureIndex({'start_timestamp': 1, 'end_timestamp': 1, 'organization': 1}, function(errorMsg, indexName) {
+    eventModel.ensureIndex({'event_time.start_timestamp': 1, 'event_time.end_timestamp': 1, 'organization': 1}, function(errorMsg, indexName) {
         if (!indexName) {
             throw errors.GeneralError(errorMsg);
         }
@@ -276,15 +276,16 @@ const eventHooks = {
             let query = context.params.query;
             
             var search_fields = {
-                'start_timestamp': { func: '$gte', val: parseInt(query.start_timestamp) },
-                'end_timestamp': { func: '$lte', val: parseInt(query.end_timestamp) }
+                'start_timestamp': { name: 'event_time.start_timestamp', func: '$gte', val: parseInt(query.start_timestamp) },
+                'end_timestamp': { name: 'event_time.end_timestamp', func: '$lte', val: parseInt(query.end_timestamp) }
             }
 
             function mapParams(param) {
                 let field = search_fields[param]
-                let ret = field ? { [field.func]: field.val }: { ['$eq']: query[param] }
+                let name = field ? field.name : param
+                let ret = field ? { [field.func]: field.val }: { '$eq': query[param] }
                 return {
-                    [param]: ret
+                    [name]: ret
                 }; 
             }
             let keys = _.keys(query)

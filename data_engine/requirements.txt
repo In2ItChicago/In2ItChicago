@@ -1,5 +1,5 @@
 Scrapy
-DateRangeParser 
+timefhuman
 python-dateutil 
 bs4 
 requests

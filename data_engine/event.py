@@ -9,7 +9,7 @@ def custom_field():
     return scrapy.Field(input_processor=MapCompose(DataUtils.remove_html), output_processor=Join())
 
 def price_field():
-    return scrapy.Field(input_processor=MapCompose(DataUtils.remove_html, float), output_processor=TakeFirst())
+    return scrapy.Field(input_processor=MapCompose(lambda value: value.replace('$', '') if type(value) == str else value, DataUtils.remove_html, float), output_processor=TakeFirst())
 
 def url_field():
     return scrapy.Field(input_processor=MapCompose(DataUtils.remove_html, lambda value: value.rstrip('//')), output_processor=Join())

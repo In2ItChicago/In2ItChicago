@@ -2,9 +2,8 @@ import dateutil.parser
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
 import time
-import daterangeparser
+from timefhuman import timefhuman
 import re
-import pyparsing
 from data_utils import DataUtils
 
 class TimeUtils:
@@ -98,34 +97,36 @@ class TimeUtils:
         parsed_date = self.parse_date_string(test_string)
         if parsed_date != None:
             return parsed_date, parsed_date
-        try:
-            # If that fails, try to parse the date as a date range string
-            return daterangeparser.parse(test_string)
-            
-        except pyparsing.ParseException:
-            # If that fails, it may be a date range in a format that daterangeparser doesn't recognize
-            # Check if the string contains two formatted dates by checking the beginning and end substrings
-            # until it finds two strings formatted like dates
-            test_start = len(test_string) - 1
-            test_end = 0
-            start = None
-            end = None
-            while test_end < len(test_string):
-                if start == None:
-                    start = self.parse_date_string(test_string[0:test_end])
-                if end == None:
-                    end = self.parse_date_string(test_string[test_start:len(test_string)])
+        # If that fails, try to parse the date as a date range string
+        human_parsed = timefhuman(test_string)
+        if len(human_parsed) == 1:
+            return human_parsed, human_parsed
+        elif len(human_parsed) == 2:
+            return human_parsed
 
-                if start != None and end != None:
-                    break
+        # If that fails, it may be a date range in a format that daterangeparser doesn't recognize
+        # Check if the string contains two formatted dates by checking the beginning and end substrings
+        # until it finds two strings formatted like dates
+        test_start = len(test_string) - 1
+        test_end = 0
+        start = None
+        end = None
+        while test_end < len(test_string):
+            if start == None:
+                start = self.parse_date_string(test_string[0:test_end])
+            if end == None:
+                end = self.parse_date_string(test_string[test_start:len(test_string)])
 
-                test_start -= 1
-                test_end += 1
+            if start != None and end != None:
+                break
 
-            if start == None or end == None:
-                raise ValueError('Could not parse date string: ' + test_string)
-            
-            return start, end
+            test_start -= 1
+            test_end += 1
+
+        if start == None or end == None:
+            raise ValueError('Could not parse date string: ' + test_string)
+        
+        return start, end
 
     def set_year(self, date_obj):
         if date_obj.year == 1900:

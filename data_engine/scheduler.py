@@ -16,8 +16,8 @@ from scrapy.utils.log import configure_logging
 
 class Scheduler:
     def __init__(self):
-        #self.scrapers = [HistorySpider, WpbccSpider, LWVchicago, LibraryEvents, GreatLakesReader]
-        self.scrapers = [LWVChicago]
+        self.scrapers = [HistorySpider, WpbccSpider, LWVChicago, LibraryEvents, GreatLakesReader]
+        #self.scrapers = [LWVChicago]
         self.start_date = datetime.now().strftime('%m-%d-%Y')
         self.end_date = (datetime.now() + relativedelta(months=+1)).strftime('%m-%d-%Y')
         self.interval_seconds = 60
