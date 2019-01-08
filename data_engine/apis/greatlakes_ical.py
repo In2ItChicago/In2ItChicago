@@ -1,4 +1,4 @@
-from data_aggregators.apis.ical_reader import ICal
+from apis.ical_reader import ICal
 from pytz import timezone
 from custom_spiders import ApiSpider
 from api_base import ApiBase

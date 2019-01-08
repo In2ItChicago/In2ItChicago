@@ -2,12 +2,11 @@ from apscheduler.schedulers.twisted import TwistedScheduler
 from apscheduler.events import EVENT_JOB_MISSED
 from twisted.internet import reactor
 from dateutil.relativedelta import relativedelta
-from data_aggregators.apis.library_events import LibraryEvents
-from data_aggregators.apis.greatlakes_ical import GreatLakesReader
-from data_aggregators.apis.lwv_chicago import LWVChicago
-from data_aggregators.clipboard_scrapers.spiders.history_spider import HistorySpider
-from data_aggregators.clipboard_scrapers.spiders.wpbcc_spider import WpbccSpider
-#from data_aggregators.clipboard_scrapers.spiders.lwvchicago_spider import LWVchicago
+from apis.library_events import LibraryEvents
+from apis.greatlakes_ical import GreatLakesReader
+from apis.lwv_chicago import LWVChicago
+from clipboard_scrapers.spiders.history_spider import HistorySpider
+from clipboard_scrapers.spiders.wpbcc_spider import WpbccSpider
 from threading import Lock
 from datetime import datetime
 from scrapy.crawler import CrawlerRunner

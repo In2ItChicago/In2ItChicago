@@ -8,11 +8,11 @@ import ptvsd
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from config import config 
-from data_aggregators.apis.library_events import LibraryEvents
-from data_aggregators.apis.greatlakes_ical import GreatLakesReader
-from data_aggregators.clipboard_scrapers.spiders.history_spider import HistorySpider
-from data_aggregators.clipboard_scrapers.spiders.wpbcc_spider import WpbccSpider
-from data_aggregators.clipboard_scrapers.spiders.lwvchicago_spider import LWVchicago
+from apis.library_events import LibraryEvents
+from apis.greatlakes_ical import GreatLakesReader
+from clipboard_scrapers.spiders.history_spider import HistorySpider
+from clipboard_scrapers.spiders.wpbcc_spider import WpbccSpider
+from apis.lwv_chicago import LWVChicago
 from scrapy.cmdline import execute
 from scrapy.crawler import CrawlerProcess, CrawlerRunner
 from scrapy.utils.project import get_project_settings
@@ -36,7 +36,7 @@ def run():
 
     crawlerProcess.crawl(HistorySpider, start_date, end_date)
     crawlerProcess.crawl(WpbccSpider, start_date, end_date)
-    crawlerProcess.crawl(LWVchicago, start_date, end_date)
+    crawlerProcess.crawl(LWVChicago, start_date, end_date)
     crawlerProcess.crawl(LibraryEvents, start_date, end_date)
     crawlerProcess.crawl(GreatLakesReader, start_date, end_date)
 
@@ -62,7 +62,7 @@ if __name__ == '__main__':
         ptvsd.enable_attach(address=('0.0.0.0', 5860))
         ptvsd.wait_for_attach()
     # get_project_settings() can't find the settings unless we execute in the same directory as scrapy.cfg
-    os.chdir('data_aggregators')
-    #run()
-    scheduler = Scheduler()
-    scheduler.run_schedule()
+    #os.chdir('data_aggregators')
+    run()
+    #scheduler = Scheduler()
+    #scheduler.run_schedule()
