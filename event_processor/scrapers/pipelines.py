@@ -14,11 +14,6 @@ from scrapy.exceptions import DropItem
 import requests
 import json
 
-class EventBuildPipeline:
-    def process_item(self, item, spider):
-        spider.event_manager.update(item['url'], item)
-        return item
-
 class EventTransformPipeline:
     def __init__(self):
         self.time_utils = TimeUtils()
@@ -36,6 +31,21 @@ class EventTransformPipeline:
                 raise DropItem('Event is not in the confured timeframe')
         else:
             return loader.item
+            
+class GeocodePipeline:
+    def process_item(self, item, spider):
+        if 'address' in item:
+            try:
+                geocode = requests.get(config.db_get_geocode, {'address': item['address']})
+                item['geocode'] = geocode.json()
+            except Exception as e:
+                print('Exception while getting geocode: ' + e)
+        return item
+
+class EventBuildPipeline:
+    def process_item(self, item, spider):
+        spider.event_manager.update(item['url'], item)
+        return item
 
 class ScraperTransformPipeline:
     def process_item(self, item, spider):
@@ -55,10 +65,6 @@ class ScraperTransformPipeline:
         return count
 
 class EventSavePipeline:
-    def __init__(self):
-        super().__init__()
-        self.update_mutex = Lock()
-        
     def close_spider(self, spider):
         if len(spider.event_manager.events) == 0:
             print('No data returned for ' + spider.base_url)
@@ -73,8 +79,7 @@ class EventSavePipeline:
            return
         EventHashes.set(identifier, new_hash)
 
-        with self.update_mutex:
-            response = requests.post(config.db_put_events, json=event_list)
+        response = requests.post(config.db_put_events, json=event_list)
         if not response.ok:
             raise ValueError(response.text)
         else:

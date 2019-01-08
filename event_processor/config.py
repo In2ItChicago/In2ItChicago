@@ -18,6 +18,7 @@ class Config:
 
         self.db_get_events = self.db_client_url + '/events'
         self.db_put_events = self.db_client_url + '/events'
+        self.db_get_geocode = self.db_client_url + '/geocode'
         self.db_client_status = self.db_client_url + '/status'
         
         self.debug = self.get_env_var('DEBUG', False)

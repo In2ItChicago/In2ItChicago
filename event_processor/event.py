@@ -9,13 +9,23 @@ def custom_field():
     return scrapy.Field(input_processor=MapCompose(DataUtils.remove_html), output_processor=Join())
 
 def price_field():
-    return scrapy.Field(input_processor=MapCompose(lambda value: value.replace('$', '') if type(value) == str else value, DataUtils.remove_html, float), output_processor=TakeFirst())
+    return scrapy.Field(input_processor=MapCompose(
+            lambda value: value.replace('$', '') if type(value) == str else value, 
+            DataUtils.remove_html, float), 
+        output_processor=TakeFirst())
 
 def url_field():
-    return scrapy.Field(input_processor=MapCompose(DataUtils.remove_html, lambda value: value.rstrip('//')), output_processor=Join())
+    return scrapy.Field(input_processor=MapCompose(DataUtils.remove_html, lambda value: value.rstrip('//')), 
+    output_processor=Join())
 
 def category_field():
     return scrapy.Field(input_processor=MapCompose(lambda value: value.name), output_processor=Join())
+
+def address_field():
+    return scrapy.Field(input_processor=MapCompose(
+            lambda value: value + ' Chicago IL' if not 'Chicago' in value else value, 
+            DataUtils.remove_html), 
+        output_processor=Join())
 
 def create_time_data():
     # When creating an event, you'll want to pass in the data that matches
@@ -56,11 +66,12 @@ class Event(scrapy.Item):
     organization = custom_field()
     title = custom_field()
     description = custom_field()
-    address = custom_field()
+    address = address_field()
     url = url_field()
     price = price_field()
     category = category_field()
     event_time = date_field()
+    geocode = scrapy.Field()
 
 class EventLoader():
     def __init__(self, *args, **kwargs):
