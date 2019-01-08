@@ -3,20 +3,20 @@ from spider_base import SpiderBase
 from api_base import ApiBase
 api_settings = {
         'ITEM_PIPELINES': {
-            'clipboard_scrapers.pipelines.EventTransformPipeline': 300,
-            'clipboard_scrapers.pipelines.EventBuildPipeline': 400,
-            'clipboard_scrapers.pipelines.EventSavePipeline': 500
+            'scrapers.pipelines.EventTransformPipeline': 300,
+            'scrapers.pipelines.EventBuildPipeline': 400,
+            'scrapers.pipelines.EventSavePipeline': 500
             
         }
     }
 scraper_settings = {
         'ITEM_PIPELINES': {
-            'clipboard_scrapers.pipelines.EventTransformPipeline': 300,
-            'clipboard_scrapers.pipelines.EventBuildPipeline': 400,
-            'clipboard_scrapers.pipelines.EventSavePipeline': 500
+            'scrapers.pipelines.EventTransformPipeline': 300,
+            'scrapers.pipelines.EventBuildPipeline': 400,
+            'scrapers.pipelines.EventSavePipeline': 500
         },
         'SPIDER_MIDDLEWARES': {
-            'clipboard_scrapers.middlewares.SplitItemsMiddleware': 200
+            'scrapers.middlewares.SplitItemsMiddleware': 200
         }
     }
 class ApiSpider(Spider, ApiBase):

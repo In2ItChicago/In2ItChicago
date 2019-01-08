@@ -25,7 +25,7 @@
     import { dummyData } from '~/store/dummydata.js';
 
 	const app = feathers();
-	const restClient = rest('http://clipboard_db_client:5000');
+	const restClient = rest('http://event_service:5000');
 	app.configure(restClient.axios(axios));
     const events = app.service('events');
 

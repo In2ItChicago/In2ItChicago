@@ -12,8 +12,8 @@ class AggregatorBase:
     # This class includes functionality that should be shared by spiders and API-based classes
     custom_settings = {
         'ITEM_PIPELINES': {
-            'clipboard_scrapers.pipelines.EventBuildPipeline': 300,
-            'clipboard_scrapers.pipelines.EventSavePipeline': 400
+            'scrapers.pipelines.EventBuildPipeline': 300,
+            'scrapers.pipelines.EventSavePipeline': 400
         }
     }
 

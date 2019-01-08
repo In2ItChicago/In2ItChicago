@@ -1,19 +1,21 @@
 version: '3.6'
 services:
-  clipboard_db:
+  mongo:
     ports:
       - "27017:27017"
-  clipboard_db_client:
+  event_service:
     command: ["npm", "run", "debug"]
     ports:
       - "5000:5000"
       - "5858:5858"
-  data_engine:
+  event_processor:
     environment:
-      - DEBUG=${DATA_ENGINE_DEBUG}
+      - DEBUG=${EVENT_PROCESSOR_DEBUG}
+      - VERBOSE_OUTPUT=${VERBOSE_OUTPUT}
+      - RUN_SCHEDULER=${RUN_SCHEDULER}
     ports:
       - "5860:5860"
-  clipboard_site:
+  in2it_site:
     command: ["npm", "run", "docker-debug"]
     ports:
       - "3000:3000"

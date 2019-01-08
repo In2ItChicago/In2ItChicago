@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-from config import ENABLE_SCRAPY_CACHE, VERBOSE_SCRAPY_OUTPUT, SCRAPY_CACHE_EXPIRATION
+from config import config
 
-# Scrapy settings for clipboardproject project
-#
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
 #
@@ -10,13 +8,13 @@ from config import ENABLE_SCRAPY_CACHE, VERBOSE_SCRAPY_OUTPUT, SCRAPY_CACHE_EXPI
 #     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'clipboard'
+BOT_NAME = 'In2ItChicago'
 
-SPIDER_MODULES = ['clipboard_scrapers.spiders']
-NEWSPIDER_MODULE = 'clipboard_scrapers.spiders'
+SPIDER_MODULES = ['scrapers.spiders']
+NEWSPIDER_MODULE = 'scrapers.spiders'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'clipboardproject (+http://www.yourdomain.com)'
+USER_AGENT = 'In2ItChicago (+http://in2itchicago.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -44,30 +42,11 @@ ROBOTSTXT_OBEY = True
 #   'Accept-Language': 'en',
 #}
 
-# Enable or disable spider middlewares
-# See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
-# SPIDER_MIDDLEWARES = {
-#    'clipboard_scrapers.middlewares.HistorySpiderMiddleware': 543,
-# }
-
-# Enable or disable downloader middlewares
-# See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'clipboardproject.middlewares.ClipboardprojectDownloaderMiddleware': 543,
-#}
-
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
 #EXTENSIONS = {
 #    'scrapy.extensions.telnet.TelnetConsole': None,
 #}
-
-# Configure item pipelines
-# See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-# ITEM_PIPELINES = {
-#    'clipboard_scrapers.pipelines.EventBuildPipeline': 300,
-#    'clipboard_scrapers.pipelines.EventSavePipeline': 400,
-# }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -84,12 +63,12 @@ AUTOTHROTTLE_ENABLED = True
 
 # Enable and configure HTTP caching (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
-HTTPCACHE_ENABLED = ENABLE_SCRAPY_CACHE
+HTTPCACHE_ENABLED = config.enable_scrapy_cache
 # Expire cache every hour
-HTTPCACHE_EXPIRATION_SECS = SCRAPY_CACHE_EXPIRATION
+HTTPCACHE_EXPIRATION_SECS = config.scrapy_cache_expiration
 HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 # Comment this out to see all data being scraped
-LOG_LEVEL = 'DEBUG' if VERBOSE_SCRAPY_OUTPUT else 'ERROR'
+LOG_LEVEL = 'DEBUG' if config.verbose_scrapy_output else 'ERROR'

@@ -1,17 +1,18 @@
-ENABLE_API_CACHE = True
-API_CACHE_EXPIRATION = 3600
-API_DELAY_SECONDS = .1
-
-ENABLE_SCRAPY_CACHE = True
-SCRAPY_CACHE_EXPIRATION = 3600
-VERBOSE_SCRAPY_OUTPUT = True
-
 import os
 import requests
 import time
+
 class Config:
     def __init__(self):
-        self.db_client_ip = 'clipboard_db_client'
+        self.enable_api_cache = True
+        self.api_cache_expiration = 3600
+        self.api_delay_seconds = .1
+
+        self.enable_scrapy_cache = True
+        self.scrapy_cache_expiration = 3600
+        self.verbose_scrapy_output = self.get_env_var('VERBOSE_OUTPUT', False)
+
+        self.db_client_ip = 'event_service'
         self.db_client_port = 5000
         self.db_client_url = f'http://{self.db_client_ip}:{self.db_client_port}'
 
@@ -19,15 +20,20 @@ class Config:
         self.db_put_events = self.db_client_url + '/events'
         self.db_client_status = self.db_client_url + '/status'
         
-        self.debug = self.get_env_var('DEBUG', False, '0')
+        self.debug = self.get_env_var('DEBUG', False)
+        self.verbose_scrapy_output = self.get_env_var('VERBOSE_OUTPUT', False)
+        self.run_scheduler = self.get_env_var('RUN_SCHEDULER', True)
+
         self.num_connect_attempts = 10
 
-        self.display_date_format = '%Y-%m-%d'
-        self.display_time_format = '%H:%M'
-
-    def get_env_var(self, name, error_if_null=True, default_value=None):
+    def get_env_var(self, name, default_value=None, error_if_null=False):
         try:
-            return os.environ[name]
+            value = os.environ[name]
+            if value == '0':
+                return False
+            if value == '1':
+                return True
+            return value
         except KeyError:
             if error_if_null:
                 raise KeyError(f'Error: environment variable {name} not set. If this value was recently set, close all python processes and try again')

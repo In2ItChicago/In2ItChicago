@@ -10,8 +10,8 @@ from dateutil.relativedelta import relativedelta
 from config import config 
 from apis.library_events import LibraryEvents
 from apis.greatlakes_ical import GreatLakesReader
-from clipboard_scrapers.spiders.history_spider import HistorySpider
-from clipboard_scrapers.spiders.wpbcc_spider import WpbccSpider
+from scrapers.spiders.history_spider import HistorySpider
+from scrapers.spiders.wpbcc_spider import WpbccSpider
 from apis.lwv_chicago import LWVChicago
 from scrapy.cmdline import execute
 from scrapy.crawler import CrawlerProcess, CrawlerRunner
@@ -58,11 +58,12 @@ def run():
 
 
 if __name__ == '__main__':
-    if config.debug == "1":
+    if config.debug:
         ptvsd.enable_attach(address=('0.0.0.0', 5860))
         ptvsd.wait_for_attach()
-    # get_project_settings() can't find the settings unless we execute in the same directory as scrapy.cfg
-    #os.chdir('data_aggregators')
-    run()
-    #scheduler = Scheduler()
-    #scheduler.run_schedule()
+        
+    if config.run_scheduler:
+        scheduler = Scheduler()
+        scheduler.run_schedule()
+    else:
+        run()

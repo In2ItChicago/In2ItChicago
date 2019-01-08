@@ -2,7 +2,7 @@ import functools
 from beaker.cache import CacheManager
 from beaker.util import parse_cache_config_options
 from switchable_decorator import SwitchableDecorator
-from config import API_DELAY_SECONDS, API_CACHE_EXPIRATION, ENABLE_API_CACHE
+from config import config
 
 cache = CacheManager(**parse_cache_config_options({
         'cache.type': 'file',
@@ -10,4 +10,4 @@ cache = CacheManager(**parse_cache_config_options({
         'cache.lock_dir': 'lock'
     }))
 
-cache_call = SwitchableDecorator(cache.cache('web_call', expire=API_CACHE_EXPIRATION), ENABLE_API_CACHE)
+cache_call = SwitchableDecorator(cache.cache('web_call', expire=config.api_cache_expiration), config.enable_api_cache)

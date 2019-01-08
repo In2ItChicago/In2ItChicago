@@ -1,10 +1,10 @@
 version: '3.6'
 services:
-  data_engine:
-    image: "in2itchicago/data_engine"
-  clipboard_db_client:
-    image: "in2itchicago/clipboard_db_client"
+  event_processor:
+    image: "in2itchicago/event_processor"
+  event_service:
+    image: "in2itchicago/event_service"
     command: ["npm", "run", "start"]
-  clipboard_site:
-    image: "in2itchicago/clipboard_site"
+  in2it_site:
+    image: "in2itchicago/in2it_site"
     command: ["npm", "run", "start"]

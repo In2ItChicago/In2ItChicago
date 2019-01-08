@@ -1,7 +1,7 @@
 {
-  "name": "clipboard-client",
+  "name": "in2it-site",
   "version": "1.0.0",
-  "description": "My superior Nuxt.js project",
+  "description": "in2it site",
   "author": "WesThorburn",
   "private": true,
   "scripts": {

@@ -21,7 +21,7 @@ const sleep = require('util').promisify(setTimeout)
 let lastExecuted = new Date();
 
 (async () => {
-    let client = new MongoClient('mongodb://clipboard_db:27017/clipboard', {
+    let client = new MongoClient('mongodb://mongo:27017', {
         useNewUrlParser: true,
     });
     let currentTries = 0;
@@ -63,8 +63,8 @@ function setup(client) {
               }
         }))
 
-    let eventModel = client.db('clipboard').collection('event');
-    let geocodeModel = client.db('clipboard').collection('geocode');
+    let eventModel = client.db('in2it').collection('event');
+    let geocodeModel = client.db('in2it').collection('geocode');
     eventModel.ensureIndex({'event_time.start_timestamp': 1, 'event_time.end_timestamp': 1, 'organization': 1}, function(errorMsg, indexName) {
         if (!indexName) {
             throw errors.GeneralError(errorMsg);

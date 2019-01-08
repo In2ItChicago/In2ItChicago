@@ -1,7 +1,7 @@
 ./build-images.sh prod
-docker tag data_engine in2itchicago/data_engine
-docker tag clipboard_site in2itchicago/clipboard_site
-docker tag clipboard_db_client in2itchicago/clipboard_db_client
-docker push in2itchicago/data_engine
-docker push in2itchicago/clipboard_site
-docker push in2itchicago/clipboard_db_client
+docker tag event_processor in2itchicago/event_processor
+docker tag in2it_site in2itchicago/in2it_site
+docker tag event_service in2itchicago/event_service
+docker push in2itchicago/event_processor
+docker push in2itchicago/in2it_site
+docker push in2itchicago/event_service

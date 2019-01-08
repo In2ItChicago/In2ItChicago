@@ -5,8 +5,8 @@ from dateutil.relativedelta import relativedelta
 from apis.library_events import LibraryEvents
 from apis.greatlakes_ical import GreatLakesReader
 from apis.lwv_chicago import LWVChicago
-from clipboard_scrapers.spiders.history_spider import HistorySpider
-from clipboard_scrapers.spiders.wpbcc_spider import WpbccSpider
+from scrapers.spiders.history_spider import HistorySpider
+from scrapers.spiders.wpbcc_spider import WpbccSpider
 from threading import Lock
 from datetime import datetime
 from scrapy.crawler import CrawlerRunner
@@ -16,7 +16,7 @@ from scrapy.utils.log import configure_logging
 class Scheduler:
     def __init__(self):
         self.scrapers = [HistorySpider, WpbccSpider, LWVChicago, LibraryEvents, GreatLakesReader]
-        #self.scrapers = [LWVChicago]
+        
         self.start_date = datetime.now().strftime('%m-%d-%Y')
         self.end_date = (datetime.now() + relativedelta(months=+1)).strftime('%m-%d-%Y')
         self.interval_seconds = 60

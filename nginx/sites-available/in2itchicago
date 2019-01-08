@@ -3,7 +3,7 @@ server {
 
 	#location = /favicon.ico {access_log off; log_not_found off; }
 	#location /static/ {
-	#	root /usr/src/app/clipboard_site;
+	#	root /usr/src/app/in2it_site;
 	#}
 	
 	location / {
@@ -11,7 +11,7 @@ server {
 	}
 
 	location @proxy_to_app {
-		proxy_pass http://docker-clipboard_site;
+		proxy_pass http://docker-in2it_site;
 		include proxy_params;
 	}
 }

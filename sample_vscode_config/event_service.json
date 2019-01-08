@@ -6,11 +6,11 @@
             "type": "node",
             "request": "attach",
             "port": 5858,
-            "address": "192.168.99.100",
+            "address": "localhost", //docker toolbox users will likely need to use 192.168.99.100 
             "restart": true,
             "sourceMaps": false,
             "localRoot": "${workspaceRoot}",
-            "remoteRoot": "/usr/src/app/clipboard_db_client"
+            "remoteRoot": "/usr/src/app/event_service"
         }
     ]
 }

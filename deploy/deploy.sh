@@ -1,4 +1,4 @@
-cd clipboardapp
+cd In2ItChicago
 git checkout .
 git pull
 chmod +x *.sh

@@ -1,15 +1,15 @@
 version: '3.6'
 services:
-  clipboard_db:
+  mongo:
     image: "mongo:4.1.6"
     volumes:
       - mongodata:/data/db
-  clipboard_db_client:
-    image: "clipboard_db_client"
-  data_engine:
-    image: "data_engine"
-  clipboard_site:
-    image: "clipboard_site"
+  event_service:
+    image: "event_service"
+  event_processor:
+    image: "event_processor"
+  in2it_site:
+    image: "in2it_site"
   nginx:
     image: "nginx:1.15.8"
     volumes:

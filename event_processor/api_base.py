@@ -4,7 +4,7 @@ import time
 
 from aggregator_base import AggregatorBase
 from cache_call import cache_call
-from config import API_DELAY_SECONDS
+from config import config
 
 
 class ApiBase(AggregatorBase):
@@ -24,7 +24,7 @@ class ApiBase(AggregatorBase):
 
     def wait(self, sleep_time=None):
         if sleep_time == None:
-            time.sleep(API_DELAY_SECONDS)
+            time.sleep(config.api_delay_seconds)
         else:
             time.sleep(sleep_time)
 
