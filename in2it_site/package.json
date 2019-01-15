@@ -19,7 +19,9 @@
     "@nuxtjs/axios": "^5.0.0",
     "bootstrap": "^4.1.3",
     "bootstrap-vue": "^2.0.0-beta",
-    "nuxt": "^2.0.0"
+    "nuxt": "^2.0.0",
+    "vue-badger-accordion": "^1.0.8",
+    "vuejs-datepicker": "^1.5.4"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",

@@ -1,20 +1,18 @@
 <template>
-	<section class="container">
-		<h2>Event Results</h2>
+	<div class="events">
 		<div v-if="eventsAvailable">
 			<div v-for="event in events">
-				<event-listing :event="event"></event-listing>
+				<event-summary :event="event"></event-summary>
 			</div>
 		</div>
-		<div v-else>
+		<div v-else class="no-event-message">
 			<span>No events available, please try again later.</span>
 		</div>
-	</section>
+	</div>
 </template>
 
 <script>
-	import EventListing from '~/components/EventListing';
-
+	import EventSummary from '~/components/EventSummary.vue';
 	export default{
 		props: ['events'],
 		computed: {
@@ -23,7 +21,7 @@
 			}
 		},
 		components: {
-			EventListing
+			EventSummary
 		}
 	};
 </script>

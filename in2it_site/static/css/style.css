@@ -1,33 +1,152 @@
-header {
-    background-color: #934211;
+body{
+	background-color:#c3c3c3;
 }
 
-h1 {
-    font-family: "Permanent Marker";
+.footer{
+	bottom: 0;
+	width: 100%;
+	/* Set the fixed height of the footer here */
+	height: 60px;
+	line-height: 60px; /* Vertically center the text there */
+	background-color: #056277;
+	color:#fff;
+	font-size:22px;
 }
-h2, h3 {
-    font-family: 'Signika', sans-serif;
+
+.in2it-navbar{
+	color:#fff;
+	background-color:#056277;
+	box-shadow: 0px 7px 15px #888888;
 }
-p {
-    font-family: sans-serif;
+
+.nav-link{
+	padding:10px 20px 0px 20px;
+	color:#fff;
+	font-size:18px;
 }
-aside {
-    float: left;
-    width: 27%;
-    padding-left: 1em;
-    padding-right: 1em;
-    background-color: #888;
+
+.nav-link:hover{
+	text-decoration: underline;
+	color:#e3e3e3;
 }
-main {
-    width: 66%;
-    float: right;
-    padding: 1em;
-    background-color: #999;
+
+.in2it-brand{
+	margin-left:20px;
+	color:#fff;
+	font-size:30px;
 }
-.sharing-saving img {
-    border-radius: 22%;
-    padding: .2em;
+.in2it-brand:hover{
+	text-decoration: none;
+	color:#e3e3e3;
 }
-.filterType {
-     
+
+.logo-container{
+	padding:0px;
+	height: 60px;
+	margin-left:20px;
+}
+
+.content{
+	margin:40px 0px 40px 0px;
+	display:flex;
+}
+
+.filters{
+	flex: 1 0 0;
+	background-color:#67abba;
+	border-radius:4px 0px 0px 4px;
+	border:1px solid #056277;
+	border-top:none;
+}
+
+.events{
+	flex: 3 0 0;
+	border-radius:0px 4px 4px 0px;
+	background-color:#fff;
+	border:1px solid #056277;
+	border-left:none;
+	border-bottom:none;
+}
+
+.no-event-message{
+	padding:10px;
+}
+
+.form-group{
+	margin-top:10px;
+}
+
+.accordion-button{
+	background-color: #67abba;
+	color: #444;
+	cursor: pointer;
+	padding: 18px;
+	width: 100%;
+	border: none;
+	text-align: left;
+	outline: none;
+	font-size: 15px;
+	transition: 0.4s;
+	border-top:1px solid #056277;
+
+}
+
+.active, .accordion-button:hover {
+	background-color: #056277;
+	color:#fff;
+}
+
+.accordion-button:after {
+	content: '\002B';
+	color: #444;
+	font-weight: bold;
+	float: right;
+	margin-left: 5px;
+}
+
+.active:after {
+	content: "\2212";
+}
+
+.accordion-panel {
+	padding: 0 18px;
+	background-color:#67abba;
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 0.2s ease-out;
+}
+
+.accordion-panel.open{
+	overflow: visible;
+}
+
+.event-summary{
+	display:flex;
+	padding:10px;
+	justify-content: space-between;
+	border-bottom:1px solid #056277;
+}
+
+.event-summary:hover{
+	background-color:#e3e3e3;
+}
+
+.event-summary .event-summary-heading{
+	color:#444;
+	font-size:20px;
+}
+
+.event-summary .event-summary-description{
+	color:#444;
+	font-size:16px;
+}
+
+.map-icon{
+	width: 25px;
+	height: 25px;
+}
+
+.calendar-icon{
+	width: 25px;
+	height: 25px;
 }

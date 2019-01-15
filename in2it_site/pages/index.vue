@@ -3,25 +3,29 @@
 		<header>
 			<page-header></page-header>
 		</header>
-		<aside>
-			<control-column></control-column>
-		</aside>
-		<main>
-			<map-view></map-view>
-			<event-results :events="events"></event-results>
-		</main>
-	</div>
+
+		<div class="container">
+			<div class="content">
+				<filters></filters>
+				<event-list :events="events"></event-list>
+			</div>
+		</div>
+
+		<footer>
+			<page-footer></page-footer>
+		</footer>
+	</div>	
 </template>
 
 <script lang='ts'>
 	import axios from 'axios';
-	import feathers from '@feathersjs/feathers';
 	import rest from '@feathersjs/rest-client';
-	import ControlColumn from '~/components/ControlColumn.vue';
-	import EventListing from '~/components/EventListing.vue';
+	import feathers from '@feathersjs/feathers';
+	import Filters from '~/components/Filters.vue';
+	import EventList from '~/components/EventList.vue';
+	import PageFooter from '~/components/PageFooter.vue';
 	import PageHeader from '~/components/PageHeader.vue';
-	import MapView from '~/components/MapView.vue';
-    import EventResults from '~/components/EventResults.vue';
+	
     import { dummyData } from '~/store/dummydata.js';
 
 	const app = feathers();
@@ -49,11 +53,10 @@
 				});
 		},
 		components: {
-			ControlColumn,
-			EventListing,
-			PageHeader,
-			MapView,
-			EventResults
+			Filters,
+			EventList,
+			PageFooter,
+			PageHeader
 		}
 	};
 </script>

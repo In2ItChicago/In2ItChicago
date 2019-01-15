@@ -1,8 +1,19 @@
 <template>
-	<div>
-        <a href="">Login/Sign Up</a>
-        <h1>In2It Chicago</h1>
-        <nav><a href="index.html"> Home </a><a href=""> About </a><a href=""> Getting Started </a></nav>
-        <div class="search"><input type="search">Search</div>
-    </div>
+	<nav class="navbar navbar-expand-lg navbar-light in2it-navbar">
+        <div class="container">
+            <div class="d-flex flex-column">
+                <a class="in2it-brand" href="/">In2It</a>
+                <div class="d-flex flex-row">
+                    <a class="nav-link" href="/">Home</a>
+                    <a class="nav-link" href="/about-us">About Us</a>
+                    <a class="nav-link" href="/faq">FAQ</a>
+                    <a class="nav-link" href="/join-us">Join Us</a>
+                </div>
+            </div>
+        </div>
+    </nav>
 </template>
+
+<script>
+	export default{};
+</script>
