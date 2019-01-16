@@ -26,11 +26,17 @@ class Scheduler:
         self.scheduler.add_listener(self.schedule_missed, EVENT_JOB_MISSED)
     
     def add_schedule(self, scraper, seconds_delay):
+        # Run immediately
+        self.scheduler.add_job(self.run_scraper, 
+                id=scraper.__name__ + 'FirstRun', 
+                trigger='date', 
+                args=[scraper], 
+                run_date=datetime.now() + relativedelta(seconds=5 if seconds_delay == 0 else seconds_delay))
         self.scheduler.add_job(self.run_scraper, 
                 id=scraper.__name__, 
                 trigger='interval', 
                 args=[scraper], 
-                start_date=datetime.now() + relativedelta(seconds=seconds_delay if seconds_delay > 0 else 1), 
+                start_date=datetime.now() + relativedelta(seconds=seconds_delay), 
                 seconds=self.interval_seconds)
         
     def schedule_missed(self, event):
@@ -47,8 +53,8 @@ class Scheduler:
         start_interval = self.interval_seconds / len(self.scrapers)
         now = datetime.now()
         self.last_scheduled = now
+        self.scheduler.start()
         for index, scraper in enumerate(self.scrapers):
             self.add_schedule(scraper, start_interval * index)
         
-        self.scheduler.start()
         reactor.run()
