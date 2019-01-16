@@ -2,6 +2,11 @@ version: '3.6'
 services:
   event_processor:
     image: "in2itchicago/event_processor"
+    environment:
+      - DEBUG=0
+      - VERBOSE_OUTPUT=0
+      - RUN_SCHEDULER=1
+      - SCHEDULE_INTERVAL=120
   event_service:
     image: "in2itchicago/event_service"
     command: ["npm", "run", "start"]

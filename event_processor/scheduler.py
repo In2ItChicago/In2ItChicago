@@ -12,6 +12,7 @@ from datetime import datetime
 from scrapy.crawler import CrawlerRunner
 from scrapy.utils.project import get_project_settings
 from scrapy.utils.log import configure_logging
+from config import config
 
 class Scheduler:
     def __init__(self):
@@ -19,7 +20,7 @@ class Scheduler:
         
         self.start_date = datetime.now().strftime('%m-%d-%Y')
         self.end_date = (datetime.now() + relativedelta(months=+1)).strftime('%m-%d-%Y')
-        self.interval_seconds = 60
+        self.interval_seconds = 60 * config.schedule_interval
 
         self.scheduler = TwistedScheduler()
         self.scheduler.add_listener(self.schedule_missed, EVENT_JOB_MISSED)

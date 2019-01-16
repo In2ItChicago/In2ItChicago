@@ -13,6 +13,7 @@ services:
       - DEBUG=${EVENT_PROCESSOR_DEBUG}
       - VERBOSE_OUTPUT=${VERBOSE_OUTPUT}
       - RUN_SCHEDULER=${RUN_SCHEDULER}
+      - SCHEDULE_INTERVAL=1
     ports:
       - "5860:5860"
   in2it_site:

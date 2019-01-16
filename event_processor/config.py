@@ -6,7 +6,7 @@ class Config:
     def __init__(self):
         self.enable_api_cache = True
         self.api_cache_expiration = 3600
-        self.api_delay_seconds = .1
+        self.api_delay_seconds = 0.1
 
         self.enable_scrapy_cache = True
         self.scrapy_cache_expiration = 3600
@@ -21,20 +21,24 @@ class Config:
         self.db_get_geocode = self.db_client_url + '/geocode'
         self.db_client_status = self.db_client_url + '/status'
         
-        self.debug = self.get_env_var('DEBUG', False)
-        self.verbose_scrapy_output = self.get_env_var('VERBOSE_OUTPUT', False)
-        self.run_scheduler = self.get_env_var('RUN_SCHEDULER', True)
+        self.debug = self.get_env_bool('DEBUG', False)
+        self.verbose_scrapy_output = self.get_env_bool('VERBOSE_OUTPUT', False)
+        self.run_scheduler = self.get_env_bool('RUN_SCHEDULER', True)
+        self.schedule_interval = int(self.get_env_var('SCHEDULE_INTERVAL', error_if_null=True))
 
         self.num_connect_attempts = 10
 
+    def get_env_bool(self, name, default_value=None, error_if_null=False):
+        value = self.get_env_var(name, default_value, error_if_null)
+        if value == '0':
+                return False
+        if value == '1':
+            return True
+        raise KeyError(f'Boolean variable {name} returned {value}. Should be 0 or 1')
+
     def get_env_var(self, name, default_value=None, error_if_null=False):
         try:
-            value = os.environ[name]
-            if value == '0':
-                return False
-            if value == '1':
-                return True
-            return value
+            return os.environ[name]
         except KeyError:
             if error_if_null:
                 raise KeyError(f'Error: environment variable {name} not set. If this value was recently set, close all python processes and try again')
