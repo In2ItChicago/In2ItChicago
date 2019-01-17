@@ -39,7 +39,7 @@ class GeocodePipeline:
                 geocode = requests.get(config.db_get_geocode, {'address': item['address']})
                 item['geocode'] = geocode.json()
             except Exception as e:
-                print('Exception while getting geocode: ' + e)
+                print('Exception while getting geocode: ' + str(e))
         return item
 
 class EventBuildPipeline:

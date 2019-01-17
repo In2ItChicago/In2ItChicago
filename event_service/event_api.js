@@ -6,6 +6,8 @@ const service = require('feathers-mongodb');
 const swagger = require('feathers-swagger');
 const _ = require('lodash');
 const axios = require('axios');
+const fs = require('fs');
+const GeoJsonGeometriesLookup = require('geojson-geometries-lookup');
 
 const port = 5000;
 const timeout = 1000;
@@ -17,7 +19,11 @@ const minExpireAfterDays = 15;
 const maxExpireAfterDays = 30;
 const retries = 20;
 const additionalMongoFilters = ['$eq', '$and'];
-const sleep = require('util').promisify(setTimeout)
+const sleep = require('util').promisify(setTimeout);
+const geojsonData = fs.readFileSync('chicago_neighborhoods.geojson');
+const geojsonContent = JSON.parse(geojsonData);
+const geoLookup = new GeoJsonGeometriesLookup(geojsonContent);
+
 let lastExecuted = new Date();
 
 (async () => {
@@ -61,7 +67,7 @@ function setup(client) {
                 title: 'Event API',
                 description: 'Event API'
               }
-        }))
+        }));
 
     let eventModel = client.db('in2it').collection('event');
     let geocodeModel = client.db('in2it').collection('geocode');
@@ -72,6 +78,12 @@ function setup(client) {
     });
 
     geocodeModel.ensureIndex({ 'expireAt': 1 }, { expireAfterSeconds: 0 }, function(errorMsg, indexName) {
+        if (!indexName) {
+            throw errors.GeneralError(errorMsg);
+        }
+    });
+
+    geocodeModel.ensureIndex({ 'address': 1, 'neighborhood': 1 }, function(errorMsg, indexName) {
         if (!indexName) {
             throw errors.GeneralError(errorMsg);
         }
@@ -103,6 +115,12 @@ function setup(client) {
                         description: 'Address',
                         in: 'query',
                         name: 'address',
+                        type: 'string'
+                    },
+                    {
+                        description: 'Neighborhood',
+                        in: 'query',
+                        name: 'neighborhood',
                         type: 'string'
                     }
                 ]
@@ -217,6 +235,31 @@ function timeFromTimestamp(timestamp) {
     return timestampToDate(timestamp).toLocaleTimeString();
 }
 
+function mongoSearch(query, search_fields={}, join='$and') {
+    function mapParams(param) {
+        let field = search_fields[param]
+        let name = field ? field.name : param
+        let ret = field ? { [field.func]: field.val }: { '$eq': query[param] }
+        return {
+            [name]: ret
+        }; 
+    }
+    let keys = _.keys(query)
+
+    let mongoFilters = keys
+    .filter(key => !key.startsWith('$'))
+    .map(mapParams);
+
+    let newParams = _.pickBy(query, (value, key) => key.startsWith('$'));
+
+    if (mongoFilters.length > 0) {
+        let joined_clause = {[join]: mongoFilters};
+        Object.assign(newParams, joined_clause);
+    }
+
+    return newParams;
+}
+
 function transformResult(mongoResult) {
     start_timestamp = mongoResult.event_time.start_timestamp;
     end_timestamp = mongoResult.event_time.end_timestamp;
@@ -230,6 +273,8 @@ function transformResult(mongoResult) {
         start_date: dateFromTimestamp(start_timestamp),
         end_time: timeFromTimestamp(end_timestamp),
         end_date: dateFromTimestamp(end_timestamp),
+        start_timestamp: start_timestamp,
+        end_timestamp: end_timestamp,
         id: id
     })
     
@@ -244,12 +289,23 @@ async function getGeocode(address) {
     }
     let response = await axios.get(`${base_url}?q=${address}&format=json`);
     lastExecuted = new Date();
+
+    if (response.data.length === 0) {
+        return null;
+    }
+
     let data = response.data[0];
     let result = {
         'address': address,
         'lat': data.lat, 
         'lon': data.lon
     };
+
+    let geojsonPoint = { type: "Point", coordinates: [data.lon, data.lat] }; 
+    let matches = geoLookup.getContainers(geojsonPoint).features;
+    if (matches.length > 0) {
+        result.neighborhood = matches[0].properties.pri_neigh;
+    }
     return result;
 }
 
@@ -280,27 +336,7 @@ const eventHooks = {
                 'end_timestamp': { name: 'event_time.end_timestamp', func: '$lte', val: parseInt(query.end_timestamp) }
             }
 
-            function mapParams(param) {
-                let field = search_fields[param]
-                let name = field ? field.name : param
-                let ret = field ? { [field.func]: field.val }: { '$eq': query[param] }
-                return {
-                    [name]: ret
-                }; 
-            }
-            let keys = _.keys(query)
-
-            let newParams = _.pickBy(query, (value, key) => key.startsWith('$'))
-
-            let mongoFilters = keys
-            .filter(key => !key.startsWith('$'))
-            .map(mapParams);
-            
-            if (mongoFilters.length > 0) {
-                let and_clause = {'$and': mongoFilters};
-                Object.assign(newParams, and_clause);
-            }
-            context.params.query = newParams;
+            context.params.query = mongoSearch(query, search_fields);
             return context;
         },
 
@@ -337,7 +373,8 @@ const geocodeHooks = {
     before: {
         async find(context) {
             let query = context.params.query;
-            context.params.query = { 'address': {'$eq': query.address }};
+            context.params.query = mongoSearch(query);
+           
             // This is only here so it's easier to access
             context.params.address = query.address;
             return context;
@@ -354,8 +391,14 @@ const geocodeHooks = {
             if (context.result.length > 0) {
                 return context;
             }
-            let address = context.params.address;
-            let result = await getGeocode(address);
+            let result = null;
+            if (context.params.address) {
+                result = await getGeocode(context.params.address);
+            }
+            
+            if (result == null) {
+                return context;
+            }
             context.result = [result];
             await this.create(result);
             return context;
