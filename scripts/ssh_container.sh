@@ -1,0 +1,1 @@
+docker exec -it clipboardapp_$1_1 bash
