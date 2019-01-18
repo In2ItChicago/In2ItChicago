@@ -7,6 +7,8 @@ case "$(uname)" in
      ./dos2unix.exe *.sh */*.sh
      ;;
 esac
+docker stack rm In2ItChicago
+sleep 5
 ENV=${1:-dev}
 ./scripts/render.sh
 ./scripts/build-images.sh $ENV

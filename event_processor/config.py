@@ -34,11 +34,18 @@ class Config:
                 return False
         if value == '1':
             return True
-        raise KeyError(f'Boolean variable {name} returned {value}. Should be 0 or 1')
+        if type(value) == bool:
+            return value
+        raise KeyError(f'Boolean variable {name} returned {value}. Should be 0, 1, True, or False')
 
     def get_env_var(self, name, default_value=None, error_if_null=False):
         try:
-            return os.environ[name]
+            # KeyError occurs if value is not present in os
+            # Because of how environment variables are passed to Docker, they will appear as '' if they are not set
+            value = os.environ[name]
+            if value == '':
+                raise KeyError
+            return value
         except KeyError:
             if error_if_null:
                 raise KeyError(f'Error: environment variable {name} not set. If this value was recently set, close all python processes and try again')
