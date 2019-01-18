@@ -29,8 +29,10 @@ class ICal:
         start_time = int(self.localize(event.get('DTSTART', '').dt).timestamp())
         end_time = int(self.localize(event.get('DTEND', '').dt).timestamp())
         return {
-            'start_timestamp': start_time,
-            'end_timestamp': end_time,
+            'event_time': {
+                'start_timestamp': start_time,
+                'end_timestamp': end_time,
+            },
             'title': '' + event.get('SUMMARY', ''),
             'description': '' + event.get('DESCRIPTION', ''),
             'address': '' + event.get('LOCATION', ''),
