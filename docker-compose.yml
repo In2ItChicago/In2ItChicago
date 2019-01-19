@@ -4,17 +4,35 @@ services:
     image: "mongo:4.1.6"
     volumes:
       - mongodata:/data/db
+    ports:
+      - "27017:27017"
   event_service:
     image: "event_service"
+    ports:
+      - "5000:5000"
+      - "5858:5858"
   event_processor:
     image: "event_processor"
+    ports:
+      - "5860:5860"
   in2it_site:
     image: "in2it_site"
+    ports:
+      - "3000:3000"
+      - "5859:5859"
   nginx:
     image: "nginx:1.15.8"
     volumes:
       - ./nginx:/etc/nginx
     ports:
       - "0.0.0.0:80:80"
+  portainer:
+    image: "portainer/portainer:1.20.0"
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainerdata:/data
 volumes:
   mongodata:
+  portainerdata:

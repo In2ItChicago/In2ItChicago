@@ -235,9 +235,9 @@ function timeFromTimestamp(timestamp) {
     return timestampToDate(timestamp).toLocaleTimeString();
 }
 
-function mongoSearch(query, search_fields={}, join='$and') {
+function mongoSearch(query, searchFields={}, join='$and') {
     function mapParams(param) {
-        let field = search_fields[param]
+        let field = searchFields[param]
         let name = field ? field.name : param
         let ret = field ? { [field.func]: field.val }: { '$eq': query[param] }
         return {
@@ -253,28 +253,28 @@ function mongoSearch(query, search_fields={}, join='$and') {
     let newParams = _.pickBy(query, (value, key) => key.startsWith('$'));
 
     if (mongoFilters.length > 0) {
-        let joined_clause = {[join]: mongoFilters};
-        Object.assign(newParams, joined_clause);
+        let joinedClause = {[join]: mongoFilters};
+        Object.assign(newParams, joinedClause);
     }
 
     return newParams;
 }
 
 function transformResult(mongoResult) {
-    start_timestamp = mongoResult.event_time.start_timestamp;
-    end_timestamp = mongoResult.event_time.end_timestamp;
+    let startTimestamp = mongoResult.event_time.start_timestamp;
+    let endTimestamp = mongoResult.event_time.end_timestamp;
     id = mongoResult._id.toString();
 
     delete mongoResult.event_time;
     delete mongoResult._id;
     
     Object.assign(mongoResult, {
-        start_time: timeFromTimestamp(start_timestamp),
-        start_date: dateFromTimestamp(start_timestamp),
-        end_time: timeFromTimestamp(end_timestamp),
-        end_date: dateFromTimestamp(end_timestamp),
-        start_timestamp: start_timestamp,
-        end_timestamp: end_timestamp,
+        start_time: timeFromTimestamp(startTimestamp),
+        start_date: dateFromTimestamp(startTimestamp),
+        end_time: timeFromTimestamp(endTimestamp),
+        end_date: dateFromTimestamp(endTimestamp),
+        start_timestamp: startTimestamp,
+        end_timestamp: endTimestamp,
         id: id
     })
     
@@ -282,12 +282,12 @@ function transformResult(mongoResult) {
 }
 
 async function getGeocode(address) {
-    let base_url = 'https://nominatim.openstreetmap.org/search';
+    let baseUrl = 'https://nominatim.openstreetmap.org/search';
     let diff = new Date() - lastExecuted;
     if (diff <= geocodeApiDelayMilliseconds) {
         await sleep(diff);
     }
-    let response = await axios.get(`${base_url}?q=${address}&format=json`);
+    let response = await axios.get(`${baseUrl}?q=${address}&format=json`);
     lastExecuted = new Date();
 
     if (response.data.length === 0) {
@@ -331,12 +331,12 @@ const eventHooks = {
         async find(context) {
             let query = context.params.query;
             
-            var search_fields = {
+            var searchFields = {
                 'start_timestamp': { name: 'event_time.start_timestamp', func: '$gte', val: parseInt(query.start_timestamp) },
                 'end_timestamp': { name: 'event_time.end_timestamp', func: '$lte', val: parseInt(query.end_timestamp) }
             }
 
-            context.params.query = mongoSearch(query, search_fields);
+            context.params.query = mongoSearch(query, searchFields);
             return context;
         },
 

@@ -1,32 +1,13 @@
 version: '3.6'
 services:
   mongo:
-    ports:
-      - "27017:27017"
   event_service:
     command: ["npm", "run", "debug"]
-    ports:
-      - "5000:5000"
-      - "5858:5858"
   event_processor:
     environment:
       - DEBUG=${EVENT_PROCESSOR_DEBUG}
       - VERBOSE_OUTPUT=${VERBOSE_OUTPUT}
       - RUN_SCHEDULER=${RUN_SCHEDULER}
       - SCHEDULE_INTERVAL=1
-    ports:
-      - "5860:5860"
   in2it_site:
     command: ["npm", "run", "docker-debug"]
-    ports:
-      - "3000:3000"
-      - "5859:5859"
-  portainer:
-    image: "portainer/portainer:1.20.0"
-    ports:
-      - "9000:9000"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainerdata:/data
-volumes:
-  portainerdata:
