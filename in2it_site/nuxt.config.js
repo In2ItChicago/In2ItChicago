@@ -70,9 +70,12 @@ module.exports = {
             else
                 config.devtool = 'inline-source-map'
             return config;
-            // return Object.assign({}, config, {
-            //     devtool: 'source-map'
-            //   });
 		}
-	}
+    },
+    watchers: {
+        webpack: {
+            aggregateTimeout:300,
+            poll: 1000
+        }
+    }
 }

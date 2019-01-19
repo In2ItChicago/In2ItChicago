@@ -5,7 +5,7 @@
   "main": "event_api.js",
   "scripts": {
     "start": "node event_api",
-    "debug": "node --inspect=[::]:5858 event_api"
+    "dev": "./node_modules/nodemon/bin/nodemon.js -L --inspect=[::]:5858 event_api"
   },
   "author": "",
   "license": "ISC",
@@ -19,5 +19,8 @@
     "geojson-geometries-lookup": "^0.3.0",
     "lodash": "^4.17.11",
     "mongodb": "^3.1.10"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9"
   }
 }

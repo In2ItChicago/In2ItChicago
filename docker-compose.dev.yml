@@ -2,12 +2,25 @@ version: '3.6'
 services:
   mongo:
   event_service:
-    command: ["npm", "run", "debug"]
+    command: ["npm", "run", "dev"]
+    volumes:
+      - ./event_service:/usr/src/app/event_service
+      # hack to prevent mounting node_modules
+      - /usr/src/app/event_service/node_modules/
   event_processor:
+    command: ["./node_modules/nodemon/bin/nodemon.js", "-L", "./runner.py"]
     environment:
       - DEBUG=${EVENT_PROCESSOR_DEBUG}
       - VERBOSE_OUTPUT=${VERBOSE_OUTPUT}
       - RUN_SCHEDULER=${RUN_SCHEDULER}
       - SCHEDULE_INTERVAL=1
+    volumes:
+      - ./event_processor:/usr/src/app/event_processor
+      - /usr/src/app/event_processor/node_modules/
+      - /usr/src/app/event_processor/data/
+      - /usr/src/app/event_processor/lock/
   in2it_site:
     command: ["npm", "run", "docker-debug"]
+    volumes:
+      - ./in2it_site:/usr/src/app/in2it_site
+      - /usr/src/app/in2it_site/node_modules/
