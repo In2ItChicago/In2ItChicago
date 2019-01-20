@@ -193,17 +193,17 @@ Here is an example of how to detect if a site has an API we can use.
 8. Click on the "Headers" tab. The Request URL is what was requested by your browser to retrieve the json data. We can use that same url to get that data in our application.
 9. If you keep clicking through more requests, you should see several more that also returned json data.
 
-[This](https://github.com/ClipboardProject/ClipboardApp/blob/master/data_engine/data_aggregators/apis/library_events.py) is the code that was used to create an API client for that site.  
+[This](https://github.com/ClipboardProject/ClipboardApp/blob/master/event_processor/apis/library_events.py) is the code that was used to create an API client for that site.  
 You can use this as a guide if you need to create your own API client. Some sites have APIs that are well-documented and designed for external use. These should be used if they are available.
 
-Some sites may provide an iCalendar feed. Try to use the [iCal reader](https://github.com/ClipboardProject/ClipboardApp/blob/docker-swarm/event_processor/apis/ical_reader.py) if it is possible to do so. 
-Some sites may also provide an RSS feed. [This](https://github.com/ClipboardProject/ClipboardApp/blob/docker-swarm/event_processor/apis/lwv_chicago.py) is an example of how to use the `feedparser` module to parse a feed.
+Some sites may provide an iCalendar feed. Try to use the [iCal reader](https://github.com/ClipboardProject/ClipboardApp/blob/master/event_processor/apis/ical_reader.py) if it is possible to do so. 
+Some sites may also provide an RSS feed. [This](https://github.com/ClipboardProject/ClipboardApp/blob/master/event_processor/apis/lwv_chicago.py) is an example of how to use the `feedparser` module to parse a feed.
 
 ### How to integrate new scrapers and API clients with the core code
-All new scrapers should inherit from one of the classes listed [here](https://github.com/ClipboardProject/ClipboardApp/blob/docker-swarm/event_processor/custom_spiders.py)
+All new scrapers should inherit from one of the classes listed [here](https://github.com/ClipboardProject/ClipboardApp/blob/master/event_processor/custom_spiders.py)
 All new API clients should inherit from ApiSpider and scrapers should inherit from ScraperSpider or ScraperCrawlSpider, depending on if the spider needs to visit multiple urls or not.
 
-The end goal of all scrapers and API clients is to transform the raw data into event objects that conform to the Event class in [this file](https://github.com/ClipboardProject/ClipboardApp/blob/docker-swarm/event_processor/event.py).  
+The end goal of all scrapers and API clients is to transform the raw data into event objects that conform to the Event class in [this file](https://github.com/ClipboardProject/ClipboardApp/blob/master/event_processor/event.py).  
 For each item, you'll want to parse out the following data (as much as is available). You'll notice that these fields correspond to the first parameter in the extract methods in `SpiderBase.py`.
 - **`organization`**: The name of the organization that's putting on the event
 - **`title`**: The name of the event
@@ -211,7 +211,7 @@ For each item, you'll want to parse out the following data (as much as is availa
 - **`address`**: Location of the event (okay if exact address is not known)
 - **`url`**: Link to url for event. Link to specific event is preferred, but a link to a page containing general event listings is okay.
 - **`price`**: Cost to attend, if provided
-- **`category`**: Category of event, as defined [here](https://github.com/ClipboardProject/ClipboardApp/blob/master/data_engine/categories.py). (Work in progress. We'll flesh out categories more eventually)  
+- **`category`**: Category of event, as defined [here](https://github.com/ClipboardProject/ClipboardApp/blob/master/event_processor/categories.py). (Work in progress. We'll flesh out categories more eventually)  
 - **Start/End Time and Date**: Dates and times can be supplied with several parameters. Choose one date formate and one time format. Eventually, all dates and times will be converted into Unix timestamps.
     - **`time`**: Use if only one time is supplied for the event (not time range)
     - **`start_Time` and `End_Time`**: Use if the site supplies distinct data for these two values
