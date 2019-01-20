@@ -1,7 +1,6 @@
 # In2It App
 
 ## Setup
-Detailed instructions for setup on Ubuntu are described in a separate section below. Other distributions may have slighly different requirements.
 ### Python
 For Windows, I recommend using [Anaconda](https://www.anaconda.com/download/) to manage your Python environments because it comes with a lot of packages preinstalled that are difficult to set up without Anaconda.
 For Mac and Linux, you can choose to use it if you'd like, but it's not as necessary.
@@ -17,6 +16,8 @@ For Linux, download from your package manager. Documentation is [here](https://d
 Make sure you follow any OS and distro-specific instructions for setting up Docker. It may be helpful to go through the getting started guide [here](https://docs.docker.com/get-started/).  
 
 #### Extra Installation Steps for Linux
+These steps are for Ubuntu. Arch Linux has Docker available in pacman without any manual steps required. Other distros may require different steps.
+
 If you're new to Docker or you're recovering from a failed installation attempt, it's best to start by uninstalling older versions of Docker: `sudo apt-get remove docker docker-engine docker.io`
 
 Run: `sudo apt-get update`  
@@ -66,8 +67,8 @@ If you're using Docker Toolbox on Windows Home edition, you'll want to start the
 
 ### Setting Up Docker
 If you are using Linux, all of the subsequent Docker commands in this guide might have to be run with `sudo`. 
-If you would like to be able to use Docker without `sudo`, look through the answers [here](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo). *If you're using Docker Toolbox on Windows Home, 
-all subsequent statements that mention `localhost` should be replaced with `192.168.99.100`*. This is because the Docker engine can't bind to localhost when using Docker Toolbox.
+If you would like to be able to use Docker without `sudo`, look through the answers [here](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo). **If you're using Docker Toolbox on Windows Home, 
+all subsequent statements that mention `localhost` should be replaced with `192.168.99.100`**. This is because the Docker engine can't bind to localhost when using Docker Toolbox.
 
 Verify that Docker installed correctly with: `docker run hello-world`. You should see, "Hello from Docker!"
 
