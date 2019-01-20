@@ -17,9 +17,10 @@ services:
       - SCHEDULE_INTERVAL=1
     volumes:
       - ./event_processor:/usr/src/app/event_processor
-      - event_processor_data:/usr/src/app/event_processor/node_modules/
+      - event_processor_modules:/usr/src/app/event_processor/node_modules/
       - event_processor_data:/usr/src/app/event_processor/data/
-      - event_processor_data:/usr/src/app/event_processor/lock/
+      - event_processor_lock:/usr/src/app/event_processor/lock/
+      - event_processor_scrapy:/usr/src/app/event_processor/.scrapy/
   in2it_site:
     command: ["npm", "run", "docker-debug"]
     volumes:
@@ -27,5 +28,8 @@ services:
       - in2it_site_data:/usr/src/app/in2it_site/node_modules/
 volumes:
   in2it_site_data:
-  event_processor_data:
   event_service_data:
+  event_processor_modules:
+  event_processor_data:
+  event_processor_lock:
+  event_processor_scrapy:
