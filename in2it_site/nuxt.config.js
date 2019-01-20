@@ -65,17 +65,20 @@ module.exports = {
 		** You can extend webpack config here
 		*/
 		extend(config, ctx) {
-            if (ctx.isClient)
-                config.devtool = 'eval-source-map'
-            else
-                config.devtool = 'inline-source-map'
+            if (process.env.NODE_ENV === 'dev') {
+                if (ctx.isClient)
+                    config.devtool = 'eval-source-map'
+                else
+                    config.devtool = 'inline-source-map'
             return config;
+            }
 		}
     },
     watchers: {
         webpack: {
-            aggregateTimeout:300,
-            poll: 1000
+            aggregateTimeout: 300,
+            poll: 1000,
+            ignored: /node_modules/
         }
     }
 }
