@@ -1,7 +1,6 @@
 # In2It App
 
 ## Setup
-Detailed instructions for setup on Ubuntu are described in a separate section below. Other distributions may have slighly different requirements.
 ### Python
 For Windows, I recommend using [Anaconda](https://www.anaconda.com/download/) to manage your Python environments because it comes with a lot of packages preinstalled that are difficult to set up without Anaconda.
 For Mac and Linux, you can choose to use it if you'd like, but it's not as necessary.
@@ -18,6 +17,7 @@ Make sure you follow any OS and distro-specific instructions for setting up Dock
 
 #### Extra Installation Steps for Linux
 These steps are for Ubuntu. Arch Linux has Docker available in pacman without any manual steps required. Other distros may require different steps.
+
 If you're new to Docker or you're recovering from a failed installation attempt, it's best to start by uninstalling older versions of Docker: `sudo apt-get remove docker docker-engine docker.io`
 
 Run: `sudo apt-get update`  
