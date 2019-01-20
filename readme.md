@@ -17,6 +17,7 @@ For Linux, download from your package manager. Documentation is [here](https://d
 Make sure you follow any OS and distro-specific instructions for setting up Docker. It may be helpful to go through the getting started guide [here](https://docs.docker.com/get-started/).  
 
 #### Extra Installation Steps for Linux
+These steps are for Ubuntu. Arch Linux has Docker available in pacman without any manual steps required. Other distros may require different steps.
 If you're new to Docker or you're recovering from a failed installation attempt, it's best to start by uninstalling older versions of Docker: `sudo apt-get remove docker docker-engine docker.io`
 
 Run: `sudo apt-get update`  
