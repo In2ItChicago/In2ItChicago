@@ -1,6 +1,5 @@
 version: '3.6'
 services:
-  mongo:
   event_service:
     command: ["npm", "run", "dev"]
     volumes:
