@@ -17,4 +17,3 @@ class GreatLakesReader(ApiSpider):
 
     def get_events(self):
         return self.reader.parse_events()
-        #self.save_events([event.to_dict() for event in events])

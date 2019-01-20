@@ -2,23 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "node",
-            "request": "launch",
-            "name": "npm run dev",
-            "runtimeExecutable": "npm",
-            "runtimeArgs": [
-                "run",
-                "dev-debug"
-            ],
-            "port": 5858
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch Program",
-            "program": "${workspaceFolder}\\start"
-        },
-        {
+            // Choose this one for docker debugging
             "name": "NodeAttach",
             "type": "node",
             "request": "attach",

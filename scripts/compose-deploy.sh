@@ -1,25 +1,25 @@
 PARAMS=""
 EVENT_PROCESSOR_DEBUG=0
 VERBOSE_OUTPUT=0
-RUN_SCHEDULER=1
+RUN_SCHEDULER=0
 ENV="dev"
 while (( "$#" )); do
   case "$1" in
-    -dd|--data-engine-debug)
-      EVENT_PROCESSOR_DEBUG=$2
-      shift 2
+    -d|--processor-debug)
+      EVENT_PROCESSOR_DEBUG=1
+      shift
       ;;
     -e|--env)
       ENV=$2
       shift 2
       ;;
     -v|--verbose-output)
-      VERBOSE_OUTPUT=$2
-      shift 2
+      VERBOSE_OUTPUT=1
+      shift
       ;;
     -s|--run-scheduler)
-      RUN_SCHEDULER=$2
-      shift 2
+      RUN_SCHEDULER=1
+      shift
       ;;
     --) # end argument parsing
       shift

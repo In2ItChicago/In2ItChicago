@@ -11,4 +11,5 @@ esac
 ./scripts/render.sh
 ./scripts/build-images.sh dev
 ./scripts/check-all-image-updates.sh
+docker-compose rm -f -v
 ./scripts/compose-deploy.sh --env dev "$@"

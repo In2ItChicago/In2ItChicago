@@ -26,6 +26,8 @@ services:
       - ./nginx:/etc/nginx
     ports:
       - "0.0.0.0:80:80"
+    # Sometimes nginx crashes if the site doesn't come up in time
+    restart: on-failure
   portainer:
     image: "portainer/portainer:1.20.0"
     ports:

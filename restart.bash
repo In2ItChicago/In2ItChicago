@@ -9,7 +9,7 @@ while (( "$#" )); do
     shift
   fi
 done
-set positional arguments in their proper place
+#set positional arguments in their proper place
 eval set -- "$PARAMS"
 
 docker-compose stop $PARAMS

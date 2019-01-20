@@ -62,57 +62,56 @@ Close and reopen your terminal(s) to apply the changes.
 #### Extra Installation Steps for Windows
 I was unable to get Kinematic to work on Docker Toolbox, so I would recommend skipping that. Make sure virtualization is enabled in the BIOS. If you need to change virtualization settings, do a full reboot cycle,
 otherwise Windows may not report that the settings have changed. If you're running Windows 10 Professional, you'll need to make sure Hyper-V is enabled in the "Turn Windows Features On or Off" dialog.
-If you're using Docker Toolbox on Windows Home edition, when you start Windows, you'll want to start the VirtualBox instance manually before starting Docker or Docker will complain about not having an IP address.
+If you're using Docker Toolbox on Windows Home edition, you'll want to start the VirtualBox instance manually before starting Docker every time or Docker will complain about not having an IP address.
 
-### Docker Setup
-#### Windows
-For Docker Toolbox on Windows Home, go to the environment variables section in the control panel. Look for a variable called DOCKER_HOST. Add another variable called DOCKER_IP which is the same as DOCKER_HOST,
-but with the tcp prefix and the port number removed. For example, if DOCKER_HOST is `tcp://192.168.1.11:2376`, DOCKER_IP should be `192.168.1.11`. Add another variable called DB_CLIENT_IP with a value of `localhost`.
-For Docker on Windows Professional, do those same steps, except both DOCKER_IP and DB_CLIENT_IP should be `localhost`.
-
-#### Mac
-Add the lines `export DOCKER_IP=localhost` and `export DB_CLIENT_IP=localhost` to your `~/.bashrc` file. If you haven't used your `.bashrc` file before, you may need to source it. To do so, add  
-```
-if [ -f ~/.bashrc ]; then  
-   source ~/.bashrc  
-fi  
-```
-to your `~/.bash_profile`.
-
-#### Linux
-Add the lines `DOCKER_IP=localhost` and `DB_CLIENT_IP=localhost` to `/etc/environment`. This file may be in a different location on some distros.
-
-### Running Docker
-If you are using Linux, all of the subsequent Docker commands in this guide must be run with `sudo`. If you would like to be able to use Docker without `sudo`, look through the answers [here](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo). You will also need to move your environment variables to your `~/.bashrc` file if you go this route.
+### Setting Up Docker
+If you are using Linux, all of the subsequent Docker commands in this guide might have to be run with `sudo`. 
+If you would like to be able to use Docker without `sudo`, look through the answers [here](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo). *If you're using Docker Toolbox on Windows Home, 
+all subsequent statements that mention `localhost` should be replaced with `192.168.99.100`*. This is because the Docker engine can't bind to localhost when using Docker Toolbox.
 
 Verify that Docker installed correctly with: `docker run hello-world`. You should see, "Hello from Docker!"
 
-After setting the environment variables, close all terminals and every editor or process that's running Python. This is needed to ensure that your Python environment correctly reloads your environment variables.
-The DOCKER_IP variable is necessary because the versions of Docker that run on VirtualBox generate an IP address that is dependent on the host's configuration,
-so the code will read this variable to know where to make HTTP requests. The DB_CLIENT_IP variable is necessary because the client needs to run on 0.0.0.0 inside the Docker container,
-which is the internal IP address that Docker containers use to communicate with each other, but it needs to run on localhost outside the container.
+### Running the Code
+The startup process runs a Python script to check if any docker images are out of date, so you will need python >=3.6 installed for that script to run properly. If you do not, it will throw an error,
+but it won't affect the rest of the process, so this part can be skipped if you want.
+If you're on Windows and do not have Python set up, you should install Anaconda from [here](https://www.anaconda.com/download/#windows/). During set up, you should check the box that says to add Python to your system path. 
+If you do not, you'll need to add it to your path later. Without Python being accessible in the system path, Python commands won't be visible to terminals like the Docker Terminal or Git Bash. On Mac or Linux, you can install Python directly 
+from your system's package manager. If your Python version is too old, I recommend using [pyenv](https://github.com/pyenv/pyenv) to manage your Python versions.
 
-Open a Docker terminal on Windows Home, Git Bash or some kind of bash emulator on Windows Professional, or a normal terminal otherwise, and `cd` into the Git repo. Run `./start.bash`. If you get a permissions error, you may need to run `chmod +x start.bash`. 
-This will grant execution permissions to the file. If all goes well, the database will be created, the scrapers will start running, and the website will start up. This process will take some time.
-Eventually, you should start seeing messages like `POST /putevents`. That means the data is being saved. Once a message says `Data retrieved successfully`, the code is done running. You can go to your Docker IP on Windows (usually `192.168.99.100`) or `localhost` otherwise to see the site.
+Once Python is set up, run `scripts/install.sh` from the root of the Github repo to install necessary Python dependencies.
 
-If you want to see the data in the database, download Robo 3T from [here](https://robomongo.org/download) using the link on the right. You can use another MongoDB client if you'd prefer. When you start Robo 3T, a popup to configure connections should appear.
-If you're on Windows Home, right click on the New Connection row and click "Edit". Change localhost to your Docker IP and hit "Save". Now press "Connect". Otherwise, leave the settings alone.
-It should connect successfully and you should see a database called Clipboard on the pane on the right. The database should contain a collection called "event" and an index that includes the start and end timestamp, along with other field(s).
+Open a Docker terminal on Windows Home, Git Bash or some kind of bash emulator on Windows Professional, or a normal terminal otherwise, and `cd` into the Git repo. Run `./start.bash`. 
+If you get a permissions error, you may need to run `chmod +x start.bash`. This will grant execution permissions to the file. 
+If all goes well, the database will be created, the scrapers will start running, and the website will start up. This process will take some time.
+Eventually, you should start seeing messages about events being saved. Once a message says `Data retrieved successfully`, the code is done running. 
+Several components should be visible now:
+- `localhost` and `localhost:3000` will show the site
+- `localhost:5000/docs` will show a frontend for viewing the data and testing the API
+- `localhost:9000` will show a frontend for managing the Docker containers. Create whatever username and password you want.
 
-On Linux, you'll probably want to move the extracted Robo 3T folder to `/opt/your-extracted-folder-name` and run `sudo ln -s /opt/your-extracted-folder-name/bin/robo3t /usr/local/bin/robo3t`. Then you can run `robo3t` from the command line.
+### Setting up your development environment
 
-When the program is finished running, go to your Robo 3T instance, right click on the "event" collection, and click "View Documents". The screen should populate with data.
+If you want to see more details about the data in the database, download NoSQL Booster from [here](https://nosqlbooster.com/downloads). You can use another MongoDB client if you'd prefer. Create a connection to `localhost:27017` and 
+you should see the data show up. 
 
-### Setting up the code to run locally
-For debugging, you'll want to run some or all of the code locally instead of inside Docker. To set up the dependencies, `cd` into the ClipboardApp repository. 
-On Windows, you'll need to have Visual Studio installed if you don't already because Scrapy is dependent on Visual Studio's C++ compiler.
-If you're using Anaconda, open up an Anaconda terminal and run `conda install -c anaconda python=3.7` to ensure you're running python 3.7 and then `anaconda-install.sh`.
-Otherwise, run `./install.sh`. You can use the shell script `up-db-and-client.sh` to run the database and database client inside of docker, allowing you to run the other components instead of inside Docker. 
-`up-db-only.sh` only runs the database inside Docker, allowing you to run the data engine and database client locally. These scripts are just shortcuts for running specific `docker-compose up` commands. You can use `docker-compose up` with any combination of services like this: `docker-compose up clipboard_db clipboard_site` to run just the database and site in Docker.
+For debugging, we've set up configurations to allow for remote debugging in Docker using VS Code. This allows you to set breakpoints and step through code remotely while it's running in Docker.
+You can use another editor if you'd like, but you'll have to set up remote debugging yourself. Whenever you open VS Code, it creates a directory called `.vscode` which stores local configurations.
 
-IMPORTANT: When running a component from an IDE or text editor, you must have the component (eg `data_engine`) folder set as the base project folder. 
-Opening the entire clipboard app folder will not work because of how Python looks for files to import.
+This repo contains all of the components needed to run the system in separate folders:
+- `clipboardapp/in2it_site` contains all code pertaining to the site itself
+- `clipboardapp/event_processor` contains the web scrapers
+- `clipboardapp/event_service` contains the API that the site and the event processor both call to interface with the database
+
+When you're developing, you'll want to think of those folders as separate projects and open a separate instance of VS Code in each of those subdirectories. This is important because the remote debugger requires
+the folder structure of the remote and local repository to match. To do so, you can launch VS Code, then choose `File -> Open Folder` or open it from the command line like this: `code ./in2it_site`. 
+
+Once you have VS Code open, you should see a bug icon on the left panel. This contains the debugger settings. If you click the gear icon near the top right of the submenu, it will open a prompt to choose an environment.
+It doesn't matter which one you choose because we'll overwrite this file in a minute. In this repo, there is a folder called `sample_vscode_config` with one config per component. Replace the entire `launch.json` file with
+whatever config matches your current folder. As the comment in the files explain, you will need to replace `localhost` with `192.168.99.100` for Docker Toolbox. 
+Once you have the configuration saved, you'll be able to select it from the debug menu. When you have the code running in Docker, click the green arrow to attach to the running process.
+
+All of the code is running through a program called [nodemon](https://nodemon.io/) which allows you to use hot reloading while debugging. Hot reloading means that any time you change the source code in your editor,
+nodemon will detect the change and automatically restart the attached process. This way, testing your changes requires no manual intervention.
 
 ### Settings
 The folling settings are defined in `data_engine/config.py`:  

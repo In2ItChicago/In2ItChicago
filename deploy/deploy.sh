@@ -1,6 +1,5 @@
 cd clipboardapp
 git checkout .
 git pull
-chmod +x *.sh
-chmod +x *.bash
+chmod +x start-prod.bash
 ./start-prod.bash

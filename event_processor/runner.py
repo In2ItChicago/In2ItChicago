@@ -43,7 +43,7 @@ def run():
     crawlerProcess.start()
     crawlerProcess.join()
 
-    print('Data engine complete')
+    print('Event processor completed')
  
     events = requests.get(config.db_get_events, params = {
         'start_timestamp': 0, 
