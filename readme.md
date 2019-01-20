@@ -67,8 +67,8 @@ If you're using Docker Toolbox on Windows Home edition, you'll want to start the
 
 ### Setting Up Docker
 If you are using Linux, all of the subsequent Docker commands in this guide might have to be run with `sudo`. 
-If you would like to be able to use Docker without `sudo`, look through the answers [here](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo). *If you're using Docker Toolbox on Windows Home, 
-all subsequent statements that mention `localhost` should be replaced with `192.168.99.100`*. This is because the Docker engine can't bind to localhost when using Docker Toolbox.
+If you would like to be able to use Docker without `sudo`, look through the answers [here](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo). **If you're using Docker Toolbox on Windows Home, 
+all subsequent statements that mention `localhost` should be replaced with `192.168.99.100`**. This is because the Docker engine can't bind to localhost when using Docker Toolbox.
 
 Verify that Docker installed correctly with: `docker run hello-world`. You should see, "Hello from Docker!"
 
