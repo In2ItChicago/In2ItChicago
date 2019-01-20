@@ -4,6 +4,7 @@ services:
     image: "mongo:4.1.6"
     volumes:
       - mongodata:/data/db
+      - ./mongoconfig:/data/configdb
     ports:
       - "27017:27017"
   event_service:

@@ -6,7 +6,7 @@ services:
     volumes:
       - ./event_service:/usr/src/app/event_service
       # hack to prevent mounting node_modules
-      - /usr/src/app/event_service/node_modules/
+      - event_service_data:/usr/src/app/event_service/node_modules/
   event_processor:
     command: ["./node_modules/nodemon/bin/nodemon.js", "-L", "./runner.py"]
     environment:
@@ -16,11 +16,15 @@ services:
       - SCHEDULE_INTERVAL=1
     volumes:
       - ./event_processor:/usr/src/app/event_processor
-      - /usr/src/app/event_processor/node_modules/
-      - /usr/src/app/event_processor/data/
-      - /usr/src/app/event_processor/lock/
+      - event_processor_data:/usr/src/app/event_processor/node_modules/
+      - event_processor_data:/usr/src/app/event_processor/data/
+      - event_processor_data:/usr/src/app/event_processor/lock/
   in2it_site:
     command: ["npm", "run", "docker-debug"]
     volumes:
       - ./in2it_site:/usr/src/app/in2it_site
-      - /usr/src/app/in2it_site/node_modules/
+      - in2it_site_data:/usr/src/app/in2it_site/node_modules/
+volumes:
+  in2it_site_data:
+  event_processor_data:
+  event_service_data:
