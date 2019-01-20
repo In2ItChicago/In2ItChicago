@@ -1,4 +1,4 @@
-# Clipboard App
+# In2It App
 
 ## Setup
 Detailed instructions for setup on Ubuntu are described in a separate section below. Other distributions may have slighly different requirements.
@@ -114,27 +114,36 @@ All of the code is running through a program called [nodemon](https://nodemon.io
 nodemon will detect the change and automatically restart the attached process. This way, testing your changes requires no manual intervention.
 
 ### Settings
-The folling settings are defined in `data_engine/config.py`:  
+#### Command Line Arguments
+The following parameters can be passed to `start.bash` to change its runtime behavior. 
+- `-d or --processor-debug`:
+This parameter is needed when using the debugger with the event processor. When passed in, `runner.py` will pause at the start of execution until you connect to it from the VS Code debugger.
+This isn't needed by the other components because you can attach to a Node process without any special configuration.
 
-- **ENABLE_API_CACHE**:
+- `-v or --verbose-output`
+This tells scrapy to send verbose output to the logs. Otherwise, only errors will be displayed. Scrapy generates a lot of output so this is only useful when debugging odd behavior.
+
+- `-s or --run-scheduler`
+This tells the event processor to run the scrapers on a schedule (currently once a minute in dev and once every two hours in prod). It's easier to test without this flag since it will run them all at once
+when this is not passed in.
+
+#### Other Settings
+The following settings are defined in `event_processor/config.py`:  
+
+- **enable_api_cache**:
 If `True`, any API calls made will be cached to a local file. This is useful to speed up development and to prevent hitting sites repeatedly.
 
-- **API_CACHE_EXPIRATION**:
+- **api_cache_expiration**:
 Time in seconds that API data will be cached for.
 
-- **API_DELAY_SECONDS**:
+- **api_delay_seconds**:
 The amount of time between API calls. This is used by calling `ApiBase.wait()`. This is necessary when making large amounts of API calls in quick succession so as not to overrun the server.
 
-- **ENABLE_SCRAPY_CACHE**:
+- **enable_scrapy_cache**:
 If `True`, any Scrapy calls made will be cached using Scrapy's builtin cache system. This is useful to speed up development and to prevent hitting sites repeatedly.
 
-- **SCRAPY_CACHE_EXPIRATION**:
-ime in seconds that Scrapy data will be cached for.
-
-- **VERBOSE_SCRAPY_OUTPUT**:
-If `True`, Scrapy will show verbose logs during the scraping process. This may be useful for debugging, but the vast amount of data shown makes it difficult to spot errors as they occur.
-
-`clipboard_common_lib/clipboardcommonlib/shared_config.py` contains settings that are shared by multiple services. This file is distributed as a pip package. After modifying this file, re-install it with `clipboard_common_lib/install-common-libs.sh`
+- **scrapy_cache_expiration**:
+Time in seconds that Scrapy data will be cached for.
 
 ## Development Guide
 Our current development tasks and bugs are kept in the issues list [here](https://github.com/ClipboardProject/ClipboardApp/issues).  
@@ -143,17 +152,17 @@ The issue contains instructions on how to pick a specific site.
 
 ### Technical Overview
 This project consists of four parts
-- **Data Engine**:
+- **Event Processor**:
 This is the heart of the application. It asynchronously scrapes websites and pulls in data from APIs, cleans and formats the data, then sends it to the MongoDB client.
 
-- **Database Client**:
-This is a standalone service that receives data from the data engine for insertion into MongoDB and processes requests from the clipboard site to display data to the user.  
+- **Event Service**:
+This is a standalone service that receives data from the event processor for insertion into MongoDB and processes requests from the clipboard site to display data to the user.  
 Any time data is received from a website, the old data from that site is deleted and refreshed with the new data.
 
 - **MongoDB Instance**:
 This holds a single collection of all data from the sites. Only the database client interacts with the database.
 
-- **Clipboard Site**:
+- **In2It Site**:
 The website that displays the aggregated data. Interacts with the database via the database client.
 
 ### Getting Started
@@ -187,13 +196,14 @@ Here is an example of how to detect if a site has an API we can use.
 [This](https://github.com/ClipboardProject/ClipboardApp/blob/master/data_engine/data_aggregators/apis/library_events.py) is the code that was used to create an API client for that site.  
 You can use this as a guide if you need to create your own API client. Some sites have APIs that are well-documented and designed for external use. These should be used if they are available.
 
-Some sites may provide an iCalendar feed. Try to use the [iCal reader](https://github.com/ClipboardProject/ClipboardApp/blob/master/data_engine/data_aggregators/apis/ical_reader.py) if it is possible to do so. 
+Some sites may provide an iCalendar feed. Try to use the [iCal reader](https://github.com/ClipboardProject/ClipboardApp/blob/docker-swarm/event_processor/apis/ical_reader.py) if it is possible to do so. 
+Some sites may also provide an RSS feed. [This](https://github.com/ClipboardProject/ClipboardApp/blob/docker-swarm/event_processor/apis/lwv_chicago.py) is an example of how to use the `feedparser` module to parse a feed.
 
 ### How to integrate new scrapers and API clients with the core code
-All new scrapers should inherit from [SpiderBase](https://github.com/ClipboardProject/ClipboardApp/blob/master/data_engine/spider_base.py)
-All new API clients should inherit from [ApiBase](https://github.com/ClipboardProject/ClipboardApp/blob/master/data_engine/api_base.py)
+All new scrapers should inherit from one of the classes listed [here](https://github.com/ClipboardProject/ClipboardApp/blob/docker-swarm/event_processor/custom_spiders.py)
+All new API clients should inherit from ApiSpider and scrapers should inherit from ScraperSpider or ScraperCrawlSpider, depending on if the spider needs to visit multiple urls or not.
 
-The end goal of all scrapers and API clients is to transform the raw data into event objects that conform to [this class](https://github.com/ClipboardProject/ClipboardApp/blob/master/data_engine/event.py).  
+The end goal of all scrapers and API clients is to transform the raw data into event objects that conform to the Event class in [this file](https://github.com/ClipboardProject/ClipboardApp/blob/docker-swarm/event_processor/event.py).  
 For each item, you'll want to parse out the following data (as much as is available). You'll notice that these fields correspond to the first parameter in the extract methods in `SpiderBase.py`.
 - **`organization`**: The name of the organization that's putting on the event
 - **`title`**: The name of the event
@@ -210,4 +220,4 @@ For each item, you'll want to parse out the following data (as much as is availa
     - **`start_date` and `end_date`**: Use if the site supplies distinct data for these two values
     - **`start_timestamp` and `end_timestamp`**: Use if the data is formatted like a Unix timestamp (Unlikely for scrapers but possible for an API)
 
-Once you've decided how to find these fields for your site, look at the methods in `SpiderBase.py` or `ApiBase.py` and how they're used in existing spiders and API clients to see how to process the data.
+Once you've decided how to find these fields for your site, look at the existing examples to see what methods to use to extract the data.
