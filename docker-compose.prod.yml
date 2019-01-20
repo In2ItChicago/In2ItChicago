@@ -2,7 +2,7 @@ version: '3.6'
 services:
   event_processor:
     image: "in2itchicago/event_processor"
-    command: ["python3", "runner.py"]
+    command: ["python", "-u", "runner.py"]
     environment:
       - DEBUG=0
       - VERBOSE_OUTPUT=0

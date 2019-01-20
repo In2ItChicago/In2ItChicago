@@ -30,7 +30,7 @@ def run():
     start_date = datetime.now().strftime('%m-%d-%Y')
     end_date = (datetime.now() + relativedelta(months=+1)).strftime('%m-%d-%Y')
 
-    print('Running data engine...')
+    print('Running event processor...')
 
     crawlerProcess = CrawlerProcess(get_project_settings())
 

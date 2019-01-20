@@ -8,7 +8,9 @@ services:
       # hack to prevent mounting node_modules
       - event_service_data:/usr/src/app/event_service/node_modules/
   event_processor:
-    command: ["./node_modules/nodemon/bin/nodemon.js", "-L", "./runner.py"]
+    # -L runs nodemon in legacy mode (necessary over Docker)
+    # -u is passed to python to return output unbuffered, so there is no delay when viewing docker logs
+    command: ["./node_modules/nodemon/bin/nodemon.js", "-L", "-u", "./runner.py"]
     environment:
       - DEBUG=${EVENT_PROCESSOR_DEBUG}
       - VERBOSE_OUTPUT=${VERBOSE_OUTPUT}
