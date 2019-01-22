@@ -70,13 +70,13 @@ class TimeUtils:
     def datetime_to_timestamp(self, date):
         return int(time.mktime(date.timetuple()))
 
-    def convert_date_format(self, date_string, new_format):
-        parsed_date = self.parse_date_string(date_string)
+    def convert_date_format(self, date_string, new_format, validate_past=True):
+        parsed_date = self.parse_date_string(date_string, validate_past)
         if parsed_date == None:
             return None
         return parsed_date.strftime(new_format)
 
-    def parse_date_string(self, test_string):
+    def parse_date_string(self, test_string, validate_past=True):
         try:
             parsed_date = datetime.strptime(test_string, self.date_format)
             parsed_date = self.set_year(parsed_date)
@@ -85,7 +85,8 @@ class TimeUtils:
             # We won't be querying for any dates in the past
             # If the year isn't explicitly set and the month is in the past,
             # then the event must be in the next year
-            if parsed_date < now:
+            # validate_past=False ignores this check
+            if validate_past and parsed_date < now:
                 parsed_date += relativedelta(years = +1)
             return parsed_date
         except ValueError:
@@ -97,7 +98,7 @@ class TimeUtils:
         parsed_date = self.parse_date_string(test_string)
         if parsed_date != None:
             return parsed_date, parsed_date
-        # If that fails, try to parse the date as a date range string
+        # If that fails, try to parse the date with fuzzy matching (needed for weird formats or date ranges)
         human_parsed = timefhuman(test_string)
         if len(human_parsed) == 1:
             return human_parsed, human_parsed

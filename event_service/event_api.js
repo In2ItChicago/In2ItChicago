@@ -326,6 +326,24 @@ function randomExpirationTime() {
     return addDaysToDate(new Date(), expirationTime);
 }
 
+const errorHandler = ctx => {
+    if (ctx.error) {
+        const error = ctx.error;
+        if (!error.code) {
+            const newError = new errors.GeneralError(`server error: ${error.stack}`);
+            ctx.error = newError;
+            return ctx;
+        }
+        
+        console.log({
+            message: ctx.error.message,
+            stack: ctx.error.stack,
+            data: ctx.error.data
+        });
+        return ctx;
+    }
+};
+
 const eventHooks = {
     before: {
         async find(context) {
@@ -341,9 +359,9 @@ const eventHooks = {
         },
 
         async create(context) {
-            let invalid = context.data.filter(data => !(data.organization && data.event_time.start_timestamp && data.event_time.end_timestamp));
+            let invalid = context.data.filter(data => !(data.organization && data.event_time && data.event_time.start_timestamp && data.event_time.end_timestamp));
             if (invalid.length > 0) {
-                throw new errors.BadRequest('Invalid events. organization, start_timestamp, and end_timestamp are required', invalid);
+                throw new errors.BadRequest('Invalid events. organization, event_time.start_timestamp, and event_time.end_timestamp are required', invalid);
             }
             let organizations = _(context.data)
                 .groupBy(d => d.organization)
@@ -366,7 +384,8 @@ const eventHooks = {
             context.result.data = context.result.data.map(mongoResult => transformResult(mongoResult));
             return context;
         }
-    }
+    },
+    error: errorHandler
 }
 
 const geocodeHooks = {
@@ -403,5 +422,6 @@ const geocodeHooks = {
             await this.create(result);
             return context;
         }
-    }
+    },
+    error: errorHandler
 }

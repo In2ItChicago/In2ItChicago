@@ -8,6 +8,7 @@ from config import config
 
 
 class ApiBase(AggregatorBase):
+    # Placeholder values that can be used if no request needs to be made through Scrapy
     allowed_domains = ['wikipedia.org','en.wikipedia.org']
     start_urls = ['https://www.wikipedia.org/']
     
@@ -50,6 +51,3 @@ class ApiBase(AggregatorBase):
     def get_events(self):
         # Override me
         pass
-
-    #def save_events(self, events):
-    #    return super(ApiBase, self).save_events([event.to_dict() for event in events])

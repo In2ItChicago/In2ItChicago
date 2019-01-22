@@ -11,6 +11,7 @@ from config import config
 from data_utils import DataUtils
 from time_utils import TimeUtils
 from scrapy.exceptions import DropItem
+from datetime import datetime
 import requests
 import json
 
@@ -67,15 +68,15 @@ class ScraperTransformPipeline:
 class EventSavePipeline:
     def close_spider(self, spider):
         if len(spider.event_manager.events) == 0:
-            print('No data returned for ' + spider.base_url)
+            print(f'{datetime.now()} No data returned for ' + spider.base_url)
         else:
             self.save_events(spider.identifier, spider.event_manager.to_dicts())
 
     def save_events(self, identifier, event_list):
         new_hash = EventHashes.create_hash(event_list)
-        print(f'Found {len(event_list)} events for {event_list[0]["organization"]}.')
+        print(f'{datetime.now()} Found {len(event_list)} events for {event_list[0]["organization"]}.')
         if new_hash == EventHashes.get(identifier):
-           print('Nothing to update.')
+           print(f'{datetime.now()} Nothing to update.')
            return
         EventHashes.set(identifier, new_hash)
 
@@ -83,4 +84,4 @@ class EventSavePipeline:
         if not response.ok:
             raise ValueError(response.text)
         else:
-            print(f'Saved {len(event_list)} events for {event_list[0]["organization"]}')
+            print(f'{datetime.now()} Saved {len(event_list)} events for {event_list[0]["organization"]}')

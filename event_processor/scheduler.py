@@ -17,9 +17,6 @@ from config import config
 class Scheduler:
     def __init__(self):
         self.scrapers = [HistorySpider, WpbccSpider, LWVChicago, LibraryEvents, GreatLakesReader]
-        
-        self.start_date = datetime.now().strftime('%m-%d-%Y')
-        self.end_date = (datetime.now() + relativedelta(months=+1)).strftime('%m-%d-%Y')
         self.interval_seconds = 60 * config.schedule_interval
 
         self.scheduler = TwistedScheduler()
@@ -37,9 +34,11 @@ class Scheduler:
         print(f'{event.job_id} missed. Interval time: {self.interval_seconds}')
 
     def run_scraper(self, scraper):
-        print('starting ' + scraper.__name__)
+        start_date = datetime.now().strftime('%m-%d-%Y')
+        end_date = (datetime.now() + relativedelta(months=+1)).strftime('%m-%d-%Y')
+        print(f'{datetime.now()} starting {scraper.__name__}')
         runner = CrawlerRunner(get_project_settings())
-        runner.crawl(scraper, self.start_date, self.end_date)
+        runner.crawl(scraper, start_date, end_date)
         runner.join()
     
     def run_schedule(self):

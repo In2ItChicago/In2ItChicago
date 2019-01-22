@@ -10,12 +10,6 @@ import requests
 
 class AggregatorBase:
     # This class includes functionality that should be shared by spiders and API-based classes
-    custom_settings = {
-        'ITEM_PIPELINES': {
-            'scrapers.pipelines.EventBuildPipeline': 300,
-            'scrapers.pipelines.EventSavePipeline': 400
-        }
-    }
 
     def __init__(self, organization, base_url, start_date, end_date, date_format, request_date_format = None):
         self.organization = organization
@@ -30,7 +24,8 @@ class AggregatorBase:
         self.event_manager = EventManager()
         
         request_format_utils = TimeUtils('%m-%d-%Y')
-        self.start_date = request_format_utils.convert_date_format(start_date, request_date_format)
-        self.end_date = request_format_utils.convert_date_format(end_date, request_date_format)
+        # When this is running for multiple days, validating if the date is in the past causes issues
+        self.start_date = request_format_utils.convert_date_format(start_date, request_date_format, validate_past=False)
+        self.end_date = request_format_utils.convert_date_format(end_date, request_date_format, validate_past=False)
         self.start_timestamp = request_format_utils.min_timestamp_for_day(start_date)
         self.end_timestamp = request_format_utils.max_timestamp_for_day(end_date)
