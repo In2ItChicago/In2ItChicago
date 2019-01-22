@@ -205,7 +205,7 @@ All new scrapers should inherit from one of the classes listed [here](https://gi
 All new API clients should inherit from ApiSpider and scrapers should inherit from ScraperSpider or ScraperCrawlSpider, depending on if the spider needs to visit multiple urls or not.
 
 The end goal of all scrapers and API clients is to transform the raw data into event objects that conform to the Event class in [this file](https://github.com/ClipboardProject/ClipboardApp/blob/master/event_processor/event.py).  
-For each item, you'll want to parse out the following data (as much as is available). You'll notice that these fields correspond to the first parameter in the extract methods in `SpiderBase.py`.
+For each item, you'll want to parse out the following data (as much as is available). 
 - **`organization`**: The name of the organization that's putting on the event
 - **`title`**: The name of the event
 - **`description`**: Detailed description of the event
