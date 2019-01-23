@@ -8,3 +8,4 @@ beaker
 apscheduler
 feedparser
 ptvsd
+usaddress

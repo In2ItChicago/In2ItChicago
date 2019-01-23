@@ -1,5 +1,6 @@
 import scrapy
 import re
+import usaddress
 from time_utils import TimeUtils
 from data_utils import DataUtils
 from scrapy.loader.processors import MapCompose, Compose, Join, TakeFirst
@@ -22,10 +23,29 @@ def category_field():
     return scrapy.Field(input_processor=MapCompose(lambda value: value.name), output_processor=Join())
 
 def address_field():
+    def parse_address(value):
+        parsed = usaddress.parse(value)
+        contains_field = lambda field: any(address_part[1] == field for address_part in parsed)
+        default_field = lambda field, default: f' {default}' if not contains_field(field) else ''
+        return f'{value}{default_field("PlaceName", "Chicago")}{default_field("StateName", "IL")}'
+        
     return scrapy.Field(input_processor=MapCompose(
-            lambda value: value + ' Chicago IL' if not 'Chicago' in value else value, 
-            DataUtils.remove_html), 
+            DataUtils.remove_html,
+            parse_address),
         output_processor=Join())
+
+def date_field():
+    def parse_date(value):
+        date_format = value['date_format']
+        time_utils = TimeUtils(date_format=date_format)
+        date_obj = {**create_time_data(), **value}
+        start_timestamp, end_timestamp = time_utils.get_timestamps(date_obj)
+        return {
+            'start_timestamp': start_timestamp,
+            'end_timestamp': end_timestamp
+        }
+
+    return scrapy.Field(input_processor=MapCompose(DataUtils.remove_html, parse_date), output_processor=TakeFirst())
 
 def create_time_data():
     # When creating an event, you'll want to pass in the data that matches
@@ -48,19 +68,6 @@ def create_time_data():
         'start_timestamp': None,
         'end_timestamp': None
     }
-
-def date_field():
-    def parse_date(value):
-        date_format = value['date_format']
-        time_utils = TimeUtils(date_format=date_format)
-        date_obj = {**create_time_data(), **value}
-        start_timestamp, end_timestamp = time_utils.get_timestamps(date_obj)
-        return {
-            'start_timestamp': start_timestamp,
-            'end_timestamp': end_timestamp
-        }
-
-    return scrapy.Field(input_processor=MapCompose(DataUtils.remove_html, parse_date), output_processor=TakeFirst())
 
 class Event(scrapy.Item):
     organization = custom_field()

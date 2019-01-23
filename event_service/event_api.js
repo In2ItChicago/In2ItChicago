@@ -390,7 +390,11 @@ const eventHooks = {
 const geocodeHooks = {
     before: {
         async find(context) {
-            let query = context.params.query;
+            let query = context.params.query; 
+            // searching by address and neighborhood causes issues if the neighborhood doesn't match the address
+            if (query.address && query.neighborhood) {
+                delete query.neighborhood;
+            }
             context.params.query = mongoSearch(query);
            
             // This is only here so it's easier to access
@@ -407,6 +411,9 @@ const geocodeHooks = {
         async find(context) {
             // Geocode already found in database. No need to query web service.
             if (context.result.length > 0) {
+                if (context.params.address) {
+                    context.result = context.result[0];
+                }
                 return context;
             }
             let result = null;
@@ -417,7 +424,7 @@ const geocodeHooks = {
             if (result == null) {
                 return context;
             }
-            context.result = [result];
+            context.result = result;
             await this.create(result);
             return context;
         }
