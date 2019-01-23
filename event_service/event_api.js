@@ -135,8 +135,7 @@ function setup(client) {
     let eventService = Object.assign(service({
         Model: eventModel,
         paginate: {
-            default: 25,
-            max: 100
+            default: 25
         },
         multi: true,
         whitelist: additionalMongoFilters
