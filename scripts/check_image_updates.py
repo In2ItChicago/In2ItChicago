@@ -15,7 +15,7 @@ current_version = StrictVersion(cur_version)
 def check_key(check_dict, key, value):
 	return (key in check_dict and check_dict[key] == value) or key not in check_dict
 
-tags = requests.get(f'https://registry.hub.docker.com/v2/repositories/library/{lib_name}/tags?page_size=1024') 
+tags = requests.get(f'https://registry.hub.docker.com/v2/repositories/{lib_name}/tags?page_size=1024') 
 choices = [r['name'] for r in tags.json()['results'] if check_key(r, 'os', 'linux') and check_key(r, 'arch', 'amd64')]
 
 newest_version = StrictVersion('0.0')
