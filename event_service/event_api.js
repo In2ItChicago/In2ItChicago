@@ -9,9 +9,8 @@ const docs = require('./docs.js');
 const event = require('./event.js');
 const geocode = require('./geocode.js');
 const settings = require('./settings.js');
-const common = require('./common.js');  
 
-(async () => {
+(async () => { 
     let client = new MongoClient(`mongodb://mongo:${settings.mongoPort}`, {
         useNewUrlParser: true,
     });
@@ -19,13 +18,14 @@ const common = require('./common.js');
     async function connect() {
         try {
             await client.connect();
+            console.log('DB connection succeeded');
             setup(client);
         }
-        catch (error) {
-            if (error.name === 'MongoNetworkError' && currentTries < retries) {
+        catch (error) { 
+            if (error.name === 'MongoNetworkError' && currentTries < settings.retries) {
                 currentTries++;
                 console.log('DB connection attempt: ' + currentTries);
-                setTimeout(connect, timeout);
+                connect();
             }
             else {
                 console.log(error);

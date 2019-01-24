@@ -1,6 +1,5 @@
 module.exports = {
     port: 5000,
-    timeout: 1000,
     // OpenStreetMaps only allows 1 query per second
      geocodeApiDelayMilliseconds: 1000,
     // Expire geo data after a set amount of time to prevent the database from getting too big
