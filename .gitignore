@@ -118,13 +118,12 @@ venv.bak/
 # Visual Studio Code
 .settings/
 .vscode/
-
 # Visual Studio
 .vs/
 
 # Beaker files
-data_engine/data_aggregators/data/
-data_engine/data_aggregators/lock/
+event_processor/data/
+event_processor/lock/
 
 # Generated files
 nginx/nginx.conf

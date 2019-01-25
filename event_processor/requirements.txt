@@ -1,0 +1,11 @@
+Scrapy
+timefhuman
+python-dateutil 
+bs4 
+requests
+icalendar
+beaker
+apscheduler
+feedparser
+ptvsd
+usaddress

@@ -1,0 +1,35 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            // Choose this one for docker debugging
+            "name": "NodeAttach",
+            "type": "node",
+            "request": "attach",
+            "port": 5859,
+            "address": "localhost", //docker toolbox users will likely need to use 192.168.99.100 
+            "restart": true,
+            "sourceMaps": true,
+            "localRoot": "${workspaceRoot}",
+            "remoteRoot": "/usr/src/app/in2it_site"
+        },
+        {
+            "name": "LocalDebug",
+            "type": "node",
+            "request": "launch",
+            "protocol": "inspector",
+            "program": "${workspaceRoot}/node_modules/nuxt/bin/nuxt",
+            "stopOnEntry": false,
+            "args": ["dev"],
+            "runtimeArgs": ["-r", "ts-node/register"],
+            "internalConsoleOptions": "openOnSessionStart",
+            "cwd": "${workspaceRoot}",
+            "sourceMaps": true,
+            "env": {
+                "NODE_ENV": "development",
+                "DEBUG": "nuxt:*,app",
+                "DUMMY_DATA": "1"
+            }
+          }
+    ]
+}

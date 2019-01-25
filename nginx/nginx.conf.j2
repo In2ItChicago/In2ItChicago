@@ -54,8 +54,8 @@ http {
 	# gzip_http_version 1.1;
 	# gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
 	
-	upstream docker-clipboard_site {
-		server clipboard_site:3000;
+	upstream docker-in2it_site {
+		server in2it_site:3000;
 	}
 	##
 	# Virtual Host Configs
@@ -69,14 +69,14 @@ http {
 		{% if SERVER_NAME %}server_name {{ SERVER_NAME }};{% endif %}
 		#location = /favicon.ico {access_log off; log_not_found off; }
 		#location /static/ {
-		#	root /usr/src/app/clipboard_site;
+		#	root /usr/src/app/in2it_site;
 		#}
 		
 		#location / {
 		#	try_files $uri @proxy_to_app;
 		#}
 		location / {
-			proxy_pass http://docker-clipboard_site;
+			proxy_pass http://docker-in2it_site;
 			proxy_redirect off;
 			proxy_set_header Host $host;
 			proxy_set_header X-Real-IP $remote_addr;
@@ -86,7 +86,7 @@ http {
 		}
 
 		#location @proxy_to_app {
-		#	proxy_pass http://docker-clipboard_site;
+		#	proxy_pass http://docker-in2it_site;
 		#	include proxy_params;
 		#}
 	}

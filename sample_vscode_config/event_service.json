@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "NodeAttach",
+            "type": "node",
+            "request": "attach",
+            "port": 5858,
+            "address": "localhost", //docker toolbox users will likely need to use 192.168.99.100 
+            "restart": true,
+            "sourceMaps": false,
+            "localRoot": "${workspaceRoot}",
+            "remoteRoot": "/usr/src/app/event_service"
+        }
+    ]
+}

@@ -1,7 +1,0 @@
-Scrapy
-DateRangeParser 
-python-dateutil 
-bs4 
-requests
-icalendar
-beaker

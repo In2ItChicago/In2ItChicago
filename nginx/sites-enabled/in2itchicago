@@ -1,0 +1,17 @@
+server {
+	listen 80;
+
+	#location = /favicon.ico {access_log off; log_not_found off; }
+	#location /static/ {
+	#	root /usr/src/app/in2it_site;
+	#}
+	
+	location / {
+		try_files $uri @proxy_to_app;
+	}
+
+	location @proxy_to_app {
+		proxy_pass http://docker-in2it_site;
+		include proxy_params;
+	}
+}

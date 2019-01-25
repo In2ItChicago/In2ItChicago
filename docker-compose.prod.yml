@@ -1,6 +1,16 @@
 version: '3'
 services:
-  clipboard_db_client:
+  event_processor:
+    image: "in2itchicago/event_processor:20190124.1"
+    command: ["python", "-u", "runner.py"]
+    environment:
+      - DEBUG=0
+      - VERBOSE_OUTPUT=0
+      - RUN_SCHEDULER=1
+      - SCHEDULE_INTERVAL=120
+  event_service:
+    image: "in2itchicago/event_service:20190124.1"
     command: ["npm", "run", "start"]
-  clipboard_site:
+  in2it_site:
+    image: "in2itchicago/in2it_site:20190124.1"
     command: ["npm", "run", "start"]

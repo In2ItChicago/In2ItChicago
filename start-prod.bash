@@ -1,4 +1,6 @@
 pip3 install -r requirements.txt
-docker stack rm ClipboardApp
+docker stack rm In2ItChicago
+sleep 5
 docker system prune -f
-./stack-deploy.sh prod
+sleep 5
+./scripts/stack-deploy.sh prod
