@@ -1,9 +1,6 @@
 # In2It App
 
 ## Setup
-### Python
-For Windows, I recommend using [Anaconda](https://www.anaconda.com/download/) to manage your Python environments because it comes with a lot of packages preinstalled that are difficult to set up without Anaconda.
-For Mac and Linux, you can choose to use it if you'd like, but it's not as necessary.
 
 ### Get the Code
 Clone the ClipboardApp repository into your preferred directory with Git Bash on Windows or a normal terminal otherwise: `git clone https://github.com/ClipboardProject/ClipboardApp.git`
