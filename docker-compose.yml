@@ -5,6 +5,8 @@ services:
     volumes:
       - mongodata:/data/db
       - ./mongoconfig:/data/configdb
+    networks:
+     - in2it_app
     ports:
       - "27017:27017"
   event_service:
@@ -12,16 +14,22 @@ services:
     ports:
       - "5000:5000"
       - "5858:5858"
+    networks:
+     - in2it_app
   event_processor:
     image: "event_processor_dev"
     ports:
       - "6800:6800"
       - "5860:5860"
+    networks:
+     - in2it_app
   in2it_site:
     image: "in2it_site_dev"
     ports:
       - "3000:3000"
       - "5859:5859"
+    networks:
+     - in2it_app
   nginx:
     image: "nginx:1.15.8"
     volumes:
@@ -30,6 +38,8 @@ services:
       - "0.0.0.0:80:80"
     # Sometimes nginx crashes if the site doesn't come up in time
     restart: on-failure
+    networks:
+     - in2it_app
   portainer:
     image: "portainer/portainer:1.20.0"
     ports:
@@ -37,6 +47,12 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainerdata:/data
+    networks:
+     - in2it_app
 volumes:
   mongodata:
   portainerdata:
+networks:
+  in2it_app:
+    external:
+      name: in2it

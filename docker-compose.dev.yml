@@ -10,7 +10,7 @@ services:
     # -L runs nodemon in legacy mode (necessary over Docker)
     # -u is passed to python to return output unbuffered, so there is no delay when viewing docker logs
     #command: ["./node_modules/nodemon/bin/nodemon.js", "-L", "-u", "./runner.py"]
-    command: bash -c "scrapyd & scrapyd-deploy && sleep infinity"
+    command: bash -c "rm -f twistd.pid && scrapyd & scrapyd-deploy && sleep infinity"
     environment:
       - DEBUG=${EVENT_PROCESSOR_DEBUG}
       - VERBOSE_OUTPUT=${VERBOSE_OUTPUT}
