@@ -8,7 +8,7 @@ from data_utils import DataUtils
 # greatlakes.org has an iCal feed: https://greatlakes.org/events/?ical=1&tribe_display=list
 # Parsing that instead of the website would fix many of the imperfections of this scraper.
 class GreatLakesSpider(ScraperSpider):
-    name = 'greatlakes'
+    name = 'greatlakesObsolete'
     allowed_domains = ['greatlakes.org']
 
     def __init__(self, name=None, **kwargs):
