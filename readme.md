@@ -1,5 +1,7 @@
 # In2It App
 
+View these docs [here](https://clipboardproject.github.io/ClipboardApp/) if you like pretty colors.
+
 ## Setup
 
 ### Get the Code
