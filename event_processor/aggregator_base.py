@@ -6,12 +6,14 @@ from multiprocessing import Lock
 from config import config
 from event_hashes import EventHashes
 from event import EventManager
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 import requests
 
 class AggregatorBase:
     # This class includes functionality that should be shared by spiders and API-based classes
 
-    def __init__(self, organization, base_url, start_date, end_date, date_format, request_date_format = None):
+    def __init__(self, organization, base_url, date_format, request_date_format = None):
         self.organization = organization
         # date_format is the string that specifies the date style of the target website
         if request_date_format == None:
@@ -22,6 +24,9 @@ class AggregatorBase:
         self.base_url = base_url
         self.identifier = re.sub(r'\W', '', base_url)
         self.event_manager = EventManager()
+
+        start_date = datetime.now().strftime('%m-%d-%Y')
+        end_date = (datetime.now() + relativedelta(months=+1)).strftime('%m-%d-%Y')
         
         request_format_utils = TimeUtils('%m-%d-%Y')
         # When this is running for multiple days, validating if the date is in the past causes issues

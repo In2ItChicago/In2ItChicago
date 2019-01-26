@@ -16,8 +16,8 @@ class HistorySpider(ScraperCrawlSpider):
         Rule(LinkExtractor(restrict_css = '.title'), process_request = 'link_request', callback = 'parse_item'),
     )
 
-    def __init__(self, start_date, end_date):
-        super().__init__(self, 'Chicago History Museum', 'https://www.chicagohistory.org/', start_date, end_date, date_format = '%d %B %Y', request_date_format = '%Y%m%d')
+    def __init__(self, name=None, **kwargs):
+        super().__init__(self, 'Chicago History Museum', 'https://www.chicagohistory.org/', date_format = '%d %B %Y', request_date_format = '%Y%m%d')
 
     def start_requests(self):
         yield self.get_request('events', {

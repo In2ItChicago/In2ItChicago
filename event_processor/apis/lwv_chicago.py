@@ -6,8 +6,8 @@ class LWVChicago(ApiSpider):
     start_urls = ['https://my.lwv.org/illinois/chicago/calendar']
     name = 'LWVChicago'
 
-    def __init__(self, start_date, end_date):
-        super().__init__(self, 'League of Women Voters', 'https://my.lwv.org/', start_date, end_date, date_format = '%Y-%m-%d')
+    def __init__(self, name=None, **kwargs):
+        super().__init__(self, 'League of Women Voters', 'https://my.lwv.org/', date_format = '%Y-%m-%d')
     
     def parse(self, response):
         feed_url = response.css('a.feed-icon::attr(href)').extract()[0]

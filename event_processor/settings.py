@@ -10,7 +10,7 @@ from config import config
 
 BOT_NAME = 'In2ItChicago'
 
-SPIDER_MODULES = ['scrapers.spiders']
+SPIDER_MODULES = ['scrapers.spiders', 'apis']
 NEWSPIDER_MODULE = 'scrapers.spiders'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -44,9 +44,9 @@ ROBOTSTXT_OBEY = True
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
-#EXTENSIONS = {
-#    'scrapy.extensions.telnet.TelnetConsole': None,
-#}
+# EXTENSIONS = {
+#     'scrapy_jsonrpc.webservice.WebService': 500,
+# }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -60,6 +60,10 @@ AUTOTHROTTLE_ENABLED = True
 #AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
 # Enable showing throttling stats for every response received:
 #AUTOTHROTTLE_DEBUG = False
+
+#JSONRPC_ENABLED = False
+#JSONRPC_HOST = '0.0.0.0'
+#JSONRPC_PORT = [6080, 7080]
 
 # Enable and configure HTTP caching (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings

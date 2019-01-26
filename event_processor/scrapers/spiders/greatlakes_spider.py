@@ -11,8 +11,8 @@ class GreatLakesSpider(ScraperSpider):
     name = 'greatlakes'
     allowed_domains = ['greatlakes.org']
 
-    def __init__(self, start_date, end_date):
-        ScraperSpider.__init__(self, 'Alliance for the Great Lakes' 'https://greatlakes.org/', start_date, end_date, date_format='%B %d',
+    def __init__(self, name=None, **kwargs):
+        ScraperSpider.__init__(self, 'Alliance for the Great Lakes' 'https://greatlakes.org/', date_format='%B %d',
                             request_date_format='%Y-%m-%d')
 
     def start_requests(self):

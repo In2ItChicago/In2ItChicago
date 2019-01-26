@@ -15,6 +15,7 @@ services:
   event_processor:
     image: "event_processor_dev"
     ports:
+      - "6800:6800"
       - "5860:5860"
   in2it_site:
     image: "in2it_site_dev"

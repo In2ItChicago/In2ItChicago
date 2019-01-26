@@ -16,8 +16,8 @@ class WpbccSpider(ScraperCrawlSpider):
         Rule(LinkExtractor(restrict_css = ('.prevnextLink')), callback = 'parse_start_url', follow = True),
     )
 
-    def __init__(self, start_date, end_date):
-        super().__init__(self, 'Wicker Park/Bucktown Chamber of Commerce', 'http://www.wickerparkbucktown.com/', start_date, end_date, date_format = '%B %d, %Y')
+    def __init__(self, name=None, **kwargs):
+        super().__init__(self, 'Wicker Park/Bucktown Chamber of Commerce', 'http://www.wickerparkbucktown.com/', date_format = '%B %d, %Y')
 
     def start_requests(self):
         yield self.get_request('events/', {
