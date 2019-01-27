@@ -89,6 +89,9 @@ Several components should be visible now:
 - `localhost:5000/docs` will show a frontend for viewing the data and testing the API
 - `localhost:9000` will show a frontend for managing the Docker containers. Create whatever username and password you want.
 
+### System Architecture
+![System Architecture](In2ItArchitecture.png?raw=true "System Architecture")
+
 ### Setting up your development environment
 
 If you want to see more details about the data in the database, download NoSQL Booster from [here](https://nosqlbooster.com/downloads). You can use another MongoDB client if you'd prefer. Create a connection to `localhost:27017` and 
