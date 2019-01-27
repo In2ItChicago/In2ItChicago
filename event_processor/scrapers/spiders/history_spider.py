@@ -17,7 +17,7 @@ class HistorySpider(ScraperCrawlSpider):
     )
 
     def __init__(self, name=None, **kwargs):
-        super().__init__(self, 'Chicago History Museum', 'https://www.chicagohistory.org/', date_format = '%d %B %Y', request_date_format = '%Y%m%d')
+        super().__init__(self, 'Chicago History Museum', 'https://www.chicagohistory.org/', date_format = '%d %B %Y', request_date_format = '%Y%m%d', **kwargs)
 
     def start_requests(self):
         yield self.get_request('events', {

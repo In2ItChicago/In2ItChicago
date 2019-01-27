@@ -13,11 +13,13 @@ import requests
 class AggregatorBase:
     # This class includes functionality that should be shared by spiders and API-based classes
 
-    def __init__(self, organization, base_url, date_format, request_date_format = None):
+    def __init__(self, organization, base_url, date_format, request_date_format = None, **kwargs):
         self.organization = organization
         # date_format is the string that specifies the date style of the target website
         if request_date_format == None:
             request_date_format = date_format
+
+        self.jobid = kwargs['_job'] if '_job' in kwargs else None
 
         self.date_format = date_format
         self.time_utils = TimeUtils(date_format)

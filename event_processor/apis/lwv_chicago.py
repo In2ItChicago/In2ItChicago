@@ -7,7 +7,7 @@ class LWVChicago(ApiSpider):
     name = 'LWVChicago'
 
     def __init__(self, name=None, **kwargs):
-        super().__init__(self, 'League of Women Voters', 'https://my.lwv.org/', date_format = '%Y-%m-%d')
+        super().__init__(self, 'League of Women Voters', 'https://my.lwv.org/', date_format = '%Y-%m-%d', **kwargs)
     
     def parse(self, response):
         feed_url = response.css('a.feed-icon::attr(href)').extract()[0]

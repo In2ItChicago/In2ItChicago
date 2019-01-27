@@ -17,7 +17,7 @@ class WpbccSpider(ScraperCrawlSpider):
     )
 
     def __init__(self, name=None, **kwargs):
-        super().__init__(self, 'Wicker Park/Bucktown Chamber of Commerce', 'http://www.wickerparkbucktown.com/', date_format = '%B %d, %Y')
+        super().__init__(self, 'Wicker Park/Bucktown Chamber of Commerce', 'http://www.wickerparkbucktown.com/', date_format = '%B %d, %Y', **kwargs)
 
     def start_requests(self):
         yield self.get_request('events/', {

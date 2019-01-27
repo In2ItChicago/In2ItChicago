@@ -13,7 +13,7 @@ class GreatLakesSpider(ScraperSpider):
 
     def __init__(self, name=None, **kwargs):
         ScraperSpider.__init__(self, 'Alliance for the Great Lakes' 'https://greatlakes.org/', date_format='%B %d',
-                            request_date_format='%Y-%m-%d')
+                            request_date_format='%Y-%m-%d', **kwargs)
 
     def start_requests(self):
         yield self.get_request('events/', {})

@@ -13,7 +13,7 @@ class LibraryEvents(ApiSpider):
     name = 'library'
     
     def __init__(self, name=None, **kwargs):
-        super().__init__(self, 'Chicago Public Library', 'https://chipublib.bibliocommons.com/', date_format = '%Y-%m-%d')
+        super().__init__(self, 'Chicago Public Library', 'https://chipublib.bibliocommons.com/', date_format = '%Y-%m-%d', **kwargs)
     
     def parse(self, response):
         return self.get_events()

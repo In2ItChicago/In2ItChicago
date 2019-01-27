@@ -6,3 +6,4 @@ else
 fi
 
 $pythoncmd -m pip install -r requirements.txt
+docker network create in2it

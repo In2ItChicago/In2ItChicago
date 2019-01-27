@@ -70,18 +70,21 @@ class EventSavePipeline:
         if len(spider.event_manager.events) == 0:
             print(f'{datetime.now()} No data returned for ' + spider.base_url)
         else:
-            self.save_events(spider.identifier, spider.event_manager.to_dicts())
+            self.save_events(spider)
 
-    def save_events(self, identifier, event_list):
+    def save_events(self, spider):
+        event_list = spider.event_manager.to_dicts()
         new_hash = EventHashes.create_hash(event_list)
         print(f'{datetime.now()} Found {len(event_list)} events for {event_list[0]["organization"]}.')
-        if new_hash == EventHashes.get(identifier):
+        if new_hash == EventHashes.get(spider.identifier):
            print(f'{datetime.now()} Nothing to update.')
            return
-        EventHashes.set(identifier, new_hash)
+        EventHashes.set(spider.identifier, new_hash)
 
         response = requests.post(config.db_put_events, json=event_list)
         if not response.ok:
             raise ValueError(response.text)
         else:
             print(f'{datetime.now()} Saved {len(event_list)} events for {event_list[0]["organization"]}')
+        response = requests.post('http://ndscheduler:8888/api/v1/spiderComplete', json={'jobid': spider.jobid}, headers={'Content-Type': 'application/json'})
+        print(response)
