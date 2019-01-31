@@ -6,6 +6,13 @@
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals, Request
+import requests
+
+class ErrorHandlerMiddleware:
+    def process_spider_exception(self, response, exception, spider):
+        spider.log.error(exception)
+        response = spider.notify_spider_complete('failure')
+        return None
 
 class SplitItemsMiddleware:
     def get_event_count(self, item, spider):

@@ -10,8 +10,8 @@ from dateutil.relativedelta import relativedelta
 from config import config 
 from apis.library_events import LibraryEvents
 from apis.greatlakes_ical import GreatLakesReader
-from scrapers.spiders.history_spider import HistorySpider
-from scrapers.spiders.wpbcc_spider import WpbccSpider
+from scrapers.history_spider import HistorySpider
+from scrapers.wpbcc_spider import WpbccSpider
 from apis.lwv_chicago import LWVChicago
 from scrapy.cmdline import execute
 from scrapy.crawler import CrawlerProcess, CrawlerRunner
@@ -45,8 +45,8 @@ def run():
 
     print('Event processor completed')
  
-    events = requests.get(config.db_get_events, params = {
-        'start_timestamp': 0, 
+    events = requests.get(config.get_events, params = {
+        'start_timestamp': 0,
         'end_timestamp': 10000000000
     })
 

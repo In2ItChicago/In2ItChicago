@@ -37,10 +37,10 @@ class GeocodePipeline:
     def process_item(self, item, spider):
         if 'address' in item:
             try:
-                geocode = requests.get(config.db_get_geocode, {'address': item['address']})
+                geocode = requests.get(config.get_geocode, {'address': item['address']})
                 item['geocode'] = geocode.json()
             except Exception as e:
-                print('Exception while getting geocode: ' + str(e))
+                spider.log.warning('Exception while getting geocode: ' + str(e))
         return item
 
 class EventBuildPipeline:
@@ -62,29 +62,31 @@ class ScraperTransformPipeline:
                 count = len(value)
             else:
                 if len(value) != count:
-                    raise ValueError(f'{spider.organization}: Selectors returned data of differing lengths')
+                    message = f'{spider.organization}: Selectors returned data of differing lengths'
+                    spider.log.error(message)
+                    raise ValueError(message)
         return count
 
 class EventSavePipeline:
     def close_spider(self, spider):
         if len(spider.event_manager.events) == 0:
-            print(f'{datetime.now()} No data returned for ' + spider.base_url)
+            spider.log.info(f'No data returned for ' + spider.base_url)
         else:
             self.save_events(spider)
 
     def save_events(self, spider):
         event_list = spider.event_manager.to_dicts()
         new_hash = EventHashes.create_hash(event_list)
-        print(f'{datetime.now()} Found {len(event_list)} events for {event_list[0]["organization"]}.')
+        spider.log.info(f'Found {len(event_list)} events for {event_list[0]["organization"]}.')
         if new_hash == EventHashes.get(spider.identifier):
-           print(f'{datetime.now()} Nothing to update.')
+           spider.log.info(f'{datetime.now()} Nothing to update.')
            return
         EventHashes.set(spider.identifier, new_hash)
 
-        response = requests.post(config.db_put_events, json=event_list)
+        response = requests.post(config.put_events, json=event_list)
         if not response.ok:
             raise ValueError(response.text)
         else:
-            print(f'{datetime.now()} Saved {len(event_list)} events for {event_list[0]["organization"]}')
-        response = requests.post('http://ndscheduler:8888/api/v1/spiderComplete', json={'jobid': spider.jobid}, headers={'Content-Type': 'application/json'})
+            spider.log.info(f'Saved {len(event_list)} events for {event_list[0]["organization"]}')
+        response = spider.notify_spider_complete('success')
         print(response)

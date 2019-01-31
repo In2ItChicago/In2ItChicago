@@ -1,6 +1,9 @@
 import os
 import json
 import re
+import logging
+import logging.handlers
+import requests
 from time_utils import TimeUtils
 from multiprocessing import Lock
 from config import config
@@ -8,7 +11,6 @@ from event_hashes import EventHashes
 from event import EventManager
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-import requests
 
 class AggregatorBase:
     # This class includes functionality that should be shared by spiders and API-based classes
@@ -27,6 +29,16 @@ class AggregatorBase:
         self.identifier = re.sub(r'\W', '', base_url)
         self.event_manager = EventManager()
 
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        self.memory_handler = logging.handlers.MemoryHandler(0)
+        stream_handler = logging.StreamHandler()
+        self.memory_handler.setFormatter(formatter)
+        stream_handler.setFormatter(formatter)
+        self.log = logging.getLogger(organization)
+        self.log.setLevel(logging.DEBUG)
+        self.log.addHandler(self.memory_handler)
+        self.log.addHandler(stream_handler)
+
         start_date = datetime.now().strftime('%m-%d-%Y')
         end_date = (datetime.now() + relativedelta(months=+1)).strftime('%m-%d-%Y')
         
@@ -36,3 +48,9 @@ class AggregatorBase:
         self.end_date = request_format_utils.convert_date_format(end_date, request_date_format, validate_past=False)
         self.start_timestamp = request_format_utils.min_timestamp_for_day(start_date)
         self.end_timestamp = request_format_utils.max_timestamp_for_day(end_date)
+
+    def notify_spider_complete(self, status):
+        logs = [self.memory_handler.format(log) for log in self.memory_handler.buffer]
+        return requests.post(config.scheduler_spider_complete, 
+                            json={'jobid': self.jobid, 'status': status, 'logs': logs}, 
+                            headers={'Content-Type': 'application/json'})

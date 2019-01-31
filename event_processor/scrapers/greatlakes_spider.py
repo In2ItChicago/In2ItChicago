@@ -29,16 +29,3 @@ class GreatLakesSpider(ScraperSpider):
             'address': response.css('.tribe-address').extract(),
             'description': response.css('.tribe-events-list-event-description').extract()
         }
-        # titles = self.extract('title', response.css, '.tribe-event-url::text')
-        # urls = self.extract('url', response.css, '.tribe-event-url::attr(href)')
-        # dates, time_ranges = self.extract_multiple(
-        #     {'date': lambda s: s.split('@')[0], 
-        #     'time_range': lambda s: s.split('@')[1]}, 
-        #     response.css, '.tribe-event-schedule-details')
-        # dates.remove_html()
-        # time_ranges.remove_html()
-        # addresses = self.extract('address', response.css, '.tribe-address').remove_html().map(
-        #     DataUtils.remove_excess_spaces)
-        # descriptions = self.extract('description', response.css, '.tribe-events-list-event-description').remove_html()
-
-        # return self.create_events('Alliance for the Great Lakes', titles, urls, dates, time_ranges, addresses, descriptions)

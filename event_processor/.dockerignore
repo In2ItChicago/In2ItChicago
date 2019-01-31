@@ -3,3 +3,8 @@ __pycache__
 data
 lock
 twistd.pid
+eggs
+db
+build
+dbs
+logs

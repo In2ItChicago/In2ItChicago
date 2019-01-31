@@ -10,8 +10,8 @@ from config import config
 
 BOT_NAME = 'In2ItChicago'
 
-SPIDER_MODULES = ['scrapers.spiders', 'apis']
-NEWSPIDER_MODULE = 'scrapers.spiders'
+SPIDER_MODULES = ['scrapers', 'apis']
+NEWSPIDER_MODULE = 'scrapers'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = 'In2ItChicago (+http://in2itchicago.com)'

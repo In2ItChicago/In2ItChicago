@@ -1,7 +1,14 @@
 {
     "ignore": [
-        ".git",
-        "node_modules/"
+        "node_modules/*",
+        "*.egg-info",
+        "__pycache__/*",
+        "lock/*",
+        "logs/*",
+        "eggs/*",
+        "dbs/*",
+        "data/*"
       ],
-      "ext": "py"
+      "ext": "py",
+      "delay": "3000"
 }

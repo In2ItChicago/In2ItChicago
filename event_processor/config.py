@@ -12,14 +12,15 @@ class Config:
         self.scrapy_cache_expiration = 3600
         self.verbose_scrapy_output = self.get_env_var('VERBOSE_OUTPUT', False)
 
-        self.db_client_ip = 'event_service'
-        self.db_client_port = 5000
-        self.db_client_url = f'http://{self.db_client_ip}:{self.db_client_port}'
+        self.event_service_url = 'http://event_service:5000'
 
-        self.db_get_events = self.db_client_url + '/events'
-        self.db_put_events = self.db_client_url + '/events'
-        self.db_get_geocode = self.db_client_url + '/geocode'
-        self.db_client_status = self.db_client_url + '/status'
+        self.get_events = self.event_service_url + '/events'
+        self.put_events = self.event_service_url + '/events'
+        self.get_geocode = self.event_service_url + '/geocode'
+        self.service_status = self.event_service_url + '/status'
+
+        self.scheduler_url = 'http://ndscheduler:8888/api/v1'
+        self.scheduler_spider_complete = self.scheduler_url + '/spiderComplete'
         
         self.debug = self.get_env_bool('DEBUG', False)
         self.verbose_scrapy_output = self.get_env_bool('VERBOSE_OUTPUT', False)
@@ -55,7 +56,7 @@ class Config:
     def connect_to_client(self):
         for _ in range(self.num_connect_attempts):
             try:
-                requests.get(self.db_client_url + '/status')
+                requests.get(self.service_status)
                 print('Connection successful')
                 return True, 'Connection successful'
             except requests.exceptions.ConnectionError:

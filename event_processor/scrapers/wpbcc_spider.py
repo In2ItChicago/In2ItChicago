@@ -27,7 +27,7 @@ class WpbccSpider(ScraperCrawlSpider):
     def parse_start_url(self, response):
         base_selector = response.css('.listerContent')
         def sibling_extract(field):
-            return self.empty_check_extract(base_selector, self.xpath_func, 'div/span[contains(text(), "{0}: ")]/following-sibling::text()'.format(field))
+            return self.empty_check_extract(base_selector, self.xpath_func, f'div/span[contains(text(), "{field}: ")]/following-sibling::text()')
         
         return {
             'title': response.css('.listerItem h2 a::text').extract(),

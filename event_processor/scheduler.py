@@ -5,8 +5,8 @@ from dateutil.relativedelta import relativedelta
 from apis.library_events import LibraryEvents
 from apis.greatlakes_ical import GreatLakesReader
 from apis.lwv_chicago import LWVChicago
-from scrapers.spiders.history_spider import HistorySpider
-from scrapers.spiders.wpbcc_spider import WpbccSpider
+from scrapers.history_spider import HistorySpider
+from scrapers.wpbcc_spider import WpbccSpider
 from threading import Lock
 from datetime import datetime
 from scrapy.crawler import CrawlerRunner
