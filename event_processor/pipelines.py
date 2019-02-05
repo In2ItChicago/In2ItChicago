@@ -76,6 +76,9 @@ class EventSavePipeline:
             logger.info(f'No data returned for ' + spider.base_url)
         else:
             self.save_events(spider)
+            
+        response = spider.notify_spider_complete()
+        print(response)
 
     def save_events(self, spider):
         event_list = spider.event_manager.to_dicts()
@@ -94,6 +97,3 @@ class EventSavePipeline:
                 raise ValueError(response.text)
             else:
                 logger.info(f'Saved {len(event_list)} events for {event_list[0]["organization"]}')
-        
-        response = spider.notify_spider_complete()
-        print(response)
