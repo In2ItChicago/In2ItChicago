@@ -7,6 +7,7 @@
                     <a class="nav-link" href="/">Home</a>
                     <a class="nav-link" href="/about-us">About Us</a>
                     <a class="nav-link" href="/faq">FAQ</a>
+                    <a class="nav-link" href="/resources">Resources</a>
                     <a class="nav-link" href="/join-us">Join Us</a>
                 </div>
             </div>

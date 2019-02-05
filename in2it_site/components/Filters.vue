@@ -19,8 +19,13 @@
 			</div>
 
 			<div class="form-group">
-				<label for="whenDatePicker">When</label>
-				<datepicker :value="state.date" name="whenDatePicker" wrapper-class="datepicker"></datepicker>
+				<label for="fromDatePicker">From</label>
+				<datepicker :value="state.date" name="fromDatePicker" wrapper-class="datepicker" class="datepicker"></datepicker>
+			</div>
+
+			<div class="form-group">
+				<label for="toDatePicker">To</label>
+				<datepicker :value="state.date" name="toDatePicker" wrapper-class="datepicker" class="datepicker"></datepicker>
 			</div>
 		</div>
 			
@@ -95,13 +100,6 @@
 				</div>
 			</div>
 		</div>
-
-		<button class="accordion-button" @click="open">Resources and Articles</button>
-		<div class="accordion-panel">
-			<div class="form-group">
-				<p>Links</p>
-			</div>
-		</div>
 	</div>
 </template>
 
@@ -122,7 +120,8 @@
 				panel.classList.toggle('open');
 				if (panel.style.maxHeight) {
 					panel.style.maxHeight = null;
-				} else {
+				}
+				else {
 					panel.style.maxHeight = panel.scrollHeight + 'px';
 				} 
 			}
