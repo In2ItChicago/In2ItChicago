@@ -12,8 +12,11 @@ from data_utils import DataUtils
 from time_utils import TimeUtils
 from scrapy.exceptions import DropItem
 from datetime import datetime
+import logging
 import requests
 import json
+
+logger = logging.getLogger('app')
 
 class EventTransformPipeline:
     def __init__(self):
@@ -40,7 +43,7 @@ class GeocodePipeline:
                 geocode = requests.get(config.get_geocode, {'address': item['address']})
                 item['geocode'] = geocode.json()
             except Exception as e:
-                spider.log.warning('Exception while getting geocode: ' + str(e))
+                logging.warning('Exception while getting geocode: ' + str(e))
         return item
 
 class EventBuildPipeline:
@@ -63,30 +66,34 @@ class ScraperTransformPipeline:
             else:
                 if len(value) != count:
                     message = f'{spider.organization}: Selectors returned data of differing lengths'
-                    spider.log.error(message)
+                    #spider.logger.error(message)
                     raise ValueError(message)
         return count
 
 class EventSavePipeline:
     def close_spider(self, spider):
         if len(spider.event_manager.events) == 0:
-            spider.log.info(f'No data returned for ' + spider.base_url)
+            logger.info(f'No data returned for ' + spider.base_url)
         else:
             self.save_events(spider)
 
     def save_events(self, spider):
         event_list = spider.event_manager.to_dicts()
         new_hash = EventHashes.create_hash(event_list)
-        spider.log.info(f'Found {len(event_list)} events for {event_list[0]["organization"]}.')
+        logger.info(f'Found {len(event_list)} events for {event_list[0]["organization"]}.')
         if new_hash == EventHashes.get(spider.identifier):
-           spider.log.info(f'{datetime.now()} Nothing to update.')
+           logger.info(f'{datetime.now()} Nothing to update.')
            return
         EventHashes.set(spider.identifier, new_hash)
-
-        response = requests.post(config.put_events, json=event_list)
-        if not response.ok:
-            raise ValueError(response.text)
+        if spider.is_errored:
+            logger.info('Errors occurred during processing so events will not be saved')
         else:
-            spider.log.info(f'Saved {len(event_list)} events for {event_list[0]["organization"]}')
-        response = spider.notify_spider_complete('success')
+            response = requests.post(config.put_events, json=event_list)
+            if not response.ok:
+                #spider.logger.error('Error saving event data: ' + response.text)
+                raise ValueError(response.text)
+            else:
+                logger.info(f'Saved {len(event_list)} events for {event_list[0]["organization"]}')
+        
+        response = spider.notify_spider_complete()
         print(response)
