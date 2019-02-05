@@ -4,6 +4,7 @@ import re
 import logging
 import logging.handlers
 import requests
+import ptvsd
 from time_utils import TimeUtils
 from multiprocessing import Lock
 from config import config
@@ -15,7 +16,18 @@ from dateutil.relativedelta import relativedelta
 class AggregatorBase:
     # This class includes functionality that should be shared by spiders and API-based classes
 
+    @property
+    def is_errored(self):
+        return any(log.levelno == logging.ERROR for log in self.memory_handler.buffer)
+
     def __init__(self, organization, base_url, date_format, request_date_format = None, **kwargs):
+        if config.debug:
+            try:
+                ptvsd.enable_attach(address=('0.0.0.0', 5860))
+            except:
+                pass
+            ptvsd.wait_for_attach()
+        
         self.organization = organization
         # date_format is the string that specifies the date style of the target website
         if request_date_format == None:
@@ -34,10 +46,13 @@ class AggregatorBase:
         stream_handler = logging.StreamHandler()
         self.memory_handler.setFormatter(formatter)
         stream_handler.setFormatter(formatter)
-        self.log = logging.getLogger(organization)
-        self.log.setLevel(logging.DEBUG)
-        self.log.addHandler(self.memory_handler)
-        self.log.addHandler(stream_handler)
+
+        for logger in ['app', 'scrapy', 'twisted']:
+            logging.getLogger(logger).addHandler(self.memory_handler)
+            logging.getLogger(logger).addHandler(stream_handler)
+            logging.getLogger(logger).setLevel(logging.WARNING)
+        logging.getLogger('app').setLevel(logging.INFO)
+        
 
         start_date = datetime.now().strftime('%m-%d-%Y')
         end_date = (datetime.now() + relativedelta(months=+1)).strftime('%m-%d-%Y')
@@ -49,8 +64,8 @@ class AggregatorBase:
         self.start_timestamp = request_format_utils.min_timestamp_for_day(start_date)
         self.end_timestamp = request_format_utils.max_timestamp_for_day(end_date)
 
-    def notify_spider_complete(self, status):
+    def notify_spider_complete(self):
         logs = [self.memory_handler.format(log) for log in self.memory_handler.buffer]
         return requests.post(config.scheduler_spider_complete, 
-                            json={'jobid': self.jobid, 'status': status, 'logs': logs}, 
+                            json={'jobid': self.jobid, 'errored': self.is_errored, 'logs': logs}, 
                             headers={'Content-Type': 'application/json'})
