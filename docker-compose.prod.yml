@@ -1,7 +1,7 @@
 version: '3.6'
 services:
   event_processor:
-    image: "in2itchicago/event_processor:20190124.1"
+    image: "in2itchicago/event_processor:20190204.1"
     command: ["python", "-u", "runner.py"]
     environment:
       - DEBUG=0
@@ -9,8 +9,8 @@ services:
       - RUN_SCHEDULER=1
       - SCHEDULE_INTERVAL=120
   event_service:
-    image: "in2itchicago/event_service:20190124.1"
+    image: "in2itchicago/event_service:20190204.1"
     command: ["npm", "run", "start"]
   in2it_site:
-    image: "in2itchicago/in2it_site:20190124.1"
+    image: "in2itchicago/in2it_site:20190204.1"
     command: ["npm", "run", "start"]
