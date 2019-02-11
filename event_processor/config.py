@@ -21,6 +21,7 @@ class Config:
 
         self.scheduler_url = 'http://ndscheduler:8888/api/v1'
         self.scheduler_spider_complete = self.scheduler_url + '/spiderComplete'
+        self.scheduler_jobs = self.scheduler_url + '/jobs'
         
         self.debug = self.get_env_bool('DEBUG', False)
         self.verbose_scrapy_output = self.get_env_bool('VERBOSE_OUTPUT', False)

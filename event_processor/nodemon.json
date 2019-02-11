@@ -9,6 +9,6 @@
         "dbs/*",
         "data/*"
       ],
-      "ext": "py",
+      "ext": "py,sh",
       "delay": "3000"
 }

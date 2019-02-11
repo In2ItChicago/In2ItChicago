@@ -10,6 +10,7 @@ from data_utils import DataUtils
 class GreatLakesSpider(ScraperSpider):
     name = 'greatlakesObsolete'
     allowed_domains = ['greatlakes.org']
+    enabled = False
 
     def __init__(self, name=None, **kwargs):
         ScraperSpider.__init__(self, 'Alliance for the Great Lakes' 'https://greatlakes.org/', date_format='%B %d',

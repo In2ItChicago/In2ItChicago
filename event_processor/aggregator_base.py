@@ -16,6 +16,8 @@ from dateutil.relativedelta import relativedelta
 class AggregatorBase:
     # This class includes functionality that should be shared by spiders and API-based classes
 
+    enabled = True
+
     @property
     def is_errored(self):
         return any(log.levelno == logging.ERROR for log in self.memory_handler.buffer)
