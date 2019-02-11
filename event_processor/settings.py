@@ -75,4 +75,5 @@ HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 # Comment this out to see all data being scraped
-LOG_LEVEL = 'DEBUG' if config.verbose_scrapy_output else 'ERROR'
+LOG_LEVEL = 'DEBUG' if config.verbose_scrapy_output else 'WARNING'
+LOG_FORMATTER = 'polite_log_formatter.PoliteLogFormatter'

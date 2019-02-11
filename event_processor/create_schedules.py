@@ -42,6 +42,14 @@ for schedule in schedules:
         }
     if schedule.name in jobs_dict:
         job = jobs_dict[schedule.name]
-        requests.put(f'{config.scheduler_jobs}/{job["job_id"]}', json=json_payload)
+        response = requests.put(f'{config.scheduler_jobs}/{job["job_id"]}', json=json_payload)
+        if response.ok:
+            print(f'Updated schedule for {schedule.name}')
+        else:
+            raise Exception(response.text)
     else:
-        requests.post(config.scheduler_jobs, json=json_payload)
+        response = requests.post(config.scheduler_jobs, json=json_payload)
+        if response.ok:
+            print(f'Added schedule for {schedule.name}')
+        else:
+            raise Exception(response.text)

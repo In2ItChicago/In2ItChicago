@@ -15,8 +15,8 @@ from dateutil.relativedelta import relativedelta
 
 class AggregatorBase:
     # This class includes functionality that should be shared by spiders and API-based classes
-
     enabled = True
+    name = 'AggregatorBase'
 
     @property
     def is_errored(self):
@@ -27,8 +27,10 @@ class AggregatorBase:
             try:
                 ptvsd.enable_attach(address=('0.0.0.0', 5860))
             except:
+                # attach already enabled
                 pass
-            ptvsd.wait_for_attach()
+            if not ptvsd.is_attached():
+                ptvsd.wait_for_attach()
         
         self.organization = organization
         # date_format is the string that specifies the date style of the target website
@@ -49,11 +51,12 @@ class AggregatorBase:
         self.memory_handler.setFormatter(formatter)
         stream_handler.setFormatter(formatter)
 
-        for logger in ['app', 'scrapy', 'twisted']:
+        loggers = [self.name, 'scrapy', 'twisted'] if config.run_scheduler else [self.name]
+        for logger in loggers:
             logging.getLogger(logger).addHandler(self.memory_handler)
             logging.getLogger(logger).addHandler(stream_handler)
             logging.getLogger(logger).setLevel(logging.WARNING)
-        logging.getLogger('app').setLevel(logging.INFO)
+        logging.getLogger(self.name).setLevel(logging.INFO)
         
 
         start_date = datetime.now().strftime('%m-%d-%Y')

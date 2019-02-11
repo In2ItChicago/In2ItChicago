@@ -8,9 +8,7 @@ services:
       - event_service_data:/usr/src/app/event_service/node_modules/
   event_processor:
     # -L runs nodemon in legacy mode (necessary over Docker)
-    # -u is passed to python to return output unbuffered, so there is no delay when viewing docker logs
-    #command: ["./node_modules/nodemon/bin/nodemon.js", "-L", "-u", "./runner.py"]
-    command: bash -c "chmod +x entrypoint.sh && ./entrypoint.sh"
+    command: bash -c "chmod +x entrypoint.sh && ./node_modules/nodemon/bin/nodemon.js -L --exec ./entrypoint.sh"
     environment:
       - DEBUG=${EVENT_PROCESSOR_DEBUG}
       - VERBOSE_OUTPUT=${VERBOSE_OUTPUT}

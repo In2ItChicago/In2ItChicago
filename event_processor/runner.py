@@ -8,15 +8,10 @@ import ptvsd
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from config import config 
-from apis.library_events import LibraryEvents
-from apis.greatlakes_ical import GreatLakesReader
-from scrapers.history_spider import HistorySpider
-from scrapers.wpbcc_spider import WpbccSpider
-from apis.lwv_chicago import LWVChicago
-from scrapy.cmdline import execute
-from scrapy.crawler import CrawlerProcess, CrawlerRunner
+from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
-from scheduler import Scheduler
+from scrapy import spiderloader
+from scrapy.utils import project
 
 from config import config
 
@@ -26,19 +21,19 @@ def run():
        print(msg)
        sys.exit(1)
 
-    # Look for one month of events for testing purposes
-    start_date = datetime.now().strftime('%m-%d-%Y')
-    end_date = (datetime.now() + relativedelta(months=+1)).strftime('%m-%d-%Y')
-
     print('Running event processor...')
 
     crawlerProcess = CrawlerProcess(get_project_settings())
 
-    crawlerProcess.crawl(HistorySpider, start_date, end_date)
-    crawlerProcess.crawl(WpbccSpider, start_date, end_date)
-    crawlerProcess.crawl(LWVChicago, start_date, end_date)
-    crawlerProcess.crawl(LibraryEvents, start_date, end_date)
-    crawlerProcess.crawl(GreatLakesReader, start_date, end_date)
+    settings = project.get_project_settings()
+    spider_loader = spiderloader.SpiderLoader.from_settings(settings)
+    spiders = spider_loader.list()
+    classes = [s for s in (spider_loader.load(name) for name in spiders) if s.enabled]
+
+    crawlerProcess = CrawlerProcess(get_project_settings())
+
+    for spider_class in classes:
+        crawlerProcess.crawl(spider_class)
 
     crawlerProcess.start()
     crawlerProcess.join()
@@ -62,8 +57,4 @@ if __name__ == '__main__':
         ptvsd.enable_attach(address=('0.0.0.0', 5860))
         ptvsd.wait_for_attach()
         
-    if config.run_scheduler:
-        scheduler = Scheduler()
-        scheduler.run_schedule()
-    else:
-        run()
+    run()
