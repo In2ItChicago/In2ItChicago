@@ -92,5 +92,19 @@ module.exports = {
                 }
             ]
         }
+    },
+    neighborhoodDocs: {
+        description: 'Return all available neighborhoods',
+        definitions: {
+            'neighborhood list': {
+                $ref: '#/definitions/neighborhood'
+            },
+            neighborhood: {
+                'type': 'object'
+            }
+        },
+        find: {
+            parameters: []
+        }
     }
 }

@@ -80,6 +80,12 @@ function setup(client) {
         }
     });
 
+    app.use('/neighborhoods', {
+        async find(params) {
+            return geocodeModel.distinct('neighborhood');
+        }, docs: docs.neighborhoodDocs
+    });
+
     let geoService = Object.assign(service({
         Model: geocodeModel,
         whitelist: settings.additionalMongoFilters
