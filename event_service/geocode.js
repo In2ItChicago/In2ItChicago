@@ -10,6 +10,8 @@ const geojsonData = fs.readFileSync('chicago_neighborhoods.geojson');
 const geojsonContent = JSON.parse(geojsonData);
 const geoLookup = new GeoJsonGeometriesLookup(geojsonContent);
 
+const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs));
+
 let lastExecuted = new Date();
 
 async function getGeocode(address) {
@@ -28,8 +30,8 @@ async function getGeocode(address) {
     let data = response.data[0];
     let result = {
         'address': address,
-        'lat': data.lat, 
-        'lon': data.lon
+        'lat': parseFloat(data.lat), 
+        'lon': parseFloat(data.lon)
     };
 
     let geojsonPoint = { type: "Point", coordinates: [data.lon, data.lat] }; 

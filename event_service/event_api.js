@@ -4,6 +4,7 @@ const errors = require('@feathersjs/errors');
 const MongoClient = require('mongodb').MongoClient;
 const service = require('feathers-mongodb');
 const swagger = require('feathers-swagger');
+const GeoPoint = require('geopoint');
 
 const docs = require('./docs.js');
 const event = require('./event.js');
@@ -56,7 +57,7 @@ function setup(client) {
 
     let eventModel = client.db('in2it').collection('event');
     let geocodeModel = client.db('in2it').collection('geocode');
-    eventModel.ensureIndex({'event_time.start_timestamp': 1, 'event_time.end_timestamp': 1, 'organization': 1}, function(errorMsg, indexName) {
+    eventModel.ensureIndex({'event_time.start_timestamp': 1, 'event_time.end_timestamp': 1, 'organization': 1, 'geocode.lat': 1, 'geocode.lon': 1}, function(errorMsg, indexName) {
         if (!indexName) {
             throw errors.GeneralError(errorMsg);
         }
@@ -71,12 +72,6 @@ function setup(client) {
     geocodeModel.ensureIndex({ 'address': 1, 'neighborhood': 1 }, function(errorMsg, indexName) {
         if (!indexName) {
             throw errors.GeneralError(errorMsg);
-        }
-    });
-
-    app.use('/status', {
-        async find(params) {
-            return 'available'
         }
     });
 
@@ -96,6 +91,36 @@ function setup(client) {
         whitelist: settings.additionalMongoFilters
     }), {
         docs: docs.eventDocs
+    });
+
+    app.use('/status', {
+        async find(params) {
+            return 'available'
+        }
+    });
+
+    app.use('/neighborhoods', {
+        async find(params) {
+            return geocodeModel.distinct('neighborhood');
+        }, docs: docs.neighborhoodDocs
+    });
+
+    app.use('/radius', {
+        async find(params) {
+            let address = await app.service('geocode').find({'query': {'address': `${params.query.address} US`}});
+            if (!address.lat || !address.lon) {
+                return [];
+            }
+            let point = new GeoPoint(parseFloat(address.lat), parseFloat(address.lon));
+            let bounds = point.boundingCoordinates(parseFloat(params.query.miles));
+            let results = await app.service('events').find({'query': {
+                'min_lat': Math.min(bounds[0]._degLat, bounds[1]._degLat),
+                'max_lat': Math.max(bounds[0]._degLat, bounds[1]._degLat),
+                'min_lon': Math.min(bounds[0]._degLon, bounds[1]._degLon),
+                'max_lon': Math.max(bounds[0]._degLon, bounds[1]._degLon),
+            }})
+            return results;
+        }, docs: docs.radiusDocs
     });
 
     app.use('/geocode', geoService);
