@@ -57,19 +57,19 @@ function setup(client) {
 
     let eventModel = client.db('in2it').collection('event');
     let geocodeModel = client.db('in2it').collection('geocode');
-    eventModel.ensureIndex({'event_time.start_timestamp': 1, 'event_time.end_timestamp': 1, 'organization': 1, 'geocode.lat': 1, 'geocode.lon': 1}, function(errorMsg, indexName) {
+    eventModel.createIndex({'event_time.start_timestamp': 1, 'event_time.end_timestamp': 1, 'organization': 1, 'geocode.lat': 1, 'geocode.lon': 1}, function(errorMsg, indexName) {
         if (!indexName) {
             throw errors.GeneralError(errorMsg);
         }
     });
 
-    geocodeModel.ensureIndex({ 'expireAt': 1 }, { expireAfterSeconds: 0 }, function(errorMsg, indexName) {
+    geocodeModel.createIndex({ 'expireAt': 1 }, { expireAfterSeconds: 0 }, function(errorMsg, indexName) {
         if (!indexName) {
             throw errors.GeneralError(errorMsg);
         }
     });
 
-    geocodeModel.ensureIndex({ 'address': 1, 'neighborhood': 1 }, function(errorMsg, indexName) {
+    geocodeModel.createIndex({ 'address': 1, 'neighborhood': 1 }, function(errorMsg, indexName) {
         if (!indexName) {
             throw errors.GeneralError(errorMsg);
         }
@@ -118,7 +118,7 @@ function setup(client) {
                 'max_lat': Math.max(bounds[0]._degLat, bounds[1]._degLat),
                 'min_lon': Math.min(bounds[0]._degLon, bounds[1]._degLon),
                 'max_lon': Math.max(bounds[0]._degLon, bounds[1]._degLon),
-            }})
+            }});
             return results;
         }, docs: docs.radiusDocs
     });
