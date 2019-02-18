@@ -17,14 +17,14 @@ Make sure you follow any OS and distro-specific instructions for setting up Dock
 #### Extra Installation Steps for Linux
 These steps are for Ubuntu. Arch Linux has Docker available in pacman without any manual steps required. Other distros may require different steps.
 
-If you're new to Docker or you're recovering from a failed installation attempt, it's best to start by uninstalling older versions of Docker: `sudo apt-get remove docker docker-engine docker.io`
+If you're new to Docker or you're recovering from a failed installation attempt, it's best to start by uninstalling older versions of Docker: `sudo apt remove docker docker-engine docker.io`
 
-Run: `sudo apt-get update`  
+Run: `sudo apt update`  
 Install the following packages:  
-`sudo apt-get install apt-transport-https`  
-`sudo apt-get install ca-certificates`  
-`sudo apt-get install curl`  
-`sudo apt-get install software-properties-common`  
+`sudo apt install apt-transport-https`  
+`sudo apt install ca-certificates`  
+`sudo apt install curl`  
+`sudo apt install software-properties-common`  
 These allow apt to use a repository over HTTPS
 
 Add Docker's official GNU Privacy Guard (GPG) key  
@@ -34,18 +34,24 @@ This should print, "OK" to the terminal.
 Run: `sudo apt-key fingerprint 0EBFCD88`  
 Verify that the Key Fingerprint line shows: 9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88
 
-Set up the stable Docker repository:  
+Set up the stable Docker repository:
+For Ubuntu 16.04:
 `
 sudo add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
    $(lsb_release -cs) \
    stable"
 `
-Run: `sudo apt-get update` again.  
-Install the latest version of Docker CE: `sudo apt-get install docker-ce`
+
+For Ubuntu 18.04:
+`
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+`
+Run: `sudo apt update` again.  
+Install the latest version of Docker CE: `sudo apt install docker-ce`
 
 If there were problems during the installation, try removing docker and starting over.  
-`sudo apt-get purge docker-ce`  
+`sudo apt purge docker-ce`  
 `sudo rm -rf /var/lib/docker`
 
 Run: `sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose`
