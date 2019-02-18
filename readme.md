@@ -35,6 +35,7 @@ Run: `sudo apt-key fingerprint 0EBFCD88`
 Verify that the Key Fingerprint line shows: 9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88
 
 Set up the stable Docker repository:
+
 For Ubuntu 16.04:
 `
 sudo add-apt-repository \
@@ -47,6 +48,7 @@ For Ubuntu 18.04:
 `
 sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
 `
+
 Run: `sudo apt update` again.  
 Install the latest version of Docker CE: `sudo apt install docker-ce`
 
