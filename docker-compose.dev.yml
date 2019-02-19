@@ -13,7 +13,7 @@ services:
       - DEBUG=${EVENT_PROCESSOR_DEBUG}
       - VERBOSE_OUTPUT=${VERBOSE_OUTPUT}
       - RUN_SCHEDULER=${RUN_SCHEDULER}
-      - SCHEDULE_INTERVAL=1
+      - SCHEDULE_INTERVAL=5
     volumes:
       - ./event_processor:/usr/src/app/event_processor
       - event_processor_modules:/usr/src/app/event_processor/node_modules/
