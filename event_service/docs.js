@@ -92,5 +92,46 @@ module.exports = {
                 }
             ]
         }
+    },
+    neighborhoodDocs: {
+        description: 'Return all available neighborhoods',
+        definitions: {
+            'neighborhood list': {
+                $ref: '#/definitions/neighborhood'
+            },
+            neighborhood: {
+                'type': 'object'
+            }
+        },
+        find: {
+            parameters: []
+        }
+    },
+    radiusDocs: {
+        description: 'Return all events in a certain radius',
+        definitions: {
+            'radius list': {
+                $ref: '#/definitions/radius'
+            },
+            radius: {
+                'type': 'object'
+            }
+        },
+        find: {
+            parameters: [
+                {
+                    description: 'Address',
+                    in: 'query',
+                    name: 'address',
+                    type: 'string'
+                },
+                {
+                    description: 'Miles',
+                    in: 'query',
+                    name: 'miles',
+                    type: 'float'
+                }
+            ]
+        }
     }
 }

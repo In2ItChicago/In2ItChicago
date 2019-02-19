@@ -17,6 +17,7 @@
     "feathers-mongodb": "^4.0.4",
     "feathers-swagger": "^0.7.2",
     "geojson-geometries-lookup": "^0.3.0",
+    "geopoint": "^1.0.1",
     "lodash": "^4.17.11",
     "mongodb": "^3.1.13"
   },

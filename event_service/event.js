@@ -9,7 +9,11 @@ module.exports = {
                 
                 var searchFields = {
                     'start_timestamp': { name: 'event_time.start_timestamp', func: '$gte', val: parseInt(query.start_timestamp) },
-                    'end_timestamp': { name: 'event_time.end_timestamp', func: '$lte', val: parseInt(query.end_timestamp) }
+                    'end_timestamp': { name: 'event_time.end_timestamp', func: '$lte', val: parseInt(query.end_timestamp) },
+                    'min_lat': { name: 'geocode.lat', func: '$gte', val: parseFloat(query.min_lat) },
+                    'min_lon': { name: 'geocode.lon', func: '$gte', val: parseFloat(query.min_lon) },
+                    'max_lat': { name: 'geocode.lat', func: '$lte', val: parseFloat(query.max_lat) },
+                    'max_lon': { name: 'geocode.lon', func: '$lte', val: parseFloat(query.max_lon) }
                 }
     
                 context.params.query = common.mongoSearch(query, searchFields);
