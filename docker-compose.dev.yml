@@ -5,7 +5,7 @@ services:
     volumes:
       - ./event_service:/usr/src/app/event_service
       # hack to prevent mounting node_modules
-      - event_service_data:/usr/src/app/event_service/node_modules/
+      - /usr/src/app/event_service/node_modules/
   event_processor:
     # -L runs nodemon in legacy mode (necessary over Docker)
     # -u is passed to python to return output unbuffered, so there is no delay when viewing docker logs
@@ -17,7 +17,7 @@ services:
       - SCHEDULE_INTERVAL=1
     volumes:
       - ./event_processor:/usr/src/app/event_processor
-      - event_processor_modules:/usr/src/app/event_processor/node_modules/
+      - /usr/src/app/event_processor/node_modules/
       - event_processor_data:/usr/src/app/event_processor/data/
       - event_processor_lock:/usr/src/app/event_processor/lock/
       - event_processor_scrapy:/usr/src/app/event_processor/.scrapy/
@@ -25,11 +25,8 @@ services:
     command: ["npm", "run", "docker-debug"]
     volumes:
       - ./in2it_site:/usr/src/app/in2it_site
-      - in2it_site_data:/usr/src/app/in2it_site/node_modules/
+      - /usr/src/app/in2it_site/node_modules/
 volumes:
-  in2it_site_data:
-  event_service_data:
-  event_processor_modules:
   event_processor_data:
   event_processor_lock:
   event_processor_scrapy:
