@@ -2,6 +2,16 @@ body{
 	background-color:#c3c3c3;
 }
 
+.site{
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+}
+
+.page-container{
+	flex: 1;
+}
+
 .footer{
 	position: relative;
 	bottom: 0;
@@ -120,6 +130,10 @@ body{
 
 .accordion-panel.open{
 	overflow: visible;
+}
+
+.event-summary-link:hover{
+	text-decoration: none;
 }
 
 .event-summary{
