@@ -1,6 +1,7 @@
 from icalendar import Calendar
 from event import Event
 from cache_call import cache_call
+from datetime import datetime, date
 import requests
 
 class ICal:
@@ -26,8 +27,8 @@ class ICal:
 
     # TODO Double-check that unicode is handled correctly
     def create_event(self, event, org):
-        start_time = int(self.localize(event.get('DTSTART', '').dt).timestamp())
-        end_time = int(self.localize(event.get('DTEND', '').dt).timestamp())
+        start_time = int(self.localize_min(event.get('DTSTART', '').dt).timestamp())
+        end_time = int(self.localize_max(event.get('DTEND', '').dt).timestamp())
         return {
             'event_time': {
                 'start_timestamp': start_time,
@@ -40,7 +41,16 @@ class ICal:
             'organization': '' + org
         }
 
-    def localize(self, time):
+    def localize_min(self, time):
+        return self.localize(time, datetime.min.time())
+
+    def localize_max(self, time):
+        return self.localize(time, datetime.max.time())
+
+    def localize(self, time, default_time):
+        if type(time) == date:
+            time = datetime.combine(time, default_time)
+
         if time.tzinfo is None:
             return self.default_timezone.localize(time)
         return time
