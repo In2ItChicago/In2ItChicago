@@ -14,5 +14,7 @@ services:
   in2it_site:
     image: "in2itchicago/in2it_site:20190204.1"
     command: ["npm", "run", "start"]
+    environment:
+      - API_URL=http://api.in2itchicago.com
   nginx:
     image: "nginx:1.15.8"

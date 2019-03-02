@@ -41,8 +41,8 @@ module.exports = {
                     }
                         
                     var searchFields = {
-                        'start_timestamp': { name: 'event_time.start_timestamp', func: '$gte', val: query.start_timestamp },
-                        'end_timestamp': { name: 'event_time.end_timestamp', func: '$lte', val: query.end_timestamp },
+                        'start_timestamp': { name: 'event_time.start_timestamp', func: '$gte', val: parseInt(query.start_timestamp) },
+                        'end_timestamp': { name: 'event_time.end_timestamp', func: '$lte', val: parseInt(query.end_timestamp) },
                         'neighborhood': { name: 'geocode.neighborhood', func: '$eq', val: query.neighborhood },
                         'min_lat': { name: 'geocode.lat', func: '$gte', val: searchBounds.min_lat },
                         'min_lon': { name: 'geocode.lon', func: '$gte', val: searchBounds.min_lon },
