@@ -4,7 +4,6 @@ const errors = require('@feathersjs/errors');
 const MongoClient = require('mongodb').MongoClient;
 const service = require('feathers-mongodb');
 const swagger = require('feathers-swagger');
-const GeoPoint = require('geopoint');
 
 const docs = require('./docs.js');
 const event = require('./event.js');
@@ -107,29 +106,11 @@ function setup(client) {
         }, docs: docs.neighborhoodDocs
     });
 
-    app.use('/radius', {
-        async find(params) {
-            let address = await app.service('geocode').find({'query': {'address': `${params.query.address} US`}});
-            if (!address.lat || !address.lon) {
-                return [];
-            }
-            let point = new GeoPoint(parseFloat(address.lat), parseFloat(address.lon));
-            let bounds = point.boundingCoordinates(parseFloat(params.query.miles));
-            let results = await app.service('events').find({'query': {
-                'min_lat': Math.min(bounds[0]._degLat, bounds[1]._degLat),
-                'max_lat': Math.max(bounds[0]._degLat, bounds[1]._degLat),
-                'min_lon': Math.min(bounds[0]._degLon, bounds[1]._degLon),
-                'max_lon': Math.max(bounds[0]._degLon, bounds[1]._degLon),
-            }});
-            return results;
-        }, docs: docs.radiusDocs
-    });
-
     app.use('/geocode', geoService);
-    app.service('geocode').hooks(geocode.geocodeHooks);
+    app.service('geocode').hooks(geocode.geocodeHooks(app));
 
     app.use('/events', eventService);
-    app.service('events').hooks(event.eventHooks);    
+    app.service('events').hooks(event.eventHooks(app));    
 
     const server = app.listen(settings.port);
 

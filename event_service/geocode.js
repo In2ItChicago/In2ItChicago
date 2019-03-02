@@ -41,48 +41,50 @@ async function getGeocode(address) {
 }
 
 module.exports = {
-    geocodeHooks: {
-        before: {
-            async find(context) {
-                let query = context.params.query; 
-                // searching by address and neighborhood causes issues if the neighborhood doesn't match the address
-                if (query.address && query.neighborhood) {
-                    delete query.neighborhood;
-                }
-                context.params.query = common.mongoSearch(query);
-               
-                // This is only here so it's easier to access
-                context.params.address = query.address;
-                return context;
-            },
-    
-            async create(context) {
-                context.data.expireAt = common.randomExpirationTime();
-                return context;
-            }
-        },
-        after: {
-            async find(context) {
-                // Geocode already found in database. No need to query web service.
-                if (context.result.length > 0) {
-                    if (context.params.address) {
-                        context.result = context.result[0];
+    geocodeHooks: function(app) {
+        return {
+            before: {
+                async find(context) {
+                    let query = context.params.query; 
+                    // searching by address and neighborhood causes issues if the neighborhood doesn't match the address
+                    if (query.address && query.neighborhood) {
+                        delete query.neighborhood;
                     }
-                    return context;
-                }
-                let result = null;
-                if (context.params.address) {
-                    result = await getGeocode(context.params.address);
-                }
+                    context.params.query = common.mongoSearch(query);
                 
-                if (result == null) {
+                    // This is only here so it's easier to access
+                    context.params.address = query.address;
+                    return context;
+                },
+        
+                async create(context) {
+                    context.data.expireAt = common.randomExpirationTime();
                     return context;
                 }
-                context.result = result;
-                await this.create(result);
-                return context;
-            }
-        },
-        error: common.errorHandler
+            },
+            after: {
+                async find(context) {
+                    // Geocode already found in database. No need to query web service.
+                    if (context.result.length > 0) {
+                        if (context.params.address) {
+                            context.result = context.result[0];
+                        }
+                        return context;
+                    }
+                    let result = null;
+                    if (context.params.address) {
+                        result = await getGeocode(context.params.address);
+                    }
+                    
+                    if (result == null) {
+                        return context;
+                    }
+                    context.result = result;
+                    await this.create(result);
+                    return context;
+                }
+            },
+            error: common.errorHandler
+        }
     }
 }

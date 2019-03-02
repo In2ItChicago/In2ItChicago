@@ -52,6 +52,24 @@ module.exports = {
                     type: 'string'
                 },
                 {
+                    description: 'address used for radius search (address + miles should be used together)',
+                    in: 'query',
+                    name: 'address',
+                    type: 'string'
+                },
+                {
+                    description: 'miles used for radius search (address + miles should be used together)',
+                    in: 'query',
+                    name: 'miles',
+                    type: 'string'
+                },
+                {
+                    description: 'neighborhood',
+                    in: 'query',
+                    name: 'neighborhood',
+                    type: 'string'
+                },
+                {
                     description: 'limit',
                     in: 'query',
                     name: '$limit',
@@ -105,33 +123,6 @@ module.exports = {
         },
         find: {
             parameters: []
-        }
-    },
-    radiusDocs: {
-        description: 'Return all events in a certain radius',
-        definitions: {
-            'radius list': {
-                $ref: '#/definitions/radius'
-            },
-            radius: {
-                'type': 'object'
-            }
-        },
-        find: {
-            parameters: [
-                {
-                    description: 'Address',
-                    in: 'query',
-                    name: 'address',
-                    type: 'string'
-                },
-                {
-                    description: 'Miles',
-                    in: 'query',
-                    name: 'miles',
-                    type: 'float'
-                }
-            ]
         }
     }
 }
