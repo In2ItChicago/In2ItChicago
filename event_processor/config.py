@@ -61,5 +61,6 @@ class Config:
             except requests.exceptions.ConnectionError:
                 time.sleep(0.5)
                 continue
+        return False, 'Connection failed'
 
 config = Config()

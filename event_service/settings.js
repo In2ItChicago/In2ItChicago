@@ -6,7 +6,7 @@ module.exports = {
     // Use a random expiration time between min and max to avoid too much data expiring at the same time
     minExpireAfterDays: 15,
     maxExpireAfterDays: 30,
-    retries: 20,
+    sleepTime: 100,
     // feathers only whitelists certain filters by default, need to add these manually or it will throw an error
     additionalMongoFilters: ['$eq', '$and'],
     mongoPort: 27017

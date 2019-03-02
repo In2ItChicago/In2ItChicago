@@ -10,6 +10,7 @@ const docs = require('./docs.js');
 const event = require('./event.js');
 const geocode = require('./geocode.js');
 const settings = require('./settings.js');
+const common = require('./common.js');
 
 (async () => { 
     let client = new MongoClient(`mongodb://mongo:${settings.mongoPort}`, {
@@ -23,9 +24,10 @@ const settings = require('./settings.js');
             setup(client);
         }
         catch (error) { 
-            if (error.name === 'MongoNetworkError' && currentTries < settings.retries) {
+            if (error.name === 'MongoNetworkError') {
                 currentTries++;
                 console.log('DB connection attempt: ' + currentTries);
+                common.sleep(settings.sleepTime);
                 connect();
             }
             else {

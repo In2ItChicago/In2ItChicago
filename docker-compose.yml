@@ -22,7 +22,7 @@ services:
       - "3000:3000"
       - "5859:5859"
   nginx:
-    image: "nginx:1.15.8"
+    image: "nginx_dev"
     volumes:
       - ./nginx:/etc/nginx
     ports:
