@@ -4,6 +4,7 @@ const errors = require('@feathersjs/errors');
 const settings = require('./settings.js');
 
 module.exports = {
+    sleep: (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs)),
     errorHandler(ctx) {
         if (ctx.error) {
             const error = ctx.error;

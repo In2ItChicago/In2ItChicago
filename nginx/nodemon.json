@@ -1,0 +1,9 @@
+{
+    "ignore": [
+        "node_modules/*",
+        "*.egg-info",
+        "__pycache__/*"
+      ],
+      "ext": "py,sh,j2",
+      "delay": "3000"
+}

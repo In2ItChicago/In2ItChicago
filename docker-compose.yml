@@ -31,7 +31,7 @@ services:
     networks:
      - in2it_app
   nginx:
-    image: "nginx:1.15.8"
+    image: "nginx_dev"
     volumes:
       - ./nginx:/etc/nginx
     ports:

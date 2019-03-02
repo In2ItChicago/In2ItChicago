@@ -10,15 +10,13 @@ const geojsonData = fs.readFileSync('chicago_neighborhoods.geojson');
 const geojsonContent = JSON.parse(geojsonData);
 const geoLookup = new GeoJsonGeometriesLookup(geojsonContent);
 
-const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs));
-
 let lastExecuted = new Date();
 
 async function getGeocode(address) {
     let baseUrl = 'https://nominatim.openstreetmap.org/search';
     let diff = new Date() - lastExecuted;
     if (diff <= settings.geocodeApiDelayMilliseconds) {
-        await sleep(diff);
+        await common.sleep(diff);
     }
     let response = await axios.get(`${baseUrl}?q=${address}&format=json`);
     lastExecuted = new Date();
