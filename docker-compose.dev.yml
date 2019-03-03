@@ -29,7 +29,7 @@ services:
       - ./in2it_site:/usr/src/app/in2it_site
       - /usr/src/app/in2it_site/node_modules/
   nginx:
-    command: bash -c "chmod +x entrypoint.sh && ./node_modules/nodemon/bin/nodemon.js -L --exec ./entrypoint.sh"
+    command: bash -c "chmod +x entrypoint.sh && nodemon -L --exec ./entrypoint.sh"
     environment:
       - SERVER_NAME=localhost
 volumes:

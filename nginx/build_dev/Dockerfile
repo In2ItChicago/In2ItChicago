@@ -8,7 +8,7 @@ COPY ./install-npm.sh ./
 COPY package.json ./
 RUN chmod +x install-npm.sh
 RUN ./install-npm.sh
-RUN npm install
+RUN npm install -g nodemon
 
 COPY ./requirements.txt ./
 RUN apt-get install -yq python3
