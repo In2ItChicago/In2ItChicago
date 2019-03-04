@@ -1,19 +1,9 @@
 <template>
 	<div>
-		<header>
-			<page-header></page-header>
-		</header>
-
-		<div class="container">
-			<div class="content">
-				<filters></filters>
-				<event-list :events="events"></event-list>
-			</div>
+		<div class="content">
+			<filters :searchFilters="searchFilters" @filterApplied="updateEvents()"></filters>
+			<event-list :events="events"></event-list>
 		</div>
-
-		<footer>
-			<page-footer></page-footer>
-		</footer>
 	</div>	
 </template>
 
@@ -23,10 +13,8 @@
 	import feathers from '@feathersjs/feathers';
 	import Filters from '~/components/Filters.vue';
 	import EventList from '~/components/EventList.vue';
-	import PageFooter from '~/components/PageFooter.vue';
-	import PageHeader from '~/components/PageHeader.vue';
 	
-    import { dummyData } from '~/store/dummydata.js';
+    import { dummyData } from '~/store/dummyData.js';
 
 	const app = feathers();
 	const restClient = rest('http://event_service:5000');
@@ -36,7 +24,13 @@
 	export default {
 		data() {
 			return {
-				events: []
+				events: [],
+				searchFilters: {
+					zipOrNeighborhood: '',
+					searchRadius: 10,
+					startDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1,  new Date().getDate()),
+					endDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1,  new Date().getDate())
+				}
 			};
 		},
 		asyncData ({ params }) {
@@ -52,11 +46,26 @@
 					return { events: res.data };
 				});
 		},
+		methods:{
+			updateEvents: function() {
+				events.find({query: {
+					start_timestamp: this.searchFilters.startDate,
+					end_timestamp: this.searchFilters.endDate
+				}})
+				.then(res => {
+					return { events: res.data };
+				});
+
+				/* This gives a CORS Error
+				 return axios.get('http://localhost:5000/events?start_timestamp=0&end_timestamp=10000000000000')
+				.then((res) => {
+					return {events: res.data};
+				}); */
+			}
+		},
 		components: {
 			Filters,
-			EventList,
-			PageFooter,
-			PageHeader
+			EventList
 		}
 	};
 </script>
