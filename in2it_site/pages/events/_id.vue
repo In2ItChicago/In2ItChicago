@@ -40,15 +40,11 @@
 		},
 		computed: {
 			mapUrl: function() {
-				return "https://www.google.com/maps/embed/v1/place?key=AIzaSyDKuKo2WRNv5IhKm_At8wGfD4T142laung&q="
-				 + this.event.geocode.address;
+				return 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDKuKo2WRNv5IhKm_At8wGfD4T142laung&q=' + this.event.geocode.address;
 			}
 		},
-		mounted() {
-			console.log(this.event);
-		},
 		asyncData({redirect, store}) {
-			if(store.activeEvent == null){
+			if(store.activeEvent == null) {
 				redirect('/');
 			}
 		}

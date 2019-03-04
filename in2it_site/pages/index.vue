@@ -28,8 +28,8 @@
 				searchFilters: {
 					zipOrNeighborhood: '',
 					searchRadius: 10,
-					startDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1,  new Date().getDate()),
-					endDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1,  new Date().getDate())
+					startDate: new Date(new Date().getFullYear(), new Date().getMonth(),  new Date().getDate()),
+					endDate: new Date(new Date().getFullYear(), new Date().getMonth(),  new Date().getDate())
 				}
 			};
 		},
@@ -48,19 +48,20 @@
 		},
 		methods:{
 			updateEvents: function() {
-				events.find({query: {
-					start_timestamp: this.searchFilters.startDate,
-					end_timestamp: this.searchFilters.endDate
-				}})
-				.then(res => {
-					return { events: res.data };
-				});
+				//TODO, replace with process.env.API_URL?
+				const baseURL = 'api.localhost';
 
-				/* This gives a CORS Error
-				 return axios.get('http://localhost:5000/events?start_timestamp=0&end_timestamp=10000000000000')
+				return axios.get(
+					'http://' + baseURL + '/events?' +
+					'neighborhood=' + this.searchFilters.zipOrNeighborhood + '&' +
+					/* Disabled until miles works without address  
+					'miles=' + this.searchFilters.searchRadius + '&' +  */
+					'start_timestamp=' + this.searchFilters.startDate.getTime() + '&' +
+					'end_timestamp=' + this.searchFilters.endDate.getTime()
+				)
 				.then((res) => {
-					return {events: res.data};
-				}); */
+					this.events = res.data;
+				});
 			}
 		},
 		components: {

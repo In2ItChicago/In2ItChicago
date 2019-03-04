@@ -33,7 +33,7 @@
 			</div>
 		</div>
 			
-		<button class="accordion-button" @click="open">Category</button>
+<!-- 		<button class="accordion-button" @click="open">Category</button>
 		<div class="accordion-panel">
 			<div class="form-group">
 				<div class="form-check">
@@ -85,9 +85,9 @@
 					</label>
 				</div>
 			</div>
-		</div>
+		</div> -->
 			
-		<button class="accordion-button" @click="open">Advanced Options</button>
+		<!-- <button class="accordion-button" @click="open">Advanced Options</button>
 		<div class="accordion-panel">
 			<div class="form-group">
 				<div class="form-check">
@@ -115,7 +115,7 @@
 					</label>
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</div>
 </template>
 

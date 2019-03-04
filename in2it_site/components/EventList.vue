@@ -6,7 +6,7 @@
 			</div>
 		</div>
 		<div v-else class="no-event-message">
-			<span>No events available, please try again later.</span>
+			<span>No events available, please adjust your search filter.</span>
 		</div>
 	</div>
 </template>
