@@ -14,7 +14,7 @@
 	import Filters from '~/components/Filters.vue';
 	import EventList from '~/components/EventList.vue';
 	
-    import { dummyData } from '~/store/dummydata.js';
+    import { dummyData } from '~/store/dummyData.js';
 
 	const app = feathers();
 	const restClient = rest('http://event_service:5000');
@@ -47,7 +47,7 @@
 				});
 		},
 		methods:{
-			updateEvents: function(){
+			updateEvents: function() {
 				events.find({query: {
 					start_timestamp: this.searchFilters.startDate,
 					end_timestamp: this.searchFilters.endDate
