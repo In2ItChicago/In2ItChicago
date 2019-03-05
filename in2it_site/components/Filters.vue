@@ -4,7 +4,7 @@
 		<div class="accordion-panel">
 			<div class="form-group">
 				<label for="locationFilter">Where</label>
-				<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Neighborhood" :value="searchFilters.zipOrNeighborhood">
+				<input type="text" class="form-control" id="locationFilter" placeholder="Address / Zip" :value="searchFilters.addressOrZip">
 			</div>
 
 			<div class="form-group">
