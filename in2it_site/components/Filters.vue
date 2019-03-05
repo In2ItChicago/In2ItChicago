@@ -122,7 +122,7 @@
 
 <script>
 	import Datepicker from 'vuejs-datepicker';
-	export default{
+	export default {
 		data() {
 			return {
 				searchFilter: {
@@ -131,7 +131,7 @@
 					startDate: new Date(new Date().getFullYear(), new Date().getMonth(),  new Date().getDate()),
 					endDate: new Date(new Date().getFullYear(), new Date().getMonth(),  new Date().getDate())
 				}
-			}
+			};
 		},
 		methods: {
 			open: function(event) {

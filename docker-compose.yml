@@ -18,6 +18,8 @@ services:
       - "5860:5860"
   in2it_site:
     image: "in2it_site_dev"
+    environment:
+      - API_URL=${API_URL:-api.localhost}
     ports:
       - "3000:3000"
       - "5859:5859"
