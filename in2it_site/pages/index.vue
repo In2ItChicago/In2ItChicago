@@ -14,12 +14,16 @@
 	import Filters from '~/components/Filters.vue';
 	import EventList from '~/components/EventList.vue';
 	
-    import { dummyData } from '~/store/dummyData.js';
+	import { dummyData } from '~/store/dummyData.js';
+	
+	function getClient(url) {
+		const app = feathers();
+		const restClient = rest(url);
+		app.configure(restClient.axios(axios));
+		return app.service('events');
+	}
 
-	const app = feathers();
-	const restClient = rest('http://event_service:5000');
-	app.configure(restClient.axios(axios));
-    const events = app.service('events');
+	const eventServiceClient = getClient(process.env.API_URL);
 
 	export default {
 		data() {
@@ -31,25 +35,26 @@
             //Ensure get request goes to an endpoint that returns an array or json object
             //If a regular HTML page is returned, the v-for in the view above will try to
             //render each character in the HTML page string as a separate event and nuxt
-            //will run out of memory
+			//will run out of memory
             if (process.env.DUMMY_DATA) {
                 return { events: dummyData };
-            }
-			return events.find({query: {start_timestamp: 0, end_timestamp: 10000000000000}})
+			}
+			const eventService = getClient('http://event_service:5000');
+			return eventService.find({query: {start_timestamp: 0, end_timestamp: 10000000000000}})
 				.then(res => {
 					return { events: res.data };
 				});
 		},
-		methods:{
+		methods: {
 			updateEvents: function() {
-				return axios.get(
-					process.env.API_URL + '/events?' +
-					'neighborhood=' + this.$store.searchFilter.zipOrNeighborhood + '&' +
-					/* Disabled until miles works without address  
-					'miles=' + this.searchFilters.searchRadius + '&' +  */
-					'start_timestamp=' + this.$store.searchFilter.startDate.getTime() + '&' +
-					'end_timestamp=' + this.$store.searchFilter.endDate.getTime()
-				)
+				return eventServiceClient.find({
+					query: {
+						start_timestamp: this.$store.searchFilter.startDate.getTime() / 1000, 
+						end_timestamp: this.$store.searchFilter.endDate.getTime() / 1000,
+						miles: this.$store.searchFilter.searchRadius,
+						address: this.$store.searchFilter.addressOrZip
+					}
+				})
 				.then((res) => {
 					this.events = res.data;
 				});

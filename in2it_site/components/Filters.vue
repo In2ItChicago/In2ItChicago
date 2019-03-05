@@ -4,7 +4,7 @@
 		<div class="accordion-panel">
 			<div class="form-group">
 				<label for="locationFilter">Where</label>
-				<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Neighborhood" v-model="searchFilter.zipOrNeighborhood">
+				<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Neighborhood" v-model="searchFilter.addressOrZip">
 			</div>
 
 			<div class="form-group">
@@ -125,7 +125,7 @@
 		data() {
 			return {
 				searchFilter: {
-					zipOrNeighborhood: '',
+					addressOrZip: '',
 					searchRadius: 10,
 					startDate: new Date(new Date().getFullYear(), new Date().getMonth(),  new Date().getDate()),
 					endDate: new Date(new Date().getFullYear(), new Date().getMonth(),  new Date().getDate())
