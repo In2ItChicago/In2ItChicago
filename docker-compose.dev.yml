@@ -23,8 +23,6 @@ services:
       - event_processor_scrapy:/usr/src/app/event_processor/.scrapy/
   in2it_site:
     command: ["npm", "run", "docker-debug"]
-    environment:
-      - API_URL=http://api.localhost
     volumes:
       - ./in2it_site:/usr/src/app/in2it_site
       - /usr/src/app/in2it_site/node_modules/

@@ -18,7 +18,7 @@
 	
 	function getClient(url) {
 		const app = feathers();
-		const restClient = rest(url);
+		const restClient = rest('http://' + url);
 		app.configure(restClient.axios(axios));
 		return app.service('events');
 	}
@@ -39,7 +39,7 @@
             if (process.env.DUMMY_DATA) {
                 return { events: dummyData };
 			}
-			const eventService = getClient('http://event_service:5000');
+			const eventService = getClient('event_service:5000');
 			return eventService.find({query: {start_timestamp: 0, end_timestamp: 10000000000000}})
 				.then(res => {
 					return { events: res.data };
