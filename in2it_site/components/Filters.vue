@@ -4,12 +4,12 @@
 		<div class="accordion-panel">
 			<div class="form-group">
 				<label for="locationFilter">Where</label>
-				<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Neighborhood" :value="searchFilters.zipOrNeighborhood">
+				<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Neighborhood" v-model="searchFilter.zipOrNeighborhood">
 			</div>
 
 			<div class="form-group">
 				<label for="locationFilter">Distance (Miles)</label>
-				<select class="form-control" id="distanceFilter" v-model="searchFilters.searchRadius">
+				<select class="form-control" id="distanceFilter" v-model="searchFilter.searchRadius">
 					<option value="5">5</option>
 					<option value="10">10</option>
 					<option value="25">25</option>
@@ -20,16 +20,16 @@
 
 			<div class="form-group">
 				<label for="fromDatePicker">From</label>
-				<datepicker :value="searchFilters.startDate" name="fromDatePicker" wrapper-class="datepicker" class="datepicker"></datepicker>
+				<datepicker v-model="searchFilter.startDate" name="fromDatePicker" wrapper-class="datepicker" class="datepicker"></datepicker>
 			</div>
 
 			<div class="form-group">
 				<label for="toDatePicker">To</label>
-				<datepicker :value="searchFilters.endDate" name="toDatePicker" wrapper-class="datepicker" class="datepicker"></datepicker>
+				<datepicker v-model="searchFilter.endDate" name="toDatePicker" wrapper-class="datepicker" class="datepicker"></datepicker>
 			</div>
 
 			<div class="form-group text-right">
-				<button class="btn btn-light" @click="$emit('filterApplied')">Filter</button>
+				<button class="btn btn-light" @click="filter()">Filter</button>
 			</div>
 		</div>
 			
@@ -122,7 +122,16 @@
 <script>
 	import Datepicker from 'vuejs-datepicker';
 	export default{
-		props: ['searchFilters'],
+		data() {
+			return {
+				searchFilter: {
+					zipOrNeighborhood: '',
+					searchRadius: 10,
+					startDate: new Date(new Date().getFullYear(), new Date().getMonth(),  new Date().getDate()),
+					endDate: new Date(new Date().getFullYear(), new Date().getMonth(),  new Date().getDate())
+				}
+			}
+		},
 		methods: {
 			open: function(event) {
 				event.target.classList.toggle('active');
@@ -134,6 +143,10 @@
 				else {
 					panel.style.maxHeight = panel.scrollHeight + 'px';
 				} 
+			},
+			filter: function() {
+				this.$store.searchFilter = this.searchFilter;
+				this.$emit('filterApplied');
 			}
 		},
 		components:{

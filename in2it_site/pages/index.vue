@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="content">
-			<filters :searchFilters="searchFilters" @filterApplied="updateEvents()"></filters>
+			<filters @filterApplied="updateEvents()"></filters>
 			<event-list :events="events"></event-list>
 		</div>
 	</div>	
@@ -25,12 +25,6 @@
 		data() {
 			return {
 				events: [],
-				searchFilters: {
-					zipOrNeighborhood: '',
-					searchRadius: 10,
-					startDate: new Date(new Date().getFullYear(), new Date().getMonth(),  new Date().getDate()),
-					endDate: new Date(new Date().getFullYear(), new Date().getMonth(),  new Date().getDate())
-				}
 			};
 		},
 		asyncData ({ params }) {
@@ -50,11 +44,11 @@
 			updateEvents: function() {
 				return axios.get(
 					process.env.API_URL + '/events?' +
-					'neighborhood=' + this.searchFilters.zipOrNeighborhood + '&' +
+					'neighborhood=' + this.$store.searchFilter.zipOrNeighborhood + '&' +
 					/* Disabled until miles works without address  
 					'miles=' + this.searchFilters.searchRadius + '&' +  */
-					'start_timestamp=' + this.searchFilters.startDate.getTime() + '&' +
-					'end_timestamp=' + this.searchFilters.endDate.getTime()
+					'start_timestamp=' + this.$store.searchFilter.startDate.getTime() + '&' +
+					'end_timestamp=' + this.$store.searchFilter.endDate.getTime()
 				)
 				.then((res) => {
 					this.events = res.data;
