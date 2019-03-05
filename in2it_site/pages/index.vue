@@ -52,7 +52,7 @@
 						start_timestamp: this.$store.searchFilter.startDate.getTime() / 1000, 
 						end_timestamp: this.$store.searchFilter.endDate.getTime() / 1000,
 						miles: this.$store.searchFilter.searchRadius,
-						address: this.$store.searchFilter.addressOrZip
+						address: this.$store.searchFilter.addressOrZip || '60611'
 					}
 				})
 				.then((res) => {

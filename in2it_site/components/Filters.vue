@@ -33,7 +33,8 @@
 			</div>
 		</div>
 			
-<!-- 		<button class="accordion-button" @click="open">Category</button>
+<!-- Disabled until event categorization is improved
+	<button class="accordion-button" @click="open">Category</button>
 		<div class="accordion-panel">
 			<div class="form-group">
 				<div class="form-check">
@@ -125,7 +126,7 @@
 		data() {
 			return {
 				searchFilter: {
-					addressOrZip: '',
+					addressOrZip: '60611',
 					searchRadius: 10,
 					startDate: new Date(new Date().getFullYear(), new Date().getMonth(),  new Date().getDate()),
 					endDate: new Date(new Date().getFullYear(), new Date().getMonth(),  new Date().getDate())
