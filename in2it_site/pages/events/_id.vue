@@ -21,7 +21,7 @@
 				<p class="event-date">{{ event.start_date }}</p>
 				<p class="event-time">{{ event.start_time }}</p>
 
-				<h3 class="event-info-label">Location</h3>
+				<p class="event-info-label">Location</p>
 				<p class="event-address">{{ event.address }}</p>
 
 				<iframe width="600" height="450" frameborder="0" style="border:0" :src=mapUrl allowfullscreen></iframe>
