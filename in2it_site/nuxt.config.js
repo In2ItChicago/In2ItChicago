@@ -51,6 +51,9 @@ module.exports = {
         'bootstrap-vue/nuxt',
         'nuxt-typescript'
 	],
+	env: {
+		API_URL: process.env.API_URL || 'http://api.localhost'
+	},
 	/*
 	** Axios module configuration
 	*/

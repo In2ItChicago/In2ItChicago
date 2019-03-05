@@ -48,11 +48,8 @@
 		},
 		methods:{
 			updateEvents: function() {
-				//TODO, replace with process.env.API_URL?
-				const baseURL = 'api.localhost';
-
 				return axios.get(
-					'http://' + baseURL + '/events?' +
+					process.env.API_URL + '/events?' +
 					'neighborhood=' + this.searchFilters.zipOrNeighborhood + '&' +
 					/* Disabled until miles works without address  
 					'miles=' + this.searchFilters.searchRadius + '&' +  */
