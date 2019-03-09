@@ -4,14 +4,14 @@
 		<div class="accordion-panel">
 			<div class="form-group">
 				<label for="locationFilter">Where</label>
-				<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Neighborhood">
+				<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Neighborhood" v-model="searchFilter.addressOrZip">
 			</div>
 
 			<div class="form-group">
 				<label for="locationFilter">Distance (Miles)</label>
-				<select class="form-control" id="distanceFilter">
+				<select class="form-control" id="distanceFilter" v-model="searchFilter.searchRadius">
 					<option value="5">5</option>
-					<option value="10" selected>10</option>
+					<option value="10">10</option>
 					<option value="25">25</option>
 					<option value="50">50</option>
 					<option value="100">100</option>
@@ -20,58 +20,75 @@
 
 			<div class="form-group">
 				<label for="fromDatePicker">From</label>
-				<datepicker :value="state.date" name="fromDatePicker" wrapper-class="datepicker" class="datepicker"></datepicker>
+				<datepicker v-model="searchFilter.startDate" name="fromDatePicker" wrapper-class="datepicker" class="datepicker"></datepicker>
 			</div>
 
 			<div class="form-group">
 				<label for="toDatePicker">To</label>
-				<datepicker :value="state.date" name="toDatePicker" wrapper-class="datepicker" class="datepicker"></datepicker>
+				<datepicker v-model="searchFilter.endDate" name="toDatePicker" wrapper-class="datepicker" class="datepicker"></datepicker>
+			</div>
+
+			<div class="form-group text-right">
+				<button class="btn btn-light" @click="filter()">Filter</button>
 			</div>
 		</div>
 			
-		<button class="accordion-button" @click="open">Category</button>
+<!-- Disabled until event categorization is improved
+	<button class="accordion-button" @click="open">Category</button>
 		<div class="accordion-panel">
 			<div class="form-group">
 				<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="" id="environmentCheck">
+					<input class="form-check-input" type="checkbox" value="" id="libraryCheck">
+					<label class="form-check-label" for="libraryCheck">
+						Library
+					</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" value="" id="educationCheck">
+					<label class="form-check-label" for="educationCheck">
+						Education
+					</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" value="" id="environmentCheck" disabled>
 					<label class="form-check-label" for="environmentCheck">
 						Environment
 					</label>
 				</div>
 				<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="" id="homelessnessCheck">
+					<input class="form-check-input" type="checkbox" value="" id="homelessnessCheck" disabled>
 					<label class="form-check-label" for="homelessnessCheck">
 						Homelessness
 					</label>
 				</div>
 				<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="" id="hospitalsCheck">
+					<input class="form-check-input" type="checkbox" value="" id="hospitalsCheck" disabled>
 					<label class="form-check-label" for="hospitalsCheck">
 						Hospitals
 					</label>
 				</div>
 				<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="" id="hungerCheck">
+					<input class="form-check-input" type="checkbox" value="" id="hungerCheck" disabled>
 					<label class="form-check-label" for="hungerCheck">
 						Hunger
 					</label>
 				</div>
 				<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="" id="elderlyCheck">
+					<input class="form-check-input" type="checkbox" value="" id="elderlyCheck" disabled>
 					<label class="form-check-label" for="elderlyCheck">
 						Elderly
 					</label>
 				</div>
 				<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="" id="kidsCheck">
+					<input class="form-check-input" type="checkbox" value="" id="kidsCheck" disabled>
 					<label class="form-check-label" for="kidsCheck">
 						Kids
 					</label>
 				</div>
 			</div>
-		</div>
+		</div> -->
 			
-		<button class="accordion-button" @click="open">Advanced Options</button>
+		<!-- <button class="accordion-button" @click="open">Advanced Options</button>
 		<div class="accordion-panel">
 			<div class="form-group">
 				<div class="form-check">
@@ -99,17 +116,20 @@
 					</label>
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</div>
 </template>
 
 <script>
 	import Datepicker from 'vuejs-datepicker';
-	export default{
+	export default {
 		data() {
 			return {
-				state: {
-					date: new Date(new Date().getFullYear(), new Date().getMonth() + 1,  new Date().getDate())
+				searchFilter: {
+					addressOrZip: '60611',
+					searchRadius: 10,
+					startDate: new Date(new Date().getFullYear(), new Date().getMonth(),  new Date().getDate()),
+					endDate: new Date(new Date().getFullYear(), new Date().getMonth(),  new Date().getDate())
 				}
 			};
 		},
@@ -124,6 +144,10 @@
 				else {
 					panel.style.maxHeight = panel.scrollHeight + 'px';
 				} 
+			},
+			filter: function() {
+				this.$store.searchFilter = this.searchFilter;
+				this.$emit('filterApplied');
 			}
 		},
 		components:{

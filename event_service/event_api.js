@@ -1,5 +1,6 @@
 const feathers = require('@feathersjs/feathers');
 const express = require('@feathersjs/express');
+const cors = require('cors');
 const errors = require('@feathersjs/errors');
 const MongoClient = require('mongodb').MongoClient;
 const service = require('feathers-mongodb');
@@ -45,6 +46,8 @@ function setup(client) {
         .use(express.json({limit: '50mb'}))
         // Turn on URL-encoded body parsing for REST services
         .use(express.urlencoded({ extended: true }))
+        // Enable Cross-origin resource sharing
+        .use(cors())
         // Set up REST transport using Express
         .configure(express.rest())
         .configure(swagger({

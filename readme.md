@@ -2,6 +2,25 @@
 
 View these docs [here](https://clipboardproject.github.io/ClipboardApp/) if you like pretty colors.
 
+## Table of Contents
+ * [In2It App](readme.md#in2it-app)
+      * [Setup](readme.md#setup)
+         * [Get the Code](readme.md#get-the-code)
+         * [Install Docker](readme.md#install-docker)
+            * [Extra Installation Steps for Linux](readme.md#extra-installation-steps-for-linux)
+            * [Extra Installation Steps for Windows](readme.md#extra-installation-steps-for-windows)
+         * [Setting Up Docker](readme.md#setting-up-docker)
+         * [Running the Code](readme.md#running-the-code)
+         * [Setting up your development environment](readme.md#setting-up-your-development-environment)
+         * [Settings](readme.md#settings)
+            * [Command Line Arguments](readme.md#command-line-arguments)
+            * [Other Settings](readme.md#other-settings)
+      * [Development Guide](readme.md#development-guide)
+         * [Technical Overview](readme.md#technical-overview)
+         * [Getting Started](readme.md#getting-started)
+            * [Knowing when to use a scraper and when to use an API](readme.md#knowing-when-to-use-a-scraper-and-when-to-use-an-api)
+         * [How to integrate new scrapers and API clients with the core code](readme.md#how-to-integrate-new-scrapers-and-api-clients-with-the-core-code)
+
 ## Setup
 
 ### Get the Code
@@ -14,7 +33,7 @@ For Mac, download from [here](https://www.docker.com/docker-mac). Documentation 
 For Linux, download from your package manager. Documentation is [here](https://docs.docker.com/install/linux/docker-ce/ubuntu/) (Other distros have links on the left side of the page).  
 Make sure you follow any OS and distro-specific instructions for setting up Docker. It may be helpful to go through the getting started guide [here](https://docs.docker.com/get-started/).  
 
-#### Extra Installation Steps for Linux
+#### Extra Installation Steps for Linux (Ubuntu)
 These steps are for Ubuntu. Arch Linux has Docker available in pacman without any manual steps required. Other distros may require different steps.
 
 If you're new to Docker or you're recovering from a failed installation attempt, it's best to start by uninstalling older versions of Docker: `sudo apt-get remove docker docker-engine docker.io`
@@ -63,6 +82,18 @@ Close and reopen your terminal(s) to apply the changes.
 I was unable to get Kinematic to work on Docker Toolbox, so I would recommend skipping that. Make sure virtualization is enabled in the BIOS. If you need to change virtualization settings, do a full reboot cycle,
 otherwise Windows may not report that the settings have changed. If you're running Windows 10 Professional, you'll need to make sure Hyper-V is enabled in the "Turn Windows Features On or Off" dialog.
 If you're using Docker Toolbox on Windows Home edition, you'll want to start the VirtualBox instance manually before starting Docker every time or Docker will complain about not having an IP address.
+
+Additionally, once Docker is installed, you'll need to tweak the VirtualBox settings slightly. Port forwarding must be configured manually to allow the host system to communicate with Docker over `localhost`
+instead of `192.168.99.100`.
+First, right click on the machine title "default" and select "Settings".
+![Settings](images/settings.png?raw=true "Settings")
+
+Once in the settings menu, select "Network" and then "Port Forwarding".
+![Network](images/network.png?raw=true "Network")
+
+Finally, click the green plus on the top right corner and add a new port forwarding rule. The new rule should be configured exactly like "Rule 1" in the following picture, but you can name it whatever.
+This is the minimum amount of configuration needed for the application to work, but you can add the other ports used by the application later if you'd like to be able to connect to everything via `localhost`.
+![PortForwaring](images/portforwarding.png?raw=true "Port Forwarding")
 
 ### Setting Up Docker
 If you are using Linux, all of the subsequent Docker commands in this guide might have to be run with `sudo`. 

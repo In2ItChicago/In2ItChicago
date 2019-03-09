@@ -15,7 +15,7 @@ module.exports = {
 		],
 		link: [
 			{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-			{ rel: 'stylesheet', href: 'css/style.css' },
+			{ rel: 'stylesheet', href: '/css/style.css' },
 			{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Signika' },
 			{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Signika' },
 			{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Kalam' },
@@ -51,6 +51,9 @@ module.exports = {
         'bootstrap-vue/nuxt',
         'nuxt-typescript'
 	],
+	env: {
+		API_URL: process.env.API_URL || 'api.localhost'
+	},
 	/*
 	** Axios module configuration
 	*/

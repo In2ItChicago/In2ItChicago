@@ -2,17 +2,17 @@
 	<div class="events">
 		<div v-if="eventsAvailable">
 			<div v-for="event in events">
-				<event-summary :event="event"></event-summary>
+				<event-listing :event="event"></event-listing>
 			</div>
 		</div>
 		<div v-else class="no-event-message">
-			<span>No events available, please try again later.</span>
+			<span>No events available, please adjust your search filter.</span>
 		</div>
 	</div>
 </template>
 
 <script>
-	import EventSummary from '~/components/EventSummary.vue';
+	import EventListing from '~/components/EventListing.vue';
 	export default{
 		props: ['events'],
 		computed: {
@@ -21,7 +21,7 @@
 			}
 		},
 		components: {
-			EventSummary
+			EventListing
 		}
 	};
 </script>

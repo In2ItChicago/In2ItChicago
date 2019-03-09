@@ -16,16 +16,16 @@
   "dependencies": {
     "@feathersjs/feathers": "^3.3.1",
     "@feathersjs/rest-client": "^1.4.7",
-    "@nuxtjs/axios": "^5.3.6",
-    "@types/node": "^11.9.4",
+    "@nuxtjs/axios": "^5.4.0",
+    "@types/node": "^11.10.4",
     "bootstrap": "^4.3.1",
-    "bootstrap-vue":"^2.0.0-rc.13",
-    "nuxt": "^2.4.3",
+    "bootstrap-vue": "^1.5.1",
+    "nuxt": "^2.2.0",
     "nuxt-typescript": "^0.11.0",
-    "vue-badger-accordion": "^1.0.8",
+    "vue-badger-accordion":"^1.1.2",
     "vuejs-datepicker": "^1.5.4",
     "ts-loader": "^5.3.3",
-    "typescript": "^3.3.3"
+    "typescript": "^3.3.3333"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
