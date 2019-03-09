@@ -121,7 +121,7 @@ Several components should be visible now:
 - `localhost:9000` will show a frontend for managing the Docker containers. Create whatever username and password you want.
 
 ### System Architecture
-![System Architecture](In2ItArchitecture.png?raw=true "System Architecture")
+![System Architecture](images/In2ItArchitecture.png?raw=true "System Architecture")
 
 ### Setting up your development environment
 
