@@ -70,7 +70,7 @@ http {
 	
 	server {
 		listen 80;
-		server_name {{ SERVER_NAME }};
+		server_name {{ SERVER_NAME|default("localhost", true) }};
 		location = /favicon.ico {access_log off; log_not_found off; }
 		
 		location / {
@@ -86,7 +86,7 @@ http {
 
 	server {
 		listen 80;
-		server_name api.{{ SERVER_NAME }};
+		server_name api.{{ SERVER_NAME|default("localhost", true) }};
 		
 		location / {
 			proxy_pass http://docker-event_service;
