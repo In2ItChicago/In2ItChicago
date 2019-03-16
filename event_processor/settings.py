@@ -70,7 +70,7 @@ AUTOTHROTTLE_ENABLED = True
 HTTPCACHE_ENABLED = config.enable_scrapy_cache
 # Expire cache every hour
 HTTPCACHE_EXPIRATION_SECS = config.scrapy_cache_expiration
-HTTPCACHE_DIR = 'httpcache'
+HTTPCACHE_DIR = '/tmp/httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 

@@ -63,7 +63,7 @@ class EventSavePipeline:
         new_hash = EventHashes.create_hash(event_list)
         spider.logger.info(f'Found {len(event_list)} events for {event_list[0]["organization"]}.')
         if new_hash == EventHashes.get(spider.identifier):
-           spider.logger.info(f'{datetime.now()} Nothing to update.')
+           spider.logger.info(f'Nothing to update.')
            return
         EventHashes.set(spider.identifier, new_hash)
         if spider.is_errored:

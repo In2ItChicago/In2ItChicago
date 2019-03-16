@@ -37,6 +37,9 @@ while (( "$#" )); do
 done
 # set positional arguments in their proper place
 eval set -- "$PARAMS"
+if [ ! "$(docker network ls | grep in2it)" ]; then
+  docker network create in2it
+fi
 EVENT_PROCESSOR_DEBUG=$EVENT_PROCESSOR_DEBUG \
 VERBOSE_OUTPUT=$VERBOSE_OUTPUT \
 RUN_SCHEDULER=$RUN_SCHEDULER \
