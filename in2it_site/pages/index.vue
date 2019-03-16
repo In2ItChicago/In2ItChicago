@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="content">
+		<div class="content-row">
 			<filters @filterApplied="updateEvents()"></filters>
 			<event-list :events="events"></event-list>
 		</div>

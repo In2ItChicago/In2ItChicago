@@ -4,12 +4,12 @@
 		<div class="accordion-panel">
 			<div class="form-group">
 				<label for="locationFilter">Where</label>
-				<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Neighborhood" v-model="searchFilter.addressOrZip">
+				<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Neighborhood" :value="searchFilter.addressOrZip">
 			</div>
 
 			<div class="form-group">
 				<label for="locationFilter">Distance (Miles)</label>
-				<select class="form-control" id="distanceFilter" v-model="searchFilter.searchRadius">
+				<select class="form-control" id="distanceFilter" :value="searchFilter.searchRadius">
 					<option value="5">5</option>
 					<option value="10">10</option>
 					<option value="25">25</option>
@@ -20,12 +20,24 @@
 
 			<div class="form-group">
 				<label for="fromDatePicker">From</label>
-				<datepicker v-model="searchFilter.startDate" name="fromDatePicker" wrapper-class="datepicker" class="datepicker"></datepicker>
+				<datepicker
+					id="startDatePicker"
+					:value="defaultFromDate"
+					name="fromDatePicker"
+					wrapper-class="datepicker"
+					class="datepicker">
+				</datepicker>
 			</div>
 
 			<div class="form-group">
 				<label for="toDatePicker">To</label>
-				<datepicker v-model="searchFilter.endDate" name="toDatePicker" wrapper-class="datepicker" class="datepicker"></datepicker>
+				<datepicker
+					id="endDatePicker"
+					:value="defaultToDate"
+					name="toDatePicker"
+					wrapper-class="datepicker"
+					class="datepicker">
+				</datepicker>
 			</div>
 
 			<div class="form-group text-right">
@@ -126,12 +138,20 @@
 		data() {
 			return {
 				searchFilter: {
-					addressOrZip: '60611',
+					addressOrZip: '60647',
 					searchRadius: 10,
-					startDate: new Date(new Date().getFullYear(), new Date().getMonth(),  new Date().getDate()),
-					endDate: new Date(new Date().getFullYear(), new Date().getMonth(),  new Date().getDate())
+					startDate: this.defaultFromDate,
+					endDate: this.defaultToDate
 				}
 			};
+		},
+		computed: {
+			defaultFromDate: function() {
+				return new Date(new Date().getFullYear(), new Date().getMonth(),  new Date().getDate());
+			},
+			defaultToDate: function() {
+				return new Date(new Date().getFullYear(), new Date().getMonth(),  new Date().getDate() + 7);
+			}
 		},
 		methods: {
 			open: function(event) {
@@ -146,8 +166,13 @@
 				} 
 			},
 			filter: function() {
+				this.setDates();
 				this.$store.searchFilter = this.searchFilter;
 				this.$emit('filterApplied');
+			},
+			setDates: function() {
+				this.searchFilter.startDate = new Date(document.getElementById('startDatePicker').value);
+				this.searchFilter.endDate = new Date(document.getElementById('endDatePicker').value);
 			}
 		},
 		components:{

@@ -57,9 +57,16 @@ body{
 	margin-left:20px;
 }
 
-.content{
-	margin-top:40px;
+.content-row{
+	margin-top:20px;
 	display:flex;
+	flex-direction:row;
+}
+
+.content-col{
+	margin-top:20px;
+	display:flex;
+	flex-direction:column;
 }
 
 .filters{
