@@ -1,39 +1,39 @@
-const MongoClient = require('mongodb').MongoClient;
-const service = require('feathers-mongodb');
-const _ = require('lodash');
-const settings = require('./settings.js');
-const docs = require('./docs.js');
-const common = require('./common.js');
+import { MongoClient, Collection } from 'mongodb';
+import { GeneralError } from '@feathersjs/errors';
+import * as service from 'feathers-mongodb';
+import * as _ from 'lodash';
+import * as settings from './settings';
+import * as docs from './docs';
+import * as common from './common';
+import { Params } from '@feathersjs/feathers';
 
 class Mongo {
-    constructor() {
-        this.geocodeModel = null;
-        this.eventModel = null;
-    }
+    geocodeModel: Collection<any>
+    eventModel: Collection<any>
 
-    initCollections(client) {
+    initCollections(client: MongoClient) {
         this.eventModel = client.db('in2it').collection('event');
         this.geocodeModel = client.db('in2it').collection('geocode');
         this.eventModel.createIndex({'event_time.start_timestamp': 1, 'event_time.end_timestamp': 1, 'organization': 1, 'geocode.lat': 1, 'geocode.lon': 1}, function(errorMsg, indexName) {
             if (!indexName) {
-                throw errors.GeneralError(errorMsg);
+                throw new GeneralError(errorMsg);
             }
         });
 
         this.geocodeModel.createIndex({ 'expireAt': 1 }, { expireAfterSeconds: 0 }, function(errorMsg, indexName) {
             if (!indexName) {
-                throw errors.GeneralError(errorMsg);
+                throw new GeneralError(errorMsg);
             }
         });
 
         this.geocodeModel.createIndex({ 'address': 1, 'neighborhood': 1 }, function(errorMsg, indexName) {
             if (!indexName) {
-                throw errors.GeneralError(errorMsg);
+                throw new GeneralError(errorMsg);
             }
         });
     }
 
-    async initialize() {
+    async initialize(): Promise<void> {
         let client = new MongoClient(`mongodb://mongo:${settings.mongoPort}`, {
             useNewUrlParser: true,
         });
@@ -44,7 +44,7 @@ class Mongo {
                 await client.connect();
                 console.log('DB connection succeeded');
                 self.initCollections(client);
-                return client;
+                return;
             }
             catch (error) { 
                 if (error.name === 'MongoNetworkError') {
@@ -63,9 +63,10 @@ class Mongo {
     
 
     get neighborhoodService() {
+        let self = this;
         return {
-            async find(params) {
-                return this.geocodeModel.distinct('neighborhood');
+            async find(params: Params) {
+                return self.geocodeModel.distinct('neighborhood', {});
             }, docs: docs.neighborhoodDocs
         }
     }
@@ -121,7 +122,7 @@ function buildQuery(query, searchFields={}, join='$and') {
 function transformResult(mongoResult) {
     let startTimestamp = mongoResult.event_time.start_timestamp;
     let endTimestamp = mongoResult.event_time.end_timestamp;
-    id = mongoResult._id.toString();
+    let id = mongoResult._id.toString();
 
     delete mongoResult.event_time;
     delete mongoResult._id;

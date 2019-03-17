@@ -1,19 +1,19 @@
-const feathers = require('@feathersjs/feathers');
-const express = require('@feathersjs/express');
-const cors = require('cors');
-const errors = require('@feathersjs/errors');
+import feathers from '@feathersjs/feathers';
+import express from '@feathersjs/express';
+import * as cors from 'cors';
+import * as errors from '@feathersjs/errors';
 const MongoClient = require('mongodb').MongoClient;
-const service = require('feathers-mongodb');
-const swagger = require('feathers-swagger');
+import service from 'feathers-mongodb';
+import * as swagger from 'feathers-swagger';
 
-const docs = require('./docs.js');
-const event = require('./event.js');
-const geocode = require('./geocode.js');
-const settings = require('./settings.js');
-const common = require('./common.js');
-const Mongo = require('./mongo.js').Mongo;
+import * as docs from './docs';
+import { eventHooks } from './event';
+import { geocodeHooks } from './geocode';
+import * as settings from './settings';
+import * as common from './common';
+const Mongo = require('./mongo.ts').Mongo;
 
-function setup() {
+function setup(): void {
     let client = new Mongo();
     client.initialize().then(() => {
         const app = express(feathers());
@@ -45,10 +45,10 @@ function setup() {
         app.use('/neighborhoods', client.neighborhoodService);
 
         app.use('/geocode', client.geoService);
-        app.service('geocode').hooks(geocode.geocodeHooks(app));
+        app.service('geocode').hooks(geocodeHooks(app));
 
         app.use('/events', client.eventService);
-        app.service('events').hooks(event.eventHooks(app));    
+        app.service('events').hooks(eventHooks(app));    
 
         const server = app.listen(settings.port);
 
