@@ -14,4 +14,4 @@ services:
     image: "in2itchicago/in2it_site:20190311.1"
     command: ["npm", "run", "start"]
   nginx:
-    image: "nginx:1.15.8"
+    image: "nginx:1.15.9"

@@ -1,4 +1,4 @@
-FROM nginx:1.15.8 AS nginx_common
+FROM nginx:1.15.9 AS nginx_common
 
 FROM nginx_common as nginx_dev
 WORKDIR /etc/nginx

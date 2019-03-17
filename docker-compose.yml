@@ -1,7 +1,7 @@
 version: '3.2'
 services:
   mongo:
-    image: "mongo:4.1.7"
+    image: "mongo:4.1.9"
     volumes:
       - mongodata:/data/db
       - ./mongoconfig:/data/configdb
@@ -37,7 +37,7 @@ services:
     # Sometimes nginx crashes if the site doesn't come up in time
     restart: on-failure
   portainer:
-    image: "portainer/portainer:1.20.1"
+    image: "portainer/portainer:1.20.2"
     ports:
       - "9000:9000"
     volumes:

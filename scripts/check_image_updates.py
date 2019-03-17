@@ -22,6 +22,9 @@ newest_version = StrictVersion('0.0')
 for choice in choices:
 	try:
 		version_test = StrictVersion(choice)
+		# Don't care about alpha/beta versions
+		if version_test.prerelease:
+			continue
 		if version_test > newest_version:
 			newest_version = version_test
 	# StrictVersion parsing will fail if the version has letters or is in a strange format
