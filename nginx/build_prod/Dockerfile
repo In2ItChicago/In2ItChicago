@@ -1,1 +1,0 @@
-FROM nginx:1.15.8 AS nginx_common
