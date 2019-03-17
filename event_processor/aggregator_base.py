@@ -51,7 +51,7 @@ class AggregatorBase:
         self.memory_handler.setFormatter(formatter)
         stream_handler.setFormatter(formatter)
 
-        loggers = [self.name, 'scrapy', 'twisted'] if config.run_scheduler else [self.name]
+        loggers = [self.name, 'scrapy', 'twisted']
         for logger in loggers:
             logging.getLogger(logger).addHandler(self.memory_handler)
             logging.getLogger(logger).addHandler(stream_handler)

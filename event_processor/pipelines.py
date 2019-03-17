@@ -54,9 +54,7 @@ class EventSavePipeline:
             spider.logger.info(f'No data returned for ' + spider.base_url)
         else:
             self.save_events(spider)
-        if config.run_scheduler:
-            response = spider.notify_spider_complete()
-            print(response)
+        spider.notify_spider_complete()
 
     def save_events(self, spider):
         event_list = spider.event_manager.to_dicts()

@@ -5,6 +5,7 @@ const GeoJsonGeometriesLookup = require('geojson-geometries-lookup');
 
 const common = require('./common.js');
 const settings = require('./settings.js');
+const mongo = require('./mongo.js');
 
 const geojsonData = fs.readFileSync('chicago_neighborhoods.geojson');
 const geojsonContent = JSON.parse(geojsonData);
@@ -50,7 +51,7 @@ module.exports = {
                     if (query.address && query.neighborhood) {
                         delete query.neighborhood;
                     }
-                    context.params.query = common.mongoSearch(query);
+                    context.params.query = mongo.buildQuery(query);
                 
                     // This is only here so it's easier to access
                     context.params.address = query.address;

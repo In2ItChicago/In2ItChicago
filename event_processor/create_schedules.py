@@ -8,7 +8,6 @@ MINUTES_IN_HOUR = 60
 JOB_CLASS = 'simple_scheduler.jobs.scrapy_job.ScrapyJob'
 
 class Schedule:
-    
     def __init__(self, name, interval, delta, offset):
         self.name = name
         current_offset = int(delta * offset)

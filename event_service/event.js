@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const mongo = require('./mongo.js');
 const GeoPoint = require('geopoint');
 const errors = require('@feathersjs/errors');
 const common = require('./common.js');
@@ -50,7 +51,7 @@ module.exports = {
                         'max_lon': { name: 'geocode.lon', func: '$lte', val: searchBounds.max_lon }
                     }
         
-                    context.params.query = common.mongoSearch(query, searchFields);
+                    context.params.query = mongo.buildQuery(query, searchFields);
                     return context;
                 },
         
@@ -77,7 +78,7 @@ module.exports = {
             },
             after: {
                 async find(context) {
-                    context.result.data = context.result.data.map(mongoResult => common.transformResult(mongoResult));
+                    context.result.data = context.result.data.map(mongoResult => mongo.transformResult(mongoResult));
                     return context;
                 }
             },

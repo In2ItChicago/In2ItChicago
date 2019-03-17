@@ -1,28 +1,26 @@
-version: '3'
+version: '3.2'
 services:
   mongo:
     image: "mongo:4.1.7"
     volumes:
       - mongodata:/data/db
       - ./mongoconfig:/data/configdb
-    networks:
-     - in2it_app
     ports:
       - "27017:27017"
   event_service:
     image: "event_service_dev"
     ports:
-      - "5000:5000"
+      - target: 5000
+        published: 5000
+        mode: host
       - "5858:5858"
-    networks:
-     - in2it_app
+    deploy:
+      mode: global
   event_processor:
     image: "event_processor_dev"
     ports:
       - "6800:6800"
       - "5860:5860"
-    networks:
-     - in2it_app
   in2it_site:
     image: "in2it_site_dev"
     environment:
@@ -30,8 +28,6 @@ services:
     ports:
       - "3000:3000"
       - "5859:5859"
-    networks:
-     - in2it_app
   nginx:
     image: "nginx_dev"
     volumes:
@@ -40,8 +36,6 @@ services:
       - "0.0.0.0:80:80"
     # Sometimes nginx crashes if the site doesn't come up in time
     restart: on-failure
-    networks:
-     - in2it_app
   portainer:
     image: "portainer/portainer:1.20.1"
     ports:
@@ -49,12 +43,40 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainerdata:/data
-    networks:
-     - in2it_app
+  ndscheduler:
+    image: ndscheduler
+    command: ["./node_modules/nodemon/bin/nodemon.js", "-L", "-u", "simple_scheduler/scheduler.py"]
+    ports: 
+      - "8888:8888"
+      - "5861:5861"
+    volumes:
+      - ../ndscheduler:/usr/src/app/ndscheduler
+      - ndscheduler_modules:/usr/src/app/ndscheduler/node_modules/
+    environment:
+      - NDSCHEDULER_SETTINGS_MODULE=simple_scheduler.settings
+      - DEBUG=0
+  postgres:
+    image: postgres:11.1
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  pgadmin:
+    image: dpage/pgadmin4:4.2
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=user@domain.com
+      - PGADMIN_DEFAULT_PASSWORD=pgadmin
+      - PGADMIN_LISTEN_PORT=7000
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    ports:
+      - "7000:7000"
 volumes:
   mongodata:
   portainerdata:
-networks:
-  in2it_app:
-    external:
-      name: in2it
+  ndscheduler_modules:
+  postgres_data:
+  pgadmin_data:

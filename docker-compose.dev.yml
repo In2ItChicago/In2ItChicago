@@ -1,4 +1,4 @@
-version: '3'
+version: '3.2'
 services:
   event_service:
     command: ["npm", "run", "dev"]
@@ -12,7 +12,6 @@ services:
     environment:
       - DEBUG=${EVENT_PROCESSOR_DEBUG}
       - VERBOSE_OUTPUT=${VERBOSE_OUTPUT}
-      - RUN_SCHEDULER=${RUN_SCHEDULER}
       - SCHEDULE_INTERVAL=5
     volumes:
       - ./event_processor:/usr/src/app/event_processor

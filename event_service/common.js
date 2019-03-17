@@ -1,6 +1,5 @@
 const _ = require('lodash');
 const errors = require('@feathersjs/errors');
-
 const settings = require('./settings.js');
 
 module.exports = {
@@ -52,49 +51,49 @@ module.exports = {
         return this.addDaysToDate(new Date(), expirationTime);
     },
     
-    mongoSearch(query, searchFields={}, join='$and') {
-        function mapParams(param) {
-            let field = searchFields[param]
-            let name = field ? field.name : param
-            let ret = field ? { [field.func]: field.val }: { '$eq': query[param] }
-            return {
-                [name]: ret
-            }; 
-        }
-        let keys = _.keys(query)
+    // mongoSearch(query, searchFields={}, join='$and') {
+    //     function mapParams(param) {
+    //         let field = searchFields[param]
+    //         let name = field ? field.name : param
+    //         let ret = field ? { [field.func]: field.val }: { '$eq': query[param] }
+    //         return {
+    //             [name]: ret
+    //         }; 
+    //     }
+    //     let keys = _.keys(query)
     
-        let mongoFilters = keys
-        .filter(key => !key.startsWith('$'))
-        .map(mapParams);
+    //     let mongoFilters = keys
+    //     .filter(key => !key.startsWith('$'))
+    //     .map(mapParams);
     
-        let newParams = _.pickBy(query, (value, key) => key.startsWith('$'));
+    //     let newParams = _.pickBy(query, (value, key) => key.startsWith('$'));
     
-        if (mongoFilters.length > 0) {
-            let joinedClause = {[join]: mongoFilters};
-            Object.assign(newParams, joinedClause);
-        }
+    //     if (mongoFilters.length > 0) {
+    //         let joinedClause = {[join]: mongoFilters};
+    //         Object.assign(newParams, joinedClause);
+    //     }
     
-        return newParams;
-    },
+    //     return newParams;
+    // },
     
-    transformResult(mongoResult) {
-        let startTimestamp = mongoResult.event_time.start_timestamp;
-        let endTimestamp = mongoResult.event_time.end_timestamp;
-        id = mongoResult._id.toString();
+    // transformResult(mongoResult) {
+    //     let startTimestamp = mongoResult.event_time.start_timestamp;
+    //     let endTimestamp = mongoResult.event_time.end_timestamp;
+    //     id = mongoResult._id.toString();
     
-        delete mongoResult.event_time;
-        delete mongoResult._id;
+    //     delete mongoResult.event_time;
+    //     delete mongoResult._id;
         
-        Object.assign(mongoResult, {
-            start_time: this.timeFromTimestamp(startTimestamp),
-            start_date: this.dateFromTimestamp(startTimestamp),
-            end_time: this.timeFromTimestamp(endTimestamp),
-            end_date: this.dateFromTimestamp(endTimestamp),
-            start_timestamp: startTimestamp,
-            end_timestamp: endTimestamp,
-            id: id
-        })
+    //     Object.assign(mongoResult, {
+    //         start_time: this.timeFromTimestamp(startTimestamp),
+    //         start_date: this.dateFromTimestamp(startTimestamp),
+    //         end_time: this.timeFromTimestamp(endTimestamp),
+    //         end_date: this.dateFromTimestamp(endTimestamp),
+    //         start_timestamp: startTimestamp,
+    //         end_timestamp: endTimestamp,
+    //         id: id
+    //     })
         
-        return mongoResult;
-    }
+    //     return mongoResult;
+    // }
 }

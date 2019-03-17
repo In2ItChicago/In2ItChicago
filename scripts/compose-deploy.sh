@@ -1,7 +1,6 @@
 PARAMS=""
 EVENT_PROCESSOR_DEBUG=0
 VERBOSE_OUTPUT=0
-RUN_SCHEDULER=0
 ENV="dev"
 while (( "$#" )); do
   case "$1" in
@@ -15,10 +14,6 @@ while (( "$#" )); do
       ;;
     -v|--verbose-output)
       VERBOSE_OUTPUT=1
-      shift
-      ;;
-    -s|--run-scheduler)
-      RUN_SCHEDULER=1
       shift
       ;;
     --) # end argument parsing
@@ -42,5 +37,4 @@ if [ ! "$(docker network ls | grep in2it)" ]; then
 fi
 EVENT_PROCESSOR_DEBUG=$EVENT_PROCESSOR_DEBUG \
 VERBOSE_OUTPUT=$VERBOSE_OUTPUT \
-RUN_SCHEDULER=$RUN_SCHEDULER \
 docker-compose -f docker-compose.yml -f docker-compose.${ENV}.yml up $PARAMS

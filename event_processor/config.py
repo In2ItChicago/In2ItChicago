@@ -25,7 +25,6 @@ class Config:
         
         self.debug = self.get_env_bool('DEBUG', False)
         self.verbose_scrapy_output = self.get_env_bool('VERBOSE_OUTPUT', False)
-        self.run_scheduler = self.get_env_bool('RUN_SCHEDULER', True)
         self.schedule_interval = int(self.get_env_var('SCHEDULE_INTERVAL', error_if_null=True))
 
         self.num_connect_attempts = 10
