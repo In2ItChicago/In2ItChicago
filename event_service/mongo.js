@@ -4,7 +4,6 @@ const _ = require('lodash');
 const settings = require('./settings.js');
 const docs = require('./docs.js');
 const common = require('./common.js');
-deasync = require('deasync');
 
 class Mongo {
     constructor() {
