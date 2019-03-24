@@ -1,17 +1,12 @@
 import feathers from '@feathersjs/feathers';
 import express from '@feathersjs/express';
 import * as cors from 'cors';
-import * as errors from '@feathersjs/errors';
-const MongoClient = require('mongodb').MongoClient;
-import service from 'feathers-mongodb';
 import * as swagger from 'feathers-swagger';
 
-import * as docs from './docs';
 import { eventHooks } from './event';
 import { geocodeHooks } from './geocode';
 import * as settings from './settings';
-import * as common from './common';
-const Mongo = require('./mongo.ts').Mongo;
+import { Mongo } from './mongo';
 
 function setup(): void {
     let client = new Mongo();

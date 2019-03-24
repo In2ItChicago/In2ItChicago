@@ -7,11 +7,12 @@ services:
       - DEBUG=0
       - VERBOSE_OUTPUT=0
       - SCHEDULE_INTERVAL=120
+      - RUN_SCHEDULER=1
   event_service:
     image: "in2itchicago/event_service:20190311.1"
-    command: ["npm", "run", "start"]
+    command: ["yarn", "run", "start"]
   in2it_site:
     image: "in2itchicago/in2it_site:20190311.1"
-    command: ["npm", "run", "start"]
+    command: ["yarn", "run", "start"]
   nginx:
     image: "nginx:1.15.9"

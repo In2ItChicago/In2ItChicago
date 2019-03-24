@@ -1,32 +1,32 @@
 import { Application, HookContext, HooksObject } from "@feathersjs/feathers";
+import * as _ from 'lodash';
+import axios from 'axios';
+import { readFileSync } from 'fs';
+import * as GeoJsonGeometriesLookup from 'geojson-geometries-lookup';
 
-const _ = require('lodash');
-const axios = require('axios');
-const fs = require('fs');
-const GeoJsonGeometriesLookup = require('geojson-geometries-lookup');
+import { sleep, errorHandler, randomExpirationTime } from './common';
+import { geocodeApiDelayMilliseconds } from './settings';
+import { buildQuery } from './mongo';
+import { GeneralError } from "@feathersjs/errors";
 
-const common = require('./common.ts');
-const settings = require('./settings');
-const mongo = require('./mongo.ts');
-
-const geojsonData = fs.readFileSync('chicago_neighborhoods.geojson');
-const geojsonContent = JSON.parse(geojsonData);
+const geojsonData = readFileSync('chicago_neighborhoods.geojson');
+const geojsonContent = JSON.parse(geojsonData.toString());
 const geoLookup = new GeoJsonGeometriesLookup(geojsonContent);
 
 class AddressResult {
     address: string
     lat: number
     lon: number
-    neighborhood: string
+    neighborhood: string | null
 }
 
 let lastExecuted = new Date();
 
-async function getGeocode(address: string): Promise<AddressResult> {
+async function getGeocode(address: string): Promise<AddressResult | null> {
     let baseUrl = 'https://nominatim.openstreetmap.org/search';
     let diff = new Date().valueOf() - lastExecuted.valueOf();
-    if (diff <= settings.geocodeApiDelayMilliseconds) {
-        await common.sleep(diff);
+    if (diff <= geocodeApiDelayMilliseconds) {
+        await sleep(diff);
     }
     let response = await axios.get(`${baseUrl}?q=${address}&format=json`);
     lastExecuted = new Date();
@@ -56,11 +56,14 @@ export function geocodeHooks(app: Application<any>): Partial<HooksObject> {
         before: {
             async find(context: HookContext): Promise<HookContext> {
                 let query = context.params.query; 
+                if (!query) {
+                    throw new GeneralError('Query not supplied');
+                }
                 // searching by address and neighborhood causes issues if the neighborhood doesn't match the address
                 if (query.address && query.neighborhood) {
                     delete query.neighborhood;
                 }
-                context.params.query = mongo.buildQuery(query);
+                context.params.query = buildQuery(query);
             
                 // This is only here so it's easier to access
                 context.params.address = query.address;
@@ -68,7 +71,7 @@ export function geocodeHooks(app: Application<any>): Partial<HooksObject> {
             },
     
             async create(context: HookContext) {
-                context.data.expireAt = common.randomExpirationTime();
+                context.data.expireAt = randomExpirationTime();
                 return context;
             }
         },
@@ -81,7 +84,7 @@ export function geocodeHooks(app: Application<any>): Partial<HooksObject> {
                     }
                     return context;
                 }
-                let result = null;
+                let result: AddressResult | null = null;
                 if (context.params.address) {
                     result = await getGeocode(context.params.address);
                 }
@@ -94,6 +97,10 @@ export function geocodeHooks(app: Application<any>): Partial<HooksObject> {
                 return context;
             }
         },
-        error: common.errorHandler
+        error: {
+            all(ctx) {
+                return errorHandler(ctx);
+            }
+        }
     }
 }

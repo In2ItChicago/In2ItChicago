@@ -1,7 +1,7 @@
 version: '3.2'
 services:
   event_service:
-    command: ["npm", "run", "dev"]
+    command: ["yarn", "run", "dev"]
     volumes:
       - ./event_service:/usr/src/app/event_service
       # hack to prevent mounting node_modules
@@ -12,6 +12,7 @@ services:
     environment:
       - DEBUG=${EVENT_PROCESSOR_DEBUG}
       - VERBOSE_OUTPUT=${VERBOSE_OUTPUT}
+      - RUN_SCHEDULER=${RUN_SCHEDULER}
       - SCHEDULE_INTERVAL=5
     volumes:
       - ./event_processor:/usr/src/app/event_processor
@@ -20,7 +21,7 @@ services:
       - event_processor_lock:/usr/src/app/event_processor/lock/
       - event_processor_scrapy:/usr/src/app/event_processor/.scrapy/
   in2it_site:
-    command: ["npm", "run", "docker-debug"]
+    command: ["yarn", "run", "docker-debug"]
     volumes:
       - ./in2it_site:/usr/src/app/in2it_site
       - /usr/src/app/in2it_site/node_modules/

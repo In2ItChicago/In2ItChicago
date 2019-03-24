@@ -1,15 +1,17 @@
 import * as _ from 'lodash';
-import * as errors from '@feathersjs/errors';
-import * as settings from './settings';
+import { GeneralError } from '@feathersjs/errors';
+import { HookMap, Hook, HookContext } from '@feathersjs/feathers';
+
+import { minExpireAfterDays, maxExpireAfterDays } from './settings';
 
 
 export const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs));
 
-export function errorHandler(ctx) {
+export function errorHandler(ctx: HookContext<any>): HookContext<any> {
     if (ctx.error) {
         const error = ctx.error;
         if (!error.code) {
-            const newError = new errors.GeneralError(`server error: ${error.stack}`);
+            const newError = new GeneralError(`server error: ${error.stack}`);
             ctx.error = newError;
             return ctx;
         }
@@ -19,8 +21,8 @@ export function errorHandler(ctx) {
             stack: ctx.error.stack,
             data: ctx.error.data
         });
-        return ctx;
     }
+    return ctx;
 }
 
 export const timestampToDate = (timestamp: number): Date => new Date(timestamp * 1000);
@@ -36,6 +38,6 @@ export const daysToMilliseconds = (days: number): number => days * 24 * 60 * 60 
 export const addDaysToDate = (date: Date, days: number): Date => new Date(date.getTime() + this.daysToMilliseconds(days));
 
 export function randomExpirationTime(): Date {
-        let expirationTime = this.getRandomInt(settings.minExpireAfterDays, settings.maxExpireAfterDays);
+        let expirationTime = this.getRandomInt(minExpireAfterDays, maxExpireAfterDays);
         return this.addDaysToDate(new Date(), expirationTime);
     }

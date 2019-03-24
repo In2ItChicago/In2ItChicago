@@ -13,17 +13,18 @@
 	import feathers from '@feathersjs/feathers';
 	import Filters from '~/components/Filters.vue';
 	import EventList from '~/components/EventList.vue';
+	import { Service } from 'feathersjs__feathers';
 	
 	import { dummyData } from '~/store/dummyData.js';
 	
-	function getClient(url) {
+	function getClient(url: string): Service<any> {
 		const app = feathers();
 		const restClient = rest('http://' + url);
 		app.configure(restClient.axios(axios));
 		return app.service('events');
 	}
 
-	const eventServiceClient = getClient(process.env.API_URL);
+	const eventServiceClient = getClient(process.env.API_URL || '');
 
 	export default {
 		data() {

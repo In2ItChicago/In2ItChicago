@@ -1,6 +1,8 @@
 PARAMS=""
 EVENT_PROCESSOR_DEBUG=0
 VERBOSE_OUTPUT=0
+EXCLUDE="ndscheduler"
+RUN_SCHEDULER=0
 ENV="dev"
 while (( "$#" )); do
   case "$1" in
@@ -14,6 +16,11 @@ while (( "$#" )); do
       ;;
     -v|--verbose-output)
       VERBOSE_OUTPUT=1
+      shift
+      ;;
+    -s|--scheduler)
+      EXCLUDE=""
+      RUN_SCHEDULER=1
       shift
       ;;
     --) # end argument parsing
@@ -32,9 +39,8 @@ while (( "$#" )); do
 done
 # set positional arguments in their proper place
 eval set -- "$PARAMS"
-if [ ! "$(docker network ls | grep in2it)" ]; then
-  docker network create in2it
-fi
 EVENT_PROCESSOR_DEBUG=$EVENT_PROCESSOR_DEBUG \
 VERBOSE_OUTPUT=$VERBOSE_OUTPUT \
-docker-compose -f docker-compose.yml -f docker-compose.${ENV}.yml up $PARAMS
+RUN_SCHEDULER=$RUN_SCHEDULER \
+docker-compose -f docker-compose.yml -f docker-compose.${ENV}.yml up \
+$(docker-compose config --services | grep -v -e $EXCLUDE) $PARAMS

@@ -27,6 +27,7 @@ class Config:
         self.verbose_scrapy_output = self.get_env_bool('VERBOSE_OUTPUT', False)
         self.schedule_interval = int(self.get_env_var('SCHEDULE_INTERVAL', error_if_null=True))
 
+        self.run_scheduler = self.get_env_bool('RUN_SCHEDULER', True)
         self.num_connect_attempts = 10
 
     def get_env_bool(self, name, default_value=None, error_if_null=False):

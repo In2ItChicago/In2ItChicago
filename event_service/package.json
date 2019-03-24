@@ -5,7 +5,7 @@
   "main": "event_api.js",
   "scripts": {
     "start": "node -r ts-node/register event_api",
-    "dev": "./node_modules/nodemon/bin/nodemon.js -L -r ts-node/register --inspect=[::]:5858 event_api"
+    "dev": "./node_modules/nodemon/bin/nodemon.js -L -r ts-node/register --inspect=[::]:5858 event_api.ts"
   },
   "author": "",
   "license": "ISC",

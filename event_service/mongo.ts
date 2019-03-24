@@ -2,12 +2,13 @@ import { MongoClient, Collection } from 'mongodb';
 import { GeneralError } from '@feathersjs/errors';
 import * as service from 'feathers-mongodb';
 import * as _ from 'lodash';
-import * as settings from './settings';
-import * as docs from './docs';
-import * as common from './common';
 import { Params } from '@feathersjs/feathers';
 
-class Mongo {
+import { mongoPort, sleepTime, additionalFilters } from './settings';
+import { neighborhoodDocs, eventDocs, geocodeDocs } from './docs';
+import { sleep, timeFromTimestamp, dateFromTimestamp } from './common';
+
+export class Mongo {
     geocodeModel: Collection<any>
     eventModel: Collection<any>
 
@@ -34,7 +35,7 @@ class Mongo {
     }
 
     async initialize(): Promise<void> {
-        let client = new MongoClient(`mongodb://mongo:${settings.mongoPort}`, {
+        let client = new MongoClient(`mongodb://mongo:${mongoPort}`, {
             useNewUrlParser: true,
         });
         let currentTries = 0;
@@ -50,7 +51,7 @@ class Mongo {
                 if (error.name === 'MongoNetworkError') {
                     currentTries++;
                     console.log('DB connection attempt: ' + currentTries);
-                    common.sleep(settings.sleepTime);
+                    sleep(sleepTime);
                     await connect();
                 }
                 else {
@@ -67,7 +68,7 @@ class Mongo {
         return {
             async find(params: Params) {
                 return self.geocodeModel.distinct('neighborhood', {});
-            }, docs: docs.neighborhoodDocs
+            }, docs: neighborhoodDocs
         }
     }
 
@@ -78,23 +79,23 @@ class Mongo {
                     default: 25
                 },
                 multi: true,
-                whitelist: settings.additionalMongoFilters
+                whitelist: additionalFilters
             }), {
-                docs: docs.eventDocs
+                docs: eventDocs
             });
     }
 
     get geoService() {
         return Object.assign(service({
             Model: this.geocodeModel,
-            whitelist: settings.additionalMongoFilters
+            whitelist: additionalFilters
         }), {
-            docs: docs.geocodeDocs
+            docs: geocodeDocs
         });
     }
 }
 
-function buildQuery(query, searchFields={}, join='$and') {
+export function buildQuery(query, searchFields={}, join='$and') {
     function mapParams(param) {
         let field = searchFields[param]
         let name = field ? field.name : param
@@ -119,7 +120,7 @@ function buildQuery(query, searchFields={}, join='$and') {
     return newParams;
 }
 
-function transformResult(mongoResult) {
+export function transformResult(mongoResult) {
     let startTimestamp = mongoResult.event_time.start_timestamp;
     let endTimestamp = mongoResult.event_time.end_timestamp;
     let id = mongoResult._id.toString();
@@ -128,10 +129,10 @@ function transformResult(mongoResult) {
     delete mongoResult._id;
     
     Object.assign(mongoResult, {
-        start_time: common.timeFromTimestamp(startTimestamp),
-        start_date: common.dateFromTimestamp(startTimestamp),
-        end_time: common.timeFromTimestamp(endTimestamp),
-        end_date: common.dateFromTimestamp(endTimestamp),
+        start_time: timeFromTimestamp(startTimestamp),
+        start_date: dateFromTimestamp(startTimestamp),
+        end_time: timeFromTimestamp(endTimestamp),
+        end_date: dateFromTimestamp(endTimestamp),
         start_timestamp: startTimestamp,
         end_timestamp: endTimestamp,
         id: id

@@ -1,10 +1,10 @@
-import { Application, HookContext, HooksObject } from "@feathersjs/feathers";
-
+import { Application, HookContext, HooksObject } from '@feathersjs/feathers';
 import * as _ from 'lodash';
-const mongo = require('./mongo.ts');
-const GeoPoint = require('geopoint');
-const errors = require('@feathersjs/errors');
-const common = require('./common.ts');
+import * as GeoPoint from 'geopoint';
+import { BadRequest, GeneralError } from '@feathersjs/errors';
+
+import { buildQuery, transformResult } from './mongo';
+import { errorHandler } from './common';
 
 class SearchBounds {
     minLat: number
@@ -35,9 +35,12 @@ export function eventHooks(app: Application<any>): Partial<HooksObject> {
         before: {
             async find(context: HookContext): Promise<HookContext> {
                 let query = context.params.query;
+                if (!query) {
+                    throw new GeneralError('Query not found');
+                }
                 
                 if ((query.address && !query.miles) || (query.miles && !query.address)) {
-                    throw new errors.BadRequest("address and miles must be used together");
+                    throw new BadRequest("address and miles must be used together");
                 }
 
                 let searchBounds = new SearchBounds();
@@ -52,20 +55,20 @@ export function eventHooks(app: Application<any>): Partial<HooksObject> {
                     'start_timestamp': { name: 'event_time.start_timestamp', func: '$gte', val: parseInt(query.start_timestamp) },
                     'end_timestamp': { name: 'event_time.end_timestamp', func: '$lte', val: parseInt(query.end_timestamp) },
                     'neighborhood': { name: 'geocode.neighborhood', func: '$eq', val: query.neighborhood },
-                    'min_lat': { name: 'geocode.lat', func: '$gte', val: searchBounds.minLat },
-                    'min_lon': { name: 'geocode.lon', func: '$gte', val: searchBounds.minLon },
-                    'max_lat': { name: 'geocode.lat', func: '$lte', val: searchBounds.maxLat },
-                    'max_lon': { name: 'geocode.lon', func: '$lte', val: searchBounds.maxLon }
+                    'minLat': { name: 'geocode.lat', func: '$gte', val: searchBounds.minLat },
+                    'minLon': { name: 'geocode.lon', func: '$gte', val: searchBounds.minLon },
+                    'maxLat': { name: 'geocode.lat', func: '$lte', val: searchBounds.maxLat },
+                    'maxLon': { name: 'geocode.lon', func: '$lte', val: searchBounds.maxLon }
                 }
     
-                context.params.query = mongo.buildQuery(query, searchFields);
+                context.params.query = buildQuery(query, searchFields);
                 return context;
             },
     
             async create(context: HookContext): Promise<HookContext> {
                 let invalid = context.data.filter(data => !(data.organization && data.event_time && data.event_time.start_timestamp && data.event_time.end_timestamp));
                 if (invalid.length > 0) {
-                    throw new errors.BadRequest('Invalid events. organization, event_time.start_timestamp, and event_time.end_timestamp are required', invalid);
+                    throw new BadRequest('Invalid events. organization, event_time.start_timestamp, and event_time.end_timestamp are required', invalid);
                 }
                 let organizations = _(context.data)
                     .groupBy(d => d.organization)
@@ -85,10 +88,14 @@ export function eventHooks(app: Application<any>): Partial<HooksObject> {
         },
         after: {
             async find(context: HookContext): Promise<HookContext> {
-                context.result.data = context.result.data.map(mongoResult => mongo.transformResult(mongoResult));
+                context.result.data = context.result.data.map(mongoResult => transformResult(mongoResult));
                 return context;
             }
         },
-        error: common.errorHandler
+        error: {
+            all(ctx) {
+                return errorHandler(ctx);
+            }
+        }
     }
 }
