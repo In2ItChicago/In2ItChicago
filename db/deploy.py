@@ -2,14 +2,32 @@ from sqlbag import S, create_database, drop_database
 from migra import Migration
 from contextlib import contextmanager
 import glob
+from queue import SimpleQueue
+from sqlalchemy.exc import ProgrammingError
 
 def get_sql(file):
     with open(file, 'r') as f:
         return f.read()
 
 def run_all(folder, s_target):
+    sql_queue = SimpleQueue()
+    size = 0
     for filename in glob.iglob(f'{folder}/**/*.sql', recursive=True):
-        s_target.execute(get_sql(filename))
+        sql_queue.put(get_sql(filename))
+        size += 1
+    while not sql_queue.empty():
+        try:
+            sql = sql_queue.get()
+            s_target.execute(sql)
+            s_target.commit()
+        except ProgrammingError as e:
+            message = str(e.orig).strip()
+            if 'relation' in message and 'does not exist' in message:
+                s_target.rollback()
+                print(f'Object does not exist yet: {message}. Re-queueing...')
+                sql_queue.put(sql)
+            else:
+                raise
 
 @contextmanager
 def temp_db(url):

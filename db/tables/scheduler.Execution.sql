@@ -8,7 +8,7 @@ CREATE TABLE scheduler.Execution
     updated_time timestamp with time zone,
     description text COLLATE pg_catalog."default",
     result text COLLATE pg_catalog."default",
-    job_id text COLLATE pg_catalog."default" NOT NULL,
+    job_id text COLLATE pg_catalog."default" NOT NULL REFERENCES scheduler.Jobs(id),
     task_id text COLLATE pg_catalog."default",
     CONSTRAINT scheduler_execution_pkey PRIMARY KEY (eid)
 )

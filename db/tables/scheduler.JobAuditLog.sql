@@ -1,6 +1,6 @@
 CREATE TABLE scheduler.JobAuditLog
 (
-    job_id text COLLATE pg_catalog."default" NOT NULL,
+    job_id text COLLATE pg_catalog."default" NOT NULL REFERENCES scheduler.Jobs(id),
     job_name text COLLATE pg_catalog."default" NOT NULL,
     event integer NOT NULL,
     "user" text COLLATE pg_catalog."default",
