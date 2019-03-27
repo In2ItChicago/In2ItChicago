@@ -17,5 +17,5 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE scheduler.Execution
+ALTER TABLE events.Event
     OWNER to postgres;

@@ -12,5 +12,5 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE public.scheduler_jobauditlog
+ALTER TABLE scheduler.JobAuditlog
     OWNER to postgres;

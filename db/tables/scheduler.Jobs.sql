@@ -10,7 +10,7 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE public.scheduler_jobs
+ALTER TABLE scheduler.Jobs
     OWNER to postgres;
 
 -- Index: ix_scheduler_jobs_next_run_time
@@ -18,6 +18,6 @@ ALTER TABLE public.scheduler_jobs
 -- DROP INDEX public.ix_scheduler_jobs_next_run_time;
 
 CREATE INDEX ix_scheduler_jobs_next_run_time
-    ON public.scheduler_jobs USING btree
+    ON scheduler.Jobs USING btree
     (next_run_time)
     TABLESPACE pg_default;
