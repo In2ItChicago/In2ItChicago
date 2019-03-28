@@ -40,9 +40,10 @@ def temp_db(url):
 
 
 def sync():
-    DB_URL = 'postgresql://postgres:postgres@localhost:5432/scheduler'
-    with temp_db('postgresql://postgres:postgres@localhost:5432/temp') as TEMP_DB_URL:
+    DB_URL = 'postgresql://postgres:postgres@postgres:5432/scheduler'
+    with temp_db('postgresql://postgres:postgres@postgres:5432/temp') as TEMP_DB_URL:
         create_database(TEMP_DB_URL)
+        create_database(DB_URL)
         with S(DB_URL) as s_current, S(TEMP_DB_URL) as s_target:
             run_all('schemas', s_target)
             run_all('tables', s_target)
@@ -54,7 +55,7 @@ def sync():
                 print('THE FOLLOWING CHANGES ARE PENDING:', end='\n\n')
                 print(m.sql)
                 print()
-                if input('Apply these changes? (y/n)') == 'y':
+                if input('Apply these changes? (y/n) ') == 'y':
                     print('Applying...')
                     m.apply()
                 else:

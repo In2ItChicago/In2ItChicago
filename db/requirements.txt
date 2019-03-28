@@ -1,1 +1,2 @@
 migra
+psycopg2
