@@ -1,1 +1,3 @@
-docker run -it --rm --network In2ItChicago_in2it --mount "type=bind,src=$(pwd),dst=/usr/src" --entrypoint /usr/src/entrypoint.sh db_deploy
+#!/bin/bash
+sleep 0
+$(dirname $0)/deploy.sh -d noconfirm

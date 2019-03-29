@@ -4,6 +4,8 @@ from contextlib import contextmanager
 import glob
 from queue import SimpleQueue
 from sqlalchemy.exc import ProgrammingError
+import sys
+import time
 
 def get_sql(file):
     with open(file, 'r') as f:
@@ -55,11 +57,13 @@ def sync():
                 print('THE FOLLOWING CHANGES ARE PENDING:', end='\n\n')
                 print(m.sql)
                 print()
-                if input('Apply these changes? (y/n) ') == 'y':
+                print(sys.argv[1])
+                if (len(sys.argv) > 1 and sys.argv[1] == 'noconfirm') or input('Apply these changes? (y/n) ') == 'y':
                     print('Applying...')
                     m.apply()
                 else:
                     print('Not applying.')
             else:
                 print('Already synced.')
+    
 sync()

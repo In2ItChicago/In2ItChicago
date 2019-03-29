@@ -10,6 +10,7 @@ CREATE TABLE events.Event
     result text COLLATE pg_catalog."default",
     job_id text COLLATE pg_catalog."default" NOT NULL,
     task_id text COLLATE pg_catalog."default",
+    task_id2 text COLLATE pg_catalog."default",
     CONSTRAINT scheduler_execution_pkey PRIMARY KEY (eid)
 )
 WITH (
