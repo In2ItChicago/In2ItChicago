@@ -57,7 +57,6 @@ def sync():
                 print('THE FOLLOWING CHANGES ARE PENDING:', end='\n\n')
                 print(m.sql)
                 print()
-                print(sys.argv[1])
                 if (len(sys.argv) > 1 and sys.argv[1] == 'noconfirm') or input('Apply these changes? (y/n) ') == 'y':
                     print('Applying...')
                     m.apply()

@@ -1,17 +1,19 @@
 CREATE TABLE events.Event
 (
-    eid character varying(191) COLLATE pg_catalog."default" NOT NULL,
-    hostname text COLLATE pg_catalog."default",
-    pid integer,
-    state integer NOT NULL,
-    scheduled_time timestamp with time zone NOT NULL,
-    updated_time timestamp with time zone,
-    description text COLLATE pg_catalog."default",
-    result text COLLATE pg_catalog."default",
-    job_id text COLLATE pg_catalog."default" NOT NULL,
-    task_id text COLLATE pg_catalog."default",
-    task_id2 text COLLATE pg_catalog."default",
-    CONSTRAINT scheduler_execution_pkey PRIMARY KEY (eid)
+    id serial,
+    title varchar(256) COLLATE pg_catalog."default" NOT NULL,
+    url varchar(256) COLLATE pg_catalog."default" NOT NULL,
+    description varchar(5000) COLLATE pg_catalog."default" NOT NULL,
+    organization varchar(256) COLLATE pg_catalog."default" NOT NULL,
+    address varchar(256) COLLATE pg_catalog."default" NOT NULL,
+    price decimal(5,2) NOT NULL,
+    geocode_id int,
+    start_time timestamp with time zone,
+    end_time timestamp with time zone,
+    start_timestamp int,
+    end_timestamp int,
+    created_date timestamp with time zone,
+    CONSTRAINT events_event_pkey PRIMARY KEY (id)
 )
 WITH (
     OIDS = FALSE
