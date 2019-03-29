@@ -90,6 +90,9 @@ services:
       - pgadmin_data:/var/lib/pgadmin
     ports:
       - "7000:7000"
+    # pgadmin spams logs with http request notifications
+    logging:
+      driver: none
     networks: 
       - in2it
 volumes:
