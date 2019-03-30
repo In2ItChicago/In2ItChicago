@@ -1,4 +1,4 @@
-import { Application, HookContext, HooksObject } from "@feathersjs/feathers";
+import { Application, HookContext, HooksObject } from '@feathersjs/feathers';
 import * as _ from 'lodash';
 import axios from 'axios';
 import { readFileSync } from 'fs';
@@ -7,7 +7,7 @@ import * as GeoJsonGeometriesLookup from 'geojson-geometries-lookup';
 import { sleep, errorHandler, randomExpirationTime } from './common';
 import { geocodeApiDelayMilliseconds } from './settings';
 import { buildQuery } from './mongo';
-import { GeneralError } from "@feathersjs/errors";
+import { GeneralError } from '@feathersjs/errors';
 
 const geojsonData = readFileSync('chicago_neighborhoods.geojson');
 const geojsonContent = JSON.parse(geojsonData.toString());
@@ -43,7 +43,7 @@ async function getGeocode(address: string): Promise<AddressResult | null> {
         neighborhood: null
     };
 
-    let geojsonPoint = { type: "Point", coordinates: [data.lon, data.lat] }; 
+    let geojsonPoint = { type: 'Point', coordinates: [data.lon, data.lat] }; 
     let matches = geoLookup.getContainers(geojsonPoint).features;
     if (matches.length > 0) {
         result.neighborhood = matches[0].properties.pri_neigh;

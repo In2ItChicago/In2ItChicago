@@ -74,9 +74,11 @@ export function eventHooks(app: Application<any>): Partial<HooksObject> {
                 if (invalid.length > 0) {
                     throw new BadRequest('Invalid events. organization, event_time.start_timestamp, and event_time.end_timestamp are required', invalid);
                 }
-
-                Object.assign(context.data[0], context.data[0].event_time);
-                delete context.data[0].event_time;
+                for (let i = 0; i < context.data.length; i++) {
+                    Object.assign(context.data[i], context.data[i].event_time);
+                    delete context.data[i].event_time;
+                }
+                
                 let organizations = _(context.data)
                     .groupBy(d => d.organization)
                     .map((value, key) => key)

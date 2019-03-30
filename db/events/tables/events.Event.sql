@@ -5,13 +5,14 @@ CREATE TABLE events.Event
     url varchar(256) COLLATE pg_catalog."default" NOT NULL,
     description varchar(5000) COLLATE pg_catalog."default" NOT NULL,
     organization varchar(256) COLLATE pg_catalog."default" NOT NULL,
-    price decimal(5,2) NOT NULL,
+    price decimal(5,2),
     geocode_id int REFERENCES geocode.Location(id),
     start_time timestamp with time zone,
     end_time timestamp with time zone,
     start_timestamp int,
     end_timestamp int,
-    created_date timestamp with time zone,
+    category varchar(256),
+    created_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT events_event_pkey PRIMARY KEY (id)
 )
 WITH (

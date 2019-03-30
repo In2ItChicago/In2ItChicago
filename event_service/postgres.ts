@@ -15,7 +15,7 @@ export class Postgres {
         let self = this;
         return {
             async find(params: Params) {
-                let result = db.select('*').from('geocode.Location');
+                let result = db.select('*').from('geocode.location');
                 return result;
             }, docs: neighborhoodDocs
         }
@@ -24,10 +24,15 @@ export class Postgres {
     get eventService() {
         return {
             async find(params: Params) {
-                let result = db.select('*').from('events.event');
+                let result = db.select('*').from('events.event').leftOuterJoin('geocode.location', 'events.event.geocode_id', 'geocode.location.id');
                 return result;
             },
             async create(data: any, params: Params) {
+                data.forEach(element => {
+                    element.geocode_id = element.geocode.id;
+                    delete element.address;
+                    delete element.geocode;
+                });
                 let val = db('events.event').insert(data).then(() => console.log('data inserted'));
                 return null;
             },
@@ -45,13 +50,29 @@ export class Postgres {
     get geoService() {
         return {
             async find(params: Params) {
-                let result = db.select('*').from('geocode.location');
+                let filter = '';
+                let value = '';
+                let result: knex.QueryBuilder;
+                if (params.address) {
+                    filter = 'address';
+                    value = params.address;
+                }
+                else if (params.neighborhood){
+                    filter = 'neighborhood';
+                    value = params.neighborhood;
+                }
+                else {
+                    return db.select('*').from('geocode.location');
+                }
+                result = db.select('*').from('geocode.location').where(filter, value);
                 return result;
             },
             async create(data: any, params: Params) {
+                delete data.expireAt;
                 let val = db('geocode.location').insert(data).then(() => console.log('data inserted'));
                 return null;
             },
+            docs: geocodeDocs
         }
     }
 }
