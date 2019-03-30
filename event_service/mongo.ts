@@ -2,7 +2,7 @@ import { MongoClient, Collection } from 'mongodb';
 import { GeneralError } from '@feathersjs/errors';
 import * as service from 'feathers-mongodb';
 import * as _ from 'lodash';
-import { Params } from '@feathersjs/feathers';
+import { Params, ServiceMethods, Query } from '@feathersjs/feathers';
 
 import { mongoPort, sleepTime, additionalFilters } from './settings';
 import { neighborhoodDocs, eventDocs, geocodeDocs } from './docs';
@@ -63,7 +63,7 @@ export class Mongo {
     }
     
 
-    get neighborhoodService() {
+    get neighborhoodService(): any {
         let self = this;
         return {
             async find(params: Params) {
@@ -72,7 +72,7 @@ export class Mongo {
         }
     }
 
-    get eventService() {
+    get eventService(): any {
         return Object.assign(service({
                 Model: this.eventModel,
                 paginate: {
@@ -85,7 +85,7 @@ export class Mongo {
             });
     }
 
-    get geoService() {
+    get geoService(): any {
         return Object.assign(service({
             Model: this.geocodeModel,
             whitelist: additionalFilters
@@ -95,8 +95,8 @@ export class Mongo {
     }
 }
 
-export function buildQuery(query, searchFields={}, join='$and') {
-    function mapParams(param) {
+export function buildQuery(query: Query, searchFields={}, join='$and'): _.Dictionary<any> {
+    function mapParams(param: string): object {
         let field = searchFields[param]
         let name = field ? field.name : param
         let ret = field ? { [field.func]: field.val }: { '$eq': query[param] }
@@ -107,8 +107,8 @@ export function buildQuery(query, searchFields={}, join='$and') {
     let keys = _.keys(query)
 
     let mongoFilters = keys
-    .filter(key => !key.startsWith('$'))
-    .map(mapParams);
+        .filter(key => !key.startsWith('$'))
+        .map(mapParams);
 
     let newParams = _.pickBy(query, (value, key) => key.startsWith('$'));
 
@@ -120,7 +120,7 @@ export function buildQuery(query, searchFields={}, join='$and') {
     return newParams;
 }
 
-export function transformResult(mongoResult) {
+export function transformResult(mongoResult: any): object {
     let startTimestamp = mongoResult.event_time.start_timestamp;
     let endTimestamp = mongoResult.event_time.end_timestamp;
     let id = mongoResult._id.toString();

@@ -66,10 +66,17 @@ export function eventHooks(app: Application<any>): Partial<HooksObject> {
             },
     
             async create(context: HookContext): Promise<HookContext> {
-                let invalid = context.data.filter(data => !(data.organization && data.event_time && data.event_time.start_timestamp && data.event_time.end_timestamp));
+                let invalid = context.data.filter(data => !(
+                    data.organization && 
+                    data.event_time && 
+                    (data.event_time.start_timestamp || data.event_time.start_timestamp === 0) && 
+                    (data.event_time.end_timestamp || data.event_time.end_timestamp === 0)));
                 if (invalid.length > 0) {
                     throw new BadRequest('Invalid events. organization, event_time.start_timestamp, and event_time.end_timestamp are required', invalid);
                 }
+
+                Object.assign(context.data[0], context.data[0].event_time);
+                delete context.data[0].event_time;
                 let organizations = _(context.data)
                     .groupBy(d => d.organization)
                     .map((value, key) => key)
@@ -78,9 +85,7 @@ export function eventHooks(app: Application<any>): Partial<HooksObject> {
                 
                 await this.remove(null, {
                     'query': {
-                        'organization': {
-                            '$in': organizations
-                        }
+                        'organization': organizations
                     }
                 });
                 return context;
@@ -88,7 +93,10 @@ export function eventHooks(app: Application<any>): Partial<HooksObject> {
         },
         after: {
             async find(context: HookContext): Promise<HookContext> {
-                context.result.data = context.result.data.map(mongoResult => transformResult(mongoResult));
+                if (context.result.data) {
+                    context.result.data = context.result.data.map(mongoResult => transformResult(mongoResult));
+                }
+                
                 return context;
             }
         },

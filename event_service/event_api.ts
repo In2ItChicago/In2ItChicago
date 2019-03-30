@@ -7,9 +7,11 @@ import { eventHooks } from './event';
 import { geocodeHooks } from './geocode';
 import * as settings from './settings';
 import { Mongo } from './mongo';
+import { Postgres } from './postgres';
 
 function setup(): void {
     let client = new Mongo();
+    let client2 = new Postgres();
     client.initialize().then(() => {
         const app = express(feathers());
 
@@ -37,12 +39,12 @@ function setup(): void {
             }
         });
 
-        app.use('/neighborhoods', client.neighborhoodService);
+        app.use('/neighborhoods', client2.neighborhoodService);
 
-        app.use('/geocode', client.geoService);
+        app.use('/geocode', client2.geoService);
         app.service('geocode').hooks(geocodeHooks(app));
 
-        app.use('/events', client.eventService);
+        app.use('/events', client2.eventService);
         app.service('events').hooks(eventHooks(app));    
 
         const server = app.listen(settings.port);

@@ -39,8 +39,15 @@ while (( "$#" )); do
 done
 # set positional arguments in their proper place
 eval set -- "$PARAMS"
+
+if [[ -z $PARAMS ]] 
+then
+  SERVICES=$(docker-compose config --services | grep -v -e $EXCLUDE)
+else
+  SERVICES=$PARAMS
+fi
+
 EVENT_PROCESSOR_DEBUG=$EVENT_PROCESSOR_DEBUG \
 VERBOSE_OUTPUT=$VERBOSE_OUTPUT \
 RUN_SCHEDULER=$RUN_SCHEDULER \
-docker-compose -f docker-compose.yml -f docker-compose.${ENV}.yml up \
-$(docker-compose config --services | grep -v -e $EXCLUDE) $PARAMS
+docker-compose -f docker-compose.yml -f docker-compose.${ENV}.yml up $SERVICES

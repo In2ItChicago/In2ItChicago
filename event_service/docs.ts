@@ -9,16 +9,32 @@ export const eventDocs = {
             required: ['organization', 'start_timestamp', 'end_timestamp'],
             properties: {
                 organization: {
-                    type: "string",
-                    description: "organization"
+                    type: 'string',
+                    description: 'organization'
                 },
-                start_timestamp: {
-                    type: "integer",
-                    "description": "event start time"
+                title: {
+                    type: 'string',
+                    description: 'title'
                 },
-                end_timestamp: {
-                    type: "integer",
-                    "description": "event end time"
+                url: {
+                    type: 'string',
+                    description: 'url'
+                },
+                description: {
+                    type: 'string',
+                    description: 'description'
+                },
+                address: {
+                    type: 'string',
+                    description: 'address'
+                },
+                price: {
+                    type: 'integer',
+                    description: 'price'
+                },
+                event_time: {
+                    type: 'object',
+                    $ref: '#/definitions/event_time'
                 }
             }
         },
@@ -27,6 +43,19 @@ export const eventDocs = {
             items: {
                 type: 'object',
                 $ref: '#/definitions/event'
+            }
+        },
+        event_time: {
+            type: 'object',
+            properties: {
+                start_timestamp: {
+                    type: 'integer',
+                    description: 'event start time'
+                },
+                end_timestamp: {
+                    type: 'integer',
+                    description: 'event end time'
+                }
             }
         }
     },
@@ -90,7 +119,7 @@ export const geocodeDocs = {
             $ref: '#/definitions/geocode'
         },
         geocode: {
-            "type": "object"
+            'type': 'object'
         }
     },
     find: {
