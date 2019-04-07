@@ -1,12 +1,9 @@
 import * as knex from 'knex'
 import { Params, Query } from '@feathersjs/feathers';
 import * as _ from 'lodash';
-import { sql, DatabaseConnectionType, createPool, PrimitiveValueExpressionType } from 'slonik';
 
 import { neighborhoodDocs, eventDocs, geocodeDocs } from './docs';
 import { sleep, timeFromTimestamp, dateFromTimestamp } from './common';
-
-const pool = createPool('postgres://postgres:postgres@postgres:5432/events');
 
 const db = knex({
     client: 'postgresql',
@@ -22,8 +19,10 @@ export class Postgres {
         let self = this;
         return {
             async find(params: Params) {
-                let result = await db.select('*').from('geocode.location');
-                //let result = await pool.query(sql`select * from geocode.location`);
+                let result = await db('geocode.location')
+                    .distinct('neighborhood')
+                    .whereNotNull('neighborhood');
+                    
                 return result;
             }, docs: neighborhoodDocs
         }
@@ -32,17 +31,30 @@ export class Postgres {
     get eventService() {
         return {
             async find(params: Params) {
-                let query = params.query;
-                if (!query) {
+                if (!params.query) {
                     return null;
                 }
-                
-                let result = await db({geo: 'geocode.location', event: 'events.event'}).select('*')
+                let query = params.query;
+                debugger;
+                let result = await db().select('*')
                     .from('events.event as event')
                     .leftOuterJoin('geocode.location as geo', 'event.geocode_id', 'geo.id')
-                    .where('event.start_timestamp', '>=', query.start_timestamp.val || 0)
-                    .andWhere('event.end_timestamp', '<=', query.end_timestamp.val || 99999999999999999999)
-                  
+                    .where('event.start_time', '>=', query.start_timestamp || '01-01-1970')
+                    .andWhere('event.end_time', '<=', query.end_timestamp || '12-31-2099')
+                    .modify(function(queryBuilder) {
+                        if (query.searchBounds) {
+                            let searchBounds = query.searchBounds;
+                            queryBuilder
+                                .andWhere('geo.lat', '>=', searchBounds.minLat)
+                                .andWhere('geo.lat', '<=', searchBounds.maxLat)
+                                .andWhere('geo.lon', '>=', searchBounds.minLon)
+                                .andWhere('geo.lon', '<=', searchBounds.maxLon)
+                        }
+                        if (query.organization) {
+                            queryBuilder.andWhere('event.organization', '=', query.organization);
+                        }
+                    });
+                
                 return result;
             },
             async create(data: any, params: Params) {

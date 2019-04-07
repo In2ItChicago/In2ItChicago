@@ -34,16 +34,16 @@ export function eventHooks(app: Application<any>): Partial<HooksObject> {
     return {
         before: {
             async find(context: HookContext): Promise<HookContext> {
-                let query = context.params.query;
-                if (!query) {
+                if (!context.params.query) {
                     throw new GeneralError('Query not found');
                 }
-                
+
+                let query = context.params.query;
                 if ((query.address && !query.miles) || (query.miles && !query.address)) {
                     throw new BadRequest("address and miles must be used together");
                 }
 
-                let searchBounds = new SearchBounds();
+                let searchBounds: SearchBounds | null = null;
                 if (query.address) {
                     searchBounds = await geoSearch(app, query.address, parseFloat(query.miles));
                     delete query.address;
@@ -51,17 +51,8 @@ export function eventHooks(app: Application<any>): Partial<HooksObject> {
                     Object.assign(query, searchBounds);
                 }
                     
-                var searchFields = {
-                    'start_timestamp': { name: 'event_time.start_timestamp', func: '>=', val: parseInt(query.start_timestamp ? query.start_timestamp : 0) },
-                    'end_timestamp': { name: 'event_time.end_timestamp', func: '<=', val: parseInt(query.end_timestamp ? query.end_timestamp : 100000000) },
-                    'neighborhood': { name: 'geocode.neighborhood', func: '=', val: query.neighborhood },
-                    'minLat': { name: 'geocode.lat', func: '>=', val: searchBounds.minLat },
-                    'minLon': { name: 'geocode.lon', func: '>=', val: searchBounds.minLon },
-                    'maxLat': { name: 'geocode.lat', func: '<=', val: searchBounds.maxLat },
-                    'maxLon': { name: 'geocode.lon', func: '<=', val: searchBounds.maxLon }
-                }
-
-                context.params.query = Object.assign(query, searchFields);
+                //context.params.query = Object.assign(query, searchFields);
+                context.params.query.searchBounds = searchBounds;
                 return context;
             },
     

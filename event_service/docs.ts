@@ -49,11 +49,13 @@ export const eventDocs = {
             type: 'object',
             properties: {
                 start_timestamp: {
-                    type: 'integer',
+                    type: 'string',
+                    format: 'date-time',
                     description: 'event start time'
                 },
                 end_timestamp: {
-                    type: 'integer',
+                    type: 'string',
+                    format: 'date-time',
                     description: 'event end time'
                 }
             }
@@ -65,13 +67,15 @@ export const eventDocs = {
                 description: 'start_timestamp',
                 in: 'query',
                 name: 'start_timestamp',
-                type: 'integer'
+                type: 'string',
+                format: 'date-time'
             },
             {
                 description: 'end_timestamp',
                 in: 'query',
                 name: 'end_timestamp',
-                type: 'integer'
+                type: 'string',
+                format: 'date-time'
             },
             {
                 description: 'organization',
