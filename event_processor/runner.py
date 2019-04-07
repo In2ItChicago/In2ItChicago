@@ -40,10 +40,7 @@ def run():
 
     print('Event processor completed')
  
-    events = requests.get(config.get_events, params = {
-        'start_timestamp': 0,
-        'end_timestamp': 10000000000
-    })
+    events = requests.get(config.get_events, params = {})
 
     if len(events.json()) > 0:
         print('Data retrieved successfully')

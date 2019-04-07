@@ -1,14 +1,5 @@
 version: '3.2'
 services:
-  mongo:
-    image: "mongo:4.1.9"
-    volumes:
-      - mongodata:/data/db
-      - ./mongoconfig:/data/configdb
-    ports:
-      - "27017:27017"
-    networks: 
-      - in2it
   event_service:
     image: "event_service_dev"
     ports:

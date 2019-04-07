@@ -1,5 +1,0 @@
-get neighborhoods- db.geocode.aggregate([
-    {
-        $group: { _id: '$neighborhood' }
-    }
-])
