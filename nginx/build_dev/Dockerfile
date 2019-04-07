@@ -4,9 +4,8 @@ FROM nginx_common as nginx_dev
 WORKDIR /etc/nginx
 RUN apt-get update
 RUN apt-get install -yq gnupg
-COPY ./install-npm.sh ./
-RUN chmod +x install-npm.sh
-RUN ./install-npm.sh
+RUN apk update
+RUN apk add nodejs-npm
 RUN npm install -g nodemon
 
 COPY ./requirements.txt ./

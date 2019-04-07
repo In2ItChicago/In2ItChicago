@@ -8,7 +8,7 @@ services:
       - /usr/src/app/event_service/node_modules/
   event_processor:
     # -L runs nodemon in legacy mode (necessary over Docker)
-    command: bash -c "chmod +x entrypoint.sh && ./node_modules/nodemon/bin/nodemon.js -L --exec ./entrypoint.sh"
+    command: sh -c "chmod +x entrypoint.sh && ./node_modules/nodemon/bin/nodemon.js -L --exec ./entrypoint.sh"
     environment:
       - DEBUG=${EVENT_PROCESSOR_DEBUG}
       - VERBOSE_OUTPUT=${VERBOSE_OUTPUT}
