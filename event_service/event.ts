@@ -3,8 +3,8 @@ import * as _ from 'lodash';
 import * as GeoPoint from 'geopoint';
 import { BadRequest, GeneralError } from '@feathersjs/errors';
 
-import { buildQuery, transformResult } from './mongo';
-import { errorHandler } from './common';
+import { buildQuery, transformResult } from './postgres';
+import { errorHandler, timestampToDate, dateFromTimestamp } from './common';
 
 class SearchBounds {
     minLat: number
@@ -52,16 +52,16 @@ export function eventHooks(app: Application<any>): Partial<HooksObject> {
                 }
                     
                 var searchFields = {
-                    'start_timestamp': { name: 'event_time.start_timestamp', func: '$gte', val: parseInt(query.start_timestamp) },
-                    'end_timestamp': { name: 'event_time.end_timestamp', func: '$lte', val: parseInt(query.end_timestamp) },
-                    'neighborhood': { name: 'geocode.neighborhood', func: '$eq', val: query.neighborhood },
-                    'minLat': { name: 'geocode.lat', func: '$gte', val: searchBounds.minLat },
-                    'minLon': { name: 'geocode.lon', func: '$gte', val: searchBounds.minLon },
-                    'maxLat': { name: 'geocode.lat', func: '$lte', val: searchBounds.maxLat },
-                    'maxLon': { name: 'geocode.lon', func: '$lte', val: searchBounds.maxLon }
+                    'start_timestamp': { name: 'event_time.start_timestamp', func: '>=', val: parseInt(query.start_timestamp ? query.start_timestamp : 0) },
+                    'end_timestamp': { name: 'event_time.end_timestamp', func: '<=', val: parseInt(query.end_timestamp ? query.end_timestamp : 100000000) },
+                    'neighborhood': { name: 'geocode.neighborhood', func: '=', val: query.neighborhood },
+                    'minLat': { name: 'geocode.lat', func: '>=', val: searchBounds.minLat },
+                    'minLon': { name: 'geocode.lon', func: '>=', val: searchBounds.minLon },
+                    'maxLat': { name: 'geocode.lat', func: '<=', val: searchBounds.maxLat },
+                    'maxLon': { name: 'geocode.lon', func: '<=', val: searchBounds.maxLon }
                 }
-    
-                context.params.query = buildQuery(query, searchFields);
+
+                context.params.query = Object.assign(query, searchFields);
                 return context;
             },
     
@@ -74,8 +74,12 @@ export function eventHooks(app: Application<any>): Partial<HooksObject> {
                 if (invalid.length > 0) {
                     throw new BadRequest('Invalid events. organization, event_time.start_timestamp, and event_time.end_timestamp are required', invalid);
                 }
+
                 for (let i = 0; i < context.data.length; i++) {
-                    Object.assign(context.data[i], context.data[i].event_time);
+                    Object.assign(context.data[i], {
+                        start_time: timestampToDate(context.data[i].event_time.start_timestamp),
+                        end_time: timestampToDate(context.data[i].event_time.end_timestamp)
+                    });
                     delete context.data[i].event_time;
                 }
                 
@@ -96,7 +100,7 @@ export function eventHooks(app: Application<any>): Partial<HooksObject> {
         after: {
             async find(context: HookContext): Promise<HookContext> {
                 if (context.result.data) {
-                    context.result.data = context.result.data.map(mongoResult => transformResult(mongoResult));
+                    context.result.data = context.result.data.map(result => transformResult(result));
                 }
                 
                 return context;

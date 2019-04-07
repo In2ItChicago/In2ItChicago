@@ -1,9 +1,10 @@
 CREATE TABLE geocode.Location (
-    id serial,
-    address varchar(256) COLLATE pg_catalog."default" NOT NULL,
-    lat decimal(23,20),
-    lon decimal(23,20),
-    neighborhood varchar(256),
+    id SERIAL,
+    address VARCHAR(256) NOT NULL,
+    lat DECIMAL(23,20),
+    lon DECIMAL(23,20),
+    neighborhood VARCHAR(256),
+    expire_at TIMESTAMP WITH TIME ZONE NOT NULL,
     CONSTRAINT geocode_Location_pkey PRIMARY KEY (id)
 )
 

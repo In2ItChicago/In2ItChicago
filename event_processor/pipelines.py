@@ -38,9 +38,13 @@ class GeocodePipeline:
         if 'address' in item:
             try:
                 geocode = requests.get(config.get_geocode, {'address': item['address']})
-                item['geocode'] = geocode.json()
+                geocode_json = geocode.json()
+                if geocode_json == []:
+                    spider.logger.warning(f'No geocode response for address {item["address"]}')
+                    return item
+                item['geocode_id'] = geocode_json['id']
             except Exception as e:
-                spider.logger.warning('Exception while getting geocode: ' + str(e))
+                spider.logger.warning(f'Exception while getting geocode for address {item["address"]}: {e}')
         return item
 
 class EventBuildPipeline:

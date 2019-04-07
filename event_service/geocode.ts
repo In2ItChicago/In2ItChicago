@@ -6,7 +6,7 @@ import * as GeoJsonGeometriesLookup from 'geojson-geometries-lookup';
 
 import { sleep, errorHandler, randomExpirationTime } from './common';
 import { geocodeApiDelayMilliseconds } from './settings';
-import { buildQuery } from './mongo';
+import { buildQuery } from './postgres';
 import { GeneralError } from '@feathersjs/errors';
 
 const geojsonData = readFileSync('chicago_neighborhoods.geojson');
@@ -15,8 +15,8 @@ const geoLookup = new GeoJsonGeometriesLookup(geojsonContent);
 
 class AddressResult {
     address: string
-    lat: number
-    lon: number
+    lat: number | null
+    lon: number | null
     neighborhood: string | null
 }
 
@@ -28,7 +28,7 @@ async function getGeocode(address: string): Promise<AddressResult | null> {
     if (diff <= geocodeApiDelayMilliseconds) {
         await sleep(diff);
     }
-    let response = await axios.get(`${baseUrl}?q=${address}&format=json`);
+    let response = await axios.get(encodeURI(`${baseUrl}?q=${address}&format=json`));
     lastExecuted = new Date();
 
     if (response.data.length === 0) {
@@ -71,7 +71,7 @@ export function geocodeHooks(app: Application<any>): Partial<HooksObject> {
             },
     
             async create(context: HookContext) {
-                context.data.expireAt = randomExpirationTime();
+                context.data.expire_at = randomExpirationTime();
                 return context;
             }
         },
@@ -90,10 +90,16 @@ export function geocodeHooks(app: Application<any>): Partial<HooksObject> {
                 }
                 
                 if (result == null) {
-                    return context;
+                    result = {
+                        address: context.params.address,
+                        lat: null,
+                        lon: null,
+                        neighborhood: null
+                    }
                 }
                 context.result = result;
-                await this.create(result);
+                let val = await this.create(result);
+                context.result.id = val[0];
                 return context;
             }
         },

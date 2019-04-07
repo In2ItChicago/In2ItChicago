@@ -27,6 +27,8 @@ export function errorHandler(ctx: HookContext<any>): HookContext<any> {
 
 export const timestampToDate = (timestamp: number): Date => new Date(timestamp * 1000);
 
+export const dateTimeFromTimestamp = (timestamp: number): Date => this.timestampToDate(timestamp).toISOString();
+
 export const dateFromTimestamp = (timestamp: number): Date => this.timestampToDate(timestamp).toLocaleDateString();
 
 export const timeFromTimestamp = (timestamp: number): Date => this.timestampToDate(timestamp).toLocaleTimeString();

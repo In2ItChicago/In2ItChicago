@@ -28,7 +28,7 @@ class Config:
         self.schedule_interval = int(self.get_env_var('SCHEDULE_INTERVAL', error_if_null=True))
 
         self.run_scheduler = self.get_env_bool('RUN_SCHEDULER', True)
-        self.num_connect_attempts = 10
+        self.num_connect_attempts = 100
 
     def get_env_bool(self, name, default_value=None, error_if_null=False):
         value = self.get_env_var(name, default_value, error_if_null)
