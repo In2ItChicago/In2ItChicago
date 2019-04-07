@@ -1,1 +1,1 @@
-ssh -v -i $(dirname $0)/in2it-key.pem ubuntu@ec2-3-17-64-55.us-east-2.compute.amazonaws.com
+ssh -v -i $(dirname $0)/in2it-key.pem ec2-user@ec2-3-16-31-88.us-east-2.compute.amazonaws.com

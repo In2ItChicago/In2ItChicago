@@ -1,4 +1,4 @@
-cd clipboardapp
+cd ClipboardApp
 git checkout .
 git pull
 chmod +x start-prod.bash
