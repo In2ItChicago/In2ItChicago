@@ -6,7 +6,6 @@ import * as GeoJsonGeometriesLookup from 'geojson-geometries-lookup';
 
 import { sleep, errorHandler, randomExpirationTime } from './common';
 import { geocodeApiDelayMilliseconds } from './settings';
-import { buildQuery } from './postgres';
 import { GeneralError } from '@feathersjs/errors';
 
 const geojsonData = readFileSync('chicago_neighborhoods.geojson');
@@ -63,7 +62,6 @@ export function geocodeHooks(app: Application<any>): Partial<HooksObject> {
                 if (query.address && query.neighborhood) {
                     delete query.neighborhood;
                 }
-                context.params.query = buildQuery(query);
             
                 // This is only here so it's easier to access
                 context.params.address = query.address;

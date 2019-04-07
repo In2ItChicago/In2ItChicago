@@ -41,23 +41,23 @@
                 return { events: dummyData };
 			}
 			const eventService = getClient('event_service:5000');
-			return eventService.find({query: {start_timestamp: 0, end_timestamp: 10000000000000}})
+			return eventService.find({query: {}})
 				.then(res => {
-					return { events: res.data };
+					return { events: res };
 				});
 		},
 		methods: {
 			updateEvents: function() {
 				return eventServiceClient.find({
 					query: {
-						start_timestamp: this.$store.searchFilter.startDate.getTime() / 1000, 
-						end_timestamp: this.$store.searchFilter.endDate.getTime() / 1000,
+						start_timestamp: this.$store.searchFilter.startDate, 
+						end_timestamp: this.$store.searchFilter.endDate,
 						miles: this.$store.searchFilter.searchRadius,
 						address: this.$store.searchFilter.addressOrZip || '60611'
 					}
 				})
 				.then((res) => {
-					this.events = res.data;
+					this.events = res;
 				});
 			}
 		},

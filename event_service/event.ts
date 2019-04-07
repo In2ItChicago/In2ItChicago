@@ -3,7 +3,6 @@ import * as _ from 'lodash';
 import * as GeoPoint from 'geopoint';
 import { BadRequest, GeneralError } from '@feathersjs/errors';
 
-import { buildQuery, transformResult } from './postgres';
 import { errorHandler, timestampToDate, dateFromTimestamp } from './common';
 
 class SearchBounds {
@@ -72,6 +71,7 @@ export function eventHooks(app: Application<any>): Partial<HooksObject> {
                         end_time: timestampToDate(context.data[i].event_time.end_timestamp)
                     });
                     delete context.data[i].event_time;
+                    delete context.data[i].address;
                 }
                 
                 let organizations = _(context.data)
@@ -90,8 +90,18 @@ export function eventHooks(app: Application<any>): Partial<HooksObject> {
         },
         after: {
             async find(context: HookContext): Promise<HookContext> {
-                if (context.result.data) {
-                    context.result.data = context.result.data.map(result => transformResult(result));
+                
+                if (context.result) {
+                    context.result = context.result.map(result => {    
+                        Object.assign(result, {
+                            start_date: result.start_time.toLocaleDateString(),
+                            start_time: result.start_time.toLocaleTimeString(),
+                            end_date: result.end_time.toLocaleDateString(),
+                            end_time: result.end_time.toLocaleTimeString()
+                        });
+                        
+                        return result;
+                    });
                 }
                 
                 return context;

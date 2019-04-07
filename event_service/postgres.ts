@@ -21,7 +21,8 @@ export class Postgres {
             async find(params: Params) {
                 let result = await db('geocode.location')
                     .distinct('neighborhood')
-                    .whereNotNull('neighborhood');
+                    .whereNotNull('neighborhood')
+                    .orderBy('neighborhood');
                     
                 return result;
             }, docs: neighborhoodDocs
@@ -35,9 +36,8 @@ export class Postgres {
                     return null;
                 }
                 let query = params.query;
-                debugger;
-                let result = await db().select('*')
-                    .from('events.event as event')
+
+                let result = await db('events.event as event').select('*')
                     .leftOuterJoin('geocode.location as geo', 'event.geocode_id', 'geo.id')
                     .where('event.start_time', '>=', query.start_timestamp || '01-01-1970')
                     .andWhere('event.end_time', '<=', query.end_timestamp || '12-31-2099')
@@ -53,15 +53,12 @@ export class Postgres {
                         if (query.organization) {
                             queryBuilder.andWhere('event.organization', '=', query.organization);
                         }
-                    });
+                    })
+                    .orderBy('event.start_time');
                 
                 return result;
             },
             async create(data: any, params: Params) {
-                data.forEach(element => {
-                    delete element.address;
-                });
-                
                 let val = await db('events.event').insert(data).then(() => console.log('data inserted'));
                 return null;
             },
@@ -104,28 +101,4 @@ export class Postgres {
             docs: geocodeDocs
         }
     }
-}
-
-export function buildQuery(query: Query, searchFields={}, join='$and'): _.Dictionary<any> {
-    return Object.assign(query, searchFields);
-}
-
-export function transformResult(result: any): object {
-    let startTimestamp = result.event_time.start_timestamp;
-    let endTimestamp = result.event_time.end_timestamp;
-    //let id = result._id.toString();
-
-    delete result.event_time;
-    delete result._id;
-    
-    Object.assign(result, {
-        start_time: timeFromTimestamp(startTimestamp),
-        start_date: dateFromTimestamp(startTimestamp),
-        end_time: timeFromTimestamp(endTimestamp),
-        end_date: dateFromTimestamp(endTimestamp),
-        start_timestamp: startTimestamp,
-        end_timestamp: endTimestamp,
-    })
-    
-    return result;
 }
