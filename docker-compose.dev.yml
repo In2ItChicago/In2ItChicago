@@ -1,4 +1,4 @@
-version: '3.2'
+version: '3.6'
 services:
   event_service:
     command: ["yarn", "run", "dev"]
@@ -26,7 +26,7 @@ services:
       - ./in2it_site:/usr/src/app/in2it_site
       - /usr/src/app/in2it_site/node_modules/
   nginx:
-    command: bash -c "chmod +x entrypoint.sh && nodemon -L --exec ./entrypoint.sh"
+    command: sh -c "chmod +x entrypoint.sh && nodemon -L --exec ./entrypoint.sh"
     environment:
       - SERVER_NAME=localhost
 volumes:

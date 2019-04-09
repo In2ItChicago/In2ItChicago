@@ -1,2 +1,2 @@
-#!/bin/bash
-$(dirname $0)/deploy.sh -d noconfirm
+#!/bin/sh
+$(dirname $0)/deploy.sh -i noconfirm

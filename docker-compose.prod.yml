@@ -1,4 +1,4 @@
-version: '3'
+version: '3.6'
 services:
   event_processor:
     image: "in2itchicago/event_processor:20190311.1"
@@ -15,4 +15,4 @@ services:
     image: "in2itchicago/in2it_site:20190311.1"
     command: ["yarn", "run", "start"]
   nginx:
-    image: "nginx:1.15.9"
+    image: "nginx:1.15.10-alpine"

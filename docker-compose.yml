@@ -1,14 +1,10 @@
-version: '3.2'
+version: '3.6'
 services:
   event_service:
     image: "event_service_dev"
     ports:
-      - target: 5000
-        published: 5000
-        mode: host
+      - "5000:5000"
       - "5858:5858"
-    deploy:
-      mode: global
     networks: 
       - in2it
   event_processor:
@@ -32,7 +28,11 @@ services:
     volumes:
       - ./nginx:/etc/nginx
     ports:
-      - "0.0.0.0:80:80"
+      - target: 80
+        published: 80
+        mode: host
+    deploy:
+      mode: global
     # Sometimes nginx crashes if the site doesn't come up in time
     restart: on-failure
     networks: 
@@ -72,7 +72,7 @@ services:
     networks: 
       - in2it
   pgadmin:
-    image: dpage/pgadmin4:4.2
+    image: dpage/pgadmin4:4.4
     environment:
       - PGADMIN_DEFAULT_EMAIL=user@domain.com
       - PGADMIN_DEFAULT_PASSWORD=pgadmin
@@ -94,5 +94,4 @@ volumes:
   pgadmin_data:
 networks:
   in2it:
-    driver: overlay
-    attachable: true
+   external: true
