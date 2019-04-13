@@ -3,12 +3,12 @@ from migra import Migration
 from contextlib import contextmanager
 import glob
 from queue import SimpleQueue
-from sqlalchemy.exc import ProgrammingError
+from sqlalchemy.exc import ProgrammingError, OperationalError
 import sys
 import time
 
 databases = ['events', 'scheduler']
-queue_retries = 10
+sync_attempts = 100
 
 def get_sql(file):
     with open(file, 'r') as f:
@@ -21,7 +21,8 @@ def run_all(folder, s_target):
         sql_queue.put(get_sql(filename))
         size += 1
     num_tries = 0
-    while not sql_queue.empty() and num_tries < queue_retries:
+    max_tries = size * 2
+    while not sql_queue.empty() and num_tries < max_tries:
         try:
             sql = sql_queue.get()
             s_target.execute(sql)
@@ -36,7 +37,7 @@ def run_all(folder, s_target):
                 num_tries += 1
             else:
                 raise
-    if num_tries >= queue_retries:
+    if num_tries >= max_tries:
         print(f'Number of attempts exceeded configured threshold of {queue_retries}')
         sys.exit(1)
 @contextmanager
@@ -71,5 +72,14 @@ def sync(database):
             else:
                 print('Already synced.')
 
+def try_sync(database):
+    # Wait for the database to become operational
+    for _ in range(sync_attempts):
+        try:
+            sync(database)
+            break
+        except OperationalError:
+            continue
+
 for database in databases: 
-    sync(database)
+    try_sync(database)

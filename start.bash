@@ -7,6 +7,7 @@ case "$(uname)" in
      ./dos2unix.exe *.sh */*.sh
      ;;
 esac
+docker network create --attachable --driver overlay in2it > /dev/null 2>&1
 ../ndscheduler/build.sh
 ./scripts/build-images.sh dev
 ./scripts/check-all-image-updates.sh
