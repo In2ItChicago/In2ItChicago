@@ -59,13 +59,13 @@ export class Postgres {
                 return result;
             },
             async create(data: any, params: Params) {
-                let val = await db('events.event').insert(data).then(() => console.log('data inserted'));
+                let val = await db('events.event').insert(data);
                 return null;
             },
             async remove(id, params: Params) {
                 let query = params.query;
                 if (query) {
-                    let val = db('events.event').whereIn('organization', query.organization).del().then(() => console.log('data deleted'));
+                    let val = await db('events.event').whereIn('organization', query.organization).del();
                 }
                 return null;
             },

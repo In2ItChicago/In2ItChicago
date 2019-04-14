@@ -42,7 +42,15 @@ eval set -- "$PARAMS"
 
 if [ ! -z "$EXCLUDE" ] 
 then
-  SERVICES=$(docker-compose config --services | grep -v -e $EXCLUDE)
+    case "$(uname)" in
+    CYGWIN*|MINGW*|MSYS*)
+        SERVICES=$(docker-compose config --services | grep -v -e $EXCLUDE | tr '\r\n' ' ')
+        ;;
+    *)
+        SERVICES=$(docker-compose config --services | grep -v -e $EXCLUDE)
+        ;;
+    esac
+  
 else
   SERVICES=$PARAMS
 fi

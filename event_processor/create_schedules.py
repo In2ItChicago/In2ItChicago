@@ -26,7 +26,12 @@ spider_loader = spiderloader.SpiderLoader.from_settings(settings)
 spiders = spider_loader.list()
 classes = [s for s in (spider_loader.load(name) for name in spiders) if s.enabled]
 
-scrapy_jobs = requests.get(config.scheduler_jobs)
+for _ in range(ATTEMPTS):
+    try:
+        scrapy_jobs = requests.get(config.scheduler_jobs)
+        break
+    except ConnectionError:
+        time.sleep(5)
 jobs_json = scrapy_jobs.json()
 jobs_dict = {job['name']: job for job in jobs_json['jobs'] if job['job_class_string'] == JOB_CLASS}
 
@@ -44,16 +49,12 @@ for schedule in schedules:
         }
     if schedule.name in jobs_dict:
         job = jobs_dict[schedule.name]
-        for _ in range(ATTEMPTS):
-            try:
-                response = requests.put(f'{config.scheduler_jobs}/{job["job_id"]}', json=json_payload)
-                if response.ok:
-                    print(f'Updated schedule for {schedule.name}')
-                    break
-                else:
-                    raise Exception(response.text)
-            except ConnectionError:
-                time.sleep(5)
+        response = requests.put(f'{config.scheduler_jobs}/{job["job_id"]}', json=json_payload)
+        if response.ok:
+            print(f'Updated schedule for {schedule.name}')
+            break
+        else:
+            raise Exception(response.text)
     else:
         response = requests.post(config.scheduler_jobs, json=json_payload)
         if response.ok:
