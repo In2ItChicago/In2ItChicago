@@ -210,7 +210,7 @@ Time in seconds that Scrapy data will be cached for.
 We've forked a project from Nextdoor called ndscheduler to use as a scheduling system for this project.
 To run the scheduler with this application, the scheduler repository must be checked out into the same parent folder as this one.
 
-To use, run `cd {parent directory of the directory you cloned this repository into}` and then `git clone https://github.com/ClipboardProject/ndscheduler`. The startup scripts in this repository check for the existence of the ndscheduler folder when running. Once this is completed, go back to the `ClipboardApp` folder and run `./start.sh -s` to start the application with the scheduler.
+To use, run `cd {parent directory of the directory you cloned this repository into}`, `git clone https://github.com/ClipboardProject/ndscheduler`, and `git checkout clipboard_changes`. The startup scripts in this repository check for the existence of the ndscheduler folder when running. Once this is completed, go back to the `ClipboardApp` folder and run `./start.sh -s` to start the application with the scheduler.
 
 If all goes well, you should be able to navigate to `localhost:8888` and see the scheduler. From there, you can let the scrapers run on a schedule or run them manually with the UI. `localhost:6800` is the url for scrapyd, which is the middleman between the scrapers and ndscheduler.
 
