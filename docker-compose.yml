@@ -51,7 +51,6 @@ services:
       - "5861:5861"
     environment:
       - NDSCHEDULER_SETTINGS_MODULE=simple_scheduler.settings
-      - DEBUG=0
     networks: 
       - in2it
   postgres:

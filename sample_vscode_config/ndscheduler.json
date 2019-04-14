@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Attach",
+            "type": "python",
+            "request": "attach",
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}", 
+                    "remoteRoot": "/usr/src/app/ndscheduler"
+                }
+            ],
+            "port": 5861,                
+            "host": "localhost"  //docker toolbox users will likely need to use 192.168.99.100              
+        }
+    ]
+}

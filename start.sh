@@ -9,6 +9,7 @@ then
 fi
 ./scripts/build-images.sh dev
 ./scripts/check-all-image-updates.sh
+docker-compose down
 docker-compose rm -f -v
 ./db/run.sh &
 ./scripts/compose-deploy.sh --env dev "$@"

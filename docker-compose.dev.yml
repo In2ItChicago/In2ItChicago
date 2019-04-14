@@ -36,6 +36,8 @@ services:
     volumes:
       - ../ndscheduler:/usr/src/app/ndscheduler
       - ndscheduler_modules:/usr/src/app/ndscheduler/node_modules/
+    environment:
+      - DEBUG=${SCHEDULER_DEBUG}
 volumes:
   event_processor_data:
   event_processor_lock:

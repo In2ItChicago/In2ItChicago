@@ -1,11 +1,16 @@
 PARAMS=""
 EVENT_PROCESSOR_DEBUG=0
+SCHEDULER_DEBUG=0
 VERBOSE_OUTPUT=0
 EXCLUDE="ndscheduler"
 RUN_SCHEDULER=0
 ENV="dev"
 while (( "$#" )); do
   case "$1" in
+    -c|--scheduler-debug)
+      SCHEDULER_DEBUG=1
+      shift
+      ;;
     -d|--processor-debug)
       EVENT_PROCESSOR_DEBUG=1
       shift
@@ -55,6 +60,7 @@ else
   SERVICES=$PARAMS
 fi
 
+SCHEDULER_DEBUG=$SCHEDULER_DEBUG \
 EVENT_PROCESSOR_DEBUG=$EVENT_PROCESSOR_DEBUG \
 VERBOSE_OUTPUT=$VERBOSE_OUTPUT \
 RUN_SCHEDULER=$RUN_SCHEDULER \
