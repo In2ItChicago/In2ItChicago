@@ -110,14 +110,6 @@ all subsequent statements that mention `localhost` should be replaced with `192.
 Verify that Docker installed correctly with: `docker run hello-world`. You should see, "Hello from Docker!"
 
 ### Running the Code
-The startup process runs a Python script to check if any docker images are out of date, so you will need python >=3.6 installed for that script to run properly. If you do not, it will throw an error,
-but it won't affect the rest of the process, so this part can be skipped if you want.
-If you're on Windows and do not have Python set up, you should install Anaconda from [here](https://www.anaconda.com/download/#windows/). During set up, you should check the box that says to add Python to your system path. 
-If you do not, you'll need to add it to your path later. Without Python being accessible in the system path, Python commands won't be visible to terminals like the Docker Terminal or Git Bash. On Mac or Linux, you can install Python directly 
-from your system's package manager. If your Python version is too old, I recommend using [pyenv](https://github.com/pyenv/pyenv) to manage your Python versions.
-
-Once Python is set up, run `scripts/install.sh` from the root of the Github repo to install necessary Python dependencies.
-
 Open a Docker terminal on Windows Home, Git Bash or some kind of bash emulator on Windows Professional, or a normal terminal otherwise, and `cd` into the Git repo. If on Windows, it's probably a good idea to run `scripts/fix-bad-characters.bash` first because Docker behaves strangely when Windows-specific characters are sent to it. You may need to run this again in the future if more Windows characters make it into your files. 
 
 Now, run `./start.sh`. If you get a permissions error, you may need to run `chmod +x start.sh`. This will grant execution permissions to the file. 
@@ -151,6 +143,8 @@ Once you have the configuration saved, you'll be able to select it from the debu
 
 All of the code is running through a program called [nodemon](https://nodemon.io/) which allows you to use hot reloading while debugging. Hot reloading means that any time you change the source code in your editor,
 nodemon will detect the change and automatically restart the attached process. This way, testing your changes requires no manual intervention. You can try it by pressing `CTRL + S` on any source code file while the code is running.
+
+You do not need to have python or node running locally for development since it is running in Docker, but it may help to have local installations to help with autocomplete and linting while developing. See [python for VS Code](https://code.visualstudio.com/docs/languages/python) and [node for VS Code](https://code.visualstudio.com/docs/nodejs/nodejs-tutorial).
 
 ### Configuring pgAdmin
 This is an optional step to view what's going on with the database. This doesn't need to be done immediately, but it may be useful for debugging if things aren't working as expected. 
@@ -318,3 +312,6 @@ __Docker says that it can't start because ports are already allocated__
 
 __When starting Docker on Windows, it complains about not having an IP address__
 - The VirtualBox VM will likely need to be started manually every time before starting Docker because it takes too long to start up and Docker times out while waiting for it.
+
+__VS Code is complaining about missing dependencies/modules/etc__
+- VS Code is only looking at your local system, not what's in Docker. To get rid of the warnings and enable autocomplete, linting, etc, install all of the python/node dependencies on your local machine.

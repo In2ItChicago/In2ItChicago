@@ -1,14 +1,11 @@
-if [ ! "$(docker network ls | grep in2it)" ]
+ENV=${1:-dev}
+./scripts/create-network.sh
+if [ "$CHECK_IMAGE_UPDATES" == "1" ]
 then
-  docker network create --attachable --driver overlay in2it
+    ./scripts/check-all-image-updates.sh
 fi
 
-if [ -f ../ndscheduler/build.sh ]
-then
-  ../ndscheduler/build.sh dev
-fi
-./scripts/build-images.sh dev
-./scripts/check-all-image-updates.sh
+./scripts/build-images.sh $ENV
 docker-compose down
 docker-compose rm -f -v
 ./db/run.sh &
