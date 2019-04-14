@@ -40,7 +40,7 @@
 		},
 		computed: {
 			mapUrl: function() {
-				return 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDKuKo2WRNv5IhKm_At8wGfD4T142laung&q=' + this.event.geocode.address;
+				return 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDKuKo2WRNv5IhKm_At8wGfD4T142laung&q=' + this.event.address;
 			}
 		},
 		asyncData({redirect, store}) {

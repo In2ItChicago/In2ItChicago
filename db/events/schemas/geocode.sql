@@ -1,0 +1,6 @@
+CREATE SCHEMA geocode
+    AUTHORIZATION postgres;
+
+GRANT ALL ON SCHEMA geocode TO postgres;
+
+GRANT ALL ON SCHEMA geocode TO PUBLIC;

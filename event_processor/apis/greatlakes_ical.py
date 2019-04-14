@@ -4,14 +4,14 @@ from custom_spiders import ApiSpider
 from api_base import ApiBase
 
 class GreatLakesReader(ApiSpider):
-    name = 'great lakes'
+    name = 'greatlakes'
 
     def parse(self, response):
         return self.get_events()
 
-    def __init__(self, start_date, end_date):
+    def __init__(self, name=None, **kwargs):
         url = 'https://greatlakes.org/events/?ical=1&tribe_display=list'
-        super().__init__(self, 'Alliance for the Great Lakes', url, start_date, end_date, date_format='%Y-%m-%d')
+        super().__init__(self, 'Alliance for the Great Lakes', url, date_format='%Y-%m-%d', **kwargs)
         tz = timezone('America/Chicago')
         self.reader = ICal.from_url(self.base_url, tz)
 

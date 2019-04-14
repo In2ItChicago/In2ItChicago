@@ -133,3 +133,9 @@ node_modules/
 
 # keys
 *.pem
+
+# twisted lock file
+twistd.pid
+
+# databases
+*.db

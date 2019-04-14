@@ -1,6 +1,17 @@
 import hashlib
+import pickle
 class EventHashes:
-    hash_list = dict()
+    @staticmethod
+    def load():
+        try:
+            with open('/tmp/hashes', 'rb') as f:
+                return pickle.load(f)
+        except FileNotFoundError:
+            return dict()
+    
+    def write(hashes):
+        with open('/tmp/hashes', 'wb') as f:
+            pickle.dump(hashes, f)
 
     @staticmethod
     def create_hash(obj):
@@ -9,8 +20,11 @@ class EventHashes:
 
     @staticmethod
     def get(key):
-       return EventHashes.hash_list[key] if key in EventHashes.hash_list else ''
+        hashes = EventHashes.load()
+        return hashes[key] if key in hashes else ''
     
     @staticmethod
     def set(key, value):
-        EventHashes.hash_list[key] = value
+        hashes = EventHashes.load()
+        hashes[key] = value
+        EventHashes.write(hashes)

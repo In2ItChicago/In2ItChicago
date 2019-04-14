@@ -37,10 +37,14 @@ class GeocodePipeline:
     def process_item(self, item, spider):
         if 'address' in item:
             try:
-                geocode = requests.get(config.db_get_geocode, {'address': item['address']})
-                item['geocode'] = geocode.json()
+                geocode = requests.get(config.get_geocode, {'address': item['address']})
+                geocode_json = geocode.json()
+                if geocode_json == []:
+                    spider.logger.warning(f'No geocode response for address {item["address"]}')
+                    return item
+                item['geocode_id'] = geocode_json['id']
             except Exception as e:
-                print('Exception while getting geocode: ' + str(e))
+                spider.logger.warning(f'Exception while getting geocode for address {item["address"]}: {e}')
         return item
 
 class EventBuildPipeline:
@@ -48,40 +52,28 @@ class EventBuildPipeline:
         spider.event_manager.update(item['url'], item)
         return item
 
-class ScraperTransformPipeline:
-    def process_item(self, item, spider):
-        event_count = self.get_event_count(item, spider)
-        for processed_item in ({key: value[i]} for key, value in item.items() for i in range(event_count)):
-            yield processed_item
-        
-    
-    def get_event_count(self, item, spider):
-        count = None
-        for _, value in item.items():
-            if count == None:
-                count = len(value)
-            else:
-                if len(value) != count:
-                    raise ValueError(f'{spider.organization}: Selectors returned data of differing lengths')
-        return count
-
 class EventSavePipeline:
     def close_spider(self, spider):
         if len(spider.event_manager.events) == 0:
-            print(f'{datetime.now()} No data returned for ' + spider.base_url)
+            spider.logger.info(f'No data returned for ' + spider.base_url)
         else:
-            self.save_events(spider.identifier, spider.event_manager.to_dicts())
+            self.save_events(spider)
+        if config.run_scheduler:
+            spider.notify_spider_complete()
 
-    def save_events(self, identifier, event_list):
+    def save_events(self, spider):
+        event_list = spider.event_manager.to_dicts()
         new_hash = EventHashes.create_hash(event_list)
-        print(f'{datetime.now()} Found {len(event_list)} events for {event_list[0]["organization"]}.')
-        if new_hash == EventHashes.get(identifier):
-           print(f'{datetime.now()} Nothing to update.')
+        spider.logger.info(f'Found {len(event_list)} events for {event_list[0]["organization"]}.')
+        if new_hash == EventHashes.get(spider.identifier):
+           spider.logger.info(f'Nothing to update.')
            return
-        EventHashes.set(identifier, new_hash)
-
-        response = requests.post(config.db_put_events, json=event_list)
-        if not response.ok:
-            raise ValueError(response.text)
+        EventHashes.set(spider.identifier, new_hash)
+        if spider.is_errored:
+            spider.logger.info('Errors occurred during processing so events will not be saved')
         else:
-            print(f'{datetime.now()} Saved {len(event_list)} events for {event_list[0]["organization"]}')
+            response = requests.post(config.put_events, json=event_list)
+            if not response.ok:
+                raise Exception(response.text)
+            else:
+                spider.logger.info(f'Saved {len(event_list)} events for {event_list[0]["organization"]}')

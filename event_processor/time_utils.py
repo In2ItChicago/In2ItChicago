@@ -3,6 +3,7 @@ from dateutil.relativedelta import relativedelta
 from datetime import datetime
 import time
 from timefhuman import timefhuman
+import daterangeparser
 import re
 from data_utils import DataUtils
 
@@ -99,11 +100,15 @@ class TimeUtils:
         if parsed_date != None:
             return parsed_date, parsed_date
         # If that fails, try to parse the date with fuzzy matching (needed for weird formats or date ranges)
-        human_parsed = timefhuman(test_string)
-        if len(human_parsed) == 1:
-            return human_parsed, human_parsed
-        elif len(human_parsed) == 2:
-            return human_parsed
+        # timefhuman and daterangeparser are both libraries to do this, but they each support different cases
+        try:
+            fuzzy_parsed = timefhuman(test_string)
+        except:
+            fuzzy_parsed = daterangeparser.parse(test_string)
+        if len(fuzzy_parsed) == 1:
+            return fuzzy_parsed, fuzzy_parsed
+        elif len(fuzzy_parsed) == 2:
+            return fuzzy_parsed
 
         # If that fails, it may be a date range in a format that daterangeparser doesn't recognize
         # Check if the string contains two formatted dates by checking the beginning and end substrings

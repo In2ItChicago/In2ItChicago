@@ -1,10 +1,16 @@
 PARAMS=""
 EVENT_PROCESSOR_DEBUG=0
+SCHEDULER_DEBUG=0
 VERBOSE_OUTPUT=0
+EXCLUDE="ndscheduler"
 RUN_SCHEDULER=0
 ENV="dev"
 while (( "$#" )); do
   case "$1" in
+    -c|--scheduler-debug)
+      SCHEDULER_DEBUG=1
+      shift
+      ;;
     -d|--processor-debug)
       EVENT_PROCESSOR_DEBUG=1
       shift
@@ -17,7 +23,8 @@ while (( "$#" )); do
       VERBOSE_OUTPUT=1
       shift
       ;;
-    -s|--run-scheduler)
+    -s|--scheduler)
+      EXCLUDE=""
       RUN_SCHEDULER=1
       shift
       ;;
@@ -37,7 +44,24 @@ while (( "$#" )); do
 done
 # set positional arguments in their proper place
 eval set -- "$PARAMS"
+
+if [ ! -z "$EXCLUDE" ] 
+then
+    case "$(uname)" in
+    CYGWIN*|MINGW*|MSYS*)
+        SERVICES=$(docker-compose config --services | grep -v -e $EXCLUDE | tr '\r\n' ' ')
+        ;;
+    *)
+        SERVICES=$(docker-compose config --services | grep -v -e $EXCLUDE)
+        ;;
+    esac
+  
+else
+  SERVICES=$PARAMS
+fi
+
+SCHEDULER_DEBUG=$SCHEDULER_DEBUG \
 EVENT_PROCESSOR_DEBUG=$EVENT_PROCESSOR_DEBUG \
 VERBOSE_OUTPUT=$VERBOSE_OUTPUT \
 RUN_SCHEDULER=$RUN_SCHEDULER \
-docker-compose -f docker-compose.yml -f docker-compose.${ENV}.yml up $PARAMS
+docker-compose -f docker-compose.yml -f docker-compose.${ENV}.yml up $SERVICES

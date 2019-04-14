@@ -1,18 +1,25 @@
 version: '3.6'
 services:
   event_processor:
-    image: "in2itchicago/event_processor:20190311.1"
-    command: ["python", "-u", "runner.py"]
+    image: in2itchicago/event_processor:20190413.1
+    command: sh -c "chmod +x entrypoint.sh && ./entrypoint.sh"
     environment:
       - DEBUG=0
       - VERBOSE_OUTPUT=0
-      - RUN_SCHEDULER=1
       - SCHEDULE_INTERVAL=120
+      - RUN_SCHEDULER=1
   event_service:
-    image: "in2itchicago/event_service:20190311.1"
-    command: ["npm", "run", "start"]
+    image: in2itchicago/event_service:20190413.1
+    command: "yarn run start"
   in2it_site:
-    image: "in2itchicago/in2it_site:20190311.1"
-    command: ["npm", "run", "start"]
+    image: in2itchicago/in2it_site:20190413.1
+    command: "yarn run start"
+    environment:
+      - "API_URL=${API_URL}"
+  ndscheduler:
+    image: in2itchicago/ndscheduler:20190413.1
+    command: "python -u simple_scheduler/scheduler.py"
+    environment:
+      - DEBUG=0
   nginx:
-    image: "nginx:1.15.9"
+    image: "nginx:1.15.11-alpine"

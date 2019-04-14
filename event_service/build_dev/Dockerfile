@@ -1,6 +1,6 @@
-FROM node:11.11 AS event_service_common
+FROM node:11.14-alpine AS event_service_common
 WORKDIR /usr/src/app/event_service
 COPY ./package.json ./
 
 FROM event_service_common AS event_service_dev
-RUN npm install
+RUN yarn install

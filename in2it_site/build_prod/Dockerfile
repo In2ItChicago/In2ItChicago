@@ -1,8 +1,8 @@
-FROM node:11.11 AS in2it_site_common
+FROM node:11.14-alpine AS in2it_site_common
 WORKDIR /usr/src/app/in2it_site
 COPY package.json ./
 
 FROM in2it_site_common AS in2it_site_prod
 COPY . ./
-RUN npm install --production
-RUN npm run build
+RUN yarn install --production
+RUN yarn run build

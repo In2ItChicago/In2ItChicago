@@ -78,7 +78,7 @@ class Event(scrapy.Item):
     price = price_field()
     category = category_field()
     event_time = date_field()
-    geocode = scrapy.Field()
+    geocode_id = scrapy.Field()
 
 class EventLoader():
     def __init__(self, *args, **kwargs):

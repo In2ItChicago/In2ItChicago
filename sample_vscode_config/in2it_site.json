@@ -11,7 +11,9 @@
             "restart": true,
             "sourceMaps": true,
             "localRoot": "${workspaceRoot}",
-            "remoteRoot": "/usr/src/app/in2it_site"
+            "remoteRoot": "/usr/src/app/in2it_site",
+            "protocol": "inspector",
+            "outFiles": [ "${workspaceRoot}/.nuxt/**/*.js" ]
         },
         {
             "name": "LocalDebug",

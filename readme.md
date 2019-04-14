@@ -3,28 +3,35 @@
 View these docs [here](https://clipboardproject.github.io/ClipboardApp/) if you like pretty colors.
 
 ## Table of Contents
- * [In2It App](readme.md#in2it-app)
-      * [Setup](readme.md#setup)
-         * [Get the Code](readme.md#get-the-code)
-         * [Install Docker](readme.md#install-docker)
-            * [Extra Installation Steps for Linux](readme.md#extra-installation-steps-for-linux)
-            * [Extra Installation Steps for Windows](readme.md#extra-installation-steps-for-windows)
-         * [Setting Up Docker](readme.md#setting-up-docker)
-         * [Running the Code](readme.md#running-the-code)
-         * [Setting up your development environment](readme.md#setting-up-your-development-environment)
-         * [Settings](readme.md#settings)
-            * [Command Line Arguments](readme.md#command-line-arguments)
-            * [Other Settings](readme.md#other-settings)
-      * [Development Guide](readme.md#development-guide)
-         * [Technical Overview](readme.md#technical-overview)
-         * [Getting Started](readme.md#getting-started)
-            * [Knowing when to use a scraper and when to use an API](readme.md#knowing-when-to-use-a-scraper-and-when-to-use-an-api)
-         * [How to integrate new scrapers and API clients with the core code](readme.md#how-to-integrate-new-scrapers-and-api-clients-with-the-core-code)
+   * [In2It App](#in2it-app)
+      * [Table of Contents](#table-of-contents)
+      * [Setup](#setup)
+         * [Get the Code](#get-the-code)
+         * [Install Docker](#install-docker)
+            * [Extra Installation Steps for Linux (Ubuntu)](#extra-installation-steps-for-linux-ubuntu)
+            * [Extra Installation Steps for Windows](#extra-installation-steps-for-windows)
+         * [Setting Up Docker](#setting-up-docker)
+         * [Running the Code](#running-the-code)
+         * [System Architecture](#system-architecture)
+         * [Setting up your development environment](#setting-up-your-development-environment)
+         * [Configuring pgAdmin](#configuring-pgadmin)
+         * [Settings](#settings)
+            * [Command Line Arguments](#command-line-arguments)
+            * [Other Settings](#other-settings)
+         * [Scheduler](#scheduler)
+      * [Development Guide](#development-guide)
+         * [Technical Overview](#technical-overview)
+         * [Getting Started](#getting-started)
+            * [Knowing when to use a scraper and when to use an API](#knowing-when-to-use-a-scraper-and-when-to-use-an-api)
+         * [How to integrate new scrapers and API clients with the core code](#how-to-integrate-new-scrapers-and-api-clients-with-the-core-code)
+      * [Troubleshooting Guide](#troubleshooting-guide)
 
 ## Setup
 
 ### Get the Code
 Clone the ClipboardApp repository into your preferred directory with Git Bash on Windows or a normal terminal otherwise: `git clone https://github.com/ClipboardProject/ClipboardApp.git`
+
+If you have any issues, see the troubleshooting guide further down in this document.
 
 ### Install Docker
 For Windows Home, download from [here](https://docs.docker.com/toolbox/toolbox_install_windows/). Documentation is [here](https://docs.docker.com/toolbox/overview/).  
@@ -79,12 +86,12 @@ If the docker-compose command doesn't work, add the following line to your ~/.ba
 Close and reopen your terminal(s) to apply the changes.
 
 #### Extra Installation Steps for Windows
-I was unable to get Kinematic to work on Docker Toolbox, so I would recommend skipping that. Make sure virtualization is enabled in the BIOS. If you need to change virtualization settings, do a full reboot cycle,
+I was unable to get Kitematic to work on Docker Toolbox, so I would recommend skipping that. Make sure virtualization is enabled in the BIOS. If you need to change virtualization settings, do a full reboot cycle,
 otherwise Windows may not report that the settings have changed. If you're running Windows 10 Professional, you'll need to make sure Hyper-V is enabled in the "Turn Windows Features On or Off" dialog.
-If you're using Docker Toolbox on Windows Home edition, you'll want to start the VirtualBox instance manually before starting Docker every time or Docker will complain about not having an IP address.
+__IMPORTANT: If you're using Docker Toolbox on Windows Home edition, you'll want to start the VirtualBox instance manually before starting Docker every time or Docker will complain about not having an IP address.__
 
 Additionally, once Docker is installed, you'll need to tweak the VirtualBox settings slightly. Port forwarding must be configured manually to allow the host system to communicate with Docker over `localhost`
-instead of `192.168.99.100`.
+instead of its defualt IP of `192.168.99.100`.
 First, right click on the machine title "default" and select "Settings".
 ![Settings](images/settings.png?raw=true "Settings")
 
@@ -92,13 +99,13 @@ Once in the settings menu, select "Network" and then "Port Forwarding".
 ![Network](images/network.png?raw=true "Network")
 
 Finally, click the green plus on the top right corner and add a new port forwarding rule. The new rule should be configured exactly like "Rule 1" in the following picture, but you can name it whatever.
-This is the minimum amount of configuration needed for the application to work, but you can add the other ports used by the application later if you'd like to be able to connect to everything via `localhost`.
+This is the minimum amount of configuration needed for the application to work, but you can add the other ports used by the application if you'd like to be able to connect to everything via `localhost`. Other ports used by this application are `3000`, `9000`, `5000`, `7000`, and `6800` if you would like to add those now.
 ![PortForwaring](images/portforwarding.png?raw=true "Port Forwarding")
 
 ### Setting Up Docker
 If you are using Linux, all of the subsequent Docker commands in this guide might have to be run with `sudo`. 
 If you would like to be able to use Docker without `sudo`, look through the answers [here](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo). **If you're using Docker Toolbox on Windows Home, 
-all subsequent statements that mention `localhost` should be replaced with `192.168.99.100`**. This is because the Docker engine can't bind to localhost when using Docker Toolbox.
+all subsequent statements that mention `localhost` should be replaced with `192.168.99.100` unless you set up port forwarding for all of the ports mentioned in the previous step**.
 
 Verify that Docker installed correctly with: `docker run hello-world`. You should see, "Hello from Docker!"
 
@@ -111,20 +118,21 @@ from your system's package manager. If your Python version is too old, I recomme
 
 Once Python is set up, run `scripts/install.sh` from the root of the Github repo to install necessary Python dependencies.
 
-Open a Docker terminal on Windows Home, Git Bash or some kind of bash emulator on Windows Professional, or a normal terminal otherwise, and `cd` into the Git repo. Run `./start.bash`. 
-If you get a permissions error, you may need to run `chmod +x start.bash`. This will grant execution permissions to the file. 
+Open a Docker terminal on Windows Home, Git Bash or some kind of bash emulator on Windows Professional, or a normal terminal otherwise, and `cd` into the Git repo. If on Windows, it's probably a good idea to run `scripts/fix-bad-characters.bash` first because Docker behaves strangely when Windows-specific characters are sent to it. You may need to run this again in the future if more Windows characters make it into your files. 
+
+Now, run `./start.sh`. If you get a permissions error, you may need to run `chmod +x start.sh`. This will grant execution permissions to the file. 
 If all goes well, the database will be created, the scrapers will start running, and the website will start up. This process will take some time.
 Eventually, you should start seeing messages about events being saved. Once a message says `Data retrieved successfully`, the code is done running. 
 Several components should be visible now:
 - `localhost` and `localhost:3000` will show the site
 - `localhost:5000/docs` will show a frontend for viewing the data and testing the API
 - `localhost:9000` will show a frontend for managing the Docker containers. Create whatever username and password you want.
+-  `localhost:7000` will show a frontend for managing the Postgres database. The username is `user@domain.com` and the password is `pgadmin`. Instructions on how to connect to the database will be given later in this document.
+
+### System Architecture
+![System Architecture](images/In2ItArchitecture.png?raw=true "System Architecture")
 
 ### Setting up your development environment
-
-If you want to see more details about the data in the database, download NoSQL Booster from [here](https://nosqlbooster.com/downloads). You can use another MongoDB client if you'd prefer. Create a connection to `localhost:27017` and 
-you should see the data show up. 
-
 For debugging, we've set up configurations to allow for remote debugging in Docker using VS Code. This allows you to set breakpoints and step through code remotely while it's running in Docker.
 You can use another editor if you'd like, but you'll have to set up remote debugging yourself. Whenever you open VS Code, it creates a directory called `.vscode` which stores local configurations.
 
@@ -138,25 +146,47 @@ the folder structure of the remote and local repository to match. To do so, you 
 
 Once you have VS Code open, you should see a bug icon on the left panel. This contains the debugger settings. If you click the gear icon near the top right of the submenu, it will open a prompt to choose an environment.
 It doesn't matter which one you choose because we'll overwrite this file in a minute. In this repo, there is a folder called `sample_vscode_config` with one config per component. Replace the entire `launch.json` file with
-whatever config matches your current folder. As the comment in the files explain, you will need to replace `localhost` with `192.168.99.100` for Docker Toolbox. 
-Once you have the configuration saved, you'll be able to select it from the debug menu. When you have the code running in Docker, click the green arrow to attach to the running process.
+whatever config matches your current folder. As the comment in the files explains, you will need to replace `localhost` with `192.168.99.100` for Docker Toolbox. 
+Once you have the configuration saved, you'll be able to select it from the debug menu. When you have the code running in Docker, click the green arrow near the top left of VS Code to attach to the running process.
 
 All of the code is running through a program called [nodemon](https://nodemon.io/) which allows you to use hot reloading while debugging. Hot reloading means that any time you change the source code in your editor,
-nodemon will detect the change and automatically restart the attached process. This way, testing your changes requires no manual intervention.
+nodemon will detect the change and automatically restart the attached process. This way, testing your changes requires no manual intervention. You can try it by pressing `CTRL + S` on any source code file while the code is running.
+
+### Configuring pgAdmin
+This is an optional step to view what's going on with the database. This doesn't need to be done immediately, but it may be useful for debugging if things aren't working as expected. 
+
+This step must be done while the code is running and after the database has been initialized (1-2 minutes after the first startup).
+
+Go to pgAdmin at `locahost:7000` and sign in with username `user@domain.com` and password `pgadmin`.
+On the left pane, right click on the node called `Servers` and create a new one as shown below.
+
+![Create Server](images/CreateServer.png?raw=true "Create Server")
+
+Enter whatever name you want for the server. I choose `postgres` because I'm boring.
+
+![Choose Name](images/ChooseName.png?raw=true "Choose Name")
+
+Now, set up the conenection properties. You should enter the properties exactly as shown in the image. The password is `postgres`.
+
+![Create Connection](images/CreateConnection.png?raw=true "Create Connection")
+
+If your database was created successfully, you should see three databases in the left pane now: `events`, `postgres`, and `scheduler`. 
 
 ### Settings
 #### Command Line Arguments
 The following parameters can be passed to `start.bash` to change its runtime behavior. 
 - `-d or --processor-debug`:
-This parameter is needed when using the debugger with the event processor. When passed in, `runner.py` will pause at the start of execution until you connect to it from the VS Code debugger.
+This parameter is needed when using the debugger with the event processor. When passed in, the event processor will pause at the start of execution until you connect to it from the VS Code debugger.
 This isn't needed by the other components because you can attach to a Node process without any special configuration.
 
 - `-v or --verbose-output`
 This tells scrapy to send verbose output to the logs. Otherwise, only errors will be displayed. Scrapy generates a lot of output so this is only useful when debugging odd behavior.
 
 - `-s or --run-scheduler`
-This tells the event processor to run the scrapers on a schedule (currently once a minute in dev and once every two hours in prod). It's easier to test without this flag since it will run them all at once
-when this is not passed in.
+This tells the event processor to run the scrapers on a schedule (currently once a minute in dev and once every two hours in prod). More information about the scheduler will be discussed in a subsequent section.
+
+- `-c or --scheduler-debug`
+This is the same behavior as `-d` but for the scheduler. More information about the scheduler will be discussed in a subsequent section.
 
 #### Other Settings
 The following settings are defined in `event_processor/config.py`:  
@@ -176,7 +206,18 @@ If `True`, any Scrapy calls made will be cached using Scrapy's builtin cache sys
 - **scrapy_cache_expiration**:
 Time in seconds that Scrapy data will be cached for.
 
+### Scheduler
+We've forked a project from Nextdoor called ndscheduler to use as a scheduling system for this project.
+To run the scheduler with this application, the scheduler repository must be checked out into the same parent folder as this one.
+
+To use, run `cd {parent directory of the directory you cloned this repository into}` and then `git clone https://github.com/ClipboardProject/ndscheduler`. The startup scripts in this repository check for the existence of the ndscheduler folder when running. Once this is completed, go back to the `ClipboardApp` folder and run `./start.sh -s` to start the application with the scheduler.
+
+If all goes well, you should be able to navigate to `localhost:8888` and see the scheduler. From there, you can let the scrapers run on a schedule or run them manually with the UI. `localhost:6800` is the url for scrapyd, which is the middleman between the scrapers and ndscheduler.
+
 ## Development Guide
+
+__IMPORTANT: If you're using Windows, please run `git config --global core.autocrlf input` before committing anything. This prevents carriage returns from getting sent to the remote repository.__
+
 Our current development tasks and bugs are kept in the issues list [here](https://github.com/ClipboardProject/ClipboardApp/issues).  
 The easiest way to learn the code base and get started contributing is to add a new scraper as defined in [this](https://github.com/ClipboardProject/ClipboardApp/issues/14) issue.  
 The issue contains instructions on how to pick a specific site.
@@ -190,11 +231,17 @@ This is the heart of the application. It asynchronously scrapes websites and pul
 This is a standalone service that receives data from the event processor for insertion into MongoDB and processes requests from the clipboard site to display data to the user.  
 Any time data is received from a website, the old data from that site is deleted and refreshed with the new data.
 
-- **MongoDB Instance**:
+- **PostgreSQL Instance**:
 This holds a single collection of all data from the sites. Only the database client interacts with the database.
 
 - **In2It Site**:
 The website that displays the aggregated data. Interacts with the database via the database client.
+
+- **ndscheduler**:
+Optional scheduling system to run scrapers periodically.
+
+- **scrapyd**
+ndscheduler calls this to request scraper runs. Once a scraper is requested, scrapyd will start the scraper when resouces become available.
 
 ### Getting Started
 As stated previously, adding a scraper is the best way to start contributing. If you're not familiar with web scraping,
@@ -245,10 +292,29 @@ For each item, you'll want to parse out the following data (as much as is availa
 - **`category`**: Category of event, as defined [here](https://github.com/ClipboardProject/ClipboardApp/blob/master/event_processor/categories.py). (Work in progress. We'll flesh out categories more eventually)  
 - **Start/End Time and Date**: Dates and times can be supplied with several parameters. Choose one date formate and one time format. Eventually, all dates and times will be converted into Unix timestamps.
     - **`time`**: Use if only one time is supplied for the event (not time range)
-    - **`start_Time` and `End_Time`**: Use if the site supplies distinct data for these two values
+    - **`start_time` and `end_time`**: Use if the site supplies distinct data for these two values
     - **`time_Range`**: Use if the start and end time is supplied in a single string ex: 6:00-8:00 PM
     - **`date`**:  Use if the event could be one day or multiple days but it is contained in a single string. This is done this way because some sites have data that could be single days or multiple days.
     - **`start_date` and `end_date`**: Use if the site supplies distinct data for these two values
     - **`start_timestamp` and `end_timestamp`**: Use if the data is formatted like a Unix timestamp (Unlikely for scrapers but possible for an API)
 
 Once you've decided how to find these fields for your site, look at the existing examples to see what methods to use to extract the data.
+
+## Troubleshooting Guide
+__Weird errors are occuring when I start up the code__
+
+- First of all, try it at least two or three times. Docker tries to start all services simultaneously and occassionally things just get stuck in a weird state.
+
+- This could obviously be caused by many things, but the common cause of most errors are bad characters in files (on Windows) or bad cache data. Docker can behave strangely sometimes when Windows-specific characters are sent into it. The first thing to try on Windows when weirdness occurs is to run `scripts/fix-bad-characters.bash`. To reduce the chance of this being needed, you can change VS Code's line ending behavior to use only line feed instead of carriage return + line feed. More information on this [here](https://stackoverflow.com/questions/39525417/visual-studio-code-how-to-show-line-endings).
+
+- If bad characters aren't the problem, you can clean up your docker system. First run `docker-compose down` to make sure no containers are running, then run `docker system prune`.
+If that isn't enough, deleting the image of the offending service may be needed. `docker image rm {image name}` will do that. If that doesn't work, you can delete the volume associated with an image by running `docker volume rm {volume name}`. If you don't feel like figuring out which service is causing the issue, `docker system prune -a` will wipe out all images, and `docker volume prune` will wipe out all volumes. Keep in mind that volumes are what stores persistent data so be careful about data loss.
+
+__Services aren't restarting properly with nodemon after saving__
+- Sometimes nodemon restarts the service too quickly and doesn't allow time for ports to deallocate before reallocating them. Give it a kick by hitting `CTRL + S` on a source file one or two more times and it should start properly. This is a bug that we hope to resolve sometime soon-ish.
+
+__Docker says that it can't start because ports are already allocated__
+- You may have old containers running that weren't stopped previously. Run `docker-compose down` to stop them, or if that doesn't work, stop them manually one by one. If that doesn't work. Other applications may be using those ports and must be stoppped first.
+
+__When starting Docker on Windows, it complains about not having an IP address__
+- The VirtualBox VM will likely need to be started manually every time before starting Docker because it takes too long to start up and Docker times out while waiting for it.

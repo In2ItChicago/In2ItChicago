@@ -10,8 +10,8 @@ from config import config
 
 BOT_NAME = 'In2ItChicago'
 
-SPIDER_MODULES = ['scrapers.spiders']
-NEWSPIDER_MODULE = 'scrapers.spiders'
+SPIDER_MODULES = ['scrapers', 'apis']
+NEWSPIDER_MODULE = 'scrapers'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = 'In2ItChicago (+http://in2itchicago.com)'
@@ -44,9 +44,9 @@ ROBOTSTXT_OBEY = True
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
-#EXTENSIONS = {
-#    'scrapy.extensions.telnet.TelnetConsole': None,
-#}
+# EXTENSIONS = {
+#     'scrapy_jsonrpc.webservice.WebService': 500,
+# }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -61,14 +61,19 @@ AUTOTHROTTLE_ENABLED = True
 # Enable showing throttling stats for every response received:
 #AUTOTHROTTLE_DEBUG = False
 
+#JSONRPC_ENABLED = False
+#JSONRPC_HOST = '0.0.0.0'
+#JSONRPC_PORT = [6080, 7080]
+
 # Enable and configure HTTP caching (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
 HTTPCACHE_ENABLED = config.enable_scrapy_cache
 # Expire cache every hour
 HTTPCACHE_EXPIRATION_SECS = config.scrapy_cache_expiration
-HTTPCACHE_DIR = 'httpcache'
+HTTPCACHE_DIR = '/tmp/httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 # Comment this out to see all data being scraped
-LOG_LEVEL = 'DEBUG' if config.verbose_scrapy_output else 'ERROR'
+LOG_LEVEL = 'DEBUG' if config.verbose_scrapy_output else 'WARNING'
+LOG_FORMATTER = 'polite_log_formatter.PoliteLogFormatter'

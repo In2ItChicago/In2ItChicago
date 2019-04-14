@@ -7,7 +7,6 @@ api_settings = {
             'pipelines.GeocodePipeline': 400,
             'pipelines.EventBuildPipeline': 500,
             'pipelines.EventSavePipeline': 600
-            
         }
     }
 scraper_settings = {
@@ -18,7 +17,7 @@ scraper_settings = {
             'pipelines.EventSavePipeline': 600
         },
         'SPIDER_MIDDLEWARES': {
-            'middlewares.SplitItemsMiddleware': 200
+            'middlewares.SplitItemsMiddleware': 400
         }
     }
 class ApiSpider(Spider, ApiBase):

@@ -1,0 +1,14 @@
+{
+    "ignore": [
+        "node_modules/*",
+        "*.egg-info",
+        "__pycache__/*",
+        "lock/*",
+        "logs/*",
+        "eggs/*",
+        "dbs/*",
+        "data/*"
+      ],
+      "ext": "py,sh",
+      "delay": "3000"
+}

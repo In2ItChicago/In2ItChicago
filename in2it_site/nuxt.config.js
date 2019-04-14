@@ -32,7 +32,7 @@ module.exports = {
 	** Global CSS
 	*/
 	css: [
-        '@/node_modules/bootstrap/dist/css/bootstrap.css'
+        
 	],
 
 	/*
@@ -48,12 +48,11 @@ module.exports = {
 		// Doc: https://github.com/nuxt-community/axios-module#usage
 		'@nuxtjs/axios',
 		// Doc: https://bootstrap-vue.js.org/docs/
-        'bootstrap-vue/nuxt',
-        'nuxt-typescript'
+		'bootstrap-vue/nuxt',
+		['nuxt-env', {
+			keys: ['API_URL']
+		}]
 	],
-	env: {
-		API_URL: process.env.API_URL || 'api.localhost'
-	},
 	/*
 	** Axios module configuration
 	*/
@@ -68,16 +67,19 @@ module.exports = {
 		/*
 		** You can extend webpack config here
 		*/
-		extend(config, ctx) {
-            if (process.env.NODE_ENV === 'dev') {
-                if (ctx.isClient)
-                    config.devtool = 'eval-source-map'
-                else
-                    config.devtool = 'inline-source-map'
+		extend(config, { isClient }) {
+            if (isClient)
+				config.devtool = '#eval-source-map'
+			else
+				config.devtool = '#inline-source-map'
+			config.output.devtoolNamespace = 'In2It';
+			config.output.devtoolModuleFilenameTemplate = function(info) {
+				return `webpack://${info.namespace}/${info.resourcePath}?${info.hash}`
+			}
             return config;
-            }
-		}
-    },
+		},
+		devtools: true
+	},
     watchers: {
         webpack: {
             aggregateTimeout: 300,

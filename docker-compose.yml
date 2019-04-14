@@ -1,36 +1,40 @@
 version: '3.6'
 services:
-  mongo:
-    image: "mongo:4.1.9"
-    volumes:
-      - mongodata:/data/db
-      - ./mongoconfig:/data/configdb
-    ports:
-      - "27017:27017"
   event_service:
-    image: "event_service_dev"
+    image: event_service_dev
     ports:
       - "5000:5000"
       - "5858:5858"
+    networks: 
+      - in2it
   event_processor:
-    image: "event_processor_dev"
+    image: event_processor_dev
     ports:
+      - "6800:6800"
       - "5860:5860"
+    networks: 
+      - in2it
   in2it_site:
-    image: "in2it_site_dev"
-    environment:
-      - API_URL=${API_URL:-api.localhost}
+    image: in2it_site_dev
     ports:
       - "3000:3000"
       - "5859:5859"
+    networks: 
+      - in2it
   nginx:
-    image: "nginx_dev"
+    image: nginx_dev
     volumes:
       - ./nginx:/etc/nginx
     ports:
-      - "0.0.0.0:80:80"
+      - target: 80
+        published: 80
+        mode: host
+    deploy:
+      mode: global
     # Sometimes nginx crashes if the site doesn't come up in time
     restart: on-failure
+    networks: 
+      - in2it
   portainer:
     image: "portainer/portainer:1.20.2"
     ports:
@@ -38,6 +42,49 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainerdata:/data
+    networks: 
+      - in2it
+  ndscheduler:
+    image: ndscheduler_dev
+    ports: 
+      - "8888:8888"
+      - "5861:5861"
+    environment:
+      - NDSCHEDULER_SETTINGS_MODULE=simple_scheduler.settings
+    networks: 
+      - in2it
+  postgres:
+    image: postgres:11.2-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks: 
+      - in2it
+  pgadmin:
+    image: dpage/pgadmin4:4.5
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=user@domain.com
+      - PGADMIN_DEFAULT_PASSWORD=pgadmin
+      - PGADMIN_LISTEN_PORT=7000
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    ports:
+      - "7000:7000"
+    # pgadmin spams logs with http request notifications
+    logging:
+      driver: none
+    networks: 
+      - in2it
 volumes:
   mongodata:
   portainerdata:
+  ndscheduler_modules:
+  postgres_data:
+  pgadmin_data:
+networks:
+  in2it:
+   external: true
