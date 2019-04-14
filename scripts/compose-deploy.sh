@@ -40,7 +40,7 @@ done
 # set positional arguments in their proper place
 eval set -- "$PARAMS"
 
-if [[ -z $PARAMS ]] 
+if [ ! -z "$EXCLUDE" ] 
 then
   SERVICES=$(docker-compose config --services | grep -v -e $EXCLUDE)
 else

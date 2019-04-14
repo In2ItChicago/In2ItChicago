@@ -4,5 +4,5 @@ COPY package.json ./
 
 FROM in2it_site_common AS in2it_site_prod
 COPY . ./
-RUN npm install --production
-RUN npm run build
+RUN yarn install --production
+RUN yarn run build

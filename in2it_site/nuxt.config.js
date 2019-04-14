@@ -48,12 +48,11 @@ module.exports = {
 		// Doc: https://github.com/nuxt-community/axios-module#usage
 		'@nuxtjs/axios',
 		// Doc: https://bootstrap-vue.js.org/docs/
-        'bootstrap-vue/nuxt',
-        'nuxt-typescript'
+		'bootstrap-vue/nuxt',
+		['nuxt-env', {
+			keys: ['API_URL']
+		}]
 	],
-	env: {
-		API_URL: process.env.API_URL || 'api.localhost'
-	},
 	/*
 	** Axios module configuration
 	*/

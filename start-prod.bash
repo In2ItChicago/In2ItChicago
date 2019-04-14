@@ -2,7 +2,12 @@ pip3 install -r requirements.txt
 scripts/render.sh
 docker stack rm In2ItChicago
 sleep 5
-docker system prune -f
+docker container prune -f
 sleep 5
-docker network create --attachable --driver overlay in2it > /dev/null 2>&1
+
+if [ ! "$(docker network ls | grep in2it)" ]; then
+  docker network create --attachable --driver overlay in2it
+  sleep 5
+fi
+
 ./scripts/stack-deploy.sh prod

@@ -24,15 +24,13 @@
 		return app.service('events');
 	}
 
-	const eventServiceClient = getClient(process.env.API_URL || '');
-
 	export default {
 		data() {
 			return {
 				events: [],
 			};
 		},
-		asyncData ({ params }) {
+		asyncData ({ app, params }) {
             //Ensure get request goes to an endpoint that returns an array or json object
             //If a regular HTML page is returned, the v-for in the view above will try to
             //render each character in the HTML page string as a separate event and nuxt
@@ -48,6 +46,7 @@
 		},
 		methods: {
 			updateEvents: function() {
+				const eventServiceClient = getClient(this.$env.API_URL || '');
 				return eventServiceClient.find({
 					query: {
 						start_timestamp: this.$store.searchFilter.startDate, 

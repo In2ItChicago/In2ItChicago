@@ -1,5 +1,9 @@
 {
     "compilerOptions": {
+      "target": "es5",
+      "lib": ["esnext", "dom"],
+      "moduleResolution": "node",
+      "experimentalDecorators": true,
       "sourceMap": true,
       "strictNullChecks": true,
       "removeComments": true,

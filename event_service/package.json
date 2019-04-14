@@ -4,7 +4,8 @@
   "description": "Data Access Layer for the event database",
   "main": "event_api.js",
   "scripts": {
-    "start": "node -r ts-node/register event_api",
+    "build": "tsc --project .",
+    "start": "node event_api.js",
     "dev": "./node_modules/nodemon/bin/nodemon.js -L -r ts-node/register --inspect=[::]:5858 event_api.ts"
   },
   "author": "",
@@ -22,17 +23,16 @@
     "lodash": "^4.17.11",
     "mongodb": "^3.1.13",
     "knex": "^0.16.3",
-    "pg": "^7.9.0"
-  },
-  "devDependencies": {
-    "nodemon": "^1.18.9",
-    "typescript": "^3.3.3333",
-    "ts-node": "^8.0.3",
+    "pg": "^7.9.0",
+    "typescript": "^3.4.3",
     "@types/node": "^11.11.3",
     "@types/feathersjs__feathers": "^3.0.3",
     "@types/feathersjs__express": "^1.1.4",
     "@types/feathersjs__errors": "^3.3.1",
-    "@types/lodash": "^4.14.123",
-    "@types/mongodb": "^3.1.22"
+    "@types/lodash": "^4.14.123"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9",
+    "ts-node": "^8.0.3"
   }
 }

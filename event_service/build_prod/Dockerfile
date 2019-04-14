@@ -4,4 +4,5 @@ COPY ./package.json ./
 
 FROM event_service_common AS event_service_prod
 COPY . ./
-RUN npm install --production
+RUN yarn install --production
+RUN yarn run build

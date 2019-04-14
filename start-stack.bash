@@ -10,8 +10,15 @@ esac
 docker stack rm In2ItChicago
 sleep 5
 ENV=${1:-dev}
-docker network create --attachable --driver overlay in2it > /dev/null 2>&1
-../ndscheduler/build.sh
+
+if [ ! "$(docker network ls | grep in2it)" ]; then
+  docker network create --attachable --driver overlay in2it
+fi
+
+if [ -f ../ndscheduler/build.sh ]
+  ../ndscheduler/build.sh $ENV
+fi
+
 ./scripts/build-images.sh $ENV
 ./scripts/check-all-image-updates.sh
 ./db/run.sh &

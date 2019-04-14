@@ -38,7 +38,7 @@ def run_all(folder, s_target):
             else:
                 raise
     if num_tries >= max_tries:
-        print(f'Number of attempts exceeded configured threshold of {queue_retries}')
+        print(f'Number of attempts exceeded configured threshold of {max_tries}')
         sys.exit(1)
 @contextmanager
 def temp_db(url):

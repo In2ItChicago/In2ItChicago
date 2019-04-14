@@ -1,30 +1,28 @@
 version: '3.6'
 services:
   event_service:
-    image: "event_service_dev"
+    image: event_service_dev
     ports:
       - "5000:5000"
       - "5858:5858"
     networks: 
       - in2it
   event_processor:
-    image: "event_processor_dev"
+    image: event_processor_dev
     ports:
       - "6800:6800"
       - "5860:5860"
     networks: 
       - in2it
   in2it_site:
-    image: "in2it_site_dev"
-    environment:
-      - API_URL=${API_URL:-api.localhost}
+    image: in2it_site_dev
     ports:
       - "3000:3000"
       - "5859:5859"
     networks: 
       - in2it
   nginx:
-    image: "nginx_dev"
+    image: nginx_dev
     volumes:
       - ./nginx:/etc/nginx
     ports:
@@ -47,8 +45,7 @@ services:
     networks: 
       - in2it
   ndscheduler:
-    image: ndscheduler
-    command: ["./node_modules/nodemon/bin/nodemon.js", "-L", "-u", "simple_scheduler/scheduler.py"]
+    image: ndscheduler_dev
     ports: 
       - "8888:8888"
       - "5861:5861"
