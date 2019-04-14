@@ -79,7 +79,7 @@ If the docker-compose command doesn't work, add the following line to your ~/.ba
 Close and reopen your terminal(s) to apply the changes.
 
 #### Extra Installation Steps for Windows
-I was unable to get Kinematic to work on Docker Toolbox, so I would recommend skipping that. Make sure virtualization is enabled in the BIOS. If you need to change virtualization settings, do a full reboot cycle,
+I was unable to get Kitematic to work on Docker Toolbox, so I would recommend skipping that. Make sure virtualization is enabled in the BIOS. If you need to change virtualization settings, do a full reboot cycle,
 otherwise Windows may not report that the settings have changed. If you're running Windows 10 Professional, you'll need to make sure Hyper-V is enabled in the "Turn Windows Features On or Off" dialog.
 If you're using Docker Toolbox on Windows Home edition, you'll want to start the VirtualBox instance manually before starting Docker every time or Docker will complain about not having an IP address.
 

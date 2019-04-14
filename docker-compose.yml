@@ -49,8 +49,6 @@ services:
     ports: 
       - "8888:8888"
       - "5861:5861"
-    volumes:
-      - ndscheduler_modules:/usr/src/app/ndscheduler/node_modules/
     environment:
       - NDSCHEDULER_SETTINGS_MODULE=simple_scheduler.settings
       - DEBUG=0
@@ -68,7 +66,7 @@ services:
     networks: 
       - in2it
   pgadmin:
-    image: dpage/pgadmin4:4.4
+    image: dpage/pgadmin4:4.5
     environment:
       - PGADMIN_DEFAULT_EMAIL=user@domain.com
       - PGADMIN_DEFAULT_PASSWORD=pgadmin

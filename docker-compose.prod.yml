@@ -20,4 +20,4 @@ services:
     image: in2itchicago/ndscheduler:20190413.1
     command: "python -u simple_scheduler/scheduler.py"
   nginx:
-    image: "nginx:1.15.10-alpine"
+    image: "nginx:1.15.11-alpine"

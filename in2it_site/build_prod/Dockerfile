@@ -1,4 +1,4 @@
-FROM node:11.13-alpine AS in2it_site_common
+FROM node:11.14-alpine AS in2it_site_common
 WORKDIR /usr/src/app/in2it_site
 COPY package.json ./
 
