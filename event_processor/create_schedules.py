@@ -1,8 +1,10 @@
 import requests
 import math
+import time
 from scrapy import spiderloader
 from scrapy.utils import project
 from config import config
+from requests.exceptions import ConnectionError
 HOURS_IN_DAY = 24
 MINUTES_IN_HOUR = 60
 JOB_CLASS = 'simple_scheduler.jobs.scrapy_job.ScrapyJob'
@@ -18,6 +20,7 @@ class Schedule:
             self.minute = f'{current_offset}-{MINUTES_IN_HOUR - 1}/{interval}'
             self.hour = '*'
 
+ATTEMPTS = 100
 settings = project.get_project_settings()
 spider_loader = spiderloader.SpiderLoader.from_settings(settings)
 spiders = spider_loader.list()
@@ -41,11 +44,16 @@ for schedule in schedules:
         }
     if schedule.name in jobs_dict:
         job = jobs_dict[schedule.name]
-        response = requests.put(f'{config.scheduler_jobs}/{job["job_id"]}', json=json_payload)
-        if response.ok:
-            print(f'Updated schedule for {schedule.name}')
-        else:
-            raise Exception(response.text)
+        for _ in range(ATTEMPTS):
+            try:
+                response = requests.put(f'{config.scheduler_jobs}/{job["job_id"]}', json=json_payload)
+                if response.ok:
+                    print(f'Updated schedule for {schedule.name}')
+                    break
+                else:
+                    raise Exception(response.text)
+            except ConnectionError:
+                time.sleep(5)
     else:
         response = requests.post(config.scheduler_jobs, json=json_payload)
         if response.ok:
