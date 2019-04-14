@@ -33,6 +33,8 @@ services:
       - SERVER_NAME=localhost
   ndscheduler:
     command: ["./node_modules/nodemon/bin/nodemon.js", "-L", "-u", "simple_scheduler/scheduler.py"]
+    volumes:
+      - ../ndscheduler:/usr/src/app/ndscheduler
 volumes:
   event_processor_data:
   event_processor_lock:

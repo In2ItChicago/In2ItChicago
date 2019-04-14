@@ -2,11 +2,13 @@ docker stack rm In2ItChicago
 sleep 5
 ENV=${1:-dev}
 
-if [ ! "$(docker network ls | grep in2it)" ]; then
+if [ ! "$(docker network ls | grep in2it)" ]
+then
   docker network create --attachable --driver overlay in2it
 fi
 
 if [ -f ../ndscheduler/build.sh ]
+then
   ../ndscheduler/build.sh $ENV
 fi
 
