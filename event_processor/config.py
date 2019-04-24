@@ -28,7 +28,6 @@ class Config:
         self.schedule_interval = int(self.get_env_var('SCHEDULE_INTERVAL', error_if_null=True))
 
         self.run_scheduler = self.get_env_bool('RUN_SCHEDULER', True)
-        self.num_connect_attempts = 100
 
     def get_env_bool(self, name, default_value=None, error_if_null=False):
         value = self.get_env_var(name, default_value, error_if_null)
@@ -55,14 +54,13 @@ class Config:
                 return default_value
     
     def connect_to_client(self):
-        for _ in range(self.num_connect_attempts):
+        while True:
             try:
                 requests.get(self.service_status)
                 print('Connection successful')
-                return True, 'Connection successful'
+                return True
             except requests.exceptions.ConnectionError:
                 time.sleep(0.5)
                 continue
-        return False, 'Connection failed'
 
 config = Config()

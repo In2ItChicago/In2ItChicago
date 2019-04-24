@@ -16,10 +16,7 @@ from scrapy.utils import project
 from config import config
 
 def run():
-    status, msg = config.connect_to_client()
-    if not status:
-       print(msg)
-       sys.exit(1)
+    config.connect_to_client()
 
     print('Running event processor...')
 
