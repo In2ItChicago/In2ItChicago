@@ -34,6 +34,8 @@
             <li>Kim Schaefer</li>
             <li>Deanna Franklin</li>
             <li>Kevin Hund</li>
+            <li>Ryan Klaus</li>
+            <li>Jake Egli</li>
         </ul>
 
         <h3>* In2It is a project of Chi HackNight.</h3>
