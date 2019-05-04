@@ -14,6 +14,12 @@ services:
       - "5860:5860"
     networks: 
       - in2it
+  splash:
+    image: scrapinghub/splash:3.3.1
+    ports:
+      - "8050:8050"
+    networks:
+      - in2it
   in2it_site:
     image: in2it_site_dev
     ports:

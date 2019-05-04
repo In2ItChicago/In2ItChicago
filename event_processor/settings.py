@@ -72,8 +72,9 @@ HTTPCACHE_ENABLED = config.enable_scrapy_cache
 HTTPCACHE_EXPIRATION_SECS = config.scrapy_cache_expiration
 HTTPCACHE_DIR = '/tmp/httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
-#HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
 
-# Comment this out to see all data being scraped
 LOG_LEVEL = 'DEBUG' if config.verbose_scrapy_output else 'WARNING'
 LOG_FORMATTER = 'polite_log_formatter.PoliteLogFormatter'
+
+SPLASH_URL = 'http://splash:8050'

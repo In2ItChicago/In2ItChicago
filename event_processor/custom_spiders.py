@@ -17,8 +17,15 @@ scraper_settings = {
             'pipelines.EventSavePipeline': 600
         },
         'SPIDER_MIDDLEWARES': {
+            'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
             'middlewares.SplitItemsMiddleware': 400
-        }
+        },
+        'DOWNLOADER_MIDDLEWARES': {
+            'scrapy_splash.SplashCookiesMiddleware': 723,
+            'scrapy_splash.SplashMiddleware': 725,
+            'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810
+        },
+        'DUPEFILTER_CLASS': 'scrapy_splash.SplashAwareDupeFilter'
     }
 class ApiSpider(Spider, ApiBase):
     custom_settings = api_settings

@@ -3,6 +3,7 @@
 # See issue here: https://github.com/scrapy/scrapyd/issues/311
 twisted==18.9.0
 Scrapy
+scrapy-splash
 # daterangeparser breaks on pyparsing >2.0.5
 pyparsing==2.0.5
 daterangeparser

@@ -17,5 +17,6 @@ $pythoncmd $scriptpath library/nginx 1.15.11 alpine
 $pythoncmd $scriptpath library/nginx 1.15.11
 $pythoncmd $scriptpath library/node 11.14 alpine
 $pythoncmd $scriptpath portainer/portainer 1.20.2
+$pythoncmd $scriptpath scrapinghub/splash 3.3.1
 echo "=============================="
 echo
