@@ -183,7 +183,10 @@ This tells the event processor to run the scrapers on a schedule (currently once
 This is the same behavior as `-d` but for the scheduler. More information about the scheduler will be discussed in a subsequent section.
 
 - `-n or --spider-name`
-Only run the specified spider instead of all of them. Must match the `name` variable that's defined on the spider class. No effect when used with `-s`.
+Example: `./start.sh -n library`. Only run the specified spider instead of all of them. Must match the `name` variable that's defined on the spider class. No effect when used with `-s`.
+
+- `service names`
+Example: `./start.sh -v -n library event_service event_processor postgres`. Trailing keywords indicate which docker services to start if you do not want to start all of them.
 
 #### Other Settings
 The following settings are defined in `event_processor/config.py`:  

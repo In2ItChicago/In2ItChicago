@@ -50,7 +50,7 @@ done
 # set positional arguments in their proper place
 eval set -- "$PARAMS"
 
-if [ ! -z "$EXCLUDE" ] 
+if [ ! -z "$EXCLUDE" ] && [ -z "$PARAMS" ] 
 then
     case "$(uname)" in
     CYGWIN*|MINGW*|MSYS*)
