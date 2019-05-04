@@ -5,6 +5,7 @@ VERBOSE_OUTPUT=0
 EXCLUDE="ndscheduler"
 RUN_SCHEDULER=0
 ENV="dev"
+SPIDER_NAME=""
 while (( "$#" )); do
   case "$1" in
     -c|--scheduler-debug)
@@ -28,6 +29,10 @@ while (( "$#" )); do
       RUN_SCHEDULER=1
       shift
       ;;
+    -n|--spider-name)
+      SPIDER_NAME=$2
+      shift 2
+      ;;
     --) # end argument parsing
       shift
       break
@@ -49,6 +54,7 @@ if [ ! -z "$EXCLUDE" ]
 then
     case "$(uname)" in
     CYGWIN*|MINGW*|MSYS*)
+        # Carriage returns ruin everything
         SERVICES=$(docker-compose config --services | grep -v -e $EXCLUDE | tr '\r\n' ' ')
         ;;
     *)
@@ -64,4 +70,5 @@ SCHEDULER_DEBUG=$SCHEDULER_DEBUG \
 EVENT_PROCESSOR_DEBUG=$EVENT_PROCESSOR_DEBUG \
 VERBOSE_OUTPUT=$VERBOSE_OUTPUT \
 RUN_SCHEDULER=$RUN_SCHEDULER \
+SPIDER_NAME=$SPIDER_NAME \
 docker-compose -f docker-compose.yml -f docker-compose.${ENV}.yml up $SERVICES

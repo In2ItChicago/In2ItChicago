@@ -5,11 +5,11 @@ import logging
 import logging.handlers
 import requests
 import ptvsd
-from time_utils import TimeUtils
+from util.time_utils import TimeUtils
 from multiprocessing import Lock
 from config import config
-from event_hashes import EventHashes
-from event import EventManager
+from util.object_hash import ObjectHash
+from models.event import EventManager
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 

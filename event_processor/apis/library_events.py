@@ -1,9 +1,9 @@
 import time
 from scrapy import Item
 from scrapy.loader import ItemLoader
-from categories import Category
-from data_utils import DataUtils
-from custom_spiders import ApiSpider
+from models.category import Category
+from util.data_utils import DataUtils
+from base.custom_spiders import ApiSpider
 import scrapy
 
 class LibraryEvents(ApiSpider):
@@ -26,7 +26,7 @@ class LibraryEvents(ApiSpider):
             'local_start': f'{self.start_date} TO {self.end_date}',
             'include_near_location': 'false'
         }
-        return self.get_response_json('events/events/search', request_params, property_to_return = 'events')
+        return self.get_response_json(endpoint='events/events/search', request_params=request_params, property_to_return = 'events')
 
     def get_events_json(self):
         start = 0
@@ -51,7 +51,7 @@ class LibraryEvents(ApiSpider):
             'client_scope': 'events', 
             'limit': '0'
         }
-        return self.get_response_json('events/' + location_category, request_params, property_to_return = location_category)
+        return self.get_response_json(endpoint='events/' + location_category, request_params=request_params, property_to_return = location_category)
     
     def get_branch_locations_json(self):
         return self.get_locations_json('locations')

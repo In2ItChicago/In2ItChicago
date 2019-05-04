@@ -1,6 +1,5 @@
 from icalendar import Calendar
-from event import Event
-from cache_call import cache_call
+from util.cache_call import cache_call
 from datetime import datetime, date
 import requests
 

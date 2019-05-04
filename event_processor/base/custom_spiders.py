@@ -1,25 +1,26 @@
 from scrapy.spiders import Spider, CrawlSpider
-from spider_base import SpiderBase
-from api_base import ApiBase
+from base.spider_base import SpiderBase
+from base.api_base import ApiBase
 api_settings = {
         'ITEM_PIPELINES': {
-            'pipelines.EventTransformPipeline': 300,
-            'pipelines.GeocodePipeline': 400,
-            'pipelines.EventBuildPipeline': 500,
-            'pipelines.EventSavePipeline': 600
+            'scrapy_impl.pipelines.EventTransformPipeline': 300,
+            'scrapy_impl.pipelines.GeocodePipeline': 400,
+            'scrapy_impl.pipelines.EventBuildPipeline': 500,
+            'scrapy_impl.pipelines.EventSavePipeline': 600
         }
     }
 scraper_settings = {
         'ITEM_PIPELINES': {
-            'pipelines.EventTransformPipeline': 300,
-            'pipelines.GeocodePipeline': 400,
-            'pipelines.EventBuildPipeline': 500,
-            'pipelines.EventSavePipeline': 600
+            'scrapy_impl.pipelines.EventTransformPipeline': 300,
+            'scrapy_impl.pipelines.GeocodePipeline': 400,
+            'scrapy_impl.pipelines.EventBuildPipeline': 500,
+            'scrapy_impl.pipelines.EventSavePipeline': 600
         },
         'SPIDER_MIDDLEWARES': {
-            'middlewares.SplitItemsMiddleware': 400
+            'scrapy_impl.middlewares.SplitItemsMiddleware': 400
         }
     }
+
 class ApiSpider(Spider, ApiBase):
     custom_settings = api_settings
     def __init__(self, *args, **kwargs):

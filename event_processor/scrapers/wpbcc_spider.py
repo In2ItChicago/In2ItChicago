@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 import scrapy
 from scrapy.spiders import Rule
-from custom_spiders import ScraperCrawlSpider
+from base.custom_spiders import ScraperCrawlSpider
 from scrapy.linkextractors import LinkExtractor
 
-from event import Event
-from categories import Category
-from spider_base import SpiderBase
+from models.category import Category
 
 class WpbccSpider(ScraperCrawlSpider):
     name = 'wpbcc'
