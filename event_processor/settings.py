@@ -76,4 +76,4 @@ HTTPCACHE_DIR = '/tmp/httpcache'
 
 # Comment this out to see all data being scraped
 LOG_LEVEL = 'DEBUG' if config.verbose_scrapy_output else 'WARNING'
-LOG_FORMATTER = 'polite_log_formatter.PoliteLogFormatter'
+LOG_FORMATTER = 'scrapy_impl.polite_log_formatter.PoliteLogFormatter'

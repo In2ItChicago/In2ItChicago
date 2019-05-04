@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-from custom_spiders import ScraperSpider
-
-from data_utils import DataUtils
+from base.custom_spiders import ScraperSpider
 
 # This spider is unused but is being kept for now for test purposes
 

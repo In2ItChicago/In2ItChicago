@@ -5,8 +5,8 @@ import time
 from gql import gql, Client
 from gql.transport.requests import RequestsHTTPTransport
 
-from aggregator_base import AggregatorBase
-from cache_call import cache_call
+from base.aggregator_base import AggregatorBase
+from util.cache_call import cache_call
 from config import config
 
 

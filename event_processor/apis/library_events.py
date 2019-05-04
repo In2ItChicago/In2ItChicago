@@ -1,9 +1,9 @@
 import time
 from scrapy import Item
 from scrapy.loader import ItemLoader
-from categories import Category
-from data_utils import DataUtils
-from custom_spiders import ApiSpider
+from models.category import Category
+from util.data_utils import DataUtils
+from base.custom_spiders import ApiSpider
 import scrapy
 
 class LibraryEvents(ApiSpider):

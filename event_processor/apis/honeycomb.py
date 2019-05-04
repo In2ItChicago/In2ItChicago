@@ -4,9 +4,9 @@ from scrapy import Item
 from scrapy.loader import ItemLoader
 from gql import gql
 
-from categories import Category
-from data_utils import DataUtils
-from custom_spiders import ApiSpider
+from models.category import Category
+from util.data_utils import DataUtils
+from base.custom_spiders import ApiSpider
 from graphql_definitions.honeycomb import definition
 
 class Honeycomb(ApiSpider):

@@ -2,7 +2,7 @@ import functools
 import logging
 from beaker.cache import CacheManager
 from beaker.util import parse_cache_config_options
-from switchable_decorator import SwitchableDecorator
+from util.switchable_decorator import SwitchableDecorator
 from config import config
 
 cache = CacheManager(**parse_cache_config_options({

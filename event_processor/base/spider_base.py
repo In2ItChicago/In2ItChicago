@@ -1,6 +1,6 @@
 import scrapy
 from urllib import parse
-from aggregator_base import AggregatorBase
+from base.aggregator_base import AggregatorBase
 
 class SpiderBase(AggregatorBase):
     # This class includes all functionality that should be shared by spiders

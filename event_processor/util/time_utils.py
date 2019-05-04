@@ -5,7 +5,7 @@ import time
 from timefhuman import timefhuman
 import daterangeparser
 import re
-from data_utils import DataUtils
+from util.data_utils import DataUtils
 
 class TimeUtils:
     def __init__(self, date_format=''):

@@ -1,4 +1,4 @@
-from custom_spiders import ApiSpider
+from base.custom_spiders import ApiSpider
 import feedparser
 from scrapy.http import HtmlResponse
 class LWVChicago(ApiSpider):

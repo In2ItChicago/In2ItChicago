@@ -1,6 +1,7 @@
 import hashlib
 import pickle
-class EventHashes:
+
+class ObjectHash:
     @staticmethod
     def load():
         try:
@@ -9,6 +10,7 @@ class EventHashes:
         except FileNotFoundError:
             return dict()
     
+    @staticmethod
     def write(hashes):
         with open('/tmp/hashes', 'wb') as f:
             pickle.dump(hashes, f)
@@ -20,11 +22,11 @@ class EventHashes:
 
     @staticmethod
     def get(key):
-        hashes = EventHashes.load()
+        hashes = ObjectHash.load()
         return hashes[key] if key in hashes else ''
     
     @staticmethod
     def set(key, value):
-        hashes = EventHashes.load()
+        hashes = ObjectHash.load()
         hashes[key] = value
-        EventHashes.write(hashes)
+        ObjectHash.write(hashes)

@@ -1,7 +1,6 @@
 from apis.ical_reader import ICal
 from pytz import timezone
-from custom_spiders import ApiSpider
-from api_base import ApiBase
+from base.custom_spiders import ApiSpider
 
 class GreatLakesReader(ApiSpider):
     name = 'greatlakes'

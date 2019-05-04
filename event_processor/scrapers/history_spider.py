@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 import scrapy
 from scrapy.spiders import Rule
-from custom_spiders import ScraperCrawlSpider
+from base.custom_spiders import ScraperCrawlSpider
 from scrapy.linkextractors import LinkExtractor
 
-from categories import Category
-from spider_base import SpiderBase
-from data_utils import DataUtils
+from models.category import Category
+from util.data_utils import DataUtils
 
 class HistorySpider(ScraperCrawlSpider):
     name = 'history'

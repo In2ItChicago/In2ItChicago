@@ -4,12 +4,12 @@
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-from event import EventManager, Event, EventLoader
-from event_hashes import EventHashes
+from models.event import EventManager, Event, EventLoader
+from util.object_hash import ObjectHash
 from threading import Lock
 from config import config
-from data_utils import DataUtils
-from time_utils import TimeUtils
+from util.data_utils import DataUtils
+from util.time_utils import TimeUtils
 from scrapy.exceptions import DropItem
 from datetime import datetime
 import requests
@@ -63,12 +63,12 @@ class EventSavePipeline:
 
     def save_events(self, spider):
         event_list = spider.event_manager.to_dicts()
-        new_hash = EventHashes.create_hash(event_list)
+        new_hash = ObjectHash.create_hash(event_list)
         spider.logger.info(f'Found {len(event_list)} events for {event_list[0]["organization"]}.')
-        if new_hash == EventHashes.get(spider.identifier):
+        if new_hash == ObjectHash.get(spider.identifier):
            spider.logger.info(f'Nothing to update.')
            return
-        EventHashes.set(spider.identifier, new_hash)
+        ObjectHash.set(spider.identifier, new_hash)
         if spider.is_errored:
             spider.logger.info('Errors occurred during processing so events will not be saved')
         else:

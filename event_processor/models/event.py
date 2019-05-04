@@ -1,8 +1,8 @@
 import scrapy
 import re
 import usaddress
-from time_utils import TimeUtils
-from data_utils import DataUtils
+from util.time_utils import TimeUtils
+from util.data_utils import DataUtils
 from scrapy.loader.processors import MapCompose, Compose, Join, TakeFirst
 from scrapy.loader import ItemLoader
 
