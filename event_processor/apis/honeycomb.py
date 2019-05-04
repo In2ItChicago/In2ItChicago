@@ -1,75 +1,36 @@
 import time
+import scrapy
 from scrapy import Item
 from scrapy.loader import ItemLoader
+from gql import gql
+
 from categories import Category
 from data_utils import DataUtils
 from custom_spiders import ApiSpider
-import scrapy
-from gql import gql
+from graphql_definitions.honeycomb import definition
 
 class Honeycomb(ApiSpider):
     name = 'honeycomb'
 
     def __init__(self, name=None, **kwargs):
-        super().__init__(self, 'The Honeycomb Project', 'https://events.thehoneycombproject.org/', date_format = '%Y-%m-%d', **kwargs)
+        super().__init__(self, 'The Honeycomb Project', 'https://events.thehoneycombproject.org/', date_format = '%a %b %d %Y %H:%M:%S', **kwargs)
+        self.gql_url = 'https://the-honeycomb-project-api.herokuapp.com/gql'
     
     def parse(self, response):
         return self.get_events()
     
     def get_events(self):
-        query = gql('''
-            query EVENTS($search: EventSearchInput) {
-                events(search: $search) {
-                    docs {
-                        id
-                        name
-                        date
-                        startTime
-                        endTime
-                        shortDescription
-                        description
-                        favorite
-                        open
-                        openDate
-                        closeDate
-                        category {
-                            id
-                            name
-                            photo
-                            __typename
-                        }
-                        program {
-                            id
-                            shortDescription
-                            cardImage
-                            description
-                            addressLineOne
-                            addressLineTwo
-                            headerImage
-                            city
-                            state
-                            postal
-                            takeNote
-                            __typename
-                        }
-                        registrationOpensOn
-                        hasCapacity
-                        __typename
-                    }
-                    __typename
-                }
-            }
-        ''')
-        response = self.get_response_graphql(url='https://the-honeycomb-project-api.herokuapp.com/gql', gql_query=query, params={'search': {'published': True, 'view': 'grid'}})
+        response = self.get_response_graphql(url=self.gql_url, gql_query=definition, params={'search': {'published': True, 'view': 'grid'}})
 
-        for docs in response['events']['docs']:
+        # Don't show full events (open seats == 0)
+        for docs in (docs for docs in response['events']['docs'] if docs['open'] > 0):
             program = docs['program']
             yield {
                 'title': docs['name'],
-                'description': program['shortDescription'] + program['description'],
+                'description': program['description'],
                 'address': f'{program["addressLineTwo"]} {program["city"]}, {program["state"]} {program["postal"]}',
                 'event_time': {
-                    'date': docs['date'],
+                    'date': docs['date'].replace('GMT+0000 (Coordinated Universal Time)', ''),
                     'start_time': docs['startTime'],
                     'end_time': docs['endTime']
                 },

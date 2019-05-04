@@ -29,6 +29,8 @@ class Config:
 
         self.run_scheduler = self.get_env_bool('RUN_SCHEDULER', True)
 
+        self.spider_name = self.get_env_var('SPIDER_NAME')
+
     def get_env_bool(self, name, default_value=None, error_if_null=False):
         value = self.get_env_var(name, default_value, error_if_null)
         if value == '0':

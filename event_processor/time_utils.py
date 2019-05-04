@@ -77,11 +77,15 @@ class TimeUtils:
             return None
         return parsed_date.strftime(new_format)
 
+    def set_to_midnight(self, parsed_date):
+        return parsed_date.replace(hour = 0, minute = 0, second = 0, microsecond = 0)
+
     def parse_date_string(self, test_string, validate_past=True):
         try:
             parsed_date = datetime.strptime(test_string, self.date_format)
             parsed_date = self.set_year(parsed_date)
-            now = datetime.now().replace(hour = 0, minute = 0, second = 0, microsecond = 0)
+            parsed_date = self.set_to_midnight(parsed_date)
+            now = self.set_to_midnight(datetime.now())
 
             # We won't be querying for any dates in the past
             # If the year isn't explicitly set and the month is in the past,

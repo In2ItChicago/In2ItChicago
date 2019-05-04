@@ -14,6 +14,7 @@ services:
       - VERBOSE_OUTPUT=${VERBOSE_OUTPUT}
       - RUN_SCHEDULER=${RUN_SCHEDULER}
       - SCHEDULE_INTERVAL=5
+      - SPIDER_NAME=${SPIDER_NAME}
     volumes:
       - ./event_processor:/usr/src/app/event_processor
       - /usr/src/app/event_processor/node_modules/
