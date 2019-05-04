@@ -2,6 +2,9 @@ import requests
 import json
 import time
 
+from gql import gql, Client
+from gql.transport.requests import RequestsHTTPTransport
+
 from aggregator_base import AggregatorBase
 from cache_call import cache_call
 from config import config
@@ -30,7 +33,7 @@ class ApiBase(AggregatorBase):
             time.sleep(sleep_time)
 
     @cache_call
-    def get_response(self, url = '', request_params=None, headers=None):
+    def get_response(self, url='', request_params=None, headers=None):
         response = self.session.get(self.base_url + url, params = request_params, headers = headers)
         if not response.ok:
             raise ValueError(response.text)
@@ -47,6 +50,12 @@ class ApiBase(AggregatorBase):
             raise ValueError(response.text)
         response_json = self.parse_response_json(response)
         return response_json if property_to_return == None else response_json[property_to_return]
+
+    @cache_call
+    def get_response_graphql(self, url='', gql_query=None, params=None):
+        transport = RequestsHTTPTransport(url=url, use_json=True)
+        client = Client(transport=transport, fetch_schema_from_transport=True)
+        return client.execute(gql_query, params)
 
     def get_events(self):
         # Override me
