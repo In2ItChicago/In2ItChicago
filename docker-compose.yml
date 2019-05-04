@@ -65,7 +65,7 @@ services:
     networks: 
       - in2it
   pgadmin:
-    image: dpage/pgadmin4:4.5
+    image: dpage/pgadmin4:4.6
     environment:
       - PGADMIN_DEFAULT_EMAIL=user@domain.com
       - PGADMIN_DEFAULT_PASSWORD=pgadmin

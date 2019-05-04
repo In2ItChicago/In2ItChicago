@@ -1,5 +1,0 @@
-{
-    "signal": "SIGHUP",
-    "ignore": ["node_modules"],
-    "ext": "ts,js"
-}

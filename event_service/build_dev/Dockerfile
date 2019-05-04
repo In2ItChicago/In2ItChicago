@@ -1,4 +1,4 @@
-FROM node:11.14-alpine AS event_service_common
+FROM node:12.1-alpine AS event_service_common
 WORKDIR /usr/src/app/event_service
 COPY ./package.json ./
 
