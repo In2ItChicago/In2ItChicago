@@ -33,7 +33,7 @@ services:
     environment:
       - SERVER_NAME=localhost
   ndscheduler:
-    command: ["./node_modules/nodemon/bin/nodemon.js", "-L", "-u", "simple_scheduler/scheduler.py"]
+    command: "./node_modules/nodemon/bin/nodemon.js -L -u simple_scheduler/scheduler.py"
     volumes:
       - ../ndscheduler:/usr/src/app/ndscheduler
       - ndscheduler_modules:/usr/src/app/ndscheduler/node_modules/

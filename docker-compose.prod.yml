@@ -22,4 +22,4 @@ services:
     environment:
       - DEBUG=0
   nginx:
-    image: "nginx:1.15.16-alpine"
+    image: "nginx:1.16-alpine"

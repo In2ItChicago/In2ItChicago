@@ -7,7 +7,8 @@
         "logs/*",
         "eggs/*",
         "dbs/*",
-        "data/*"
+        "data/*",
+        "build/*"
       ],
       "ext": "py,sh",
       "delay": "3000"
