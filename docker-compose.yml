@@ -103,7 +103,7 @@ services:
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
-      - in2it
+      - elastic
 
   logstash:
     build:
@@ -121,9 +121,11 @@ services:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
       - in2it
+      - elastic
     depends_on:
       - elasticsearch
-
+    logging:
+      driver: none
   kibana:
     build:
       context: kibana/
@@ -133,10 +135,10 @@ services:
       - ./kibana/config/:/usr/share/kibana/config:ro
     ports:
       - "5601:5601"
-    networks:
-      - in2it
     depends_on:
       - elasticsearch
+    networks:
+      - elastic
 volumes:
   mongodata:
   portainerdata:
@@ -147,3 +149,4 @@ volumes:
 networks:
   in2it:
     external: true
+  elastic:
