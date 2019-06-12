@@ -36,6 +36,7 @@
             <li>Kevin Hund</li>
             <li>Ryan Klaus</li>
             <li>Jake Egli</li>
+            <li>Holden Greenberg</li>
         </ul>
 
         <h3>* In2It is a project of Chi HackNight.</h3>
