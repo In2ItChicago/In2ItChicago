@@ -153,12 +153,17 @@ body{
 	background-color:#e3e3e3;
 }
 
-.event-listing .event-listing-heading{
+.event-listing-title{
 	color:#444;
-	font-size:20px;
+	font-size:22px;
 }
 
-.event-listing .event-listing-description{
+.event-listing-time-location{
+	color:#086478;
+	font-size:18px;
+}
+
+.event-listing-description{
 	color:#444;
 	font-size:16px;
 }
