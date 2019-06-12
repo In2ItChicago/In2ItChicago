@@ -11,8 +11,8 @@
         </div>
 
         <div class="d-flex flex-column">
-            <img class="map-icon" src="/img/map-icon.png"/>
-            <img class="calendar-icon" src="/img/calendar-icon.png"/>
+            <img class="event-card-icon map-icon" src="/img/map-icon.png"/>
+            <img class="event-card-icon calendar-icon" src="/img/calendar-icon.png"/>
         </div>
     </div> 
 </template>

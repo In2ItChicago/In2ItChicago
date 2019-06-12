@@ -168,6 +168,10 @@ body{
 	font-size:16px;
 }
 
+.event-card-icon{
+	margin-bottom:8px;
+}
+
 .map-icon{
 	width: 25px;
 	height: 25px;
