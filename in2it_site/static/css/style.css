@@ -41,20 +41,15 @@ body{
 	color:#e3e3e3;
 }
 
-.in2it-brand{
-	margin-left:20px;
-	color:#fff;
-	font-size:30px;
-}
-.in2it-brand:hover{
-	text-decoration: none;
-	color:#e3e3e3;
-}
-
 .logo-container{
 	padding:0px;
 	height: 60px;
 	margin-left:20px;
+}
+
+.navbar-logo{
+	width:100px;
+	margin-right:20px;
 }
 
 .content-row{
