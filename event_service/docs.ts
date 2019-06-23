@@ -104,13 +104,13 @@ export const eventDocs = {
             {
                 description: 'limit',
                 in: 'query',
-                name: '$limit',
+                name: 'limit',
                 type: 'string'
             },
             {
-                description: 'skip',
+                description: 'offset',
                 in: 'query',
-                name: '$skip',
+                name: 'offset',
                 type: 'string'
             },
         ]

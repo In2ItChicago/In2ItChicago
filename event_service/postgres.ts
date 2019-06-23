@@ -8,11 +8,9 @@ import { sleep, timeFromTimestamp, dateFromTimestamp } from './common';
 const db = knex({
     client: 'postgresql',
     connection: 'postgresql://postgres:postgres@postgres:5432/events'
-  });
+});
 
-// function clause(statement: string, variable: PrimitiveValueExpressionType[] | undefined) {
-//     return sql.raw(variable == null ? '' : statement, variable);
-// }
+const DEFAULT_LIMIT = 25;
 
 export class Postgres {
     get neighborhoodService() {
@@ -53,7 +51,12 @@ export class Postgres {
                         if (query.organization) {
                             queryBuilder.andWhere('event.organization', '=', query.organization);
                         }
+                        if (query.neighborhood) {
+                            queryBuilder.andWhere('geo.neighborhood', '=', query.neighborhood);
+                        }
                     })
+                    .offset(query.offset || 0)
+                    .limit(query.limit || DEFAULT_LIMIT)
                     .orderBy('event.start_time');
                 
                 return result;
