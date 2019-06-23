@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 if command -v python3 &>/dev/null; then
 	pythoncmd=python3
 else

@@ -1,3 +1,4 @@
+#!/bin/bash
 if [ ! "$(docker network ls | grep in2it)" ]
 then
   docker swarm init

@@ -1,3 +1,4 @@
+#!/bin/bash
 $(dirname $0)/../scripts/build-images.sh prod
 $(dirname $0)/../../ndscheduler/build.sh prod
 docker tag event_processor_prod in2itchicago/event_processor:$1

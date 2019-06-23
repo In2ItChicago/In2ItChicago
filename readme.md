@@ -34,7 +34,10 @@ Clone the ClipboardApp repository into your preferred directory with Git Bash on
 If you have any issues, see the troubleshooting guide further down in this document.
 
 ### Install Docker
-For Windows Home, download from [here](https://docs.docker.com/toolbox/toolbox_install_windows/). Documentation is [here](https://docs.docker.com/toolbox/overview/).  
+Note: If you're running Windows Professional, it's recommended you use Docker for Windows over Docker Toolbox. This requires the use of Hyper-V, while Docker Toolbox requires using VirtualBox. 
+Keep in mind that if you're currently using VirtualBox, you can't use Hyper-V at the same time. Make sure you disable one or the other before proceeding.
+
+For Windows Home, download the latest version from [here](hhttps://github.com/docker/toolbox/releases). Documentation is [here](https://docs.docker.com/toolbox/overview/).  
 For Windows Professional or Enterprise, download from [here](https://www.docker.com/docker-windows). Documentation is [here](https://docs.docker.com/docker-for-windows/).  
 For Mac, download from [here](https://www.docker.com/docker-mac). Documentation is [here](https://docs.docker.com/docker-for-mac/).  
 For Linux, download from your package manager. Documentation is [here](https://docs.docker.com/install/linux/docker-ce/ubuntu/) (Other distros have links on the left side of the page).  

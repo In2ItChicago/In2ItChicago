@@ -1,3 +1,4 @@
+#!/bin/bash
 if [ -f ../ndscheduler/build.sh ]
 then
   ../ndscheduler/build.sh $1

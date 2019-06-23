@@ -1,3 +1,4 @@
+#!/bin/bash
 pip3 install -r requirements.txt
 scripts/render.sh
 docker stack rm In2ItChicago
