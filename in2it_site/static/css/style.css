@@ -67,6 +67,12 @@ body{
 .filters{
 	background-color:#67abba;
 	border-radius:12px;
+	/* Hardcoding this for now because the datepicker
+	   is only rendered on the client, which causes
+	   the width the change abruptly after the page loads.
+	   Maybe there's a better way to do this.
+	*/
+	min-width: 260px;
 }
 
 .events{
