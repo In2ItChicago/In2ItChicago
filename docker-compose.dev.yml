@@ -27,7 +27,7 @@ services:
       - ./in2it_site:/usr/src/app/in2it_site
       - /usr/src/app/in2it_site/node_modules/
     environment:
-      - API_URL=api.localhost
+      - API_URL=api.localhost:5000
   nginx:
     command: sh -c "chmod +x entrypoint.sh && nodemon -L --exec ./entrypoint.sh"
     environment:

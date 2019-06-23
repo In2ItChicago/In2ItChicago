@@ -47,15 +47,18 @@
 		methods: {
 			updateEvents: function() {
 				const eventServiceClient = getClient(this.$env.API_URL || '');
+				console.log(this.$store.searchFilter.organization)
 				return eventServiceClient.find({
 					query: {
 						start_timestamp: this.$store.searchFilter.startDate, 
 						end_timestamp: this.$store.searchFilter.endDate,
 						miles: this.$store.searchFilter.searchRadius,
-						address: this.$store.searchFilter.addressOrZip || '60611'
+						address: this.$store.searchFilter.addressOrZip || '60611',
+						organization: this.$store.searchFilter.organization
 					}
 				})
 				.then((res) => {
+					console.log(res)
 					this.events = res;
 				});
 			}
