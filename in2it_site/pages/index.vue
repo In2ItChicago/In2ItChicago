@@ -38,6 +38,7 @@
             if (process.env.DUMMY_DATA) {
                 return { events: dummyData };
 			}
+			// const eventService= getClient('localhost:5000/events')
 			const eventService = getClient('event_service:5000');
 			return eventService.find({query: {}})
 				.then(res => {
@@ -47,14 +48,16 @@
 		methods: {
 			updateEvents: function() {
 				const eventServiceClient = getClient(this.$env.API_URL || '');
-				console.log(this.$store.searchFilter.organization)
+				console.log(this.$env.API_URL)
+				console.log(this.$store.searchFilter.neighborhood)
 				return eventServiceClient.find({
 					query: {
 						start_timestamp: this.$store.searchFilter.startDate, 
 						end_timestamp: this.$store.searchFilter.endDate,
 						miles: this.$store.searchFilter.searchRadius,
 						address: this.$store.searchFilter.addressOrZip || '60611',
-						organization: this.$store.searchFilter.organization
+						organization: this.$store.searchFilter.organization,
+						neighborhood: this.$store.searchFilter.neighborhood
 					}
 				})
 				.then((res) => {

@@ -42,8 +42,13 @@
 			</div>
 
 			<div class="form-group">
-				<label for="organization">What organization</label>
+				<label for="organization">Organization</label>
 				<input type="text" class="form-control" id="organization" placeholder="Enter Organization name" :value="organization">
+			</div>
+
+			<div class="form-group">
+				<label for="organization">Neighborhood</label>
+				<input type="text" class="form-control" id="neighborhood" placeholder="Enter Neighborhood name" :value="neighborhood">
 			</div>
 
 			<div class="form-group text-right">
@@ -174,6 +179,7 @@
 			filter: function() {
 				this.setDates();
 				this.setOrganization();
+				this.setNeighborhood();
 				this.searchFilter.addressOrZip= document.getElementById("locationFilter").value
 				this.$store.searchFilter = this.searchFilter;
 				this.$emit('filterApplied');
@@ -185,6 +191,11 @@
 			setOrganization: function() {
 				if (document.getElementById("organization").value){
 				this.searchFilter.organization= document.getElementById("organization").value
+				}
+			},
+			setNeighborhood: function() {
+				if (document.getElementById("neighborhood").value){
+				this.searchFilter.neighborhood= document.getElementById("neighborhood").value
 				}
 			}
 		},
