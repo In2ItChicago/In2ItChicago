@@ -54,7 +54,7 @@ services:
     networks: 
       - in2it
   postgres:
-    image: postgres:11.2-alpine
+    image: postgres:11.4-alpine
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -65,7 +65,7 @@ services:
     networks: 
       - in2it
   pgadmin:
-    image: dpage/pgadmin4:4.6
+    image: dpage/pgadmin4:4.8
     environment:
       - PGADMIN_DEFAULT_EMAIL=user@domain.com
       - PGADMIN_DEFAULT_PASSWORD=pgadmin
@@ -87,4 +87,4 @@ volumes:
   pgadmin_data:
 networks:
   in2it:
-   external: true
+    external: true

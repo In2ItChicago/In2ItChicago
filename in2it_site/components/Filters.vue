@@ -21,6 +21,7 @@
 
 			<div class="form-group">
 				<label for="fromDatePicker">From</label>
+				<no-ssr placeholder="Loading...">
 				<datepicker
 					id="startDatePicker"
 					:value="defaultFromDate"
@@ -28,10 +29,12 @@
 					wrapper-class="datepicker"
 					class="datepicker">
 				</datepicker>
+				</no-ssr>
 			</div>
 
 			<div class="form-group">
 				<label for="toDatePicker">To</label>
+				<no-ssr placeholder="Loading...">
 				<datepicker
 					id="endDatePicker"
 					:value="defaultToDate"
@@ -39,6 +42,7 @@
 					wrapper-class="datepicker"
 					class="datepicker">
 				</datepicker>
+				</no-ssr>
 			</div>
 
 			<div class="form-group">
@@ -144,7 +148,6 @@
 </template>
 
 <script>
-	import Datepicker from 'vuejs-datepicker';
 	export default {
 		data() {
 			return {
@@ -198,9 +201,6 @@
 				this.searchFilter.neighborhood= document.getElementById("neighborhood").value
 				}
 			}
-		},
-		components:{
-			Datepicker
 		}
 	};
 </script>

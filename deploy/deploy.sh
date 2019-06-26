@@ -1,3 +1,4 @@
+#!/bin/bash
 cd ndscheduler
 git checkout .
 git pull

@@ -1,3 +1,4 @@
+#!/bin/bash
 PARAMS=""
 PARAMS_COPY="$@"
 while (( "$#" )); do

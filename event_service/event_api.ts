@@ -22,12 +22,15 @@ function setup(): void {
     // Set up REST transport using Express
     .configure(express.rest())
     .configure(swagger({
-        docsPath: '/docs',
-        uiIndex: true,
-        info: {
-            title: 'Event API',
-            description: 'Event API'
+        specs: {
+            info: {
+                'title': 'In2It Event API',
+                'version': '1.0.0'
             }
+        },
+        openApiVersion: 2,
+        docsPath: '/docs',
+        uiIndex: true
     }));
 
     app.use('/status', {

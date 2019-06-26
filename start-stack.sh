@@ -1,3 +1,4 @@
+#!/bin/bash
 ENV=${1:-dev}
 docker stack rm In2ItChicago
 sleep 5
