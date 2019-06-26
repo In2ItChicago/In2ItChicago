@@ -31,6 +31,7 @@
 			};
 		},
 		asyncData ({ app, params }) {
+      const eventURL = process.server ? 'event_service:5000' : app.$env.API_URL;
             //Ensure get request goes to an endpoint that returns an array or json object
             //If a regular HTML page is returned, the v-for in the view above will try to
             //render each character in the HTML page string as a separate event and nuxt
@@ -38,7 +39,7 @@
             if (process.env.DUMMY_DATA) {
                 return { events: dummyData };
 			}
-			const eventService = getClient('event_service:5000');
+			const eventService = getClient(eventURL);
 			return eventService.find({query: {}})
 				.then(res => {
 					return { events: res };
