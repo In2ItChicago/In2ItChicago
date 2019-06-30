@@ -45,7 +45,7 @@ export class EventDAL {
         return result;
     }
 
-    async createEvents(data: any, params: any): Promise<number[]> {
+    async createEvents(data: any): Promise<number[]> {
         const val = await db('events.event').insert(data);
         return val;
     }

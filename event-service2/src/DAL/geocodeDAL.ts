@@ -26,4 +26,9 @@ export class GeocodeDAL {
         const filteredGeo = await db.select('*').from('geocode.location').where(filter, value);
         return filteredGeo;
     }
+
+    async createGeocode(data: any): Promise<number[]> {
+        const val = await db('geocode.location').returning('id').insert(data);
+        return val;
+    }
 }

@@ -6,7 +6,6 @@ const db = knex({
     connection: 'postgresql://postgres:postgres@postgres:5432/events',
 });
 
-
 export class NeighborhoodDAL {
     async getNeighborhoods(): Promise<Array<Pick<any, 'neighborhood'>>> {
         const result = await db('geocode.location')
