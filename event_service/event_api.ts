@@ -1,5 +1,5 @@
 import feathers from '@feathersjs/feathers';
-import express from '@feathersjs/express';
+import express, { Application } from '@feathersjs/express';
 import * as cors from 'cors';
 import * as swagger from 'feathers-swagger';
 
@@ -10,7 +10,8 @@ import { Postgres } from './postgres';
 
 function setup(): void {
     let client = new Postgres();
-    const app = express(feathers());
+    let app: Application<any>;
+    app = express(feathers());
 
     // Turn on JSON body parsing for REST services
     app

@@ -37,6 +37,8 @@
             <li>Ryan Klaus</li>
             <li>Jake Egli</li>
             <li>Holden Greenberg</li>
+            <li>Sam DeFrank</li>
+            <li>Brandon Gorson</li>
         </ul>
 
         <h3>* In2It is a project of Chi HackNight.</h3>

@@ -1,4 +1,4 @@
-import { Application, HookContext, HooksObject } from '@feathersjs/feathers';
+import { HookContext, HooksObject } from '@feathersjs/feathers';
 import * as _ from 'lodash';
 import axios from 'axios';
 import { readFileSync } from 'fs';
@@ -7,6 +7,7 @@ import * as GeoJsonGeometriesLookup from 'geojson-geometries-lookup';
 import { sleep, errorHandler, randomExpirationTime } from './common';
 import { geocodeApiDelayMilliseconds } from './settings';
 import { GeneralError } from '@feathersjs/errors';
+import { Application } from '@feathersjs/express';
 
 const geojsonData = readFileSync('chicago_neighborhoods.geojson');
 const geojsonContent = JSON.parse(geojsonData.toString());
@@ -50,7 +51,7 @@ async function getGeocode(address: string): Promise<AddressResult | null> {
     return result;
 }
 
-export function geocodeHooks(app: Application<any>): Partial<HooksObject> {
+export function geocodeHooks(app: Application<any>): any {
     return {
         before: {
             async find(context: HookContext): Promise<HookContext> {

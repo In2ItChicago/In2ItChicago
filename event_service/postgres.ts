@@ -91,11 +91,11 @@ export class Postgres {
                     value = params.neighborhood;
                 }
                 else {
-                    result = await db.select('*').from('geocode.location');
-                    return result;
+                    let allGeo = await db.select('*').from('geocode.location');
+                    return allGeo;
                 }
-                result = await db.select('*').from('geocode.location').where(filter, value);
-                return result;
+                let filteredGeo = await db.select('*').from('geocode.location').where(filter, value);
+                return filteredGeo;
             },
             async create(data: any, params: Params) {
                 let val = await db('geocode.location').returning('id').insert(data);

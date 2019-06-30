@@ -1,4 +1,5 @@
-import { Application, HookContext, HooksObject } from '@feathersjs/feathers';
+import { HookContext, HooksObject } from '@feathersjs/feathers';
+import { Application } from '@feathersjs/express';
 import * as _ from 'lodash';
 import * as GeoPoint from 'geopoint';
 import { BadRequest, GeneralError } from '@feathersjs/errors';
@@ -29,7 +30,7 @@ async function geoSearch(app: Application<any>, address: string, miles: number):
     return searchBounds;
 }
 
-export function eventHooks(app: Application<any>): Partial<HooksObject> {
+export function eventHooks(app: Application<any>): any {
     return {
         before: {
             async find(context: HookContext): Promise<HookContext> {
