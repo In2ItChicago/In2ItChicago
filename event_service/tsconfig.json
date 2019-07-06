@@ -1,22 +1,15 @@
 {
-    "compilerOptions": {
-      "target": "es5",
-      "lib": ["esnext", "dom"],
-      "moduleResolution": "node",
-      "experimentalDecorators": true,
-      "sourceMap": true,
-      "strictNullChecks": true,
-      "removeComments": true,
-      "suppressImplicitAnyIndexErrors": true,
-      "allowSyntheticDefaultImports": true,
-      "strictPropertyInitialization": false,
-      "jsx": "preserve",
-      "allowJs": true,
-      "baseUrl": ".",
-      "paths": {
-        "~/*": ["./*"],
-        "@/*": ["./*"]
-      }
-    }
-  }
-  
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "es6",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true
+  },
+  "exclude": ["node_modules"]
+}
