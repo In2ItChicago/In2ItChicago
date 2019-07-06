@@ -1,31 +1,36 @@
 import * as knex from 'knex';
+import * as knexStringcase from 'knex-stringcase';
 import * as _ from 'lodash';
+import { GetEventsRequest } from 'src/DTO/getEventsRequest';
+import { SearchBounds } from 'src/interfaces/searchBounds';
+import { Get } from '@nestjs/common';
+import { GetEventsResponse } from 'src/DTO/getEventsResponse';
 
 const DEFAULT_LIMIT = 25;
 
-const db = knex({
+const db = knex(knexStringcase({
     client: 'postgresql',
     connection: 'postgresql://postgres:postgres@postgres:5432/events',
-});
+}));
 
 export class EventDAL {
-    async getNeighborhoods(): Promise<Array<Pick<any, 'neighborhood'>>> {
+    async getNeighborhoods(): Promise<string[]> {
         const result = await db('geocode.location')
                     .distinct('neighborhood')
                     .whereNotNull('neighborhood')
                     .orderBy('neighborhood');
 
-        return result;
+        return result.map(r => r.neighborhood);
     }
 
-    async getEvents(query: any): Promise<any> {
-        const result = await db('events.event as event').select('*')
+    async getEvents(query: GetEventsRequest, searchBounds: SearchBounds): Promise<GetEventsResponse[]> {
+        let result: GetEventsResponse[];
+        result = await db('events.event as event').select('*')
                     .leftOuterJoin('geocode.location as geo', 'event.geocode_id', 'geo.id')
-                    .where('event.start_time', '>=', query.start_timestamp || '01-01-1970')
-                    .andWhere('event.end_time', '<=', query.end_timestamp || '12-31-2099')
+                    .where('event.start_time', '>=', query.startTime || '01-01-1970')
+                    .andWhere('event.end_time', '<=', query.endTime || '12-31-2099')
                     .modify((queryBuilder) => {
-                        if (query.searchBounds) {
-                            const searchBounds = query.searchBounds;
+                        if (searchBounds) {
                             queryBuilder
                                 .andWhere('geo.lat', '>=', searchBounds.minLat)
                                 .andWhere('geo.lat', '<=', searchBounds.maxLat)
@@ -50,13 +55,9 @@ export class EventDAL {
         return val;
     }
 
-    async deleteEvents(params: any): Promise<number> {
-        const query = params.query;
-        if (query) {
-            const val = await db('events.event').whereIn('organization', query.organization).del();
-            return val;
-        }
-        return null;
+    async deleteEvents(organizations: string[]): Promise<number> {
+        const val = await db('events.event').whereIn('organization', organizations).del();
+        return val;
     }
 
     

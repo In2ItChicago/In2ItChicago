@@ -15,7 +15,7 @@ export class GeocodeDAL {
             filter = 'address';
             value = params.address;
         }
-        else if (params.neighborhood){
+        else if (params.neighborhood) {
             filter = 'neighborhood';
             value = params.neighborhood;
         }

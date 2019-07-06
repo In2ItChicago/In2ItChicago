@@ -58,7 +58,7 @@ export class Postgres {
                     .offset(query.offset || 0)
                     .limit(query.limit || DEFAULT_LIMIT)
                     .orderBy('event.start_time');
-                
+                debugger;
                 return result;
             },
             async create(data: any, params: Params) {
