@@ -105,5 +105,5 @@ AUTHORS text
 *.woff binary
 *.pyc binary
 *.pdf binary
-
+*.exe binary
 * eol=lf
