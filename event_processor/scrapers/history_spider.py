@@ -43,7 +43,7 @@ class HistorySpider(ScraperCrawlSpider):
             'title': response.css('a.title::text').extract(),
             'url': response.css('a.title::attr(href)').extract(),
             'event_time': self.create_time_data(
-                time_range=response.css('.time').extract(),
+                time_range=self.empty_check_extract(response.css('.details'), self.css_func, '.time::text'),
                 date=get_full_date(response.css('.xcalendar-row .number,.month').extract())
             ),
             'description': response.css('.info').extract()
