@@ -1,5 +1,7 @@
 import * as knex from 'knex';
 import * as _ from 'lodash';
+import { GetGeocodeRequest } from 'src/DTO/getGeocodeRequest';
+import { GetGeocodeResponse } from 'src/DTO/getGeocodeResponse';
 
 const db = knex({
     client: 'postgresql',
@@ -7,7 +9,7 @@ const db = knex({
 });
 
 export class GeocodeDAL {
-    async getGeocode(params: any) {
+    async getGeocode(params: GetGeocodeRequest): Promise<any> {
         let filter = '';
         let value = '';
 
@@ -27,7 +29,7 @@ export class GeocodeDAL {
         return filteredGeo;
     }
 
-    async createGeocode(data: any): Promise<number[]> {
+    async createGeocode(data: GetGeocodeResponse): Promise<any> {
         const val = await db('geocode.location').returning('id').insert(data);
         return val;
     }

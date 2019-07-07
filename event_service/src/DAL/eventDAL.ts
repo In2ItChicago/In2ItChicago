@@ -5,6 +5,7 @@ import { GetEventsRequest } from 'src/DTO/getEventsRequest';
 import { SearchBounds } from 'src/interfaces/searchBounds';
 import { Get } from '@nestjs/common';
 import { GetEventsResponse } from 'src/DTO/getEventsResponse';
+import { AnyTxtRecord } from 'dns';
 
 const DEFAULT_LIMIT = 25;
 
@@ -14,8 +15,9 @@ const db = knex(knexStringcase({
 }));
 
 export class EventDAL {
-    async getNeighborhoods(): Promise<string[]> {
-        const result = await db('geocode.location')
+    async getNeighborhoods(): Promise<any> {
+        let result: any;
+        result = await db('geocode.location')
                     .distinct('neighborhood')
                     .whereNotNull('neighborhood')
                     .orderBy('neighborhood');
@@ -23,9 +25,9 @@ export class EventDAL {
         return result.map(r => r.neighborhood);
     }
 
-    async getEvents(query: GetEventsRequest, searchBounds: SearchBounds): Promise<GetEventsResponse[]> {
-        let result: GetEventsResponse[];
-        result = await db('events.event as event').select('*')
+    async getEvents(query: GetEventsRequest, searchBounds: SearchBounds): Promise<any> {
+        //let result: GetEventsResponse[];
+        const result = await db('events.event as event').select('*')
                     .leftOuterJoin('geocode.location as geo', 'event.geocode_id', 'geo.id')
                     .where('event.start_time', '>=', query.startTime || '01-01-1970')
                     .andWhere('event.end_time', '<=', query.endTime || '12-31-2099')
@@ -50,12 +52,12 @@ export class EventDAL {
         return result;
     }
 
-    async createEvents(data: any): Promise<number[]> {
+    async createEvents(data: any): Promise<any> {
         const val = await db('events.event').insert(data);
         return val;
     }
 
-    async deleteEvents(organizations: string[]): Promise<number> {
+    async deleteEvents(organizations: string[]): Promise<any> {
         const val = await db('events.event').whereIn('organization', organizations).del();
         return val;
     }

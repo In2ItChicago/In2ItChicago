@@ -1,6 +1,6 @@
 import { Controller, Get, Query, Post, Body, Res, HttpStatus } from '@nestjs/common';
 import { EventService } from './event.service';
-import { GetEventsRequest } from 'src/DTO/getEventsRequest';
+import { GetEventsRequest } from '../../src/DTO/getEventsRequest';
 import { CreateEventsRequest } from 'src/DTO/createEventsRequest';
 import { GetEventsResponse } from 'src/DTO/getEventsResponse';
 
@@ -10,6 +10,7 @@ export class EventController {
 
     @Get()
     async getEvents(@Query() request: GetEventsRequest): Promise<GetEventsResponse[]> {
+        debugger;
         const response = await this.eventService.getEvents(request);
         return response;
     }

@@ -1,9 +1,9 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 
 export class GetEventsRequest {
-    @ApiModelProperty()
+    @ApiModelProperty({type: 'string', format: 'date-time'})
     startTime: Date;
-    @ApiModelProperty()
+    @ApiModelProperty({type: 'string', format: 'date-time'})
     endTime: Date;
     @ApiModelProperty()
     organization: string;

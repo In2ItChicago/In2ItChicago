@@ -1,19 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpService, Inject } from '@nestjs/common';
 import { SearchBounds } from 'src/interfaces/searchBounds';
-import { EventDAL } from 'src/DAL/eventDAL';
-import { timestampToDate } from 'src/utilities';
-import { GetEventsRequest } from 'src/DTO/getEventsRequest';
-import { CreateEventsRequest } from 'src/DTO/createEventsRequest';
+import { EventDAL } from '../../src/DAL/eventDAL';
+import { timestampToDate } from '../utilities';
+import { GetEventsRequest } from '../../src/DTO/getEventsRequest';
+import { CreateEventsRequest } from '../../src/DTO/createEventsRequest';
 import * as _ from 'lodash';
-import { GeocodeService } from 'src/geocode/geocode.service';
+import { GeocodeService } from '../../src/geocode/geocode.service';
 import { GetEventsResponse } from 'src/DTO/getEventsResponse';
 
 @Injectable()
 export class EventService {
-    private readonly eventDAL: EventDAL;
-
+    eventDAL: EventDAL;
+    //geocodeService: GeocodeService;
     constructor(private readonly geocodeService: GeocodeService) {
         this.eventDAL = new EventDAL();
+        //this.geocodeService = new GeocodeService(new HttpService());
     }
 
     async getEvents(query: GetEventsRequest): Promise<GetEventsResponse[]> {
@@ -27,7 +28,7 @@ export class EventService {
 
         let searchBounds: SearchBounds | null = null;
         if (query.address) {
-            searchBounds = await this.geocodeService.radiusSearch(query.address, query.miles);
+            searchBounds = await this.geocodeService.radiusSearch({ address: query.address, neighborhood: null }, query.miles);
             delete query.address;
             delete query.miles;
         }
