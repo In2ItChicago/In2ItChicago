@@ -1,12 +1,12 @@
 import { Injectable, HttpService, Inject } from '@nestjs/common';
 import { SearchBounds } from 'src/interfaces/searchBounds';
-import { EventDAL } from '../../src/DAL/eventDAL';
+import { EventDAL } from '@src/DAL/eventDAL';
 import { timestampToDate } from '../utilities';
-import { GetEventsRequest } from '../../src/DTO/getEventsRequest';
-import { CreateEventsRequest } from '../../src/DTO/createEventsRequest';
+import { GetEventsRequest } from '@src/DTO/getEventsRequest';
+import { CreateEventsRequest } from '@src/DTO/createEventsRequest';
 import * as _ from 'lodash';
-import { GeocodeService } from '../../src/geocode/geocode.service';
-import { GetEventsResponse } from 'src/DTO/getEventsResponse';
+import { GeocodeService } from '@src/geocode/geocode.service';
+import { GetEventsResponse } from '@src/DTO/getEventsResponse';
 
 @Injectable()
 export class EventService {
