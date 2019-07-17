@@ -56,8 +56,14 @@ class HistorySpider(ScraperCrawlSpider):
 
     def parse_item(self, response):
         prices = response.css('.price').extract()
+        addresses = response.xpath('//h3[contains(text(), "Event Location")]/following-sibling::div/p').extract()
+        address = ''
+        if len(addresses) == 0:
+            self.logger.warning(f'no address found for {response.url}')
+        else:
+            address = addresses[0]
         return {
             'url': [response.meta['clicked_url']],
-            'address': [response.xpath('//h3[contains(text(), "Event Location")]/following-sibling::div/p').extract()[0]],
+            'address': [address],
             'price': [prices[0] if len(prices) > 0 else '0']
         }
