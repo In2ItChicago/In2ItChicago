@@ -1,7 +1,4 @@
-# Scrapyd breaks on twisted >18.9.0
-# Hopefully should be resolved soon
-# See issue here: https://github.com/scrapy/scrapyd/issues/311
-twisted==18.9.0
+twisted
 Scrapy
 # daterangeparser breaks on pyparsing >2.0.5
 pyparsing==2.0.5
