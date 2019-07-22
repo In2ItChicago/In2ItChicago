@@ -54,6 +54,7 @@ class AggregatorBase:
         self.stream_handler.setFormatter(formatter)
 
         self.configure_logger(self.name, self.memory_handler, logging.INFO)
+        self.configure_logger(self.name, self.stream_handler, logging.INFO)
         self.configure_logger('scrapy', self.memory_handler, logging.WARNING)
         self.configure_logger('scrapy', self.stream_handler, logging.WARNING)
         self.configure_logger('twisted', self.memory_handler, logging.WARNING)

@@ -13,6 +13,9 @@ services:
         limits:
           # Prevent 100% CPU usage
           cpus: '0.8'
+  postgres:
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
   event_service:
     image: in2itchicago/event_service:20190722.1
     command: "yarn run start"

@@ -49,7 +49,7 @@ class HistorySpider(ScraperCrawlSpider):
             'description': response.css('.info').extract()
         }
 
-    def link_request(self, request):
+    def link_request(self, request, response):
         # Store the original url in case it gets redirected later
         request.meta['clicked_url'] = request.url
         return request

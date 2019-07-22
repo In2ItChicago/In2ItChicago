@@ -28,6 +28,9 @@ services:
       - /usr/src/app/in2it_site/node_modules/
     environment:
       - API_URL=api.localhost
+  postgres:
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
   nginx:
     command: sh -c "chmod +x entrypoint.sh && nodemon -L --exec ./entrypoint.sh"
     environment:
@@ -40,6 +43,7 @@ services:
     environment:
       - DEBUG=${SCHEDULER_DEBUG}
 volumes:
+  postgres_data:
   event_processor_data:
   event_processor_lock:
   event_processor_scrapy:
