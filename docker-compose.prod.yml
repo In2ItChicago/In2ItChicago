@@ -8,6 +8,11 @@ services:
       - VERBOSE_OUTPUT=0
       - SCHEDULE_INTERVAL=120
       - RUN_SCHEDULER=1
+    deploy:
+      resources:
+        limits:
+          # Prevent 100% CPU usage
+          cpus: '0.8'
   event_service:
     image: in2itchicago/event_service:20190630.1
     command: "yarn run start"
