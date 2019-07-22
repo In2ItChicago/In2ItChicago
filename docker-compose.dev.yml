@@ -43,6 +43,7 @@ services:
     environment:
       - DEBUG=${SCHEDULER_DEBUG}
 volumes:
+  ndscheduler_modules:
   postgres_data:
   event_processor_data:
   event_processor_lock:
