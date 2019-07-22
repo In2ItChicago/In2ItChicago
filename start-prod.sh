@@ -11,8 +11,5 @@ sleep 5
 
 ./scripts/create-network.sh
 docker build -f db/Dockerfile -t db_deploy db
-./db/run.sh &
-DB_PID=$!
 ./scripts/stack-deploy.sh prod
-echo "Waiting for db deploy. PID: ${DB_PID}"
-wait $DB_PID
+./db/run.sh
