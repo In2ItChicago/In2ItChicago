@@ -43,6 +43,8 @@ def run_all(folder, s_target):
 @contextmanager
 def temp_db(url):
     try:
+        # Drop if exists in case the previous deployment didn't clean up for some reason
+        drop_database(url)
         create_database(url)
         yield url
     finally:
