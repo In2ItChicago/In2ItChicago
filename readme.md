@@ -25,6 +25,7 @@ View these docs [here](https://clipboardproject.github.io/ClipboardApp/) if you 
             * [Knowing when to use a scraper and when to use an API](#knowing-when-to-use-a-scraper-and-when-to-use-an-api)
          * [How to integrate new scrapers and API clients with the core code](#how-to-integrate-new-scrapers-and-api-clients-with-the-core-code)
       * [Troubleshooting Guide](#troubleshooting-guide)
+      * [Deployment](#deployment)
 
 ## Setup
 
@@ -324,3 +325,20 @@ __When starting Docker on Windows, it complains about not having an IP address__
 
 __VS Code is complaining about missing dependencies/modules/etc__
 - VS Code is only looking at your local system, not what's in Docker. To get rid of the warnings and enable autocomplete, linting, etc, install all of the python/node dependencies on your local machine.
+
+## Deployment
+This describes how to deploy the application to the production server. All the following commands assume your current working directory is the root of the repo. Before you do this, you will neeed both an SSH key for the server and the Dockerhub passsword. Ask a member with push access for these.
+
+First, run `deploy/tag_images.sh` with a version number appended to the end. Our current version number scheme is YYYYMMDD.{REVISION}. EX: `deploy/tag_images.sh 20190723.1`. The revision number can be incremented if more than one deployment is done in a day. This will build the production version of the images, tag them, and save them locally on your computer.
+
+Next, open up `docker-compose.prod.yml` and update all of the image versions to point to the new tag. If not all of the images were changed, not all of the tags need to be updated, but we prefer that all of the images get versioned together as that will make it easier to keep everything in sync.
+
+Now, run `./start-prod.sh` and test to make sure everything is working locally.
+
+Once tested, you can push the images to Dockerhub. Before doing this the first time, you have to run `deploy/login.sh` in order to obtain access to push to Dockerhub. Before doing that, you will need to have `dockerhub_in2itchicago.txt` inside your `deploy` folder.
+
+Once logged in, run `deploy/publish-images.sh` to push the images to Dockerhub. This will take a few minutes depending on the extent of the changes. Dockerhub does a diff with the current published image to see what needs to be pushed.
+
+After a successful push, you're ready to deploy to the server. First, commit your changes to `docker-compose.prod.yml` so they can be picked up by the server. Then, run `deploy/in2it_aws_deploy.sh`. For this to work, you need to have `in2it-key.pem` inside your deploy folder. 
+
+After the deploy script finishes, you can run `deploy/connect_ports.sh`. This will set up port forwarding to the remote server so you can monitor the applications from your local computer. If anything goes awry, you can use `deploy/in2it_aws.sh` to SSH into the server.
