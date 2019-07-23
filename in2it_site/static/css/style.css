@@ -28,17 +28,24 @@ body{
 	color:#fff;
 	background-color:#056277;
 	box-shadow: 0px 7px 15px #888888;
+	height:120px;
 }
 
 .nav-link{
 	padding:10px 20px 0px 20px;
 	color:#fff;
-	font-size:18px;
+	font-size:20px;
+	font-weight:bold;
+	line-height: 75px;
 }
 
 .nav-link:hover{
 	text-decoration: underline;
 	color:#e3e3e3;
+}
+
+.in2it-brand{
+	line-height:91px;
 }
 
 .logo-container{
@@ -48,7 +55,7 @@ body{
 }
 
 .navbar-logo{
-	width:100px;
+	width:200px;
 	margin-right:20px;
 }
 
@@ -97,7 +104,7 @@ body{
 	border: none;
 	text-align: left;
 	outline: none;
-	font-size: 15px;
+	font-size: 20px;
 	transition: 0.4s;
 	border-top:1px solid #056277;
 }
