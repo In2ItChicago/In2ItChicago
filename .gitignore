@@ -139,3 +139,9 @@ twistd.pid
 
 # databases
 *.db
+
+# mounted postgres data
+postgres_data
+
+# dockerhub password
+dockerhub_in2itchicago.txt
