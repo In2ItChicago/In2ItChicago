@@ -171,6 +171,7 @@
 			},
 			filter: function() {
 				this.setDates();
+				this.searchFilter.addressOrZip= document.getElementById("locationFilter").value
 				this.$store.searchFilter = this.searchFilter;
 				this.$emit('filterApplied');
 			},
