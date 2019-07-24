@@ -180,12 +180,14 @@
 				} 
 			},
 			filter: function() {
+				
 				this.setDates();
 				this.setOrganization();
 				this.setNeighborhood();
 				this.searchFilter.addressOrZip= document.getElementById("locationFilter").value
 				this.$store.searchFilter = this.searchFilter;
 				this.$emit('filterApplied');
+				console.log(this.searchFilter)
 			},
 			setDates: function() {
 				this.searchFilter.startDate = new Date(document.getElementById('startDatePicker').value);
