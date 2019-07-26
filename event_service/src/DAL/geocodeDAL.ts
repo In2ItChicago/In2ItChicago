@@ -1,12 +1,15 @@
 import * as knex from 'knex';
+import * as knexStringcase from 'knex-stringcase';
 import * as _ from 'lodash';
 import { GetGeocodeRequest } from 'src/DTO/getGeocodeRequest';
 import { GetGeocodeResponse } from 'src/DTO/getGeocodeResponse';
+import { CreateGeocodeRequest } from '@src/DTO/createGeocodeRequest';
+import { randomExpirationTime } from '@src/utilities';
 
-const db = knex({
+const db = knex(knexStringcase({
     client: 'postgresql',
     connection: 'postgresql://postgres:postgres@postgres:5432/events',
-});
+}));
 
 export class GeocodeDAL {
     async getGeocode(params: GetGeocodeRequest): Promise<any> {
@@ -29,8 +32,9 @@ export class GeocodeDAL {
         return filteredGeo;
     }
 
-    async createGeocode(data: GetGeocodeResponse): Promise<any> {
+    async createGeocode(data: CreateGeocodeRequest): Promise<number> {
+        data.expireAt = randomExpirationTime();
         const val = await db('geocode.location').returning('id').insert(data);
-        return val;
+        return val[0];
     }
 }

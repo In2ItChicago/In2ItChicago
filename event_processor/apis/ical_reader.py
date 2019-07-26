@@ -1,7 +1,7 @@
 from icalendar import Calendar
 from util.cache_call import cache_call
 from datetime import datetime, date
-import requests
+from util.http_utils import HttpUtils
 
 class ICal:
     def __init__(self, cal, default_timezone):
@@ -17,7 +17,8 @@ class ICal:
     @staticmethod
     @cache_call
     def from_url(url, default_timezone):
-        r = requests.get(url)
+        session = HttpUtils.get_session()
+        r = session.get(url)
         return ICal(Calendar.from_ical(r.text), default_timezone)
 
     def parse_events(self):

@@ -1,8 +1,6 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 
-export class GetGeocodeResponse {
-    @ApiModelProperty()
-    id: number;
+export class CreateGeocodeRequest {
     @ApiModelProperty()
     address: string;
     @ApiModelProperty()
@@ -11,4 +9,6 @@ export class GetGeocodeResponse {
     lon: number;
     @ApiModelProperty()
     neighborhood: string;
+    @ApiModelProperty()
+    expireAt?: Date;
 }

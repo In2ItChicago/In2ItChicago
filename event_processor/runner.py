@@ -1,7 +1,6 @@
 import scrapy
 import os
 import sys
-import requests
 import time
 import ptvsd
 
@@ -14,6 +13,7 @@ from scrapy import spiderloader
 from scrapy.utils import project
 
 from config import config
+from util.http_utils import HttpUtils
 
 def run():
     config.connect_to_client()
@@ -36,8 +36,9 @@ def run():
     crawlerProcess.join()
 
     print('Event processor completed')
- 
-    events = requests.get(config.get_events, params = {})
+
+    session = HttpUtils.get_session()
+    events = session.get(config.get_events, params = {})
 
     if len(events.json()) > 0:
         print('Data retrieved successfully')

@@ -6,7 +6,6 @@
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals, Request
-import requests
 
 class SplitItemsMiddleware:
     def get_event_count(self, item, spider):

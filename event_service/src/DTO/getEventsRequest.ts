@@ -1,20 +1,20 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 
 export class GetEventsRequest {
-    @ApiModelProperty({type: 'string', format: 'date-time'})
+    @ApiModelProperty({type: 'string', format: 'date-time', required: false})
     startTime: Date;
-    @ApiModelProperty({type: 'string', format: 'date-time'})
+    @ApiModelProperty({type: 'string', format: 'date-time',  required: false})
     endTime: Date;
-    @ApiModelProperty()
+    @ApiModelProperty({required: false})
     organization: string;
-    @ApiModelProperty()
+    @ApiModelProperty({required: false})
     address: string;
-    @ApiModelProperty()
+    @ApiModelProperty({required: false})
     miles: number;
-    @ApiModelProperty()
+    @ApiModelProperty({required: false})
     neighborhood: string;
-    @ApiModelProperty()
+    @ApiModelProperty({required: false})
     limit: number;
-    @ApiModelProperty()
+    @ApiModelProperty({required: false})
     offset: number;
 }

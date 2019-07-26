@@ -1,8 +1,6 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { EventTime } from './eventTime';
 
-
-
 export class CreateEventsRequest {
     @ApiModelProperty()
     organization: string;

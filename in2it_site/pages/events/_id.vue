@@ -18,8 +18,8 @@
 			</b-col>
 			<b-col>
 				<p class="event-info-label">Date And Time</p>
-				<p class="event-date">{{ event.start_date }}</p>
-				<p class="event-time">{{ event.start_time }}</p>
+				<p class="event-date">{{ event.startDate }}</p>
+				<p class="event-time">{{ event.startTime }}</p>
 
 				<p class="event-info-label">Location</p>
 				<p class="event-address">{{ event.address }}</p>

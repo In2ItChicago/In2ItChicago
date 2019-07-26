@@ -4,13 +4,12 @@ import { GetEventsRequest } from '@src/DTO/getEventsRequest';
 import { CreateEventsRequest } from '@src/DTO/createEventsRequest';
 import { GetEventsResponse } from '@src/DTO/getEventsResponse';
 
-@Controller('event')
+@Controller('events')
 export class EventController {
     constructor(private readonly eventService: EventService) {}
 
     @Get()
     async getEvents(@Query() request: GetEventsRequest): Promise<GetEventsResponse[]> {
-        debugger;
         const response = await this.eventService.getEvents(request);
         return response;
     }

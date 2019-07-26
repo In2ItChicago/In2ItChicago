@@ -92,8 +92,8 @@ export class GeocodeService {
         //     }
         //     return context;
         // }
-        if (result) {
-            return result;
+        if (result.length > 0) {
+            return result[0];
         }
         let webServiceResult: AddressResult | null = null;
         if (query.address) {
@@ -101,14 +101,23 @@ export class GeocodeService {
         }
 
         if (webServiceResult == null) {
-            webServiceResult = {
+            return {
+                id: null,
                 address: query.address,
                 lat: null,
                 lon: null,
                 neighborhood: null,
             };
         }
-
-        const val = await this.geocodeDAL.createGeocode(result);
+        else {
+            const id = await this.geocodeDAL.createGeocode(webServiceResult);
+            return {
+                id,
+                address: webServiceResult.address,
+                lat: webServiceResult.lat,
+                lon: webServiceResult.lon,
+                neighborhood: webServiceResult.neighborhood,
+            };
+        }
     }
 }
