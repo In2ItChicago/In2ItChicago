@@ -25,9 +25,23 @@ export class EventDAL {
         return result.map(r => r.neighborhood);
     }
 
-    async getEvents(query: GetEventsRequest, searchBounds: SearchBounds): Promise<any> {
-        //let result: GetEventsResponse[];
-        const result = await db('events.event as event').select('*')
+    async getEvents(query: GetEventsRequest, searchBounds: SearchBounds): Promise<GetEventsResponse[]> {
+        let result: GetEventsResponse[];
+        result = await db('events.event as event').select(
+            'event.id',
+            'event.title',
+            'event.url',
+            'event.description',
+            'event.organization',
+            'event.price',
+            'event.startTime',
+            'event.endTime',
+            'event.category',
+            'event.createdDate',
+            'geo.address',
+            'geo.lat',
+            'geo.lon',
+            'geo.neighborhood')
                     .leftOuterJoin('geocode.location as geo', 'event.geocode_id', 'geo.id')
                     .where('event.start_time', '>=', query.startTime || '01-01-1970')
                     .andWhere('event.end_time', '<=', query.endTime || '12-31-2099')
@@ -49,6 +63,7 @@ export class EventDAL {
                     .offset(query.offset || 0)
                     .limit(query.limit || DEFAULT_LIMIT)
                     .orderBy('event.start_time');
+        debugger;
         return result;
     }
 
@@ -61,6 +76,4 @@ export class EventDAL {
         const val = await db('events.event').whereIn('organization', organizations).del();
         return val;
     }
-
-    
 }

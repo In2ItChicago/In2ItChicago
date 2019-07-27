@@ -1,6 +1,6 @@
 import { ApiModelProperty } from "@nestjs/swagger";
 
-export class GetGeocodeRequest {
+export class SearchNeighborhoodRequest {
     @ApiModelProperty({required: false})
-    address: string;
+    neighborhood: string;
 }

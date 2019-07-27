@@ -13,6 +13,7 @@ import { geocodeApiDelayMilliseconds } from '../settings';
 import { GetGeocodeResponse } from '@src/DTO/getGeocodeResponse';
 import { CoordPair } from '@src/interfaces/coordPair';
 import { map } from 'lodash';
+import { SearchNeighborhoodRequest } from '@src/DTO/searchNeighborhoodRequest';
 
 const geojsonData = readFileSync('./res/chicago_neighborhoods.geojson');
 const geojsonContent = JSON.parse(geojsonData.toString());
@@ -77,14 +78,24 @@ export class GeocodeService {
         return result;
     }
 
+    async getAllGeocodes(): Promise<GetGeocodeResponse[]> {
+        const result = await this.geocodeDAL.getAllGeocodes();
+        return result;
+    }
+
+    async searchNeighborhood(query: SearchNeighborhoodRequest): Promise<GetGeocodeResponse[]> {
+        const result = await this.geocodeDAL.searchNeighborhood(query);
+        return result;
+    }
+
     async getGeocode(query: GetGeocodeRequest): Promise<GetGeocodeResponse> {
         // if (!query) {
         //     throw new GeneralError('Query not supplied');
         // }
         // searching by address and neighborhood causes issues if the neighborhood doesn't match the address
-        if (query.address && query.neighborhood) {
-            delete query.neighborhood;
-        }
+        // if (query.address && query.neighborhood) {
+        //     delete query.neighborhood;
+        // }
 
         const result = await this.geocodeDAL.getGeocode(query);
 

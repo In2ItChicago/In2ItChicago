@@ -62,7 +62,7 @@ export class EventService {
         for (let i = 0; i < contextData.length; i++) {
             Object.assign(contextData[i], {
                 start_time: timestampToDate(contextData[i].eventTime.startTimestamp),
-                end_time: timestampToDate(contextData[i].eventTime.endTimestamp)
+                end_time: timestampToDate(contextData[i].eventTime.endTimestamp),
             });
             delete contextData[i].eventTime;
             delete contextData[i].address;

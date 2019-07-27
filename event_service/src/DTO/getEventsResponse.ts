@@ -25,4 +25,8 @@ export class GetEventsResponse {
     startDate: string;
     @ApiModelProperty()
     endDate: string;
+    @ApiModelProperty()
+    lat: number;
+    @ApiModelProperty()
+    lon: number;
 }
