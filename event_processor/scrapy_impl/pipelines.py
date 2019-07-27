@@ -29,10 +29,10 @@ class EventTransformPipeline:
             if self.time_utils.time_range_is_between(time['start_timestamp'], time['end_timestamp'], spider.start_timestamp, spider.end_timestamp):
                 return loader.item
             else:
-                raise DropItem('Event is not in the confured timeframe')
+                raise DropItem('Event is not in the configured timeframe')
         else:
             return loader.item
-            d
+            
 class GeocodePipeline:
     def __init__(self):
         self.session = HttpUtils.get_session()
@@ -41,10 +41,10 @@ class GeocodePipeline:
             try:
                 geocode = self.session.get(config.get_geocode, params={'address': item['address']})
                 geocode_json = geocode.json()
-                if geocode_json == []:
-                    spider.logger.warning(f'No geocode response for address {item["address"]}')
-                    return item
+                
                 item['geocode_id'] = geocode_json['id']
+                if geocode_json['lat'] == None:
+                    spider.logger.warning(f'No geocode response for address {item["address"]}')
             except Exception as e:
                 spider.logger.warning(f'Exception while getting geocode for address {item["address"]}: {e}')
         return item

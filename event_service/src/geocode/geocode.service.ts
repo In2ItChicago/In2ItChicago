@@ -55,7 +55,12 @@ export class GeocodeService {
         this.lastExecuted = new Date();
 
         if (response.data.length === 0) {
-            return null;
+            return {
+                address,
+                lat: null,
+                lon: null,
+                neighborhood: null,
+            };
         }
 
         const data = response.data[0];
@@ -100,24 +105,13 @@ export class GeocodeService {
             webServiceResult = await this.geoSearch(query.address);
         }
 
-        if (webServiceResult == null) {
-            return {
-                id: null,
-                address: query.address,
-                lat: null,
-                lon: null,
-                neighborhood: null,
-            };
-        }
-        else {
-            const id = await this.geocodeDAL.createGeocode(webServiceResult);
-            return {
-                id,
-                address: webServiceResult.address,
-                lat: webServiceResult.lat,
-                lon: webServiceResult.lon,
-                neighborhood: webServiceResult.neighborhood,
-            };
-        }
+        const id = await this.geocodeDAL.createGeocode(webServiceResult);
+        return {
+            id,
+            address: webServiceResult.address,
+            lat: webServiceResult.lat,
+            lon: webServiceResult.lon,
+            neighborhood: webServiceResult.neighborhood,
+        };
     }
 }
