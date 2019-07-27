@@ -10,11 +10,8 @@ import { GetEventsResponse } from '@src/DTO/getEventsResponse';
 
 @Injectable()
 export class EventService {
-    eventDAL: EventDAL;
-    //geocodeService: GeocodeService;
-    constructor(private readonly geocodeService: GeocodeService) {
-        this.eventDAL = new EventDAL();
-        //this.geocodeService = new GeocodeService(new HttpService());
+
+    constructor(private readonly geocodeService: GeocodeService, @Inject('EventDAL') private readonly eventDAL: EventDAL) {
     }
 
     async getEvents(query: GetEventsRequest): Promise<GetEventsResponse[]> {

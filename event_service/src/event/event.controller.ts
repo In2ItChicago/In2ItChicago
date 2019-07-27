@@ -3,7 +3,9 @@ import { EventService } from './event.service';
 import { GetEventsRequest } from '@src/DTO/getEventsRequest';
 import { CreateEventsRequest } from '@src/DTO/createEventsRequest';
 import { GetEventsResponse } from '@src/DTO/getEventsResponse';
+import { ApiUseTags } from '@nestjs/swagger';
 
+@ApiUseTags('events')
 @Controller('events')
 export class EventController {
     constructor(private readonly eventService: EventService) {}

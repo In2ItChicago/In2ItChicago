@@ -1,4 +1,4 @@
-import { Injectable, HttpService } from '@nestjs/common';
+import { Injectable, HttpService, Inject } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { AxiosResponse } from 'axios';
 import { SearchBounds } from '../interfaces/searchBounds';
@@ -21,11 +21,9 @@ const geoLookup = new GeoJsonGeometriesLookup(geojsonContent);
 @Injectable()
 export class GeocodeService {
     lastExecuted: Date;
-    geocodeDAL: GeocodeDAL;
 
-    constructor(private readonly httpService: HttpService) {
+    constructor(private readonly httpService: HttpService, @Inject('GeocodeDAL') private readonly geocodeDAL: GeocodeDAL) {
         this.lastExecuted = new Date();
-        this.geocodeDAL = new GeocodeDAL();
     }
     async radiusSearch(request: GetGeocodeRequest, miles: number): Promise<SearchBounds> {
         let searchBounds: SearchBounds;
