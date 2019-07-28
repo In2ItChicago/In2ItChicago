@@ -1,14 +1,19 @@
 import { json } from 'body-parser';
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { EventModule } from './event/event.module';
 import { GeocodeModule } from './geocode/geocode.module';
+import { GenericFilter } from './filters/generic.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(json({ limit: '50mb' }));
   app.enableCors();
+  app.useGlobalFilters(new GenericFilter())
+  app.useGlobalPipes(new ValidationPipe())
+  
   const options = new DocumentBuilder()
     .setTitle('Event API')
     .setDescription('Event API')

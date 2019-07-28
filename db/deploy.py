@@ -44,8 +44,7 @@ def run_all(folder, s_target):
 def temp_db(url):
     try:
         # Drop if exists in case the previous deployment didn't clean up for some reason
-        drop_database(url)
-        create_database(url)
+        create_database(url, wipe_if_existing=True)
         yield url
     finally:
         drop_database(url)
