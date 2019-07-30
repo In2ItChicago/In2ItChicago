@@ -25,7 +25,7 @@ export class GeocodeDAL {
     async getAllGeocodes(): Promise<Object[]> {
         const response = await db.select('id', 'address', 'lat', 'lon', 'neighborhood')
             .from('geocode.location');
-            
+
         return response;
     }
 
@@ -49,5 +49,9 @@ export class GeocodeDAL {
         data.expireAt = randomExpirationTime();
         const val = await db('geocode.location').returning('id').insert(data);
         return val[0];
+    }
+
+    async deleteAllGeocodes() {
+        await db('geocode.location').del();
     }
 }

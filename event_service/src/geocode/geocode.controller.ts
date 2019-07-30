@@ -1,4 +1,4 @@
-import { Controller, Get, Query, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Query, UseInterceptors, Post, Delete } from '@nestjs/common';
 import { GeocodeService } from './geocode.service';
 import { GetGeocodeRequest } from '@src/DTO/getGeocodeRequest';
 import { ApiUseTags, ApiResponse } from '@nestjs/swagger';
@@ -32,5 +32,11 @@ export class GeocodeController {
     @ApiResponse({status: 200, type: String, isArray: true, description: 'All available neighborhoods'})
     async listNeighborhoods(): Promise<String[]> {
         return await this.geocodeService.listNeighborhoods();
+    }
+
+    @Delete('/clearAllGeocodes')
+    @ApiResponse({status: 200, description: 'Deleted'})
+    async clear() {
+        await this.geocodeService.clearAllGeocodes();
     }
 }

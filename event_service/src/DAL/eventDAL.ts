@@ -32,8 +32,8 @@ export class EventDAL {
             'geo.lon',
             'geo.neighborhood')
                     .leftOuterJoin('geocode.location as geo', 'event.geocode_id', 'geo.id')
-                    .where('event.start_time', '>=', query.startTime || '01-01-1970')
-                    .andWhere('event.end_time', '<=', query.endTime || '12-31-2099')
+                    .where('event.startTime', '>=', query.startTime || '01-01-1970')
+                    .andWhere('event.endTime', '<=', query.endTime || '12-31-2099')
                     .modify((queryBuilder) => {
                         if (searchBounds) {
                             queryBuilder
@@ -51,7 +51,7 @@ export class EventDAL {
                     })
                     .offset(query.offset || 0)
                     .limit(query.limit || DEFAULT_LIMIT)
-                    .orderBy('event.start_time');
+                    .orderBy('event.startTime');
 
         return result;
     }
@@ -64,5 +64,13 @@ export class EventDAL {
     async deleteEvents(organizations: string[]): Promise<any> {
         const val = await db('events.event').whereIn('organization', organizations).del();
         return val;
+    }
+
+    async nullifyGeocodeIds() {
+        await db('events.event').update('geocodeId', null);
+    }
+
+    async deleteAllEvents() {
+        await db('events.event').del();
     }
 }

@@ -15,6 +15,7 @@ import { CoordPair } from '@src/interfaces/coordPair';
 import { map } from 'lodash';
 import { SearchNeighborhoodRequest } from '@src/DTO/searchNeighborhoodRequest';
 import { plainToClass } from 'class-transformer';
+import { EventDAL } from '@src/DAL/eventDAL';
 
 const geojsonData = readFileSync('./res/chicago_neighborhoods.geojson');
 const geojsonContent = JSON.parse(geojsonData.toString());
@@ -24,7 +25,11 @@ const geoLookup = new GeoJsonGeometriesLookup(geojsonContent);
 export class GeocodeService {
     lastExecuted: Date;
 
-    constructor(private readonly httpService: HttpService, @Inject('GeocodeDAL') private readonly geocodeDAL: GeocodeDAL) {
+    constructor(
+        private readonly httpService: HttpService, 
+        @Inject('GeocodeDAL') private readonly geocodeDAL: GeocodeDAL,
+        @Inject('EventDAL') private readonly eventDAL: EventDAL
+    ) {
         this.lastExecuted = new Date();
     }
     async radiusSearch(request: GetGeocodeRequest, miles: number): Promise<SearchBounds> {
@@ -113,5 +118,10 @@ export class GeocodeService {
             lon: webServiceResult.lon,
             neighborhood: webServiceResult.neighborhood,
         };
+    }
+
+    async clearAllGeocodes() {
+        await this.eventDAL.nullifyGeocodeIds();
+        await this.geocodeDAL.deleteAllGeocodes();
     }
 }

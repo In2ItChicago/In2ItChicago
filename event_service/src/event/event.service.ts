@@ -65,4 +65,8 @@ export class EventService {
 
         this.eventDAL.createEvents(contextData);
     }
+
+    async clearAllEvents() {
+        await this.eventDAL.deleteAllEvents();
+    }
 }
