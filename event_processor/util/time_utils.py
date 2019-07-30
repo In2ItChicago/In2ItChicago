@@ -177,11 +177,6 @@ class TimeUtils:
         start_time, end_time = self.split_time(time_string)
         return self.parse_time(start_time), self.parse_time(end_time)
 
-    def format_start_end(self, start, end):
-        if end == None:
-            end = ''
-        return f'{start} - {end}'
-
     def time_is_between(self, timestamp, min_timestamp, max_timestamp):
         return min_timestamp <= timestamp <= max_timestamp
 

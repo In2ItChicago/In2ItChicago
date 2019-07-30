@@ -3,15 +3,17 @@ import json
 import re
 import logging
 import logging.handlers
-import requests
 import ptvsd
-from util.time_utils import TimeUtils
+
 from multiprocessing import Lock
 from config import config
 from util.object_hash import ObjectHash
 from models.event import EventManager
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+
+from util.time_utils import TimeUtils
+from util.http_utils import HttpUtils
 
 class AggregatorBase:
     # This class includes functionality that should be shared by spiders and API-based classes
@@ -38,6 +40,8 @@ class AggregatorBase:
             request_date_format = date_format
 
         self.jobid = kwargs['_job'] if '_job' in kwargs else None
+
+        self.session = HttpUtils.get_session()
 
         self.date_format = date_format
         self.time_utils = TimeUtils(date_format)
@@ -76,6 +80,6 @@ class AggregatorBase:
 
     def notify_spider_complete(self):
         logs = [self.memory_handler.format(log) for log in self.memory_handler.buffer]
-        return requests.post(config.scheduler_spider_complete, 
+        return self.session.post(config.scheduler_spider_complete, 
                             json={'jobid': self.jobid, 'errored': self.is_errored, 'logs': logs}, 
                             headers={'Content-Type': 'application/json'})

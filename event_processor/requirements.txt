@@ -1,7 +1,5 @@
 twisted
 Scrapy
-# daterangeparser breaks on pyparsing >2.0.5
-pyparsing==2.0.5
 daterangeparser
 timefhuman
 python-dateutil 
