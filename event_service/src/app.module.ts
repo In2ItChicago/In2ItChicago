@@ -1,4 +1,4 @@
-import { Module, HttpModule, HttpService } from '@nestjs/common';
+import { Module, HttpModule, NestModule, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GeocodeController } from './geocode/geocode.controller';
@@ -19,4 +19,5 @@ import { EventDAL } from './DAL/eventDAL';
 })
 export class AppModule {
   constructor(private readonly appService: AppService) {}
+  
 }

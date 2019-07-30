@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Post } from '@nestjs/common';
+import { Controller, Get, Query, UseInterceptors } from '@nestjs/common';
 import { GeocodeService } from './geocode.service';
 import { GetGeocodeRequest } from '@src/DTO/getGeocodeRequest';
 import { ApiUseTags, ApiResponse } from '@nestjs/swagger';
@@ -26,5 +26,11 @@ export class GeocodeController {
     @ApiResponse({status: 200, type: GetGeocodeResponse, isArray: true, description: 'Geocodes matching neighborhood'})
     async neighborhoodSearch(@Query() query: SearchNeighborhoodRequest): Promise<GetGeocodeResponse[]> {
         return await this.geocodeService.searchNeighborhood(query);
+    }
+
+    @Get('/listNeighborhoods')
+    @ApiResponse({status: 200, type: String, isArray: true, description: 'All available neighborhoods'})
+    async listNeighborhoods(): Promise<String[]> {
+        return await this.geocodeService.listNeighborhoods();
     }
 }

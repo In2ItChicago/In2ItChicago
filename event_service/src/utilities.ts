@@ -3,24 +3,6 @@ import { minExpireAfterDays, maxExpireAfterDays } from './settings';
 
 export const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs));
 
-// export function errorHandler(ctx: HookContext<any>): HookContext<any> {
-//     if (ctx.error) {
-//         const error = ctx.error;
-//         if (!error.code) {
-//             const newError = new GeneralError(`server error: ${error.stack}`);
-//             ctx.error = newError;
-//             return ctx;
-//         }
-
-//         console.log({
-//             message: ctx.error.message,
-//             stack: ctx.error.stack,
-//             data: ctx.error.data
-//         });
-//     }
-//     return ctx;
-// }
-
 export const timestampToDate = (timestamp: number): Date => new Date(timestamp * 1000);
 
 export const dateTimeFromTimestamp = (timestamp: number): Date => this.timestampToDate(timestamp).toISOString();

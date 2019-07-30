@@ -12,7 +12,7 @@ async function bootstrap() {
   app.use(json({ limit: '50mb' }));
   app.enableCors();
   app.useGlobalFilters(new GenericFilter())
-  app.useGlobalPipes(new ValidationPipe())
+  app.useGlobalPipes(new ValidationPipe({transform: true, skipMissingProperties: true}))
   
   const options = new DocumentBuilder()
     .setTitle('Event API')

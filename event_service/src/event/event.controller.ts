@@ -4,6 +4,7 @@ import { GetEventsRequest } from '@src/DTO/getEventsRequest';
 import { CreateEventsRequest } from '@src/DTO/createEventsRequest';
 import { GetEventsResponse } from '@src/DTO/getEventsResponse';
 import { ApiUseTags, ApiImplicitBody, ApiResponse } from '@nestjs/swagger';
+import {plainToClass} from "class-transformer";
 
 @ApiUseTags('events')
 @Controller('events')
@@ -13,8 +14,7 @@ export class EventController {
     @Get()
     @ApiResponse({status: 200, type: GetEventsResponse, isArray: true, description: 'Event list'})
     async getEvents(@Query() request: GetEventsRequest): Promise<GetEventsResponse[]> {
-        const response = await this.eventService.getEvents(request);
-        return response;
+        return await this.eventService.getEvents(request);
     }
 
     // There seeems to be a bug that requires the ApiImplicitBody name to be 'Array'

@@ -3,7 +3,7 @@ import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from
 
 @Catch()
 export class GenericFilter implements ExceptionFilter {
-  catch(exception: unknown, host: ArgumentsHost) {
+  catch(exception: Error, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const request = ctx.getRequest();
@@ -13,11 +13,15 @@ export class GenericFilter implements ExceptionFilter {
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    response.status(status).json({
+    const errorJson = {
       statusCode: status,
       message: exception.message,
       timestamp: new Date().toISOString(),
       path: request.url,
-    });
+    };
+    
+    console.log(errorJson);
+    console.log(exception.stack);
+    response.status(status).json(errorJson);
   }
 }

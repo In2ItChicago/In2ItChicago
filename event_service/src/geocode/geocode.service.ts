@@ -14,6 +14,7 @@ import { GetGeocodeResponse } from '@src/DTO/getGeocodeResponse';
 import { CoordPair } from '@src/interfaces/coordPair';
 import { map } from 'lodash';
 import { SearchNeighborhoodRequest } from '@src/DTO/searchNeighborhoodRequest';
+import { plainToClass } from 'class-transformer';
 
 const geojsonData = readFileSync('./res/chicago_neighborhoods.geojson');
 const geojsonContent = JSON.parse(geojsonData.toString());
@@ -28,9 +29,9 @@ export class GeocodeService {
     }
     async radiusSearch(request: GetGeocodeRequest, miles: number): Promise<SearchBounds> {
         let searchBounds: SearchBounds;
-        const foundAddress = await this.geocodeDAL.getGeocode(request);
+        const foundAddress = await this.getGeocode(request);
         if (foundAddress.lat && foundAddress.lon) {
-            const point = new GeoPoint(parseFloat(foundAddress.lat), parseFloat(foundAddress.lon));
+            const point = new GeoPoint(foundAddress.lat, foundAddress.lon);
             const bounds = point.boundingCoordinates(miles);
             searchBounds = {
                 minLat: Math.min(bounds[0]._degLat, bounds[1]._degLat),
@@ -80,34 +81,24 @@ export class GeocodeService {
 
     async getAllGeocodes(): Promise<GetGeocodeResponse[]> {
         const result = await this.geocodeDAL.getAllGeocodes();
-        return result;
+        return plainToClass(GetGeocodeResponse, result);
     }
 
     async searchNeighborhood(query: SearchNeighborhoodRequest): Promise<GetGeocodeResponse[]> {
         const result = await this.geocodeDAL.searchNeighborhood(query);
-        return result;
+        return plainToClass(GetGeocodeResponse, result);
+    }
+
+    async listNeighborhoods(): Promise<String[]> {
+        const result = await this.geocodeDAL.getNeighborhoods();
+        return result.map(r => r['neighborhood']);
     }
 
     async getGeocode(query: GetGeocodeRequest): Promise<GetGeocodeResponse> {
-        // if (!query) {
-        //     throw new GeneralError('Query not supplied');
-        // }
-        // searching by address and neighborhood causes issues if the neighborhood doesn't match the address
-        // if (query.address && query.neighborhood) {
-        //     delete query.neighborhood;
-        // }
-
         const result = await this.geocodeDAL.getGeocode(query);
 
-        // Geocode already found in database. No need to query web service.
-        // if (result.length > 0) {
-        //     if (query.address) {
-        //         result = result[0];
-        //     }
-        //     return context;
-        // }
         if (result.length > 0) {
-            return result[0];
+            return plainToClass(GetGeocodeResponse, result[0]);
         }
         let webServiceResult: AddressResult | null = null;
         if (query.address) {

@@ -7,6 +7,7 @@ import { CreateEventsRequest } from '@src/DTO/createEventsRequest';
 import * as _ from 'lodash';
 import { GeocodeService } from '@src/geocode/geocode.service';
 import { GetEventsResponse } from '@src/DTO/getEventsResponse';
+import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class EventService {
@@ -15,38 +16,26 @@ export class EventService {
     }
 
     async getEvents(query: GetEventsRequest): Promise<GetEventsResponse[]> {
-        // if (!context.params.query) {
-        //     throw new GeneralError('Query not found');
-        // }
-        
-        // if ((query.address && !query.miles) || (query.miles && !query.address)) {
-        //     throw new BadRequest("address and miles must be used together");
-        // }
-
         let searchBounds: SearchBounds | null = null;
         if (query.address) {
-            searchBounds = await this.geocodeService.radiusSearch({ address: query.address, neighborhood: null }, query.miles);
-            delete query.address;
-            delete query.miles;
+            searchBounds = await this.geocodeService.radiusSearch({ address: query.address }, query.miles);
         }
-        //context.params.query = Object.assign(query, searchFields);
-        //context.params.query.searchBounds = searchBounds;
 
-        const events = this.eventDAL.getEvents(query, searchBounds);
+        const events = await this.eventDAL.getEvents(query, searchBounds);
 
-        // if (events) {
-        //     const mappedEvents = events.map(result => {
-        //         Object.assign(result, {
-        //             start_date: result.start_time.toLocaleDateString(),
-        //             start_time: result.start_time.toLocaleTimeString(),
-        //             end_date: result.end_time.toLocaleDateString(),
-        //             end_time: result.end_time.toLocaleTimeString()
-        //         });
-                
-        //         return mappedEvents;
-        //     });
-        // }
-        return events;
+        if (events) {
+            const mappedEvents = events.map(result => {
+                return plainToClass(GetEventsResponse, Object.assign(result, {
+                    startDate: result['startTime'].toLocaleDateString(),
+                    startTime: result['startTime'].toLocaleTimeString(),
+                    endDate: result['endTime'].toLocaleDateString(),
+                    endTime: result['endTime'].toLocaleTimeString()
+                }));
+            });
+
+            return mappedEvents;
+        }
+        return [];
     }
 
     async createEvents(contextData: CreateEventsRequest[]) {
@@ -55,9 +44,6 @@ export class EventService {
             data.eventTime && 
             (data.eventTime.startTimestamp || data.eventTime.startTimestamp === 0) &&
             (data.eventTime.endTimestamp || data.eventTime.endTimestamp === 0)));
-        // if (invalid.length > 0) {
-        //     throw new BadRequest('Invalid events. organization, event_time.start_timestamp, and event_time.end_timestamp are required', invalid);
-        // }
 
         for (let i = 0; i < contextData.length; i++) {
             Object.assign(contextData[i], {

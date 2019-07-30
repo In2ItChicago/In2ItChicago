@@ -15,19 +15,8 @@ const db = knex(knexStringcase({
 }));
 
 export class EventDAL {
-    async getNeighborhoods(): Promise<any> {
-        let result: any;
-        result = await db('geocode.location')
-                    .distinct('neighborhood')
-                    .whereNotNull('neighborhood')
-                    .orderBy('neighborhood');
-
-        return result.map(r => r.neighborhood);
-    }
-
-    async getEvents(query: GetEventsRequest, searchBounds: SearchBounds): Promise<GetEventsResponse[]> {
-        let result: GetEventsResponse[];
-        result = await db('events.event as event').select(
+    async getEvents(query: GetEventsRequest, searchBounds: SearchBounds): Promise<Object[]> {
+        const result = await db('events.event as event').select(
             'event.id',
             'event.title',
             'event.url',
@@ -63,7 +52,7 @@ export class EventDAL {
                     .offset(query.offset || 0)
                     .limit(query.limit || DEFAULT_LIMIT)
                     .orderBy('event.start_time');
-        debugger;
+
         return result;
     }
 

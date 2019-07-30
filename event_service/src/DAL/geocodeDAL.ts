@@ -13,13 +13,23 @@ const db = knex(knexStringcase({
 }));
 
 export class GeocodeDAL {
-    async getAllGeocodes(): Promise<GetGeocodeResponse[]> {
+    async getNeighborhoods(): Promise<Object[]> {
+        const result = await db('geocode.location')
+                    .distinct('neighborhood')
+                    .whereNotNull('neighborhood')
+                    .orderBy('neighborhood');
+
+        return result;
+    }
+
+    async getAllGeocodes(): Promise<Object[]> {
         const response = await db.select('id', 'address', 'lat', 'lon', 'neighborhood')
             .from('geocode.location');
+            
         return response;
     }
 
-    async getGeocode(params: GetGeocodeRequest): Promise<GetGeocodeResponse[]> {
+    async getGeocode(params: GetGeocodeRequest): Promise<Object[]> {
         const result = await db.select('id', 'address', 'lat', 'lon', 'neighborhood')
             .from('geocode.location')
             .where('address', params.address);
@@ -27,7 +37,7 @@ export class GeocodeDAL {
         return result;
     }
 
-    async searchNeighborhood(params: SearchNeighborhoodRequest): Promise<GetGeocodeResponse[]> {
+    async searchNeighborhood(params: SearchNeighborhoodRequest): Promise<Object[]> {
         const result = await db.select('id', 'address', 'lat', 'lon', 'neighborhood')
             .from('geocode.location')
             .where('neighborhood', params.neighborhood);

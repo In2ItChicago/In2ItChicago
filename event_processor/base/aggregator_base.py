@@ -80,6 +80,6 @@ class AggregatorBase:
 
     def notify_spider_complete(self):
         logs = [self.memory_handler.format(log) for log in self.memory_handler.buffer]
-        return session.post(config.scheduler_spider_complete, 
+        return self.session.post(config.scheduler_spider_complete, 
                             json={'jobid': self.jobid, 'errored': self.is_errored, 'logs': logs}, 
                             headers={'Content-Type': 'application/json'})
