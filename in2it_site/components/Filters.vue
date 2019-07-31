@@ -4,7 +4,7 @@
 		<div class="accordion-panel">
 			<div class="form-group">
 				<label for="locationFilter">Where</label>
-				<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Neighborhood" :value="searchFilter.addressOrZip">
+				<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Neighborhood" v-model="searchFilter.addressOrZip">
 			</div>
 
 			<div class="form-group">
@@ -173,6 +173,7 @@
 				this.setDates();
 				this.$store.searchFilter = this.searchFilter;
 				this.$emit('filterApplied');
+				console.log(this.searchFilter)
 			},
 			setDates: function() {
 				this.searchFilter.startDate = new Date(document.getElementById('startDatePicker').value);
