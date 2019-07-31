@@ -9,7 +9,7 @@
 
 			<div class="form-group">
 				<label for="locationFilter">Distance (Miles)</label>
-				<select class="form-control" id="distanceFilter" :value="searchFilter.searchRadius">
+				<select class="form-control" id="distanceFilter" v-model="searchFilter.searchRadius">
 					<option value="1">1</option>
 					<option value="2">2</option>
 					<option value="3">3</option>
@@ -173,7 +173,6 @@
 				this.setDates();
 				this.$store.searchFilter = this.searchFilter;
 				this.$emit('filterApplied');
-				console.log(this.searchFilter)
 			},
 			setDates: function() {
 				this.searchFilter.startDate = new Date(document.getElementById('startDatePicker').value);
