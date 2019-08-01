@@ -4,12 +4,12 @@
 		<div class="accordion-panel open" style="max-height:400px">
 			<div class="form-group">
 				<label for="locationFilter">Where</label>
-				<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Neighborhood" :value="searchFilter.addressOrZip">
+				<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Neighborhood" v-model="searchFilter.addressOrZip">
 			</div>
 
 			<div class="form-group">
 				<label for="locationFilter">Distance (Miles)</label>
-				<select class="form-control" id="distanceFilter" :value="searchFilter.searchRadius">
+				<select class="form-control" id="distanceFilter" v-model="searchFilter.searchRadius">
 					<option value="1">1</option>
 					<option value="2">2</option>
 					<option value="3">3</option>
