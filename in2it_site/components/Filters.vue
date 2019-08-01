@@ -1,7 +1,7 @@
 <template>
 	<div class="filters">
-		<button class="accordion-button" @click="open">Filter Results</button>						
-		<div class="accordion-panel">
+		<button class="accordion-button active" @click="toggle">Filter Results</button>						
+		<div class="accordion-panel open" style="max-height:400px">
 			<div class="form-group">
 				<label for="locationFilter">Where</label>
 				<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Neighborhood" :value="searchFilter.addressOrZip">
@@ -51,7 +51,7 @@
 		</div>
 			
 <!-- Disabled until event categorization is improved
-	<button class="accordion-button" @click="open">Category</button>
+	<button class="accordion-button" @click="toggle">Category</button>
 		<div class="accordion-panel">
 			<div class="form-group">
 				<div class="form-check">
@@ -105,7 +105,7 @@
 			</div>
 		</div> -->
 			
-		<!-- <button class="accordion-button" @click="open">Advanced Options</button>
+		<!-- <button class="accordion-button" @click="toggle">Advanced Options</button>
 		<div class="accordion-panel">
 			<div class="form-group">
 				<div class="form-check">
@@ -158,7 +158,7 @@
 			}
 		},
 		methods: {
-			open: function(event) {
+			toggle: function(event) {
 				event.target.classList.toggle('active');
 				let panel = event.target.nextElementSibling;
 				panel.classList.toggle('open');
