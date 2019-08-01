@@ -54,6 +54,11 @@ body{
 	margin-left:20px;
 }
 
+.chihacknight-logo{
+	height:58px;
+	width:auto;
+}
+
 .navbar-logo{
 	width:200px;
 	margin-right:20px;
@@ -73,7 +78,7 @@ body{
 
 .filters{
 	background-color:#67abba;
-	border-radius:12px;
+	border-radius: 12px 12px 0px 0px;
 	/* Hardcoding this for now because the datepicker
 	   is only rendered on the client, which causes
 	   the width the change abruptly after the page loads.
