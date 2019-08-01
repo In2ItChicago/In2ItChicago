@@ -4,6 +4,7 @@
 
         <p>The In2It team is an interdisciplinary group of tech-oriented Chicagoans who think that civic involvement matters. A survey of our fellow Chicagoans found that there is a sizeable group that wants to be civically engaged, but faces obstacles to doing so. We want to make it easier for people to get involved in their communities.</p>
 
+        <p>This website is a work in progress, if you would like to get involved, we meet weekly at ChiHackNight. You can learn more about ChiHackNight and register for the next event at <a href="https://chihacknight.org/" target="_blank">chihacknight.org</a></p>
 
         <h2>Values</h2>
         <ul> 
@@ -22,7 +23,7 @@
             <li>Beneficial to our partner organizations</li>
             <li>Socially oriented</li>
             <li>Maximizing opportunity and minimizing barriers to attend civic events</li>
-            <li>Neighborhood Rich</li>
+            <li>Representative of all Chicago Neighborhoods</li>
         </ul>
 
         <h2>Contributors</h2>
