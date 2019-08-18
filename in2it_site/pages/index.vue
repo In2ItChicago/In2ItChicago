@@ -48,7 +48,6 @@
 		methods: {
 			updateEvents: function() {
 				const eventServiceClient = getClient(this.$env.IN2IT_API_URL || '');
-
 				// Manually set the time to 11:59 PM for now because we don't have a time picker yet
 				this.$store.searchFilter.endDate.setHours(23, 59, 59);
 				return eventServiceClient.find({
@@ -56,7 +55,7 @@
 						startTime: this.$store.searchFilter.startDate, 
 						endTime: this.$store.searchFilter.endDate,
 						miles: this.$store.searchFilter.searchRadius,
-						address: this.$store.searchFilter.addressOrZip || '60611',
+						address: this.$store.searchFilter.addressOrZip,
 						organization: this.$store.searchFilter.organization,
 						neighborhood: this.$store.searchFilter.neighborhood
 					}
