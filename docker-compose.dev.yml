@@ -27,7 +27,7 @@ services:
       - ./in2it_site:/usr/src/app/in2it_site
       - /usr/src/app/in2it_site/node_modules/
     environment:
-      - API_URL=api.localhost
+      - IN2IT_API_URL=${IN2IT_API_URL:-api.localhost}
   postgres:
     volumes:
       - postgres_data:/var/lib/postgresql/data

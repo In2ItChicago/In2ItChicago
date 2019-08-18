@@ -31,7 +31,7 @@
 			};
 		},
 		asyncData ({ app, params }) {
-			const eventURL = process.server ? 'event_service:5000' : app.$env.API_URL;
+			const eventURL = process.server ? 'event_service:5000' : app.$env.IN2IT_API_URL;
             //Ensure get request goes to an endpoint that returns an array or json object
             //If a regular HTML page is returned, the v-for in the view above will try to
             //render each character in the HTML page string as a separate event and nuxt
@@ -47,7 +47,7 @@
 		},
 		methods: {
 			updateEvents: function() {
-				const eventServiceClient = getClient(this.$env.API_URL || '');
+				const eventServiceClient = getClient(this.$env.IN2IT_API_URL || '');
 				return eventServiceClient.find({
 					query: {
 						startTime: this.$store.searchFilter.startDate, 

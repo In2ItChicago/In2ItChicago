@@ -23,7 +23,7 @@ services:
     image: in2itchicago/in2it_site:20190731.1
     command: "yarn run start"
     environment:
-      - "API_URL=${API_URL}"
+      - "IN2IT_API_URL=${IN2IT_API_URL_PROD}"
   ndscheduler:
     image: in2itchicago/ndscheduler:20190731.1
     command: "python -u simple_scheduler/scheduler.py"
