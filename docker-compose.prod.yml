@@ -1,7 +1,7 @@
 version: '3.6'
 services:
   event_processor:
-    image: in2itchicago/event_processor:20190731.1
+    image: in2itchicago/event_processor:20190818.1
     command: sh -c "chmod +x entrypoint.sh && ./entrypoint.sh"
     environment:
       - DEBUG=0
@@ -17,15 +17,15 @@ services:
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
   event_service:
-    image: in2itchicago/event_service:20190731.1
+    image: in2itchicago/event_service:20190818.1
     command: "yarn run start:prod"
   in2it_site:
-    image: in2itchicago/in2it_site:20190731.1
+    image: in2itchicago/in2it_site:20190818.1
     command: "yarn run start"
     environment:
       - "IN2IT_API_URL=${IN2IT_API_URL_PROD}"
   ndscheduler:
-    image: in2itchicago/ndscheduler:20190731.1
+    image: in2itchicago/ndscheduler:20190818.1
     command: "python -u simple_scheduler/scheduler.py"
     environment:
       - DEBUG=0
