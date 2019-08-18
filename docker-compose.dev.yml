@@ -1,7 +1,7 @@
 version: '3.6'
 services:
   event_service:
-    command: ["yarn", "run", "dev"]
+    command: ["yarn", "run", "start:debug"]
     volumes:
       - ./event_service:/usr/src/app/event_service
       # hack to prevent mounting node_modules
@@ -27,7 +27,10 @@ services:
       - ./in2it_site:/usr/src/app/in2it_site
       - /usr/src/app/in2it_site/node_modules/
     environment:
-      - API_URL=api.localhost:5000
+      - IN2IT_API_URL=${IN2IT_API_URL:-api.localhost}
+  postgres:
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
   nginx:
     command: sh -c "chmod +x entrypoint.sh && nodemon -L --exec ./entrypoint.sh"
     environment:
@@ -40,6 +43,8 @@ services:
     environment:
       - DEBUG=${SCHEDULER_DEBUG}
 volumes:
+  ndscheduler_modules:
+  postgres_data:
   event_processor_data:
   event_processor_lock:
   event_processor_scrapy:

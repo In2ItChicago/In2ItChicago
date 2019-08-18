@@ -1,4 +1,3 @@
-import requests
 import json
 import time
 
@@ -7,6 +6,7 @@ from gql.transport.requests import RequestsHTTPTransport
 
 from base.aggregator_base import AggregatorBase
 from util.cache_call import cache_call
+from util.http_utils import HttpUtils
 from config import config
 
 
@@ -18,9 +18,7 @@ class ApiBase(AggregatorBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.session = requests.Session()
-        # Request headers to send
-        self.session.headers.update({
+        self.session = HttpUtils.get_session({
             'Accept-Encoding': 'gzip, deflate, br',
             'Accept-Language': 'en-US,en;q=0.9',
             'Connection': 'keep-alive'

@@ -58,8 +58,6 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     networks: 
@@ -80,10 +78,7 @@ services:
     networks: 
       - in2it
 volumes:
-  mongodata:
   portainerdata:
-  ndscheduler_modules:
-  postgres_data:
   pgadmin_data:
 networks:
   in2it:

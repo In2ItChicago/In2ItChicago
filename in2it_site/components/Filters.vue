@@ -1,21 +1,21 @@
 <template>
 	<div class="filters">
-		<button class="accordion-button" @click="open">Filter Results</button>						
-		<div class="accordion-panel">
+		<button class="accordion-button active" @click="toggle">Filter Results</button>						
+		<div class="accordion-panel open" style="max-height:400px">
 			<div class="form-group">
 				<label for="locationFilter">Where</label>
-				<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Neighborhood" :value="searchFilter.addressOrZip">
+				<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Neighborhood" v-model="searchFilter.addressOrZip">
 			</div>
 
 			<div class="form-group">
 				<label for="locationFilter">Distance (Miles)</label>
-				<select class="form-control" id="distanceFilter" :value="searchFilter.searchRadius">
+				<select class="form-control" id="distanceFilter" v-model="searchFilter.searchRadius">
 					<option value="1">1</option>
 					<option value="2">2</option>
 					<option value="3">3</option>
 					<option value="5">5</option>
 					<option value="10">10</option>
-					<option value="50">50</option>
+					<option value="15">15</option>
 				</select>
 			</div>
 
@@ -61,7 +61,7 @@
 		</div>
 			
 <!-- Disabled until event categorization is improved
-	<button class="accordion-button" @click="open">Category</button>
+	<button class="accordion-button" @click="toggle">Category</button>
 		<div class="accordion-panel">
 			<div class="form-group">
 				<div class="form-check">
@@ -115,7 +115,7 @@
 			</div>
 		</div> -->
 			
-		<!-- <button class="accordion-button" @click="open">Advanced Options</button>
+		<!-- <button class="accordion-button" @click="toggle">Advanced Options</button>
 		<div class="accordion-panel">
 			<div class="form-group">
 				<div class="form-check">
@@ -168,7 +168,7 @@
 			}
 		},
 		methods: {
-			open: function(event) {
+			toggle: function(event) {
 				event.target.classList.toggle('active');
 				let panel = event.target.nextElementSibling;
 				panel.classList.toggle('open');

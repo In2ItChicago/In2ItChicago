@@ -1,4 +1,3 @@
-import requests
 import math
 import time
 from scrapy import spiderloader
@@ -6,6 +5,7 @@ from scrapy.utils import project
 from config import config
 from requests.exceptions import ConnectionError
 import ptvsd
+from util.http_utils import HttpUtils
 
 HOURS_IN_DAY = 24
 MINUTES_IN_HOUR = 60
@@ -29,9 +29,10 @@ def run():
     spiders = spider_loader.list()
     classes = [s for s in (spider_loader.load(name) for name in spiders) if s.enabled]
 
+    session = HttpUtils.get_session(convert_snake_case=False)
     for _ in range(ATTEMPTS):
         try:
-            scrapy_jobs = requests.get(config.scheduler_jobs)
+            scrapy_jobs = session.get(config.scheduler_jobs)
             break
         except ConnectionError:
             time.sleep(5)
@@ -52,13 +53,13 @@ def run():
             }
         if schedule.name in jobs_dict:
             job = jobs_dict[schedule.name]
-            response = requests.put(f'{config.scheduler_jobs}/{job["job_id"]}', json=json_payload)
+            response = session.put(f'{config.scheduler_jobs}/{job["job_id"]}', json=json_payload)
             if response.ok:
                 print(f'Updated schedule for {schedule.name}')
             else:
                 raise Exception(response.text)
         else:
-            response = requests.post(config.scheduler_jobs, json=json_payload)
+            response = session.post(config.scheduler_jobs, json=json_payload)
             if response.ok:
                 print(f'Added schedule for {schedule.name}')
             else:

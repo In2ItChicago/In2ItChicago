@@ -1,5 +1,8 @@
 #!/bin/bash
 pip3 install -r requirements.txt
+if [ ! -d ./postgres_data ]; then
+    mkdir postgres_data
+fi
 scripts/render.sh
 docker stack rm In2ItChicago
 sleep 5
@@ -8,5 +11,5 @@ sleep 5
 
 ./scripts/create-network.sh
 docker build -f db/Dockerfile -t db_deploy db
-./db/run.sh &
 ./scripts/stack-deploy.sh prod
+./db/run.sh

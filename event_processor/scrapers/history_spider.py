@@ -43,21 +43,27 @@ class HistorySpider(ScraperCrawlSpider):
             'title': response.css('a.title::text').extract(),
             'url': response.css('a.title::attr(href)').extract(),
             'event_time': self.create_time_data(
-                time_range=response.css('.time').extract(),
+                time_range=self.empty_check_extract(response.css('.details'), self.css_func, '.time::text'),
                 date=get_full_date(response.css('.xcalendar-row .number,.month').extract())
             ),
             'description': response.css('.info').extract()
         }
 
-    def link_request(self, request):
+    def link_request(self, request, response):
         # Store the original url in case it gets redirected later
         request.meta['clicked_url'] = request.url
         return request
 
     def parse_item(self, response):
         prices = response.css('.price').extract()
+        addresses = response.xpath('//h3[contains(text(), "Event Location")]/following-sibling::div/p').extract()
+        address = ''
+        if len(addresses) == 0:
+            self.logger.warning(f'no address found for {response.url}')
+        else:
+            address = addresses[0]
         return {
             'url': [response.meta['clicked_url']],
-            'address': [response.xpath('//h3[contains(text(), "Event Location")]/following-sibling::div/p').extract()[0]],
+            'address': [address],
             'price': [prices[0] if len(prices) > 0 else '0']
         }

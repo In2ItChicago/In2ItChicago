@@ -5,7 +5,7 @@
                 <h2 class="event-listing-title mb-1">{{ event.title }}</h2>
             </div>
             <div class="d-flex w-100">
-                <h3 class="event-listing-time-location mb-1">{{ event.start_date }} {{ event.start_time  }}, {{ event.address }}</h3>
+                <h3 class="event-listing-time-location mb-1">{{ event.startDate }} {{ event.startTime  }}, {{ event.address }}</h3>
             </div>
             <p class="event-listing-description mb-1">{{ event.description }}</p>
         </div>

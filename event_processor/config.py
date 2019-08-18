@@ -1,7 +1,7 @@
 import os
-import requests
 import time
-
+from requests.exceptions import ConnectionError
+from util.http_utils import HttpUtils
 class Config:
     def __init__(self):
         self.enable_api_cache = True
@@ -56,12 +56,13 @@ class Config:
                 return default_value
     
     def connect_to_client(self):
+        session = HttpUtils.get_session()
         while True:
             try:
-                requests.get(self.service_status)
+                session.get(self.service_status)
                 print('Connection successful')
                 return True
-            except requests.exceptions.ConnectionError:
+            except ConnectionError:
                 time.sleep(0.5)
                 continue
 

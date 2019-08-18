@@ -51,7 +51,7 @@ module.exports = {
 		// Doc: https://bootstrap-vue.js.org/docs/
 		'bootstrap-vue/nuxt',
 		['nuxt-env', {
-			keys: ['API_URL']
+			keys: ['IN2IT_API_URL']
 		}]
 	],
 	/*
