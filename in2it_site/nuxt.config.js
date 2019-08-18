@@ -39,7 +39,8 @@ module.exports = {
 	** Plugins to load before mounting the App
 	*/
 	plugins: [
-		{src: '~/plugins/datepicker.client.js'}
+		{src: '~/plugins/datepicker.client.js'},
+		{src: '~/plugins/notifications.client.js'}
 	],
 
 	/*

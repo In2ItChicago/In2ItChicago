@@ -4,24 +4,28 @@
 			<filters @filterApplied="updateEvents()"></filters>
 			<event-list :events="events"></event-list>
 		</div>
+		<no-ssr>
+			<notifications group="default"/>
+		</no-ssr>
 	</div>	
 </template>
 
 <script lang='ts'>
 	import axios from 'axios';
-	import rest from '@feathersjs/rest-client';
-	import feathers from '@feathersjs/feathers';
 	import Filters from '~/components/Filters.vue';
 	import EventList from '~/components/EventList.vue';
-	import { Service } from 'feathersjs__feathers';
 	
 	import { dummyData } from '~/store/dummyData.js';
 	
-	function getClient(url: string): Service<any> {
-		const app = feathers();
-		const restClient = rest('http://' + url);
-		app.configure(restClient.axios(axios));
-		return app.service('events');
+	// function getClient(url: string): Service<any> {
+	// 	const app = feathers();
+	// 	const restClient = rest('http://' + url);
+	// 	app.configure(restClient.axios(axios));
+	// 	return app.service('events');
+	// }
+	function getEventURL(in2itApiUrl) {
+		const eventURL = process.server ? 'event_service:5000' : in2itApiUrl;
+		return `http://${eventURL}/events`;
 	}
 
 	export default {
@@ -31,7 +35,6 @@
 			};
 		},
 		asyncData ({ app, params }) {
-			const eventURL = process.server ? 'event_service:5000' : app.$env.IN2IT_API_URL;
             //Ensure get request goes to an endpoint that returns an array or json object
             //If a regular HTML page is returned, the v-for in the view above will try to
             //render each character in the HTML page string as a separate event and nuxt
@@ -39,19 +42,19 @@
             if (process.env.DUMMY_DATA) {
                 return { events: dummyData };
 			}
-			const eventService = getClient(eventURL);
-			return eventService.find({query: {}})
+
+			return axios.get(getEventURL(app.$env.IN2IT_API_URL))
 				.then(res => {
-					return { events: res };
+					return { events: res.data };
 				});
 		},
 		methods: {
 			updateEvents: function() {
-				const eventServiceClient = getClient(this.$env.IN2IT_API_URL || '');
 				// Manually set the time to 11:59 PM for now because we don't have a time picker yet
 				this.$store.searchFilter.endDate.setHours(23, 59, 59);
-				return eventServiceClient.find({
-					query: {
+
+				return axios.get(getEventURL(this.$env.IN2IT_API_URL) + '/sdgsdgsd', {
+					params: {
 						startTime: this.$store.searchFilter.startDate, 
 						endTime: this.$store.searchFilter.endDate,
 						miles: this.$store.searchFilter.searchRadius,
@@ -61,8 +64,20 @@
 					}
 				})
 				.then((res) => {
-					console.log(res)
-					this.events = res;
+					this.events = res.data;
+
+					this.$notify({
+						group: 'default',
+						title: 'Filters applied',
+						type: 'success'
+					});
+				})
+				.catch((res) => {
+					this.$notify({
+						group: 'default',
+						title: 'Error applying filters',
+						type: 'error'
+					});
 				});
 			}
 		},

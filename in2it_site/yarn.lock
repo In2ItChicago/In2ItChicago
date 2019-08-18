@@ -690,37 +690,6 @@
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
-"@feathersjs/commons@^4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@feathersjs/commons/-/commons-4.0.0.tgz#ae49bae4025c35aaeb9aacb6a0c27a3d1def5062"
-  integrity sha512-hyCLse4RiNt7WLPQ0KSudjoVnwiRykhYzIZdtDon9i2usPaoYkFw/fEYZrkE5HVB+sUTwphZoZ1oOntRk1MShg==
-
-"@feathersjs/errors@^3.3.6":
-  version "3.3.6"
-  resolved "https://registry.yarnpkg.com/@feathersjs/errors/-/errors-3.3.6.tgz#c34cfcd0a8fc1519afb36030efb3f835a8088015"
-  integrity sha512-VCohY/AQU13xYyZGl6rfdUgE+2bjaI76a4aEb6reIphHKgb4mnjYlg2PzS1/hcU1qUNi515kY9yQa5HsE7J1dQ==
-  dependencies:
-    debug "^4.0.0"
-
-"@feathersjs/feathers@^3.3.1":
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/@feathersjs/feathers/-/feathers-3.3.1.tgz#fcba030847f8418d711135112f01fad64bfb277c"
-  integrity sha512-Mb7Maz03TIIksomXeInmXNb5ykxgsAyBCuJDQHK+oIDrDRR9m+ZbUrslCkMk/s0nr6cW5DmVbWz9s11SCXFW5A==
-  dependencies:
-    "@feathersjs/commons" "^4.0.0"
-    debug "^4.0.0"
-    events "^3.0.0"
-    uberproto "^2.0.2"
-
-"@feathersjs/rest-client@^1.4.7":
-  version "1.4.7"
-  resolved "https://registry.yarnpkg.com/@feathersjs/rest-client/-/rest-client-1.4.7.tgz#6fb556721b661f7aa73f27173925b17274fae164"
-  integrity sha512-Eybe9iTMz2r1J8ITRZH4/WGfIhwSIzP9kiTpwAVESo6NGE6rgwvN95FmtI5AtCABV5v4C2Cy/tVDsMMa9Dgs+A==
-  dependencies:
-    "@feathersjs/commons" "^4.0.0"
-    "@feathersjs/errors" "^3.3.6"
-    qs "^6.5.0"
-
 "@nuxt/babel-preset-app@2.8.1":
   version "2.8.1"
   resolved "https://registry.yarnpkg.com/@nuxt/babel-preset-app/-/babel-preset-app-2.8.1.tgz#4b6b9ec293d66426034b30409ebda8b17e625014"
@@ -1110,18 +1079,6 @@
     "@types/body-parser" "*"
     "@types/express-serve-static-core" "*"
     "@types/serve-static" "*"
-
-"@types/feathersjs__feathers@^3.1.1":
-  version "3.1.5"
-  resolved "https://registry.yarnpkg.com/@types/feathersjs__feathers/-/feathersjs__feathers-3.1.5.tgz#4a2b3ef7d561c64c08b82463276d69119e7fc4b9"
-  integrity sha512-sv8sIp59wVLpDQs2Mo3t437KQxUCFSS0JrGjMcjLSdvFzjHB81IhHhVHnH5g4VBUa6Yt4INr1eOEq/Ql0Ij9+g==
-  dependencies:
-    "@types/node" "*"
-
-"@types/feathersjs__rest-client@^1.3.2":
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/@types/feathersjs__rest-client/-/feathersjs__rest-client-1.3.2.tgz#859813c6c579a91740398f0e14f26b743cb4fae9"
-  integrity sha512-Qg9tjEFLFPwwHtY5moeQyayKrl/rRL+4UcUENAKlBEOFFqojyuXWi9fYi3TvkN1ak72ILPDwACr+2aWeQnwiEw==
 
 "@types/html-minifier@^3.5.3":
   version "3.5.3"
@@ -2805,7 +2762,7 @@ debug@^3.2.6:
   dependencies:
     ms "^2.1.1"
 
-debug@^4.0.0, debug@^4.1.0, debug@^4.1.1:
+debug@^4.1.0, debug@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.1.1.tgz#3b72260255109c6b589cee050f1d516139664791"
   integrity sha512-pYAIzeRo8J6KPEaJ0VWOh5Pzkbw/RetuzehGM7QRRX5he4fPHx2rdKMB256ehJCkX+XRQm16eZLqLNS8RSZXZw==
@@ -6074,7 +6031,7 @@ q@^1.1.2:
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
   integrity sha1-fjL3W0E4EpHQRhHxvxQQmsAGUdc=
 
-qs@6.7.0, qs@^6.5.0:
+qs@6.7.0:
   version "6.7.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.7.0.tgz#41dc1a015e3d581f1621776be31afb2876a9b1bc"
   integrity sha512-VCdBRNFTX1fyE7Nb6FYoURo/SPe62QCaAyzJvUjwRaIsc+NePBEniHlvxFmmX56+HZphIGtV0XeCirBtpDrTyQ==
@@ -7176,11 +7133,6 @@ ua-parser-js@^0.7.19:
   resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.20.tgz#7527178b82f6a62a0f243d1f94fd30e3e3c21098"
   integrity sha512-8OaIKfzL5cpx8eCMAhhvTlft8GYF8b2eQr6JkCyVdrgjcytyOmPCXrqXFcUnhonRpLlh5yxEZVohm6mzaowUOw==
 
-uberproto@^2.0.2:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/uberproto/-/uberproto-2.0.4.tgz#f215bcc227c1b8fd8fccd8d701b9c96dd71ff85d"
-  integrity sha512-c/5xjTcztW9XVhrkCycHQRBIAxww5JpDKk/q0zc2tVdQn6ZQvnChWgLvQaWAT1Al5JvRyvloUI15ad41m6dYwg==
-
 uglify-js@3.4.x:
   version "3.4.10"
   resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.4.10.tgz#9ad9563d8eb3acdfb8d38597d2af1d815f6a755f"
@@ -7428,6 +7380,11 @@ vue-no-ssr@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/vue-no-ssr/-/vue-no-ssr-1.1.1.tgz#875f3be6fb0ae41568a837f3ac1a80eaa137b998"
   integrity sha512-ZMjqRpWabMPqPc7gIrG0Nw6vRf1+itwf0Itft7LbMXs2g3Zs/NFmevjZGN1x7K3Q95GmIjWbQZTVerxiBxI+0g==
+
+vue-notification@^1.3.16:
+  version "1.3.16"
+  resolved "https://registry.yarnpkg.com/vue-notification/-/vue-notification-1.3.16.tgz#b2eca3416a94a46e35aa2516710a0fcd2c8515ea"
+  integrity sha512-ZL57GcyeAnJK5ItWWkZ3+wcf3OlLFs9WIukxXwJBSIzIXUlXXxXzeVkZrhUf3Q/FkbWWAYRmzKXXP742ZiyxOw==
 
 vue-router@^3.0.6:
   version "3.0.6"
