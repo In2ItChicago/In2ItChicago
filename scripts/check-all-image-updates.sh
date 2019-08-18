@@ -11,11 +11,11 @@ echo
 echo "============================="
 echo "Checking for image updates..."
 $pythoncmd $scriptpath library/python 3.7.3 alpine
-$pythoncmd $scriptpath library/postgres 11.4 alpine
-$pythoncmd $scriptpath dpage/pgadmin4 4.8
-$pythoncmd $scriptpath library/nginx 1.17 alpine
-$pythoncmd $scriptpath library/nginx 1.17
-$pythoncmd $scriptpath library/node 12.4 alpine
-$pythoncmd $scriptpath portainer/portainer 1.20.2
+$pythoncmd $scriptpath library/postgres 11.5 alpine
+$pythoncmd $scriptpath dpage/pgadmin4 4.11
+$pythoncmd $scriptpath library/nginx 1.17.3 alpine
+$pythoncmd $scriptpath library/nginx 1.17.3
+$pythoncmd $scriptpath library/node 12.8.1 alpine
+$pythoncmd $scriptpath portainer/portainer 1.22.0
 echo "=============================="
 echo

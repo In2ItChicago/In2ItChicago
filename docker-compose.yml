@@ -36,7 +36,7 @@ services:
     networks: 
       - in2it
   portainer:
-    image: "portainer/portainer:1.20.2"
+    image: "portainer/portainer:1.22.0"
     ports:
       - "9000:9000"
     volumes:
@@ -54,7 +54,7 @@ services:
     networks: 
       - in2it
   postgres:
-    image: postgres:11.4-alpine
+    image: postgres:11.5-alpine
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -63,7 +63,7 @@ services:
     networks: 
       - in2it
   pgadmin:
-    image: dpage/pgadmin4:4.8
+    image: dpage/pgadmin4:4.11
     environment:
       - PGADMIN_DEFAULT_EMAIL=user@domain.com
       - PGADMIN_DEFAULT_PASSWORD=pgadmin

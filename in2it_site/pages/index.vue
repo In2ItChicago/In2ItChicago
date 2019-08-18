@@ -53,7 +53,7 @@
 				// Manually set the time to 11:59 PM for now because we don't have a time picker yet
 				this.$store.searchFilter.endDate.setHours(23, 59, 59);
 
-				return axios.get(getEventURL(this.$env.IN2IT_API_URL) + '/sdgsdgsd', {
+				return axios.get(getEventURL(this.$env.IN2IT_API_URL), {
 					params: {
 						startTime: this.$store.searchFilter.startDate, 
 						endTime: this.$store.searchFilter.endDate,
