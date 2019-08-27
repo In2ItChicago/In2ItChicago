@@ -21,6 +21,15 @@ scraper_settings = {
         }
     }
 
+no_transpose_scraper_settings  = {
+        'ITEM_PIPELINES': {
+            'scrapy_impl.pipelines.EventTransformPipeline': 300,
+            'scrapy_impl.pipelines.GeocodePipeline': 400,
+            'scrapy_impl.pipelines.EventBuildPipeline': 500,
+            'scrapy_impl.pipelines.EventSavePipeline': 600
+        }
+    }
+
 class ApiSpider(Spider, ApiBase):
     custom_settings = api_settings
     def __init__(self, *args, **kwargs):
@@ -29,6 +38,12 @@ class ApiSpider(Spider, ApiBase):
 
 class ScraperSpider(Spider, SpiderBase):
     custom_settings = scraper_settings
+    def __init__(self, *args, **kwargs):
+        Spider.__init__(self)
+        SpiderBase.__init__(*args, **kwargs)
+
+class ScraperNoTransposeSpider(Spider, SpiderBase):
+    custom_settings = no_transpose_scraper_settings
     def __init__(self, *args, **kwargs):
         Spider.__init__(self)
         SpiderBase.__init__(*args, **kwargs)
