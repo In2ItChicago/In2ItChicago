@@ -1,0 +1,309 @@
+<h1>Event Processor</h1>
+
+<p>The event processor is used to get event information from web sites
+ (by "scraping"). It is a Python codebase built on the <code>scrapy</code>
+package, then packaged up with Docker. </p>
+
+<p>This file contains my notes from reading all of the contents of the
+event processor directory, including notes about particular code or
+coding styles used. I have also estimated the complexity of the code,
+using one (1) to represent very simple and three (3) to represent
+"beginning to get complex enough to have real mistakes".</p>
+
+<p>Subdirectories:</p>
+
+<ul>
+<li>apis</li>
+<li>base</li>
+<li>graphql definitions</li>
+<li>models</li>
+<li>scrapers</li>
+<li>scrapy impl</li>
+<li>util</li>
+</ul>
+
+<h2>Configuration Variables</h2>
+
+<p>These from <code>config.py</code>. Annotating where they are used and what they
+do. (Complexity = 1)</p>
+
+<ul>
+<li><code>config.spider_name</code>: Activate the one named spider. None activates
+all! (runner.py). </li>
+<li><code>config.debug</code>: Activates Python Tools for Visual Studio remote
+debugging server in runner.py. </li>
+</ul>
+
+<p>NOTE: <code>self.verbose_scrapy_output</code> is set twice.</p>
+
+<h2>Top Level</h2>
+
+<ul>
+<li><p><code>runner.py</code>: Loads configuration and runs spiders. Complexity = 2.</p></li>
+<li><p><code>create_schedules.py</code>: Schedule spider jobs. Complexity = 3. </p>
+
+<p>Includes <code>Schedule</code> class. It would be useful if the meaning of
+ the parameters for this class were documented. Especially
+ "interval", "delta" and "offset". 
+ Use of format strings in <code>__init__</code> seems strange -
+ these need tests to make sure they are working as expected. I
+ think the author expects math to be done where only substitution
+ is occurring in the f-strings.</p>
+
+<p>Includes debugging support, snake case conversion, enabled spider
+ selection (no use of environment variable?). Does not actually do
+ work, interacts with the "ndscheduler" service. Given how little
+ it does, this file seems quite complex.</p></li>
+<li><p><code>entrypoint.sh</code></p>
+
+<p>There is a bunch of removing at the start. Why? </p>
+
+<p>Looks like it does two things, depending on the value of
+ the <code>RUN_SCHEDULER</code> environment variable.</p>
+
+<ul>
+<li><p>Value of "1"
+creates schedules and then runs <code>scrapyd-deploy</code>, then wait
+forever.</p></li>
+<li><p>Otherwise execute <code>runner.py</code>, which appears to run spider(s)
+ without any delay or repeated schedule.</p></li>
+</ul>
+
+<p>NOTES: This kind of behavior should be documented (or avoided!). </p></li>
+<li><p><code>runner.py</code></p>
+
+<p><p>Run spider(s) immediately. Can use <code>config.spider_name</code> to run
+just one.</p></li>
+</ul></p>
+
+<h2>Top Level Misc Configuration Files</h2>
+
+<ul>
+<li><p><code>nodemon.json</code>: Configures <code>nodemon</code> to auto-reload your Node.js app
+when the files on disk are changed.</p></li>
+<li><p><code>package.json</code>: For the event processor app.</p></li>
+<li><p><code>requirements.txt</code>: For Python.</p></li>
+<li><p><code>settings.py</code>: Config for Scapy. Includes cache (controlled by
+another config). Sets up scapy log fomatter and log level. Includes
+scrapers and apis directories.</p></li>
+</ul>
+
+<h2>apis</h2>
+
+<ul>
+<li><p><code>greatlakes_ical</code>: Complexity = 1.</p></li>
+<li><p><code>honeycomb</code>: The Honeycomb Project. Complexity = 1. </p>
+
+<p>Observed site (not us) eliminating apparently open project when asked for
+only "open" events. Investigate.</p></li>
+<li><p><code>ical_reader</code>: Complexity = 1. </p>
+
+<p>Has some TODO notes about Unicode. I would like to see tests to
+make sure timestamps are correct based on some real site's data.</p></li>
+<li><p><code>library_events</code>: Chicago Public Library. Complexity = 3.</p>
+
+<p>Automatically avoids full and cancelled events. Gets events page by
+page from the server search function. Moderate complexity. 
+Examples of "details" would make the reasoning about time in the code
+clearer.</p></li>
+</ul>
+
+<h2>base</h2>
+
+<p>Scrapy.spiders.</p>
+
+<ul>
+<li><p><code>aggregator_base.py</code>: AggregatorBase class. Complexity = 4.</p>
+
+<ul>
+<li><p><code>is_errored</code>: any logged message has level <code>ERROR</code>. See notes
+below. (!)</p></li>
+<li><p>Includes debugging attachment code.</p></li>
+<li>Remembers date format.</li>
+<li><code>formatter</code> class variable for logging formatter.</li>
+<li>Local <code>start_date</code> variable set to now. (!)</li>
+<li>Local <code>end_date</code> variable set to one month in the future. (!)</li>
+<li>Converted into instance variable</li>
+<li>Configures loggers.</li>
+<li>Action: <code>notify_spider_complete</code>.</li>
+<li>Question: memory handler vs stream handler for log. I think the
+logging handlers are misconfigured - the memory handler is
+supposed to wrap the stream handler, and the stream handler is
+supposed to send the output somewhere (it defaults to
+stderr). </li>
+<li>Note: creation of a MemoryHandler that buffers 0 log messages
+does not seem to make sense. That flushes every time it checks
+to see if it is supposed to flush (no buffering). See
+<a href="https://svn.python.org/projects/python/trunk/Lib/logging/handlers.py">BufferHandler source code</a>.</li>
+<li>NOTE: The use of the <code>buffer</code> attribute of a <code>MemoryHandler</code> seems
+like a bad idea. It's not in the documented interface. Just keep
+track of "fatal" errors yourself. (Should be in one place,
+right?) (!)</li>
+<li>NOTE: I think setting the time in the constructor is
+wrong. Constructors should not do "work" as a rule. Do you
+really want the time the spider was made (vs when it ran)?</li>
+</ul></li>
+<li><p><code>api_base.py</code>: ApiBase, which inherits from
+AggregatorBase. Complexity = 2.</p>
+
+<ul>
+<li><code>parse_response_json</code>: Deliberately choose not to return a
+list when there is one element? Doesn't that choice make other
+things more confusing? Always need to check return type to
+use.</li>
+<li><code>get_response_json</code>: Same behavior, uses parse response json.</li>
+<li><code>get_response_graphql</code>: Run a GraphQL query.</li>
+</ul></li>
+<li><p><code>custom_spiders.py</code>: Skeleton <code>ApiSpider</code>, <code>ScraperSpider</code>,
+<code>ScraperCrawlSpider</code> classes. Complexity = 1.</p></li>
+<li><p><code>spider_base.py</code>: Complexity = 2 (only because of comments below,
+could be 1).</p>
+
+<ul>
+<li><code>extract_multiple</code>: Is this tested? type of <code>name_funcs</code> appears
+to be <code>Dict: Unknown -&gt; (name, func)</code> because you are iterating
+over <code>name_funcs.values()</code>. Should the iteration be
+over <code>name_funcs.items()</code>? Yes, that's the way it's used in
+the Great Lakes spider.</li>
+<li>Understanding this code requires knowing the internal format
+of the data you expect to receive. (E.g., what is the need for
+the xpath selector function, and the meaning of the
+complicated-looking paths in <code>wpbcc_spider.py</code>.</li>
+<li><code>create_time_data</code> appears to use the "first" keyword args
+value. Order keywords appear in should not matter? I think
+this function should use <code>*args</code> not <code>**kwargs</code>.</li>
+</ul></li>
+</ul>
+
+<h2>models</h2>
+
+<ul>
+<li><p>categories: Only LIBRARY and EDUCATION. </p></li>
+<li><p>event:</p>
+
+<ul>
+<li><p>Classes</p>
+
+<ul>
+<li><code>Event</code>: Fields defined as functions (below) using scapy.</li>
+<li><code>EventLoader</code>: Uses scapy's <code>ItemLoader</code>.</li>
+<li><code>EventManager</code>: Dictionary of events, method to update event
+if already present. Code snippet <code>to_dicts</code> is nonstandard.</li>
+</ul></li>
+<li><p>Functions.  All of the items below are the results of <code>scrapy.Field</code> calls.</p>
+
+<ul>
+<li><code>custom_field</code></li>
+<li><code>price_field</code> DataUtils function to remove html. <code>$</code> sign.</li>
+<li><code>url_field</code>: no trailing slash in the url.</li>
+<li><code>category_field</code></li>
+<li><code>address_field</code>: includes local function for parsing
+address. Uses sophisticated <code>usaddress</code> parsing project,
+apparently only to add Chicago, IL to the address if that
+information is missing! </li>
+<li><p><code>date_Field</code>: Uses complex date parsing code from this app.</p></li>
+<li><p><strong>TODO</strong>: Would it help to remember a more sophisticated parse of the address? </p></li>
+</ul></li>
+</ul></li>
+</ul>
+
+<h2>scrapers</h2>
+
+<ul>
+<li>greatlakes: Obsolete.</li>
+<li><p>history: ChicagoHistory.org. </p>
+
+<p>Uses spider's start and end date.</p></li>
+<li><p>wpbcc: Wicker Park - Bucktown Chamber of Commerce. Visible Complexity = 1.</p>
+
+<p>(Extraction functions require understanding of HTML format, so
+complexity = 2 if you want to understand everything that happens.)</p>
+
+<p>Uses class variables, note especially <code>rules</code>.</p>
+
+<p>NOTE: Investigate whether this produces useful results. The Wicker
+Park/Bucktown web site has many events on the calendar, but few seem
+like suitable events for volunteering.</p></li>
+</ul>
+
+<h3>scrapy impl</h3>
+
+<ul>
+<li><p>middlewares: Count events and process. Complexity = 1.</p>
+
+<ul>
+<li>Why is it important that the counts be the same in each row?</li>
+</ul></li>
+<li><p>pipelines. Includes caching, time frame filtering,
+geocode pipeline. Complexity = 3!</p>
+
+<ul>
+<li>This stuff should all be separated!?</li>
+<li>Info-level logging of errors in processing = wrong level?</li>
+<li>Raise plain old <code>Exception</code> if anything goes wrong? Crude.</li>
+</ul></li>
+<li><p>polite log formatter. How to log dropped messages. Complexity = 1. </p></li>
+</ul>
+
+<h2>util</h2>
+
+<ul>
+<li><p>cache call: Uses Beaker to cache calls. Complexity = 1.</p>
+
+<ul>
+<li>Note: caching is controlled with an API config variable.</li>
+<li>Note: it looks like this code tries to survive errors
+by skipping cache attempt. What kind of errors are expected? As
+written, expecting both errors in target function and cache to be
+caught... </li>
+</ul></li>
+<li><p>data utils: Use BeautifulSoup to clean up HTML or work with
+JSON. Complexity = 2.</p>
+
+<ul>
+<li>Note: <code>remove_whitespace</code> does more than its name indicates,
+be careful or fix naming.</li>
+<li>Several functions here act differently on lists and strings as
+input. That's not usually the right way to do things. Recommend
+cleanup.</li>
+</ul></li>
+<li><p>HTTP Utils. Define <code>HttpUtils</code>. Internally (?) defines
+<code>RequestAdapter</code> a subclass of <code>HTMLAdapter</code>. Complexity = 1.</p>
+
+<ul>
+<li>Note: Dispatch on explicitly queried types. Conversion between
+"snake case" and "camel case" is happening here. Why??</li>
+</ul></li>
+<li><p>Object Hash: Maintains an on-disk pickled hash table in
+<code>/tmp/hashes</code>. Complexity = 1.</p>
+
+<ul>
+<li>Note: provides a way to compute the hash value of an object but
+does not automatically use this value when making the hash
+table (neither key nor value)?</li>
+<li>Note: reading the whole table from disk each time can't be a
+good idea in <code>set</code>. Recommend fix or delete this part of the
+codebase.</li>
+</ul></li>
+<li><p>Switchable Decorator: Complexity = 1. Only used in <code>cache_call</code>.</p></li>
+<li><p>Time Utils: Parse date and time specifications. Complexity = 4. </p>
+
+<ul>
+<li><p>Uses regular expressions and at least 2 libraries. TODO: Really
+could use written tests so we know what kind of specifications
+have been seen.</p></li>
+<li><p><code>get_timestamp(day, time)</code>: hours and minutes on given day.</p></li>
+<li><p><code>get_timestamps</code>: Dictionary of time data -> pair of
+timestamps (start, end).</p>
+
+<p>time based on what you understand:</p></li>
+<li>whole time? </li>
+<li>end date? (use start date if missing)</li>
+<li>start time?</li>
+<li><p>time range?</p>
+
+<p>If unable to parse a start time, it gives the "min timestamp for
+day". Similarly for end time and max timestamp. (FIXME: is this
+a good idea? What does this mean?) </p></li>
+</ul></li>
+</ul>
