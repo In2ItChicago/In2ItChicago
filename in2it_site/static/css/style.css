@@ -64,6 +64,21 @@ body{
 	margin-right:20px;
 }
 
+.landing-page-content{
+	margin:56px;
+}
+
+.landing-page-title{
+	text-align: center;
+	font-size: 56px;
+	font-weight: 600;
+}
+
+.landing-page-text{
+	text-align: center;
+	font-size:18px;
+}
+
 .content-row{
 	margin-top:20px;
 	display:flex;
