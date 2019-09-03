@@ -1,9 +1,8 @@
 <template>
 	<div>
-		<div class="content-row">
-			<filters @filterApplied="updateEvents()"></filters>
-			<event-list :events="events"></event-list>
-		</div>
+		<filters @filterApplied="updateEvents()"></filters>
+		<event-list :events="events"></event-list>
+		
 		<no-ssr>
 			<notifications group="default"/>
 		</no-ssr>
@@ -17,12 +16,6 @@
 	
 	import { dummyData } from '~/store/dummyData.js';
 	
-	// function getClient(url: string): Service<any> {
-	// 	const app = feathers();
-	// 	const restClient = rest('http://' + url);
-	// 	app.configure(restClient.axios(axios));
-	// 	return app.service('events');
-	// }
 	function getEventURL(in2itApiUrl) {
 		const eventURL = process.server ? 'event_service:5000' : in2itApiUrl;
 		return `http://${eventURL}/events`;

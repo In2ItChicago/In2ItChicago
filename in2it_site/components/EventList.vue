@@ -1,5 +1,5 @@
 <template>
-	<div class="events">
+	<div>
 		<div v-if="eventsAvailable">
 			<div v-for="event in events">
 				<event-listing :event="event"></event-listing>
