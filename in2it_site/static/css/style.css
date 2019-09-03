@@ -118,6 +118,21 @@ body{
 	padding:10px;
 }
 
+.events-container{
+	width: 50%;
+}
+
+.map-container{
+	width:50%;
+	margin-left:28px;
+}
+
+.events-map{
+	display:flex;
+	width:47vw;
+	height:60vh;
+}
+
 .form-group{
 	margin-top:10px;
 }
