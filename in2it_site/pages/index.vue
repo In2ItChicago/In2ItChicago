@@ -9,7 +9,9 @@
 				Check out our list of community events so you can start making a difference!
 			</p>
 		</div>
-		<filters @filterApplied="updateEvents()"></filters>
+		<div class="landing-page-filters">
+			<filters @filterApplied="updateEvents()"></filters>
+		</div>
 	</div>
 </template>
 

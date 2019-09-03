@@ -79,6 +79,10 @@ body{
 	font-size:18px;
 }
 
+.landing-page-filters{
+	margin:60px;
+}
+
 .content-row{
 	margin-top:20px;
 	display:flex;
