@@ -19,7 +19,7 @@
 	export default {
 		methods: {
 			updateEvents: function() {
-				
+				this.$router.push('/events');
 			}
 		},
 		components: {
