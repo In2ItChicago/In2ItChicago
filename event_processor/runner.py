@@ -6,16 +6,17 @@ import ptvsd
 
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from config import config 
+from event_processor.config import config 
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 from scrapy import spiderloader
 from scrapy.utils import project
 
-from config import config
-from util.http_utils import HttpUtils
+#from config import config
+from event_processor.util.http_utils import HttpUtils
 
 def run():
+    """Entrypoint script for all of the spiders in the event processor container"""
     config.connect_to_client()
 
     print('Running event processor...')

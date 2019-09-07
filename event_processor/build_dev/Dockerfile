@@ -6,7 +6,7 @@ RUN pip3 install -U pip && apk update && apk add --no-cache libxslt libstdc++ &&
     musl-dev libffi-dev \
     openssl-dev libxml2-dev libxslt-dev g++ && \
     pip3 install -r requirements.txt && \
-    apk --purge del .build-deps
+    apk --purge del .build-deps 
 
 FROM event_processor_common AS event_processor_dev
 COPY package.json ./

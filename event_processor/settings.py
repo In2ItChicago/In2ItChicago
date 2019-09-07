@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from config import config
+from event_processor.config import config
 
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -10,8 +10,8 @@ from config import config
 
 BOT_NAME = 'In2ItChicago'
 
-SPIDER_MODULES = ['scrapers', 'apis']
-NEWSPIDER_MODULE = 'scrapers'
+SPIDER_MODULES = ['event_processor.scrapers', 'event_processor.apis']
+NEWSPIDER_MODULE = 'event_processor.scrapers'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = 'In2ItChicago (+http://in2itchicago.com)'
@@ -76,4 +76,4 @@ HTTPCACHE_DIR = '/tmp/httpcache'
 
 # Comment this out to see all data being scraped
 LOG_LEVEL = 'DEBUG' if config.verbose_scrapy_output else 'WARNING'
-LOG_FORMATTER = 'scrapy_impl.polite_log_formatter.PoliteLogFormatter'
+LOG_FORMATTER = 'event_processor.scrapy_impl.polite_log_formatter.PoliteLogFormatter'
