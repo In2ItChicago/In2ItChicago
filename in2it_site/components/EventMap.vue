@@ -13,10 +13,24 @@
             });
             
             for(let i in this.events){
-                var marker = new google.maps.Marker({
+                let infoContent = 
+                    "<h1>" + this.events[i].title + "</h1>" +
+                    "<h2>" + this.events[i].address + "</h2>" +
+                    "<h3>" + this.events[i].startTime + "</h3>" +
+                    "<p>" + this.events[i].description + "</p>";
+
+                let infowindow = new google.maps.InfoWindow({
+                    content: infoContent
+                });
+
+                let marker = new google.maps.Marker({
                     position: {lat: this.events[i].lat, lng: this.events[i].lon},
                     map: map,
                     title: this.events[i].title + ' | ' + this.events[i].address
+                });
+
+                marker.addListener('click', function() {
+                    infowindow.open(map, marker);
                 });
             }
         }
