@@ -119,17 +119,16 @@ body{
 }
 
 .events-container{
-	width: 50%;
+	width:40%;
 }
 
 .map-container{
-	width:50%;
-	margin-left:28px;
+	width:60%;
 }
 
 .events-map{
 	display:flex;
-	width:47vw;
+	width:58vw;
 	height:60vh;
 }
 
@@ -143,29 +142,32 @@ body{
 
 .event-listing{
 	display:flex;
-	padding:20px;
+	padding:16px;
 	justify-content: space-between;
-	margin-bottom:16px;
-	border:1px solid #b3b3b3;
+	border-top:1px solid #b3b3b3;
 	cursor: pointer;
+	background-color: #287696;
 }
 
 .event-listing:hover{
-	background-color:#e3e3e3;
+	background-color: #4ec0c5;
 }
 
 .event-listing-title{
-	color:#444;
-	font-size:22px;
+	color:#fff;
+	font-size:24px;
+	margin-top: 10px;
 }
 
 .event-listing-time-location{
-	color:#086478;
-	font-size:18px;
+	color:#fff;
+	font-size:16px;
+	margin-top:12px;
+	margin-bottom:12px;
 }
 
 .event-listing-description{
-	color:#444;
+	color:#fff;
 	font-size:16px;
 }
 

@@ -2,12 +2,12 @@
     <div @click="navigateToEventPage()" class="event-listing d-flex flex-row event-listing-link">
         <div class="d-flex flex-column">
             <div class="d-flex w-100">
-                <h2 class="event-listing-title mb-1">{{ event.title }}</h2>
+                <h2 class="event-listing-title">{{ event.title }}</h2>
             </div>
             <div class="d-flex w-100">
-                <h3 class="event-listing-time-location mb-1">{{ event.startDate }} {{ event.startTime  }}, {{ event.address }}</h3>
+                <h3 class="event-listing-time-location">{{ event.startDate }} {{ event.startTime  }} | {{ event.address }}</h3>
             </div>
-            <p class="event-listing-description mb-1">{{ event.description }}</p>
+            <p class="event-listing-description">{{ description }}</p>
         </div>
     </div> 
 </template>
@@ -15,6 +15,14 @@
 <script>
 	export default {
         props: ['event'],
+        computed: {
+            description: function() {
+                if(this.event.description.length > 140){
+                    return this.event.description.substr(0, 140) + '...';
+                }
+                return this.event.description;
+            }
+        },
         methods: {
             navigateToEventPage: function() {
                 this.$store.activeEvent = this.event;
