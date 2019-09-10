@@ -120,6 +120,8 @@ body{
 
 .events-container{
 	width:40%;
+	height:80vh;
+	overflow-y: scroll;
 }
 
 .map-container{

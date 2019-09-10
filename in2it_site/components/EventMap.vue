@@ -24,8 +24,6 @@
                 });
             },
             createMarkers: function() {
-                this.markers = [];
-
                 for(let i in this.events){
                     let image = {
                         url: "/img/event-marker-unselected.svg",
@@ -61,9 +59,20 @@
                 for(let i in this.markers){
                    this.markers[i].setMap(this.map);
                 }
+            },
+            clearMarkers: function() {
+                for(let i in this.markers){
+                    this.markers[i].setMap(null);
+                }
+                this.markers = [];
             }
         },
         watch: {
+            events: function() {
+                this.clearMarkers();
+                this.createMarkers();
+                this.fillMap();
+            },
             hoveringEventId: function (id) {
                 for(let i in this.markers){
                     let image = {
