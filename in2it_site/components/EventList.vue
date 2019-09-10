@@ -1,7 +1,7 @@
 <template>
 	<div class="content-row">
 		<div class="map-container">
-			<event-map></event-map>
+			<event-map :events="events"></event-map>
 		</div>
 		<div class="events-container">
 			<div v-if="eventsAvailable">

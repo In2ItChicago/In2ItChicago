@@ -4,12 +4,21 @@
 
 <script>
     export default {
+        props: ['events'],
         mounted() {
+            let latLong = { lat: 41.925, lng: -87.68 };
             const map = new google.maps.Map(document.getElementById("map"), {
-                center: { lat: 41.888423, lng: -87.635072 },
-                zoom: 16
+                center: latLong,
+                zoom: 12
             });
-            console.log('loaded map');
+            
+            for(let i in this.events){
+                var marker = new google.maps.Marker({
+                    position: {lat: this.events[i].lat, lng: this.events[i].lon},
+                    map: map,
+                    title: this.events[i].title + ' | ' + this.events[i].address
+                });
+            }
         }
     }
 </script>
