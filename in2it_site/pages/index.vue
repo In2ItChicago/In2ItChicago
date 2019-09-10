@@ -2,12 +2,8 @@
 	<div>
 		<div class="landing-page-content">
 			<h1 class="landing-page-title">Let's get into it!</h1>
-			<p class="landing-page-text">
-				A survey of our fellow Chicagoans found that there is a sizeable group that wants to be civically engaged, but faces obstacles to doing so. We want to make it easier for people to get involved in their communities.
-			</p>
-			<p class="landing-page-text">
-				Check out our list of community events so you can start making a difference!
-			</p>
+			<p class="landing-page-text">In2it is here to help you make an impact in your (neighborhood, city, block) community.</p>
+   			<p class="landing-page-text">Find ways to get involved, contribute your skills, make a difference.</p>
 		</div>
 		<div class="landing-page-filters">
 			<filters @filterApplied="updateEvents()"></filters>
