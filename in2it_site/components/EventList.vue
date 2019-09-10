@@ -1,12 +1,14 @@
 <template>
 	<div class="content-row">
 		<div class="map-container">
-			<event-map :events="events"></event-map>
+			<no-ssr>
+				<event-map :events="events" :hoveringEventId="hoveringEventId"></event-map>
+			</no-ssr>
 		</div>
 		<div class="events-container">
 			<div v-if="eventsAvailable">
 				<div v-for="event in events">
-					<event-listing :event="event"></event-listing>
+					<event-listing :event="event" v-on:eventHover="hoveringEventId = $event"></event-listing>
 				</div>
 			</div>
 			<div v-else class="no-event-message">
@@ -21,6 +23,11 @@
 	import EventListing from '~/components/EventListing.vue';
 	export default{
 		props: ['events'],
+		data() {
+			return {
+				hoveringEventId: null,
+			};
+		},
 		computed: {
 			eventsAvailable: function() {
 				return this.events.length > 0;

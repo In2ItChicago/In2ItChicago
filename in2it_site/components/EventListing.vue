@@ -1,5 +1,5 @@
 <template>
-    <div @click="navigateToEventPage()" class="event-listing d-flex flex-row event-listing-link">
+    <div @click="navigateToEventPage()" @mouseover="hoverOnEvent()" class="event-listing d-flex flex-row event-listing-link">
         <div class="d-flex flex-column">
             <div class="d-flex w-100">
                 <h2 class="event-listing-title">{{ event.title }}</h2>
@@ -27,6 +27,9 @@
             navigateToEventPage: function() {
                 this.$store.activeEvent = this.event;
                 this.$router.push({path: '/events/' + this.event.id});
+            },
+            hoverOnEvent: function() {
+                this.$emit('eventHover', this.event.id);
             }
         },
     };
