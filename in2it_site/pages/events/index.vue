@@ -37,14 +37,7 @@
 		methods: {
 			updateEvents: function() {
 				return axios.get(getEventURL(this.$env.IN2IT_API_URL), {
-					params: {
-						startTime: this.$store.state.searchFilter.startDate, 
-						endTime: this.$store.state.searchFilter.endDate,
-						miles: this.$store.state.searchFilter.searchRadius,
-						address: this.$store.state.searchFilter.addressOrZip,
-						organization: this.$store.state.searchFilter.organization,
-						neighborhood: this.$store.state.searchFilter.neighborhood
-					}
+					params: this.$store.state.searchFilter
 				})
 				.then((res) => {
 					this.events = res.data;

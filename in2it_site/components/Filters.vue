@@ -4,14 +4,14 @@
 			<div class="col-sm-2"></div>
 			<div class="col-sm-2">
 				<label for="locationFilter" class="filter-label">Where</label>
-				<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Neighborhood" v-model="filterForm.addressOrZip">
+				<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Neighborhood" v-model="filterForm.address">
 			</div>
 			<div class="col-sm-3">
 				<label for="fromDatePicker" class="filter-label">From</label>
 				<no-ssr placeholder="Loading...">
 				<datepicker
 					id="startDatePicker"
-					v-model="filterForm.startDate"
+					v-model="filterForm.startTime"
 					name="fromDatePicker"
 					wrapper-class="datepicker"
 					class="datepicker">
@@ -23,7 +23,7 @@
 				<no-ssr placeholder="Loading...">
 				<datepicker
 					id="endDatePicker"
-					v-model="filterForm.endDate"
+					v-model="filterForm.endTime"
 					name="toDatePicker"
 					wrapper-class="datepicker"
 					class="datepicker">
@@ -37,7 +37,7 @@
 			<div class="col-sm-3"></div>
 			<div class="col-sm-2">
 				<label for="locationFilter" class="filter-label">Distance (Miles)</label>
-				<select class="form-control" id="distanceFilter" v-model="filterForm.searchRadius">
+				<select class="form-control" id="distanceFilter" v-model="filterForm.miles">
 					<option value="1">1</option>
 					<option value="2">2</option>
 					<option value="3">3</option>
@@ -158,22 +158,22 @@
 		data() {
 			return {
 				filterForm: {
-					addressOrZip: this.$store.state.searchFilter.addressOrZip,
-					searchRadius: this.$store.state.searchFilter.searchRadius,
+					startTime: this.$store.state.searchFilter.startTime,
+					endTime: this.$store.state.searchFilter.endTime,
+					miles: this.$store.state.searchFilter.miles,
+					address: this.$store.state.searchFilter.address,
 					organization: this.$store.state.searchFilter.organization,
-					neighborhood: this.$store.state.searchFilter.neighborhood,
-					startDate: this.$store.state.searchFilter.startDate,
-					endDate: this.$store.state.searchFilter.endDate
+					neighborhood: this.$store.state.searchFilter.neighborhood
 				}
 			};
 		},
 		methods: {
-			setEndDate: function() {
+			setEndTime: function() {
 				// Manually set the time to 11:59 PM for now because we don't have a time picker yet
-				this.filterForm.endDate.setHours(23, 59, 59);
+				this.filterForm.endTime.setHours(23, 59, 59);
 			},
 			filter: function() {
-				this.setEndDate();
+				this.setEndTime();
 				this.$store.commit('searchFilter/set', this.filterForm);
 				this.$emit('filterApplied');
 			}
