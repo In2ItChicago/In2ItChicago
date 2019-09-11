@@ -12,7 +12,6 @@ services:
     ports:
       - "6800:6800"
       - "5860:5860"
-      - "7588:7588" # accessing the pdoc3 http server? 
     networks: 
       - in2it
   in2it_site:

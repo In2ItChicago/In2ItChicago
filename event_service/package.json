@@ -17,7 +17,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "generatedocs": "typedoc --out docs src"
   },
   "dependencies": {
     "@nestjs/common": "^6.0.0",
@@ -55,7 +56,8 @@
     "ts-jest": "24.0.2",
     "ts-node-dev": "^1.0.0-pre.40",
     "tslint": "5.16.0",
-    "wait-on": "^3.2.0"
+    "wait-on": "^3.2.0",
+    "typedoc": "^0.13.0"
   },
   "jest": {
     "moduleFileExtensions": [

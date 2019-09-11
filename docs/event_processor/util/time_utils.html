@@ -33,8 +33,8 @@ from event_processor.util.data_utils import DataUtils
 
 class TimeUtils:
     def __init__(self, date_format=&#39;&#39;):
-        # date_format is the format string that represents the formatting of the date strings 
-        # that will be passed in to methods in this class
+        &#34;&#34;&#34; date_format is the format string that represents the formatting of the date strings 
+        that will be passed in to methods in this class &#34;&#34;&#34;
         self.date_format = date_format
 
     def get_timestamp(self, date, time=None):
@@ -223,13 +223,14 @@ class TimeUtils:
 <span>(</span><span>date_format='')</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>date_format is the format string that represents the formatting of the date strings
+that will be passed in to methods in this class</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class TimeUtils:
     def __init__(self, date_format=&#39;&#39;):
-        # date_format is the format string that represents the formatting of the date strings 
-        # that will be passed in to methods in this class
+        &#34;&#34;&#34; date_format is the format string that represents the formatting of the date strings 
+        that will be passed in to methods in this class &#34;&#34;&#34;
         self.date_format = date_format
 
     def get_timestamp(self, date, time=None):
