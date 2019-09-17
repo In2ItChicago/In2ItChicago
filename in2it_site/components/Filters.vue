@@ -156,7 +156,8 @@
 					miles: this.$store.state.searchFilter.miles,
 					address: this.$store.state.searchFilter.address,
 					organization: this.$store.state.searchFilter.organization,
-					neighborhood: this.$store.state.searchFilter.neighborhood
+					neighborhood: this.$store.state.searchFilter.neighborhood,
+					limit: this.$store.state.searchFilter.limit
 				}
 			};
 		},

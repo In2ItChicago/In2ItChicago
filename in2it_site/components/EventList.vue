@@ -11,7 +11,7 @@
 					<event-listing :event="event" v-on:eventHover="hoveringEventId = $event"></event-listing>
 				</div>
 				<paginate
-					:page-count="10"
+					:page-count="8"
 					:click-handler="paginateHandler"
 					:prev-text="'<'"
 					:next-text="'>'"
