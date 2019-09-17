@@ -1,12 +1,12 @@
 <template>
 	<div class="row justify-content-center">
-		<div class="col-sm-8 filters" v-if="$store.state.searchFilter">
+		<div class="col-md-8 filters" v-if="$store.state.searchFilter">
 			<div class="filter-row form-row justify-content-center">
-				<div class="col-sm-3">
+				<div class="col-md-3">
 					<label for="locationFilter" class="filter-label">Zip / Neighborhood</label>
 					<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Neighborhood" v-model="filterForm.address">
 				</div>
-				<div class="col-sm-3">
+				<div class="col-md-auto">
 					<no-ssr placeholder="Loading...">
 						<label for="startDatePicker" class="filter-label">From</label>
 						<datepicker
@@ -18,7 +18,7 @@
 						</datepicker>
 					</no-ssr>
 				</div>
-				<div class="col-sm-3">
+				<div class="col-md-3">
 					<no-ssr placeholder="Loading...">
 						<label for="endDatePicker" class="filter-label">To</label>
 						<datepicker
@@ -33,7 +33,7 @@
 			</div>
 
 			<div class="filter-row form-row justify-content-center">
-				<div class="col-sm-2">
+				<div class="col-md-2">
 					<select class="form-control" id="distanceFilter" v-model="filterForm.miles">
 						<option value="1">1 Mile</option>
 						<option value="2">2 Miles</option>
@@ -43,16 +43,16 @@
 						<option value="15">15 Miles</option>
 					</select>
 				</div>
-				<div class="col-sm-2">
+				<div class="col-md-2">
 					<input type="text" class="form-control" id="organization" placeholder="Organization" v-model="filterForm.organization">
 				</div>
-				<div class="col-sm-2">
+				<div class="col-md-2">
 					<input type="text" class="form-control" id="neighborhood" placeholder="Neighborhood" v-model="filterForm.neighborhood">
 				</div>
 			</div>
 
 			<div class="filter-row form-row justify-content-center">
-				<div class="col-sm-2">
+				<div class="col-md-2">
 					<button class="search-btn" @click="filter()">SEARCH</button>
 				</div>
 			</div>

@@ -76,6 +76,20 @@ body{
 	font-size:18px;
 }
 
+.landing-page-image-row{
+	margin-top:-100px;
+	margin-bottom:20px;
+}
+
+.landing-page-image{
+	z-index: 1;
+	width:35vw;
+	height:35vw;
+	border-radius: 8px;
+	display:flex;
+	margin:8px;
+}
+
 .content-row{
 	margin-top:20px;
 	display:flex;
@@ -93,6 +107,7 @@ body{
 	margin-bottom:28px;
 	border-radius: 5px;
 	background-color:#173450;
+	z-index:2;
 }
 
 .filter-row {
