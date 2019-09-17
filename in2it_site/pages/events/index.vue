@@ -3,9 +3,9 @@
 		<filters @filterApplied="updateEvents()"></filters>
 		<event-list :events="events" @paginated="updateEvents()"></event-list>
 
-		<no-ssr>
+		<client-only>
 			<notifications group="default"/>
-		</no-ssr>
+		</client-only>
 	</div>	
 </template>
 

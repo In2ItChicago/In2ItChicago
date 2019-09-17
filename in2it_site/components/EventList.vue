@@ -1,9 +1,9 @@
 <template>
 	<div class="content-row">
 		<div class="map-container">
-			<no-ssr>
+			<client-only>
 				<event-map :events="events" :hoveringEventId="hoveringEventId"></event-map>
-			</no-ssr>
+			</client-only>
 		</div>
 		<div class="events-container">
 			<div v-if="eventsAvailable">

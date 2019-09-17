@@ -7,7 +7,7 @@
 					<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Neighborhood" v-model="filterForm.address">
 				</div>
 				<div class="col-md-auto">
-					<no-ssr placeholder="Loading...">
+					<client-only placeholder="Loading...">
 						<label for="startDatePicker" class="filter-label">From</label>
 						<datepicker
 							id="startDatePicker"
@@ -16,10 +16,10 @@
 							wrapper-class="datepicker"
 							class="datepicker">
 						</datepicker>
-					</no-ssr>
+					</client-only>
 				</div>
 				<div class="col-md-3">
-					<no-ssr placeholder="Loading...">
+					<client-only placeholder="Loading...">
 						<label for="endDatePicker" class="filter-label">To</label>
 						<datepicker
 							id="endDatePicker"
@@ -28,7 +28,7 @@
 							wrapper-class="datepicker"
 							class="datepicker">
 						</datepicker>
-					</no-ssr>
+					</client-only>
 				</div>
 			</div>
 
