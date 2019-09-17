@@ -1,68 +1,61 @@
 <template>
-	<div class="filters" v-if="$store.state.searchFilter">
-		<div class="form-row filters-form-row">
-			<div class="col-sm-2"></div>
-			<div class="col-sm-2">
-				<label for="locationFilter" class="filter-label">Where</label>
-				<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Neighborhood" v-model="filterForm.address">
+	<div class="row justify-content-center">
+		<div class="col-sm-8 filters" v-if="$store.state.searchFilter">
+			<div class="filter-row form-row justify-content-center">
+				<div class="col-sm-3">
+					<label for="locationFilter" class="filter-label">Zip / Neighborhood</label>
+					<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Neighborhood" v-model="filterForm.address">
+				</div>
+				<div class="col-sm-3">
+					<no-ssr placeholder="Loading...">
+						<label for="startDatePicker" class="filter-label">From</label>
+						<datepicker
+							id="startDatePicker"
+							v-model="filterForm.startTime"
+							name="fromDatePicker"
+							wrapper-class="datepicker"
+							class="datepicker">
+						</datepicker>
+					</no-ssr>
+				</div>
+				<div class="col-sm-3">
+					<no-ssr placeholder="Loading...">
+						<label for="endDatePicker" class="filter-label">To</label>
+						<datepicker
+							id="endDatePicker"
+							v-model="filterForm.endTime"
+							name="toDatePicker"
+							wrapper-class="datepicker"
+							class="datepicker">
+						</datepicker>
+					</no-ssr>
+				</div>
 			</div>
-			<div class="col-sm-3">
-				<label for="fromDatePicker" class="filter-label">From</label>
-				<no-ssr placeholder="Loading...">
-				<datepicker
-					id="startDatePicker"
-					v-model="filterForm.startTime"
-					name="fromDatePicker"
-					wrapper-class="datepicker"
-					class="datepicker">
-				</datepicker>
-				</no-ssr>
-			</div>
-			<div class="col-sm-3">
-				<label for="toDatePicker" class="filter-label">To</label>
-				<no-ssr placeholder="Loading...">
-				<datepicker
-					id="endDatePicker"
-					v-model="filterForm.endTime"
-					name="toDatePicker"
-					wrapper-class="datepicker"
-					class="datepicker">
-				</datepicker>
-				</no-ssr>
-			</div>
-			<div class="col-sm-2"></div>
-		</div>
 
-		<div class="form-row filters-form-row">
-			<div class="col-sm-3"></div>
-			<div class="col-sm-2">
-				<label for="locationFilter" class="filter-label">Distance (Miles)</label>
-				<select class="form-control" id="distanceFilter" v-model="filterForm.miles">
-					<option value="1">1</option>
-					<option value="2">2</option>
-					<option value="3">3</option>
-					<option value="5">5</option>
-					<option value="10">10</option>
-					<option value="15">15</option>
-				</select>
+			<div class="filter-row form-row justify-content-center">
+				<div class="col-sm-2">
+					<select class="form-control" id="distanceFilter" v-model="filterForm.miles">
+						<option value="1">1 Mile</option>
+						<option value="2">2 Miles</option>
+						<option value="3">3 Miles</option>
+						<option value="5">5 Miles</option>
+						<option value="10">10 Miles</option>
+						<option value="15">15 Miles</option>
+					</select>
+				</div>
+				<div class="col-sm-2">
+					<input type="text" class="form-control" id="organization" placeholder="Organization" v-model="filterForm.organization">
+				</div>
+				<div class="col-sm-2">
+					<input type="text" class="form-control" id="neighborhood" placeholder="Neighborhood" v-model="filterForm.neighborhood">
+				</div>
 			</div>
-			<div class="col-sm-2">
-				<label for="organization" class="filter-label">Organization</label>
-				<input type="text" class="form-control" id="organization" placeholder="Name" v-model="filterForm.organization">
-			</div>
-			<div class="col-sm-2">
-				<label for="organization" class="filter-label">Neighborhood</label>
-				<input type="text" class="form-control" id="neighborhood" placeholder="Name" v-model="filterForm.neighborhood">
-			</div>
-			<div class="col-sm-3"></div>
-		</div>
 
-		<div class="form-row filters-form-row">
-			<div class="col-sm-5"></div>
-			<div class="col-sm-2">
-				<button class="btn btn-secondary btn-lg filter-btn" @click="filter()">Search</button>
+			<div class="filter-row form-row justify-content-center">
+				<div class="col-sm-2">
+					<button class="search-btn" @click="filter()">SEARCH</button>
+				</div>
 			</div>
-			<div class="col-sm-5"></div>
 		</div>
 	</div>
 </template>

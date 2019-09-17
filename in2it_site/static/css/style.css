@@ -64,23 +64,16 @@ body{
 	margin-right:20px;
 }
 
-.landing-page-content{
-	margin:56px;
-}
-
 .landing-page-title{
 	text-align: center;
 	font-size: 56px;
 	font-weight: 600;
+	margin-top:50px;
 }
 
 .landing-page-text{
 	text-align: center;
 	font-size:18px;
-}
-
-.landing-page-filters{
-	margin:60px;
 }
 
 .content-row{
@@ -98,20 +91,33 @@ body{
 .filters{
 	margin-top:20px;
 	margin-bottom:28px;
-	background-color:#67abba;
+	border-radius: 5px;
+	background-color:#173450;
 }
 
-.filters-form-row{
-	margin-top:16px;
+.filter-row {
+	margin-top:24px;
 }
 
 .filter-label{
 	margin-bottom:0px;
+	color:#fff;
+	font-weight: bold;
 }
 
-.filter-btn{
+.search-btn{
+	background-color: #4ec0c5;
+	padding:10px 50px 10px 50px;
 	margin-bottom:-20px;
-	background-color: #e2e6ea;
+	border:none;
+	border-radius:5px;
+	color:#fff;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.search-btn:hover{
+	background-color: #53a6aa;
 }
 
 .no-event-message{

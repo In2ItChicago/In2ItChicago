@@ -1,13 +1,9 @@
 <template>
 	<div>
-		<div class="landing-page-content">
-			<h1 class="landing-page-title">Let's get into it!</h1>
-			<p class="landing-page-text">In2it is here to help you make an impact in your (neighborhood, city, block) community.</p>
-   			<p class="landing-page-text">Find ways to get involved, contribute your skills, make a difference.</p>
-		</div>
-		<div class="landing-page-filters">
-			<filters @filterApplied="updateEvents()"></filters>
-		</div>
+		<h1 class="landing-page-title">Let's get into it!</h1>
+		<p class="landing-page-text">In2it is here to help you make an impact in your (neighborhood, city, block) community.</p>
+		<p class="landing-page-text">Find ways to get involved, contribute your skills, make a difference.</p>
+		<filters @filterApplied="updateEvents()"></filters>
 	</div>
 </template>
 
