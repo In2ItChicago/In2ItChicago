@@ -40,7 +40,8 @@ module.exports = {
 	*/
 	plugins: [
 		{src: '~/plugins/datepicker.client.js'},
-		{src: '~/plugins/notifications.client.js'}
+		{src: '~/plugins/notifications.client.js'},
+		{src: '~/plugins/pagination.client.js'}
 	],
 
 	/*

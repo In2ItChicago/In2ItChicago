@@ -10,6 +10,16 @@
 				<div v-for="event in events">
 					<event-listing :event="event" v-on:eventHover="hoveringEventId = $event"></event-listing>
 				</div>
+				<paginate
+					:page-count="10"
+					:click-handler="paginateHandler"
+					:prev-text="'<'"
+					:next-text="'>'"
+					:container-class="'pagination event-pagination justify-content-center d-flex'"
+					:page-class="'event-pagination-item'"
+					:prev-class="'event-pagination-prev-item'"
+					:next-class="'event-pagination-next-item'">
+				</paginate>
 			</div>
 			<div v-else class="no-event-message">
 				<span>No events available, please adjust your search filter.</span>
@@ -32,6 +42,12 @@
 			eventsAvailable: function() {
 				return this.events.length > 0;
 			}
+		},
+		methods: {
+			paginateHandler: function(pageNum){
+				this.$store.commit('searchFilter/setOffset', pageNum);
+				this.$emit('paginated');
+            }
 		},
 		components: {
 			EventMap,

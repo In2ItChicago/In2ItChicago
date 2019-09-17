@@ -14,15 +14,13 @@ body{
 
 .page-container{
 	flex: 1;
+	margin-bottom:60px;
 }
 
 .footer{
 	position: relative;
 	bottom: 0;
 	width: 100%;
-	/* Set the fixed height of the footer here */
-	height: 60px;
-	line-height: 60px; /* Vertically center the text there */
 }
 
 .footer-link{
@@ -153,7 +151,6 @@ body{
 .events-container{
 	width:40%;
 	height:80vh;
-	overflow-y: scroll;
 }
 
 .map-container{
@@ -207,6 +204,35 @@ body{
 
 .event-card-icon{
 	margin-bottom:8px;
+}
+
+.event-pagination{
+	padding:16px;
+	background-color: #173450;
+	border-radius:0px !important;
+}
+
+.event-pagination-item a{
+	margin-left: 16px;
+	margin-right: 16px;
+	font-size:20px;
+	color:#fff;
+}
+
+.event-pagination-item a:hover, .event-pagination-prev-item a:hover, .event-pagination-next-item a:hover{
+	color:#4ec0c5;
+	text-decoration: none;
+}
+
+.event-pagination-prev-item a, .event-pagination-next-item a{
+	margin-top:-10px;
+	color:#fff;
+	font-size:20px;
+	font-weight:bold;
+}
+
+.event-pagination-item.active a{
+	color:#4ec0c5;
 }
 
 .map-icon{

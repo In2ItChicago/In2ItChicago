@@ -4,7 +4,9 @@ export const state = () => ({
     miles: 3,
     address: '60647',
     organization: '',
-    neighborhood: ''
+    neighborhood: '',
+    limit: 4,
+    offset: 0
 })
 
 export const mutations = {
@@ -15,5 +17,11 @@ export const mutations = {
         state.address = data.address;
         state.organization = data.organization;
         state.neighborhood = data.neighborhood;
+        state.limit = data.limit;
+        state.offset = data.offset;
+    },
+
+    setOffset (state, pageNumber) {
+        state.offset = pageNumber * state.limit;
     }
 }

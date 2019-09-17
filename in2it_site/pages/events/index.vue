@@ -1,8 +1,8 @@
 <template>
     <div>
 		<filters @filterApplied="updateEvents()"></filters>
-		<event-list :events="events"></event-list>
-		
+		<event-list :events="events" @paginated="updateEvents()"></event-list>
+
 		<no-ssr>
 			<notifications group="default"/>
 		</no-ssr>
