@@ -39,10 +39,11 @@
                     marker.id = this.events[i].id;
 
                     let infoContent = 
-                        "<h1>" + this.events[i].title + "</h1>" +
-                        "<h2>" + this.events[i].address + "</h2>" +
-                        "<h3>" + this.events[i].startTime + "</h3>" +
-                        "<p>" + this.events[i].description + "</p>";
+                        "<h2>" + this.events[i].title + "</h2>" +
+                        "<h4>" + this.events[i].address + "</h4>" +
+                        "<h4>" + this.events[i].startTime + "</h4>" +
+                        "<p>" + this.events[i].description + "</p>" +
+                        "<a href=" + this.events[i].url + " target=" + "_blank" + ">" + "Find out more" + "</a>";
 
                     let infowindow = new google.maps.InfoWindow({
                         content: infoContent

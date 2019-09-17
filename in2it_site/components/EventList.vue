@@ -35,7 +35,7 @@
 		props: ['events'],
 		data() {
 			return {
-				hoveringEventId: null,
+				hoveringEventId: null
 			};
 		},
 		computed: {
@@ -44,7 +44,7 @@
 			}
 		},
 		methods: {
-			paginateHandler: function(pageNum){
+			paginateHandler: function(pageNum) {
 				this.$store.commit('searchFilter/setOffset', pageNum);
 				this.$emit('paginated');
             }
