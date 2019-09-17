@@ -16,10 +16,7 @@ module.exports = {
 		link: [
 			{ rel: 'icon', type: 'image/x-icon', href: '/img/favicon.jpg' },
 			{ rel: 'stylesheet', href: '/css/style.css' },
-			{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Nunito&display=swap' },
-			{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Signika' },
-			{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Signika' },
-			{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Kalam' }
+			{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Nunito&display=swap' }
 		]
 	},
 

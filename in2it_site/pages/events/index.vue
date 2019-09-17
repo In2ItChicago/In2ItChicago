@@ -25,12 +25,6 @@
 				events: [],
 			};
 		},
-		asyncData ({ app, params }) {
-			return axios.get(getEventURL(app.$env.IN2IT_API_URL))
-				.then(res => {
-					return { events: res.data };
-				});
-		},
 		mounted() {
 			this.updateEvents();
 		},

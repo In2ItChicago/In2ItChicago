@@ -11,12 +11,15 @@
                 map: null
             };
         },
-        mounted() {
-            this.createMap();
-            this.createMarkers();
-            this.fillMap();
+        mounted() {   
+            this.renderMap();
         },
         methods: {
+            renderMap: function() {
+                this.createMap();
+                this.createMarkers();
+                this.fillMap();
+            },
             createMap: function() {
                 this.map = new google.maps.Map(document.getElementById("map"), {
                     center: { lat: 41.925, lng: -87.68 },
@@ -70,9 +73,7 @@
         },
         watch: {
             events: function() {
-                this.clearMarkers();
-                this.createMarkers();
-                this.fillMap();
+                this.renderMap();
             },
             hoveringEventId: function (id) {
                 for(let i in this.markers){
