@@ -53,7 +53,10 @@ module.exports = {
 		'bootstrap-vue/nuxt',
 		['nuxt-env', {
 			keys: ['IN2IT_API_URL']
-		}]
+		}],
+		['nuxt-google-maps-module', {
+			key: 'AIzaSyDKuKo2WRNv5IhKm_At8wGfD4T142laung',
+		}],
 	],
 	/*
 	** Axios module configuration

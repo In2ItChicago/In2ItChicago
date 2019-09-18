@@ -64,6 +64,25 @@ body{
 	margin-right:20px;
 }
 
+.landing-page-content{
+	margin:56px;
+}
+
+.landing-page-title{
+	text-align: center;
+	font-size: 56px;
+	font-weight: 600;
+}
+
+.landing-page-text{
+	text-align: center;
+	font-size:18px;
+}
+
+.landing-page-filters{
+	margin:60px;
+}
+
 .content-row{
 	margin-top:20px;
 	display:flex;
@@ -77,79 +96,46 @@ body{
 }
 
 .filters{
+	margin-top:20px;
+	margin-bottom:28px;
 	background-color:#67abba;
-	border-radius: 12px 12px 0px 0px;
-	/* Hardcoding this for now because the datepicker
-	   is only rendered on the client, which causes
-	   the width the change abruptly after the page loads.
-	   Maybe there's a better way to do this.
-	*/
-	min-width: 260px;
 }
 
-.events{
-	margin-left:16px;
-	margin-right:16px;
+.filters-form-row{
+	margin-top:16px;
+}
+
+.filter-label{
+	margin-bottom:0px;
+}
+
+.filter-btn{
+	margin-bottom:-20px;
+	background-color: #e2e6ea;
 }
 
 .no-event-message{
 	padding:10px;
 }
 
+.events-container{
+	width:40%;
+	height:80vh;
+	overflow-y: scroll;
+}
+
+.map-container{
+	width:60%;
+}
+
+.event-map{
+	display:flex;
+	width:58vw;
+	height:80vh;
+}
+
 .form-group{
 	margin-top:10px;
-}
-
-.accordion-button{
-	background-color: #67abba;
-	color: #444;
-	cursor: pointer;
-	padding: 18px;
-	width: 100%;
-	border: none;
-	text-align: left;
-	outline: none;
-	font-size: 20px;
-	transition: 0.4s;
-	border-top:1px solid #056277;
-}
-
-.accordion-button:first-child{
-	border-radius:12px 12px 0px 0px;
-	border-top:0px;
-}
-
-.accordion-button:last-child{
-	border-radius:0px 0px 12px 12px;
-}
-
-.active, .accordion-button:hover {
-	background-color: #056277;
-	color:#fff;
-}
-
-.accordion-button:after {
-	content: '\002B';
-	color: #444;
-	font-weight: bold;
-	float: right;
-	margin-left: 5px;
-}
-
-.active:after {
-	content: "\2212";
-}
-
-.accordion-panel {
-	padding: 0 18px;
-	background-color:#67abba;
-	max-height: 0;
-	overflow: hidden;
-	transition: max-height 0.2s ease-out;
-}
-
-.accordion-panel.open{
-	overflow: visible;
 }
 
 .event-listing-link:hover{
@@ -158,31 +144,32 @@ body{
 
 .event-listing{
 	display:flex;
-	padding:20px;
+	padding:16px;
 	justify-content: space-between;
-	border-radius:12px;
-	margin-bottom:16px;
-	box-shadow: 1px 1px 4px #b3b3b3;
-	border:1px solid #b3b3b3;
+	border-top:1px solid #b3b3b3;
 	cursor: pointer;
+	background-color: #287696;
 }
 
 .event-listing:hover{
-	background-color:#e3e3e3;
+	background-color: #4ec0c5;
 }
 
 .event-listing-title{
-	color:#444;
-	font-size:22px;
+	color:#fff;
+	font-size:24px;
+	margin-top: 10px;
 }
 
 .event-listing-time-location{
-	color:#086478;
-	font-size:18px;
+	color:#fff;
+	font-size:16px;
+	margin-top:12px;
+	margin-bottom:12px;
 }
 
 .event-listing-description{
-	color:#444;
+	color:#fff;
 	font-size:16px;
 }
 
