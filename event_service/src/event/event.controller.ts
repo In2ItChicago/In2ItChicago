@@ -6,11 +6,18 @@ import { GetEventsResponse } from '@src/DTO/getEventsResponse';
 import { ApiUseTags, ApiImplicitBody, ApiResponse } from '@nestjs/swagger';
 import {plainToClass} from "class-transformer";
 
+/**
+ * An interface class to get, create, or clear events. 
+ */
 @ApiUseTags('events')
 @Controller('events')
 export class EventController {
     constructor(private readonly eventService: EventService) {}
 
+    /**
+     * 
+     * @param request 
+     */
     @Get()
     @ApiResponse({status: 200, type: GetEventsResponse, isArray: true, description: 'Event list'})
     async getEvents(@Query() request: GetEventsRequest): Promise<GetEventsResponse[]> {

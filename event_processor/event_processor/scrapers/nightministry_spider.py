@@ -7,7 +7,7 @@ from event_processor.base.custom_spiders import ScraperSpider
 class NightMinistrySpider(ScraperSpider):
     name = 'nightministry'
     allowed_domains = ['thenightministry.org'] 
-    enabled = False
+    enabled = True
 
     def __init__(self, name=None, **kwargs):
         super().__init__(self, 'The Night Ministy', 'https://www.thenightministry.org/', date_format='%Y', **kwargs)
@@ -17,22 +17,25 @@ class NightMinistrySpider(ScraperSpider):
 
     def parse(self, response): 
         print("Parsing page...") 
-        def get_br_date(sr, ind): 
-            print("sr = " + str(sr)) 
+        def index_from_br_split(txt, x, altx=x): # string, index
+            spl = txt.split("<br>")
             try:
-                return sr[0].split("<br>")[ind]
+                t = spl[x]
+                return t
             except IndexError:
-                return "" # not a valid split? 
-
-        for result in response.css("div.el-item"): 
-            print("**************** P A R S E   S T U F F")
-            print(result) 
-            yield {
-                'title': result.css('.el-title::text').extract(),
-                'url': result.css('.el-link::text').extract(),
-                'event_time': #self.extract_multiple(
-                    {'date': get_br_date(result.css('.el-content p::text').extract(), 0), 
-                    'start_time': get_br_date(result.css('.el-content p::text').extract(), 1)}, # ),
-                'address': get_br_date(result.css('.el-content p::text').extract(), -1),
-                'description': result.css('.el-title::text').extract() # title 
-            }
+                try: 
+                    t = spl[altx]
+                    return t
+                except IndexError:
+                    return ''
+        
+        return {
+            'title': self.empty_check_extract(response.css('.el-item'), self.css_func, '.el-title::text'), 
+            'url': self.empty_check_extract(response.css('.el-item'), self.css_func, '.el-link::text'), 
+            'event_time': self.create_time_data(
+                date=list(map(lambda txt: index_from_br_split(txt, 0), self.empty_check_extract(response.css('.el-item'), self.css_func, '.el-content p::text'))),
+                time_range=list(map(lambda txt: index_from_br_split(txt, 1), self.empty_check_extract(response.css('.el-item'), self.css_func, '.el-content p::text')))
+            ),
+            'address': list(map(lambda txt: index_from_br_split(txt, 3, 2), self.empty_check_extract(response.css('.el-item'), self.css_func, '.el-content p::text'))),
+            'description': self.empty_check_extract(response.css('.el-item'), self.css_func, '.el-title::text')
+        }
