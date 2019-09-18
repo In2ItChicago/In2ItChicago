@@ -69,6 +69,13 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Model representing a request for getting a collection of events</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -105,9 +112,14 @@
 					<div class="tsd-signature tsd-kind-icon">address<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in DTO/getEventsRequest.ts:23</li>
+							<li>Defined in DTO/getEventsRequest.ts:38</li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The address of where to search for the events from??? Optional unless &quot;miles&quot; is provided</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="endtime" class="tsd-anchor"></a>
@@ -115,9 +127,14 @@
 					<div class="tsd-signature tsd-kind-icon">end<wbr>Time<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Date</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in DTO/getEventsRequest.ts:14</li>
+							<li>Defined in DTO/getEventsRequest.ts:23</li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The end time to search for events? Optional.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="limit" class="tsd-anchor"></a>
@@ -125,9 +142,14 @@
 					<div class="tsd-signature tsd-kind-icon">limit<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in DTO/getEventsRequest.ts:38</li>
+							<li>Defined in DTO/getEventsRequest.ts:63</li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Limit the number of events returned by this request??? Optional.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="miles" class="tsd-anchor"></a>
@@ -135,9 +157,14 @@
 					<div class="tsd-signature tsd-kind-icon">miles<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in DTO/getEventsRequest.ts:30</li>
+							<li>Defined in DTO/getEventsRequest.ts:48</li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>How many miles away from the given address to search for events. Optional unless &quot;address&quot; is provided</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="neighborhood" class="tsd-anchor"></a>
@@ -145,9 +172,15 @@
 					<div class="tsd-signature tsd-kind-icon">neighborhood<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in DTO/getEventsRequest.ts:33</li>
+							<li>Defined in DTO/getEventsRequest.ts:55</li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The neighborhood where this event is occurring. Optional
+							Note: Should this be an Enum of some kind?? Does typescript have those?</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="offset" class="tsd-anchor"></a>
@@ -155,9 +188,15 @@
 					<div class="tsd-signature tsd-kind-icon">offset<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in DTO/getEventsRequest.ts:43</li>
+							<li>Defined in DTO/getEventsRequest.ts:72</li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The offset of events to return by this request. For pagination??? Optional???
+							Note: Should all pagination related variables be required?</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="organization" class="tsd-anchor"></a>
@@ -165,9 +204,14 @@
 					<div class="tsd-signature tsd-kind-icon">organization<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in DTO/getEventsRequest.ts:17</li>
+							<li>Defined in DTO/getEventsRequest.ts:29</li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The organiztion running the events. Optional.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="starttime" class="tsd-anchor"></a>
@@ -175,9 +219,14 @@
 					<div class="tsd-signature tsd-kind-icon">start<wbr>Time<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Date</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in DTO/getEventsRequest.ts:9</li>
+							<li>Defined in DTO/getEventsRequest.ts:15</li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The start time to search for the events. Optional.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>

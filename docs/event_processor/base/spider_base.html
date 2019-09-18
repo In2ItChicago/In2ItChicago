@@ -36,6 +36,7 @@ class SpiderBase(AggregatorBase):
         return data.css
     
     def get_request(self, url, request_params={}):
+        &#34;&#34;&#34;Call a scrapy request with the given url using the given parameters&#34;&#34;&#34;
         return scrapy.Request(f&#39;{self.base_url}{url}?{parse.urlencode(request_params)}&#39;)
 
     def extract_multiple(self, name_funcs, extracted_data):
@@ -45,7 +46,19 @@ class SpiderBase(AggregatorBase):
         return return_data
 
     def empty_check_extract(self, base_selector, extractor, path, default_value=&#39;&#39;):
-        return list(map(lambda data: default_value if len(data) == 0 else data[0], [extractor(base_data)(path).extract() for base_data in base_selector]))
+        &#34;&#34;&#34;??? Convinience function for getting specific data out each result returned by a base selector. 
+            - base_selector: The base selector for each element you want to get data from, such as &#39;.item&#39; or &#39;.result&#39;
+            - extractor: The function that will be used to extract
+            - path: An (xpath?) or (selector?) that is passed into the extractor function which retrieves each specific piece of data.
+            - default_value: If no value is found in the given selector, it will default to this value.
+                 If this is not specified, it will be an empty string.
+        &#34;&#34;&#34;
+        return list( \
+                map(lambda data: \
+                        default_value if len(data) == 0 \
+                        else data[0], \
+                        [extractor(base_data)(path).extract() for base_data in base_selector]) \
+                    )
 
     def create_time_data(self, **kwargs):
         count = len(list(kwargs.values())[0])
@@ -83,6 +96,7 @@ class SpiderBase(AggregatorBase):
         return data.css
     
     def get_request(self, url, request_params={}):
+        &#34;&#34;&#34;Call a scrapy request with the given url using the given parameters&#34;&#34;&#34;
         return scrapy.Request(f&#39;{self.base_url}{url}?{parse.urlencode(request_params)}&#39;)
 
     def extract_multiple(self, name_funcs, extracted_data):
@@ -92,7 +106,19 @@ class SpiderBase(AggregatorBase):
         return return_data
 
     def empty_check_extract(self, base_selector, extractor, path, default_value=&#39;&#39;):
-        return list(map(lambda data: default_value if len(data) == 0 else data[0], [extractor(base_data)(path).extract() for base_data in base_selector]))
+        &#34;&#34;&#34;??? Convinience function for getting specific data out each result returned by a base selector. 
+            - base_selector: The base selector for each element you want to get data from, such as &#39;.item&#39; or &#39;.result&#39;
+            - extractor: The function that will be used to extract
+            - path: An (xpath?) or (selector?) that is passed into the extractor function which retrieves each specific piece of data.
+            - default_value: If no value is found in the given selector, it will default to this value.
+                 If this is not specified, it will be an empty string.
+        &#34;&#34;&#34;
+        return list( \
+                map(lambda data: \
+                        default_value if len(data) == 0 \
+                        else data[0], \
+                        [extractor(base_data)(path).extract() for base_data in base_selector]) \
+                    )
 
     def create_time_data(self, **kwargs):
         count = len(list(kwargs.values())[0])
@@ -142,11 +168,28 @@ class SpiderBase(AggregatorBase):
 <span>def <span class="ident">empty_check_extract</span></span>(<span>self, base_selector, extractor, path, default_value='')</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>??? Convinience function for getting specific data out each result returned by a base selector.
+- base_selector: The base selector for each element you want to get data from, such as '.item' or '.result'
+- extractor: The function that will be used to extract
+- path: An (xpath?) or (selector?) that is passed into the extractor function which retrieves each specific piece of data.
+- default_value: If no value is found in the given selector, it will default to this value.
+If this is not specified, it will be an empty string.</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def empty_check_extract(self, base_selector, extractor, path, default_value=&#39;&#39;):
-    return list(map(lambda data: default_value if len(data) == 0 else data[0], [extractor(base_data)(path).extract() for base_data in base_selector]))</code></pre>
+    &#34;&#34;&#34;??? Convinience function for getting specific data out each result returned by a base selector. 
+        - base_selector: The base selector for each element you want to get data from, such as &#39;.item&#39; or &#39;.result&#39;
+        - extractor: The function that will be used to extract
+        - path: An (xpath?) or (selector?) that is passed into the extractor function which retrieves each specific piece of data.
+        - default_value: If no value is found in the given selector, it will default to this value.
+             If this is not specified, it will be an empty string.
+    &#34;&#34;&#34;
+    return list( \
+            map(lambda data: \
+                    default_value if len(data) == 0 \
+                    else data[0], \
+                    [extractor(base_data)(path).extract() for base_data in base_selector]) \
+                )</code></pre>
 </details>
 </dd>
 <dt id="event_processor.base.spider_base.SpiderBase.extract_multiple"><code class="name flex">
@@ -167,10 +210,11 @@ class SpiderBase(AggregatorBase):
 <span>def <span class="ident">get_request</span></span>(<span>self, url, request_params={})</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Call a scrapy request with the given url using the given parameters</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def get_request(self, url, request_params={}):
+    &#34;&#34;&#34;Call a scrapy request with the given url using the given parameters&#34;&#34;&#34;
     return scrapy.Request(f&#39;{self.base_url}{url}?{parse.urlencode(request_params)}&#39;)</code></pre>
 </details>
 </dd>

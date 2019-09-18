@@ -31,7 +31,7 @@
 class NightMinistrySpider(ScraperSpider):
     name = &#39;nightministry&#39;
     allowed_domains = [&#39;thenightministry.org&#39;] 
-    enabled = False
+    enabled = True
 
     def __init__(self, name=None, **kwargs):
         super().__init__(self, &#39;The Night Ministy&#39;, &#39;https://www.thenightministry.org/&#39;, date_format=&#39;%Y&#39;, **kwargs)
@@ -41,25 +41,28 @@ class NightMinistrySpider(ScraperSpider):
 
     def parse(self, response): 
         print(&#34;Parsing page...&#34;) 
-        def get_br_date(sr, ind): 
-            print(&#34;sr = &#34; + str(sr)) 
+        def index_from_br_split(txt, x, altx=x): # string, index
+            spl = txt.split(&#34;&lt;br&gt;&#34;)
             try:
-                return sr[0].split(&#34;&lt;br&gt;&#34;)[ind]
+                t = spl[x]
+                return t
             except IndexError:
-                return &#34;&#34; # not a valid split? 
-
-        for result in response.css(&#34;div.el-item&#34;): 
-            print(&#34;**************** P A R S E   S T U F F&#34;)
-            print(result) 
-            yield {
-                &#39;title&#39;: result.css(&#39;.el-title::text&#39;).extract(),
-                &#39;url&#39;: result.css(&#39;.el-link::text&#39;).extract(),
-                &#39;event_time&#39;: #self.extract_multiple(
-                    {&#39;date&#39;: get_br_date(result.css(&#39;.el-content p::text&#39;).extract(), 0), 
-                    &#39;start_time&#39;: get_br_date(result.css(&#39;.el-content p::text&#39;).extract(), 1)}, # ),
-                &#39;address&#39;: get_br_date(result.css(&#39;.el-content p::text&#39;).extract(), -1),
-                &#39;description&#39;: result.css(&#39;.el-title::text&#39;).extract() # title 
-            }</code></pre>
+                try: 
+                    t = spl[altx]
+                    return t
+                except IndexError:
+                    return &#39;&#39;
+        
+        return {
+            &#39;title&#39;: self.empty_check_extract(response.css(&#39;.el-item&#39;), self.css_func, &#39;.el-title::text&#39;), 
+            &#39;url&#39;: self.empty_check_extract(response.css(&#39;.el-item&#39;), self.css_func, &#39;.el-link::text&#39;), 
+            &#39;event_time&#39;: self.create_time_data(
+                date=list(map(lambda txt: index_from_br_split(txt, 0), self.empty_check_extract(response.css(&#39;.el-item&#39;), self.css_func, &#39;.el-content p::text&#39;))),
+                time_range=list(map(lambda txt: index_from_br_split(txt, 1), self.empty_check_extract(response.css(&#39;.el-item&#39;), self.css_func, &#39;.el-content p::text&#39;)))
+            ),
+            &#39;address&#39;: list(map(lambda txt: index_from_br_split(txt, 3, 2), self.empty_check_extract(response.css(&#39;.el-item&#39;), self.css_func, &#39;.el-content p::text&#39;))),
+            &#39;description&#39;: self.empty_check_extract(response.css(&#39;.el-item&#39;), self.css_func, &#39;.el-title::text&#39;)
+        }</code></pre>
 </details>
 </section>
 <section>
@@ -82,7 +85,7 @@ class NightMinistrySpider(ScraperSpider):
 <pre><code class="python">class NightMinistrySpider(ScraperSpider):
     name = &#39;nightministry&#39;
     allowed_domains = [&#39;thenightministry.org&#39;] 
-    enabled = False
+    enabled = True
 
     def __init__(self, name=None, **kwargs):
         super().__init__(self, &#39;The Night Ministy&#39;, &#39;https://www.thenightministry.org/&#39;, date_format=&#39;%Y&#39;, **kwargs)
@@ -92,25 +95,28 @@ class NightMinistrySpider(ScraperSpider):
 
     def parse(self, response): 
         print(&#34;Parsing page...&#34;) 
-        def get_br_date(sr, ind): 
-            print(&#34;sr = &#34; + str(sr)) 
+        def index_from_br_split(txt, x, altx=x): # string, index
+            spl = txt.split(&#34;&lt;br&gt;&#34;)
             try:
-                return sr[0].split(&#34;&lt;br&gt;&#34;)[ind]
+                t = spl[x]
+                return t
             except IndexError:
-                return &#34;&#34; # not a valid split? 
-
-        for result in response.css(&#34;div.el-item&#34;): 
-            print(&#34;**************** P A R S E   S T U F F&#34;)
-            print(result) 
-            yield {
-                &#39;title&#39;: result.css(&#39;.el-title::text&#39;).extract(),
-                &#39;url&#39;: result.css(&#39;.el-link::text&#39;).extract(),
-                &#39;event_time&#39;: #self.extract_multiple(
-                    {&#39;date&#39;: get_br_date(result.css(&#39;.el-content p::text&#39;).extract(), 0), 
-                    &#39;start_time&#39;: get_br_date(result.css(&#39;.el-content p::text&#39;).extract(), 1)}, # ),
-                &#39;address&#39;: get_br_date(result.css(&#39;.el-content p::text&#39;).extract(), -1),
-                &#39;description&#39;: result.css(&#39;.el-title::text&#39;).extract() # title 
-            }</code></pre>
+                try: 
+                    t = spl[altx]
+                    return t
+                except IndexError:
+                    return &#39;&#39;
+        
+        return {
+            &#39;title&#39;: self.empty_check_extract(response.css(&#39;.el-item&#39;), self.css_func, &#39;.el-title::text&#39;), 
+            &#39;url&#39;: self.empty_check_extract(response.css(&#39;.el-item&#39;), self.css_func, &#39;.el-link::text&#39;), 
+            &#39;event_time&#39;: self.create_time_data(
+                date=list(map(lambda txt: index_from_br_split(txt, 0), self.empty_check_extract(response.css(&#39;.el-item&#39;), self.css_func, &#39;.el-content p::text&#39;))),
+                time_range=list(map(lambda txt: index_from_br_split(txt, 1), self.empty_check_extract(response.css(&#39;.el-item&#39;), self.css_func, &#39;.el-content p::text&#39;)))
+            ),
+            &#39;address&#39;: list(map(lambda txt: index_from_br_split(txt, 3, 2), self.empty_check_extract(response.css(&#39;.el-item&#39;), self.css_func, &#39;.el-content p::text&#39;))),
+            &#39;description&#39;: self.empty_check_extract(response.css(&#39;.el-item&#39;), self.css_func, &#39;.el-title::text&#39;)
+        }</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -146,25 +152,28 @@ class NightMinistrySpider(ScraperSpider):
 <summary>Source code</summary>
 <pre><code class="python">def parse(self, response): 
     print(&#34;Parsing page...&#34;) 
-    def get_br_date(sr, ind): 
-        print(&#34;sr = &#34; + str(sr)) 
+    def index_from_br_split(txt, x, altx=x): # string, index
+        spl = txt.split(&#34;&lt;br&gt;&#34;)
         try:
-            return sr[0].split(&#34;&lt;br&gt;&#34;)[ind]
+            t = spl[x]
+            return t
         except IndexError:
-            return &#34;&#34; # not a valid split? 
-
-    for result in response.css(&#34;div.el-item&#34;): 
-        print(&#34;**************** P A R S E   S T U F F&#34;)
-        print(result) 
-        yield {
-            &#39;title&#39;: result.css(&#39;.el-title::text&#39;).extract(),
-            &#39;url&#39;: result.css(&#39;.el-link::text&#39;).extract(),
-            &#39;event_time&#39;: #self.extract_multiple(
-                {&#39;date&#39;: get_br_date(result.css(&#39;.el-content p::text&#39;).extract(), 0), 
-                &#39;start_time&#39;: get_br_date(result.css(&#39;.el-content p::text&#39;).extract(), 1)}, # ),
-            &#39;address&#39;: get_br_date(result.css(&#39;.el-content p::text&#39;).extract(), -1),
-            &#39;description&#39;: result.css(&#39;.el-title::text&#39;).extract() # title 
-        }</code></pre>
+            try: 
+                t = spl[altx]
+                return t
+            except IndexError:
+                return &#39;&#39;
+    
+    return {
+        &#39;title&#39;: self.empty_check_extract(response.css(&#39;.el-item&#39;), self.css_func, &#39;.el-title::text&#39;), 
+        &#39;url&#39;: self.empty_check_extract(response.css(&#39;.el-item&#39;), self.css_func, &#39;.el-link::text&#39;), 
+        &#39;event_time&#39;: self.create_time_data(
+            date=list(map(lambda txt: index_from_br_split(txt, 0), self.empty_check_extract(response.css(&#39;.el-item&#39;), self.css_func, &#39;.el-content p::text&#39;))),
+            time_range=list(map(lambda txt: index_from_br_split(txt, 1), self.empty_check_extract(response.css(&#39;.el-item&#39;), self.css_func, &#39;.el-content p::text&#39;)))
+        ),
+        &#39;address&#39;: list(map(lambda txt: index_from_br_split(txt, 3, 2), self.empty_check_extract(response.css(&#39;.el-item&#39;), self.css_func, &#39;.el-content p::text&#39;))),
+        &#39;description&#39;: self.empty_check_extract(response.css(&#39;.el-item&#39;), self.css_func, &#39;.el-title::text&#39;)
+    }</code></pre>
 </details>
 </dd>
 <dt id="event_processor.scrapers.nightministry_spider.NightMinistrySpider.start_requests"><code class="name flex">
@@ -179,6 +188,15 @@ class NightMinistrySpider(ScraperSpider):
 </details>
 </dd>
 </dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="event_processor.base.custom_spiders.ScraperSpider" href="../base/custom_spiders.html#event_processor.base.custom_spiders.ScraperSpider">ScraperSpider</a></b></code>:
+<ul class="hlist">
+<li><code><a title="event_processor.base.custom_spiders.ScraperSpider.empty_check_extract" href="../base/spider_base.html#event_processor.base.spider_base.SpiderBase.empty_check_extract">empty_check_extract</a></code></li>
+<li><code><a title="event_processor.base.custom_spiders.ScraperSpider.get_request" href="../base/spider_base.html#event_processor.base.spider_base.SpiderBase.get_request">get_request</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 </dl>
 </section>
