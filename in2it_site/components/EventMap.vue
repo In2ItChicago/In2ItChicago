@@ -11,14 +11,26 @@
                 map: null
             };
         },
-        mounted() {   
-            this.renderMap();
+        mounted() {
+            this.initMap();
         },
         methods: {
+            initMap: function() {
+                if (this.$google) {
+                    this.renderMap();
+                }
+                else {
+                    const callback = () => {
+                        this.renderMap();
+                        window.removeEventListener('maps-module:loaded', callback);
+                    }
+                    window.addEventListener('maps-module:loaded', callback);
+                }
+            },
             renderMap: function() {
                 this.createMap();
                 this.createMarkers();
-                this.fillMap();
+                this.addMarkersToMap();
             },
             createMap: function() {
                 this.map = new google.maps.Map(document.getElementById("map"), {
@@ -59,7 +71,7 @@
                     this.markers.push(marker);
                 }
             },
-            fillMap: function() {
+            addMarkersToMap: function() {
                 for(let i in this.markers){
                    this.markers[i].setMap(this.map);
                 }
@@ -73,9 +85,11 @@
         },
         watch: {
             events: function() {
-                this.renderMap();
+                this.clearMarkers();
+                this.initMap();
             },
             hoveringEventId: function (id) {
+                if (!this.$google)  return;
                 for(let i in this.markers){
                     let image = {
                         url : (this.markers[i].id == id) ? "/img/event-marker-selected.svg" : "/img/event-marker-unselected.svg",
