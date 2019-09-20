@@ -8,7 +8,8 @@
         data() {
             return {
                 markers: [],
-                map: null
+                map: null,
+                activeMarker: null
             };
         },
         mounted() {
@@ -39,7 +40,7 @@
                 });
             },
             createMarkers: function() {
-                for(let i in this.events){
+                for (let i in this.events) {
                     let image = {
                         url: "/img/event-marker-unselected.svg",
                         size: new google.maps.Size(35, 50),
@@ -60,24 +61,34 @@
                         "<p>" + this.events[i].description + "</p>" +
                         "<a href=" + this.events[i].url + " target=" + "_blank" + ">" + "Find out more" + "</a>";
 
-                    let infowindow = new google.maps.InfoWindow({
+                    let infoWindow = new google.maps.InfoWindow({
                         content: infoContent
                     });
 
+                    const instance = this;
                     marker.addListener('click', function() {
-                        infowindow.open(map, marker);
+                        infoWindow.open(map, marker);
+                        instance.setActiveMarker(marker);
                     });
+
+                    marker.infoWindow = infoWindow;
 
                     this.markers.push(marker);
                 }
             },
+            setActiveMarker: function(marker) {
+                if (this.activeMarker) {
+                    this.activeMarker.infoWindow.close();
+                }
+                this.activeMarker = marker;
+            },
             addMarkersToMap: function() {
-                for(let i in this.markers){
+                for (let i in this.markers) {
                    this.markers[i].setMap(this.map);
                 }
             },
             clearMarkers: function() {
-                for(let i in this.markers){
+                for (let i in this.markers) {
                     this.markers[i].setMap(null);
                 }
                 this.markers = [];
@@ -90,7 +101,7 @@
             },
             hoveringEventId: function (id) {
                 if (!this.$google)  return;
-                for(let i in this.markers){
+                for (let i in this.markers) {
                     let image = {
                         url : (this.markers[i].id == id) ? "/img/event-marker-selected.svg" : "/img/event-marker-unselected.svg",
                         size: new google.maps.Size(35, 50)
