@@ -35,19 +35,6 @@
 				})
 				.then((res) => {
 					this.events = res.data;
-
-					this.$notify({
-						group: 'default',
-						title: 'Filters applied',
-						type: 'success'
-					});
-				})
-				.catch((res) => {
-					this.$notify({
-						group: 'default',
-						title: 'Error applying filters',
-						type: 'error'
-					});
 				});
 			}
 		},
