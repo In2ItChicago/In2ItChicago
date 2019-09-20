@@ -3,8 +3,8 @@
 		<div class="col-md-8 filters" v-if="$store.state.searchFilter">
 			<div class="filter-row form-row justify-content-center">
 				<div class="col-md-3">
-					<label for="locationFilter" class="filter-label">Zip / Neighborhood</label>
-					<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Neighborhood" v-model="filterForm.address">
+					<label for="locationFilter" class="filter-label">Zip / Address</label>
+					<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Address" v-model="filterForm.address">
 				</div>
 				<div class="col-md-auto">
 					<client-only placeholder="Loading...">
