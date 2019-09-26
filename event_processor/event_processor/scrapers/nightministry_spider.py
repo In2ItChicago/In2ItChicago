@@ -15,27 +15,27 @@ class NightMinistrySpider(ScraperSpider):
     def start_requests(self):
         yield self.get_request('events/', {})
 
-    def parse(self, response): 
-        print("Parsing page...") 
-        def index_from_br_split(txt, x, altx=x): # string, index
-            spl = txt.split("<br>")
-            try:
-                t = spl[x]
+    def index_from_br_split(txt, x, altx=0): # string, index
+        spl = txt.split("<br>")
+        try:
+            t = spl[x]
+            return t
+        except IndexError:
+            try: 
+                t = spl[altx]
                 return t
             except IndexError:
-                try: 
-                    t = spl[altx]
-                    return t
-                except IndexError:
-                    return ''
-        
+                return ''
+        return ''
+
+    def parse(self, response):  
         return {
             'title': self.empty_check_extract(response.css('.el-item'), self.css_func, '.el-title::text'), 
             'url': self.empty_check_extract(response.css('.el-item'), self.css_func, '.el-link::text'), 
             'event_time': self.create_time_data(
-                date=list(map(lambda txt: index_from_br_split(txt, 0), self.empty_check_extract(response.css('.el-item'), self.css_func, '.el-content p::text'))),
-                time_range=list(map(lambda txt: index_from_br_split(txt, 1), self.empty_check_extract(response.css('.el-item'), self.css_func, '.el-content p::text')))
+                date=list(map(lambda txt: self.index_from_br_split(txt, 0), self.empty_check_extract(response.css('.el-item'), self.css_func, '.el-content p::text'))),
+                time_range=list(map(lambda txt: self.index_from_br_split(txt, 1), self.empty_check_extract(response.css('.el-item'), self.css_func, '.el-content p::text')))
             ),
-            'address': list(map(lambda txt: index_from_br_split(txt, 3, 2), self.empty_check_extract(response.css('.el-item'), self.css_func, '.el-content p::text'))),
+            'address': list(map(lambda txt: self.index_from_br_split(txt, 3, 2), self.empty_check_extract(response.css('.el-item'), self.css_func, '.el-content p::text'))),
             'description': self.empty_check_extract(response.css('.el-item'), self.css_func, '.el-title::text')
         }
