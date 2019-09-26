@@ -16,10 +16,7 @@ module.exports = {
 		link: [
 			{ rel: 'icon', type: 'image/x-icon', href: '/img/favicon.jpg' },
 			{ rel: 'stylesheet', href: '/css/style.css' },
-			{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Signika' },
-			{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Signika' },
-			{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Kalam' },
-			{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Permanent+Marker' }
+			{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Nunito&display=swap' }
 		]
 	},
 
@@ -40,7 +37,8 @@ module.exports = {
 	*/
 	plugins: [
 		{src: '~/plugins/datepicker.client.js'},
-		{src: '~/plugins/notifications.client.js'}
+		{src: '~/plugins/notifications.client.js'},
+		{src: '~/plugins/pagination.client.js'}
 	],
 
 	/*

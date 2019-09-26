@@ -5,6 +5,12 @@ until $(curl --output /dev/null --silent --head --fail http://in2it_site:3000); 
 done
 printf "\n%s\n"  "Site is online"
 
+until $(curl --output /dev/null --silent --head --fail http://event_service:5000/events); do
+    printf 'Waiting for API...'
+    sleep 5
+done
+printf "\n%s\n"  "API is online"
+
 python3 ./render.py nginx.conf.j2
 nginx -c /etc/nginx/nginx.conf -t
 running=$(service nginx status)

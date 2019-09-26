@@ -1,11 +1,11 @@
 <template>
     <div>
 		<filters @filterApplied="updateEvents()"></filters>
-		<event-list :events="events"></event-list>
-		
-		<no-ssr>
+		<event-list :events="events" @paginated="updateEvents()"></event-list>
+
+		<client-only>
 			<notifications group="default"/>
-		</no-ssr>
+		</client-only>
 	</div>	
 </template>
 
@@ -22,14 +22,8 @@
 	export default {
 		data() {
 			return {
-				events: [],
+				events: []
 			};
-		},
-		asyncData ({ app, params }) {
-			return axios.get(getEventURL(app.$env.IN2IT_API_URL))
-				.then(res => {
-					return { events: res.data };
-				});
 		},
 		mounted() {
 			this.updateEvents();
@@ -41,19 +35,6 @@
 				})
 				.then((res) => {
 					this.events = res.data;
-
-					this.$notify({
-						group: 'default',
-						title: 'Filters applied',
-						type: 'success'
-					});
-				})
-				.catch((res) => {
-					this.$notify({
-						group: 'default',
-						title: 'Error applying filters',
-						type: 'error'
-					});
 				});
 			}
 		},
