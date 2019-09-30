@@ -1,0 +1,749 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>event_processor.util.time_utils API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>event_processor.util.time_utils</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">import dateutil.parser
+from dateutil.relativedelta import relativedelta
+from datetime import datetime
+import time
+from timefhuman import timefhuman
+import daterangeparser
+import re
+from event_processor.util.data_utils import DataUtils
+
+class TimeUtils:
+    def __init__(self, date_format=&#39;&#39;):
+        &#34;&#34;&#34; date_format is the format string that represents the formatting of the date strings 
+        that will be passed in to methods in this class &#34;&#34;&#34;
+        self.date_format = date_format
+
+    def get_timestamp(self, date, time=None):
+        if time != None:
+            date += relativedelta(hour=time.hour, minute=time.minute)
+        return self.datetime_to_timestamp(date)
+    
+    def get_timestamps(self, time_data):
+        parsed_start_date = None
+        parsed_end_date = None
+        parsed_start_time = None 
+        parsed_end_time = None
+
+        min_timestamp = None
+        max_timestamp = None
+
+        if time_data[&#39;start_timestamp&#39;] != None:
+            return time_data[&#39;start_timestamp&#39;], time_data[&#39;end_timestamp&#39;]
+
+        if time_data[&#39;date&#39;] != None:
+            parsed_start_date, parsed_end_date = self.parse_date(time_data[&#39;date&#39;])
+            if parsed_end_date == None and parsed_start_date != None:
+                parsed_end_date = parsed_start_date
+        elif time_data[&#39;start_date&#39;] != None and time_data[&#39;end_date&#39;] != None:
+            parsed_start_date = self.parse_date_string(time_data[&#39;start_date&#39;])
+            parsed_end_date = self.parse_date_string(time_data[&#39;end_date&#39;])
+        else:
+            raise ValueError(&#39;Either date or start and end date must be set&#39;)
+
+        if time_data[&#39;start_time&#39;] != None:
+            parsed_start_time = self.parse_time(time_data[&#39;start_time&#39;])
+            parsed_end_time = self.parse_time(time_data[&#39;end_time&#39;])
+        elif time_data[&#39;time_range&#39;] != None:
+            parsed_start_time, parsed_end_time = self.parse_times(time_data[&#39;time_range&#39;])
+        
+        if parsed_start_time == None:
+            min_timestamp = self.min_timestamp_for_day(parsed_start_date)
+        else:
+            min_timestamp = self.get_timestamp(parsed_start_date, parsed_start_time)
+
+        if parsed_end_time == None:
+            max_timestamp = self.max_timestamp_for_day(parsed_end_date)
+        else:
+            max_timestamp = self.get_timestamp(parsed_end_date, parsed_end_time)
+
+        return min_timestamp, max_timestamp
+
+    def min_timestamp_for_day(self, date):
+        if isinstance(date, str):
+            date = self.parse_date_string(date)
+        return self.get_timestamp(date + relativedelta(hour=0, minute=0))
+    
+    def max_timestamp_for_day(self, date):
+        if isinstance(date, str):
+            date = self.parse_date_string(date)
+        return self.get_timestamp(date + relativedelta(hour=23, minute=59))
+    
+    def datetime_to_timestamp(self, date):
+        return int(time.mktime(date.timetuple()))
+
+    def convert_date_format(self, date_string, new_format, validate_past=True):
+        parsed_date = self.parse_date_string(date_string, validate_past)
+        if parsed_date == None:
+            return None
+        return parsed_date.strftime(new_format)
+
+    def set_to_midnight(self, parsed_date):
+        return parsed_date.replace(hour = 0, minute = 0, second = 0, microsecond = 0)
+
+    def parse_date_string(self, test_string, validate_past=True):
+        try:
+            parsed_date = datetime.strptime(test_string, self.date_format)
+            parsed_date = self.set_year(parsed_date)
+            parsed_date = self.set_to_midnight(parsed_date)
+            now = self.set_to_midnight(datetime.now())
+
+            # We won&#39;t be querying for any dates in the past
+            # If the year isn&#39;t explicitly set and the month is in the past,
+            # then the event must be in the next year
+            # validate_past=False ignores this check
+            if validate_past and parsed_date &lt; now:
+                parsed_date += relativedelta(years = +1)
+            return parsed_date
+        except ValueError:
+            return None
+
+    def parse_date(self, test_string):
+        test_string = DataUtils.remove_excess_spaces(test_string)
+        # First, try to parse the date according the the specified format
+        parsed_date = self.parse_date_string(test_string)
+        if parsed_date != None:
+            return parsed_date, parsed_date
+        # If that fails, try to parse the date with fuzzy matching (needed for weird formats or date ranges)
+        # timefhuman and daterangeparser are both libraries to do this, but they each support different cases
+        try:
+            fuzzy_parsed = timefhuman(test_string)
+        except:
+            fuzzy_parsed = daterangeparser.parse(test_string)
+        if len(fuzzy_parsed) == 1:
+            return fuzzy_parsed, fuzzy_parsed
+        elif len(fuzzy_parsed) == 2:
+            return fuzzy_parsed
+
+        # If that fails, it may be a date range in a format that daterangeparser doesn&#39;t recognize
+        # Check if the string contains two formatted dates by checking the beginning and end substrings
+        # until it finds two strings formatted like dates
+        test_start = len(test_string) - 1
+        test_end = 0
+        start = None
+        end = None
+        while test_end &lt; len(test_string):
+            if start == None:
+                start = self.parse_date_string(test_string[0:test_end])
+            if end == None:
+                end = self.parse_date_string(test_string[test_start:len(test_string)])
+
+            if start != None and end != None:
+                break
+
+            test_start -= 1
+            test_end += 1
+
+        if start == None or end == None:
+            raise ValueError(&#39;Could not parse date string: &#39; + test_string)
+        
+        return start, end
+
+    def set_year(self, date_obj):
+        if date_obj.year == 1900:
+            date_obj += relativedelta(year=datetime.now().year)
+        return date_obj
+
+    def parse_time(self, time_string):
+        if time_string == None:
+            return None
+        try:
+            return dateutil.parser.parse(time_string) #.strftime(self.new_time_format)
+        # Time possibly set to something like &#39;All Day&#39;
+        except ValueError:
+            return None
+
+    def split_time(self, time_string):
+        # Find instances of AM or PM
+        am_pm = re.findall(r&#39;[ap].?m.?&#39;, time_string, re.IGNORECASE)
+        add_am_pm = &#39;&#39;
+        if len(am_pm) == 1:
+            # Only one AM/PM supplied
+            # Need to make sure all times have AM or PM included
+
+            # Get rid of all AM/PM for now, will add it to all times later
+            time_string = time_string.replace(am_pm[0], &#39;&#39;)
+            add_am_pm = &#39; &#39; + am_pm[0]
+
+        # Get times separated by &#39;-&#39;, &#39;–&#39;, or &#39;to&#39;
+        times = re.split(r&#39;(?:-|–|to)+&#39;, time_string)
+
+        # Add an AM/PM suffix if required, else just add an empty string    
+        times = list(map((lambda time: time.strip() + add_am_pm), times))
+        
+        # If only one time supplied, return None for the second one
+        return times if len(times) &gt; 1 else (times[0], None)
+
+    def parse_times(self, time_string):
+        start_time, end_time = self.split_time(time_string)
+        return self.parse_time(start_time), self.parse_time(end_time)
+
+    def time_is_between(self, timestamp, min_timestamp, max_timestamp):
+        return min_timestamp &lt;= timestamp &lt;= max_timestamp
+
+    def time_range_is_between(self, start_timestamp, end_timestamp, min_timestamp, max_timestamp):
+        return self.time_is_between(start_timestamp, min_timestamp, max_timestamp) and \
+            self.time_is_between(end_timestamp, min_timestamp, max_timestamp)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="event_processor.util.time_utils.TimeUtils"><code class="flex name class">
+<span>class <span class="ident">TimeUtils</span></span>
+<span>(</span><span>date_format='')</span>
+</code></dt>
+<dd>
+<section class="desc"><p>date_format is the format string that represents the formatting of the date strings
+that will be passed in to methods in this class</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class TimeUtils:
+    def __init__(self, date_format=&#39;&#39;):
+        &#34;&#34;&#34; date_format is the format string that represents the formatting of the date strings 
+        that will be passed in to methods in this class &#34;&#34;&#34;
+        self.date_format = date_format
+
+    def get_timestamp(self, date, time=None):
+        if time != None:
+            date += relativedelta(hour=time.hour, minute=time.minute)
+        return self.datetime_to_timestamp(date)
+    
+    def get_timestamps(self, time_data):
+        parsed_start_date = None
+        parsed_end_date = None
+        parsed_start_time = None 
+        parsed_end_time = None
+
+        min_timestamp = None
+        max_timestamp = None
+
+        if time_data[&#39;start_timestamp&#39;] != None:
+            return time_data[&#39;start_timestamp&#39;], time_data[&#39;end_timestamp&#39;]
+
+        if time_data[&#39;date&#39;] != None:
+            parsed_start_date, parsed_end_date = self.parse_date(time_data[&#39;date&#39;])
+            if parsed_end_date == None and parsed_start_date != None:
+                parsed_end_date = parsed_start_date
+        elif time_data[&#39;start_date&#39;] != None and time_data[&#39;end_date&#39;] != None:
+            parsed_start_date = self.parse_date_string(time_data[&#39;start_date&#39;])
+            parsed_end_date = self.parse_date_string(time_data[&#39;end_date&#39;])
+        else:
+            raise ValueError(&#39;Either date or start and end date must be set&#39;)
+
+        if time_data[&#39;start_time&#39;] != None:
+            parsed_start_time = self.parse_time(time_data[&#39;start_time&#39;])
+            parsed_end_time = self.parse_time(time_data[&#39;end_time&#39;])
+        elif time_data[&#39;time_range&#39;] != None:
+            parsed_start_time, parsed_end_time = self.parse_times(time_data[&#39;time_range&#39;])
+        
+        if parsed_start_time == None:
+            min_timestamp = self.min_timestamp_for_day(parsed_start_date)
+        else:
+            min_timestamp = self.get_timestamp(parsed_start_date, parsed_start_time)
+
+        if parsed_end_time == None:
+            max_timestamp = self.max_timestamp_for_day(parsed_end_date)
+        else:
+            max_timestamp = self.get_timestamp(parsed_end_date, parsed_end_time)
+
+        return min_timestamp, max_timestamp
+
+    def min_timestamp_for_day(self, date):
+        if isinstance(date, str):
+            date = self.parse_date_string(date)
+        return self.get_timestamp(date + relativedelta(hour=0, minute=0))
+    
+    def max_timestamp_for_day(self, date):
+        if isinstance(date, str):
+            date = self.parse_date_string(date)
+        return self.get_timestamp(date + relativedelta(hour=23, minute=59))
+    
+    def datetime_to_timestamp(self, date):
+        return int(time.mktime(date.timetuple()))
+
+    def convert_date_format(self, date_string, new_format, validate_past=True):
+        parsed_date = self.parse_date_string(date_string, validate_past)
+        if parsed_date == None:
+            return None
+        return parsed_date.strftime(new_format)
+
+    def set_to_midnight(self, parsed_date):
+        return parsed_date.replace(hour = 0, minute = 0, second = 0, microsecond = 0)
+
+    def parse_date_string(self, test_string, validate_past=True):
+        try:
+            parsed_date = datetime.strptime(test_string, self.date_format)
+            parsed_date = self.set_year(parsed_date)
+            parsed_date = self.set_to_midnight(parsed_date)
+            now = self.set_to_midnight(datetime.now())
+
+            # We won&#39;t be querying for any dates in the past
+            # If the year isn&#39;t explicitly set and the month is in the past,
+            # then the event must be in the next year
+            # validate_past=False ignores this check
+            if validate_past and parsed_date &lt; now:
+                parsed_date += relativedelta(years = +1)
+            return parsed_date
+        except ValueError:
+            return None
+
+    def parse_date(self, test_string):
+        test_string = DataUtils.remove_excess_spaces(test_string)
+        # First, try to parse the date according the the specified format
+        parsed_date = self.parse_date_string(test_string)
+        if parsed_date != None:
+            return parsed_date, parsed_date
+        # If that fails, try to parse the date with fuzzy matching (needed for weird formats or date ranges)
+        # timefhuman and daterangeparser are both libraries to do this, but they each support different cases
+        try:
+            fuzzy_parsed = timefhuman(test_string)
+        except:
+            fuzzy_parsed = daterangeparser.parse(test_string)
+        if len(fuzzy_parsed) == 1:
+            return fuzzy_parsed, fuzzy_parsed
+        elif len(fuzzy_parsed) == 2:
+            return fuzzy_parsed
+
+        # If that fails, it may be a date range in a format that daterangeparser doesn&#39;t recognize
+        # Check if the string contains two formatted dates by checking the beginning and end substrings
+        # until it finds two strings formatted like dates
+        test_start = len(test_string) - 1
+        test_end = 0
+        start = None
+        end = None
+        while test_end &lt; len(test_string):
+            if start == None:
+                start = self.parse_date_string(test_string[0:test_end])
+            if end == None:
+                end = self.parse_date_string(test_string[test_start:len(test_string)])
+
+            if start != None and end != None:
+                break
+
+            test_start -= 1
+            test_end += 1
+
+        if start == None or end == None:
+            raise ValueError(&#39;Could not parse date string: &#39; + test_string)
+        
+        return start, end
+
+    def set_year(self, date_obj):
+        if date_obj.year == 1900:
+            date_obj += relativedelta(year=datetime.now().year)
+        return date_obj
+
+    def parse_time(self, time_string):
+        if time_string == None:
+            return None
+        try:
+            return dateutil.parser.parse(time_string) #.strftime(self.new_time_format)
+        # Time possibly set to something like &#39;All Day&#39;
+        except ValueError:
+            return None
+
+    def split_time(self, time_string):
+        # Find instances of AM or PM
+        am_pm = re.findall(r&#39;[ap].?m.?&#39;, time_string, re.IGNORECASE)
+        add_am_pm = &#39;&#39;
+        if len(am_pm) == 1:
+            # Only one AM/PM supplied
+            # Need to make sure all times have AM or PM included
+
+            # Get rid of all AM/PM for now, will add it to all times later
+            time_string = time_string.replace(am_pm[0], &#39;&#39;)
+            add_am_pm = &#39; &#39; + am_pm[0]
+
+        # Get times separated by &#39;-&#39;, &#39;–&#39;, or &#39;to&#39;
+        times = re.split(r&#39;(?:-|–|to)+&#39;, time_string)
+
+        # Add an AM/PM suffix if required, else just add an empty string    
+        times = list(map((lambda time: time.strip() + add_am_pm), times))
+        
+        # If only one time supplied, return None for the second one
+        return times if len(times) &gt; 1 else (times[0], None)
+
+    def parse_times(self, time_string):
+        start_time, end_time = self.split_time(time_string)
+        return self.parse_time(start_time), self.parse_time(end_time)
+
+    def time_is_between(self, timestamp, min_timestamp, max_timestamp):
+        return min_timestamp &lt;= timestamp &lt;= max_timestamp
+
+    def time_range_is_between(self, start_timestamp, end_timestamp, min_timestamp, max_timestamp):
+        return self.time_is_between(start_timestamp, min_timestamp, max_timestamp) and \
+            self.time_is_between(end_timestamp, min_timestamp, max_timestamp)</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="event_processor.util.time_utils.TimeUtils.convert_date_format"><code class="name flex">
+<span>def <span class="ident">convert_date_format</span></span>(<span>self, date_string, new_format, validate_past=True)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def convert_date_format(self, date_string, new_format, validate_past=True):
+    parsed_date = self.parse_date_string(date_string, validate_past)
+    if parsed_date == None:
+        return None
+    return parsed_date.strftime(new_format)</code></pre>
+</details>
+</dd>
+<dt id="event_processor.util.time_utils.TimeUtils.datetime_to_timestamp"><code class="name flex">
+<span>def <span class="ident">datetime_to_timestamp</span></span>(<span>self, date)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def datetime_to_timestamp(self, date):
+    return int(time.mktime(date.timetuple()))</code></pre>
+</details>
+</dd>
+<dt id="event_processor.util.time_utils.TimeUtils.get_timestamp"><code class="name flex">
+<span>def <span class="ident">get_timestamp</span></span>(<span>self, date, time=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_timestamp(self, date, time=None):
+    if time != None:
+        date += relativedelta(hour=time.hour, minute=time.minute)
+    return self.datetime_to_timestamp(date)</code></pre>
+</details>
+</dd>
+<dt id="event_processor.util.time_utils.TimeUtils.get_timestamps"><code class="name flex">
+<span>def <span class="ident">get_timestamps</span></span>(<span>self, time_data)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_timestamps(self, time_data):
+    parsed_start_date = None
+    parsed_end_date = None
+    parsed_start_time = None 
+    parsed_end_time = None
+
+    min_timestamp = None
+    max_timestamp = None
+
+    if time_data[&#39;start_timestamp&#39;] != None:
+        return time_data[&#39;start_timestamp&#39;], time_data[&#39;end_timestamp&#39;]
+
+    if time_data[&#39;date&#39;] != None:
+        parsed_start_date, parsed_end_date = self.parse_date(time_data[&#39;date&#39;])
+        if parsed_end_date == None and parsed_start_date != None:
+            parsed_end_date = parsed_start_date
+    elif time_data[&#39;start_date&#39;] != None and time_data[&#39;end_date&#39;] != None:
+        parsed_start_date = self.parse_date_string(time_data[&#39;start_date&#39;])
+        parsed_end_date = self.parse_date_string(time_data[&#39;end_date&#39;])
+    else:
+        raise ValueError(&#39;Either date or start and end date must be set&#39;)
+
+    if time_data[&#39;start_time&#39;] != None:
+        parsed_start_time = self.parse_time(time_data[&#39;start_time&#39;])
+        parsed_end_time = self.parse_time(time_data[&#39;end_time&#39;])
+    elif time_data[&#39;time_range&#39;] != None:
+        parsed_start_time, parsed_end_time = self.parse_times(time_data[&#39;time_range&#39;])
+    
+    if parsed_start_time == None:
+        min_timestamp = self.min_timestamp_for_day(parsed_start_date)
+    else:
+        min_timestamp = self.get_timestamp(parsed_start_date, parsed_start_time)
+
+    if parsed_end_time == None:
+        max_timestamp = self.max_timestamp_for_day(parsed_end_date)
+    else:
+        max_timestamp = self.get_timestamp(parsed_end_date, parsed_end_time)
+
+    return min_timestamp, max_timestamp</code></pre>
+</details>
+</dd>
+<dt id="event_processor.util.time_utils.TimeUtils.max_timestamp_for_day"><code class="name flex">
+<span>def <span class="ident">max_timestamp_for_day</span></span>(<span>self, date)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def max_timestamp_for_day(self, date):
+    if isinstance(date, str):
+        date = self.parse_date_string(date)
+    return self.get_timestamp(date + relativedelta(hour=23, minute=59))</code></pre>
+</details>
+</dd>
+<dt id="event_processor.util.time_utils.TimeUtils.min_timestamp_for_day"><code class="name flex">
+<span>def <span class="ident">min_timestamp_for_day</span></span>(<span>self, date)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def min_timestamp_for_day(self, date):
+    if isinstance(date, str):
+        date = self.parse_date_string(date)
+    return self.get_timestamp(date + relativedelta(hour=0, minute=0))</code></pre>
+</details>
+</dd>
+<dt id="event_processor.util.time_utils.TimeUtils.parse_date"><code class="name flex">
+<span>def <span class="ident">parse_date</span></span>(<span>self, test_string)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def parse_date(self, test_string):
+    test_string = DataUtils.remove_excess_spaces(test_string)
+    # First, try to parse the date according the the specified format
+    parsed_date = self.parse_date_string(test_string)
+    if parsed_date != None:
+        return parsed_date, parsed_date
+    # If that fails, try to parse the date with fuzzy matching (needed for weird formats or date ranges)
+    # timefhuman and daterangeparser are both libraries to do this, but they each support different cases
+    try:
+        fuzzy_parsed = timefhuman(test_string)
+    except:
+        fuzzy_parsed = daterangeparser.parse(test_string)
+    if len(fuzzy_parsed) == 1:
+        return fuzzy_parsed, fuzzy_parsed
+    elif len(fuzzy_parsed) == 2:
+        return fuzzy_parsed
+
+    # If that fails, it may be a date range in a format that daterangeparser doesn&#39;t recognize
+    # Check if the string contains two formatted dates by checking the beginning and end substrings
+    # until it finds two strings formatted like dates
+    test_start = len(test_string) - 1
+    test_end = 0
+    start = None
+    end = None
+    while test_end &lt; len(test_string):
+        if start == None:
+            start = self.parse_date_string(test_string[0:test_end])
+        if end == None:
+            end = self.parse_date_string(test_string[test_start:len(test_string)])
+
+        if start != None and end != None:
+            break
+
+        test_start -= 1
+        test_end += 1
+
+    if start == None or end == None:
+        raise ValueError(&#39;Could not parse date string: &#39; + test_string)
+    
+    return start, end</code></pre>
+</details>
+</dd>
+<dt id="event_processor.util.time_utils.TimeUtils.parse_date_string"><code class="name flex">
+<span>def <span class="ident">parse_date_string</span></span>(<span>self, test_string, validate_past=True)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def parse_date_string(self, test_string, validate_past=True):
+    try:
+        parsed_date = datetime.strptime(test_string, self.date_format)
+        parsed_date = self.set_year(parsed_date)
+        parsed_date = self.set_to_midnight(parsed_date)
+        now = self.set_to_midnight(datetime.now())
+
+        # We won&#39;t be querying for any dates in the past
+        # If the year isn&#39;t explicitly set and the month is in the past,
+        # then the event must be in the next year
+        # validate_past=False ignores this check
+        if validate_past and parsed_date &lt; now:
+            parsed_date += relativedelta(years = +1)
+        return parsed_date
+    except ValueError:
+        return None</code></pre>
+</details>
+</dd>
+<dt id="event_processor.util.time_utils.TimeUtils.parse_time"><code class="name flex">
+<span>def <span class="ident">parse_time</span></span>(<span>self, time_string)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def parse_time(self, time_string):
+    if time_string == None:
+        return None
+    try:
+        return dateutil.parser.parse(time_string) #.strftime(self.new_time_format)
+    # Time possibly set to something like &#39;All Day&#39;
+    except ValueError:
+        return None</code></pre>
+</details>
+</dd>
+<dt id="event_processor.util.time_utils.TimeUtils.parse_times"><code class="name flex">
+<span>def <span class="ident">parse_times</span></span>(<span>self, time_string)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def parse_times(self, time_string):
+    start_time, end_time = self.split_time(time_string)
+    return self.parse_time(start_time), self.parse_time(end_time)</code></pre>
+</details>
+</dd>
+<dt id="event_processor.util.time_utils.TimeUtils.set_to_midnight"><code class="name flex">
+<span>def <span class="ident">set_to_midnight</span></span>(<span>self, parsed_date)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_to_midnight(self, parsed_date):
+    return parsed_date.replace(hour = 0, minute = 0, second = 0, microsecond = 0)</code></pre>
+</details>
+</dd>
+<dt id="event_processor.util.time_utils.TimeUtils.set_year"><code class="name flex">
+<span>def <span class="ident">set_year</span></span>(<span>self, date_obj)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_year(self, date_obj):
+    if date_obj.year == 1900:
+        date_obj += relativedelta(year=datetime.now().year)
+    return date_obj</code></pre>
+</details>
+</dd>
+<dt id="event_processor.util.time_utils.TimeUtils.split_time"><code class="name flex">
+<span>def <span class="ident">split_time</span></span>(<span>self, time_string)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def split_time(self, time_string):
+    # Find instances of AM or PM
+    am_pm = re.findall(r&#39;[ap].?m.?&#39;, time_string, re.IGNORECASE)
+    add_am_pm = &#39;&#39;
+    if len(am_pm) == 1:
+        # Only one AM/PM supplied
+        # Need to make sure all times have AM or PM included
+
+        # Get rid of all AM/PM for now, will add it to all times later
+        time_string = time_string.replace(am_pm[0], &#39;&#39;)
+        add_am_pm = &#39; &#39; + am_pm[0]
+
+    # Get times separated by &#39;-&#39;, &#39;–&#39;, or &#39;to&#39;
+    times = re.split(r&#39;(?:-|–|to)+&#39;, time_string)
+
+    # Add an AM/PM suffix if required, else just add an empty string    
+    times = list(map((lambda time: time.strip() + add_am_pm), times))
+    
+    # If only one time supplied, return None for the second one
+    return times if len(times) &gt; 1 else (times[0], None)</code></pre>
+</details>
+</dd>
+<dt id="event_processor.util.time_utils.TimeUtils.time_is_between"><code class="name flex">
+<span>def <span class="ident">time_is_between</span></span>(<span>self, timestamp, min_timestamp, max_timestamp)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def time_is_between(self, timestamp, min_timestamp, max_timestamp):
+    return min_timestamp &lt;= timestamp &lt;= max_timestamp</code></pre>
+</details>
+</dd>
+<dt id="event_processor.util.time_utils.TimeUtils.time_range_is_between"><code class="name flex">
+<span>def <span class="ident">time_range_is_between</span></span>(<span>self, start_timestamp, end_timestamp, min_timestamp, max_timestamp)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def time_range_is_between(self, start_timestamp, end_timestamp, min_timestamp, max_timestamp):
+    return self.time_is_between(start_timestamp, min_timestamp, max_timestamp) and \
+        self.time_is_between(end_timestamp, min_timestamp, max_timestamp)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="event_processor.util" href="index.html">event_processor.util</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="event_processor.util.time_utils.TimeUtils" href="#event_processor.util.time_utils.TimeUtils">TimeUtils</a></code></h4>
+<ul class="">
+<li><code><a title="event_processor.util.time_utils.TimeUtils.convert_date_format" href="#event_processor.util.time_utils.TimeUtils.convert_date_format">convert_date_format</a></code></li>
+<li><code><a title="event_processor.util.time_utils.TimeUtils.datetime_to_timestamp" href="#event_processor.util.time_utils.TimeUtils.datetime_to_timestamp">datetime_to_timestamp</a></code></li>
+<li><code><a title="event_processor.util.time_utils.TimeUtils.get_timestamp" href="#event_processor.util.time_utils.TimeUtils.get_timestamp">get_timestamp</a></code></li>
+<li><code><a title="event_processor.util.time_utils.TimeUtils.get_timestamps" href="#event_processor.util.time_utils.TimeUtils.get_timestamps">get_timestamps</a></code></li>
+<li><code><a title="event_processor.util.time_utils.TimeUtils.max_timestamp_for_day" href="#event_processor.util.time_utils.TimeUtils.max_timestamp_for_day">max_timestamp_for_day</a></code></li>
+<li><code><a title="event_processor.util.time_utils.TimeUtils.min_timestamp_for_day" href="#event_processor.util.time_utils.TimeUtils.min_timestamp_for_day">min_timestamp_for_day</a></code></li>
+<li><code><a title="event_processor.util.time_utils.TimeUtils.parse_date" href="#event_processor.util.time_utils.TimeUtils.parse_date">parse_date</a></code></li>
+<li><code><a title="event_processor.util.time_utils.TimeUtils.parse_date_string" href="#event_processor.util.time_utils.TimeUtils.parse_date_string">parse_date_string</a></code></li>
+<li><code><a title="event_processor.util.time_utils.TimeUtils.parse_time" href="#event_processor.util.time_utils.TimeUtils.parse_time">parse_time</a></code></li>
+<li><code><a title="event_processor.util.time_utils.TimeUtils.parse_times" href="#event_processor.util.time_utils.TimeUtils.parse_times">parse_times</a></code></li>
+<li><code><a title="event_processor.util.time_utils.TimeUtils.set_to_midnight" href="#event_processor.util.time_utils.TimeUtils.set_to_midnight">set_to_midnight</a></code></li>
+<li><code><a title="event_processor.util.time_utils.TimeUtils.set_year" href="#event_processor.util.time_utils.TimeUtils.set_year">set_year</a></code></li>
+<li><code><a title="event_processor.util.time_utils.TimeUtils.split_time" href="#event_processor.util.time_utils.TimeUtils.split_time">split_time</a></code></li>
+<li><code><a title="event_processor.util.time_utils.TimeUtils.time_is_between" href="#event_processor.util.time_utils.TimeUtils.time_is_between">time_is_between</a></code></li>
+<li><code><a title="event_processor.util.time_utils.TimeUtils.time_range_is_between" href="#event_processor.util.time_utils.TimeUtils.time_range_is_between">time_range_is_between</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
