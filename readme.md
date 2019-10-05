@@ -231,15 +231,21 @@ This project consists of four parts
 - **Event Processor**:
 This is the heart of the application. It asynchronously scrapes websites and pulls in data from APIs, cleans and formats the data, then sends it to the MongoDB client.
 
+Detailed documentation can be found [here]('docs/event_processor)
+
 - **Event Service**:
 This is a standalone service that receives data from the event processor for insertion into MongoDB and processes requests from the clipboard site to display data to the user.  
 Any time data is received from a website, the old data from that site is deleted and refreshed with the new data.
+
+Detailed documentation can be found [here]('docs/event_service)
 
 - **PostgreSQL Instance**:
 This holds a single collection of all data from the sites. Only the database client interacts with the database.
 
 - **In2It Site**:
 The website that displays the aggregated data. Interacts with the database via the database client.
+
+Detailed documentation can be found [here]('docs/in2it_site)
 
 - **ndscheduler**:
 Optional scheduling system to run scrapers periodically.
