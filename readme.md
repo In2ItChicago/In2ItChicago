@@ -21,6 +21,7 @@ View these docs [here](https://clipboardproject.github.io/ClipboardApp/) if you 
          * [Scheduler](#scheduler)
       * [Development Guide](#development-guide)
          * [Technical Overview](#technical-overview)
+         * [Detailed Docs](#detailed-docs)
          * [Getting Started](#getting-started)
             * [Knowing when to use a scraper and when to use an API](#knowing-when-to-use-a-scraper-and-when-to-use-an-api)
          * [How to integrate new scrapers and API clients with the core code](#how-to-integrate-new-scrapers-and-api-clients-with-the-core-code)
@@ -229,8 +230,7 @@ The issue contains instructions on how to pick a specific site.
 ### Technical Overview
 This project consists of four parts
 - **Event Processor**:
-This is the heart of the application. It asynchronously scrapes websites and pulls in data from APIs, cleans and formats the data, then sends it to the MongoDB client.
-Detailed documentation can be found [here](docs/event_processor)
+This is the heart of the application. It asynchronously scrapes websites and pulls in data from APIs, cleans and formats the data, then sends it to the event service.
 
 - **Event Service**:
 This is a standalone service that receives data from the event processor for insertion into MongoDB and processes requests from the clipboard site to display data to the user.  
@@ -249,6 +249,12 @@ Optional scheduling system to run scrapers periodically.
 
 - **scrapyd**
 ndscheduler calls this to request scraper runs. Once a scraper is requested, scrapyd will start the scraper when resouces become available.
+
+### Detailed Docs
+Detailed docs are best viewed in the Jekyll site [here](https://clipboardproject.github.io/ClipboardApp/).
+ - [Event Processor](docs/event_processor)
+ - [Event Service](docs/event_service)
+ - [In2It Site](docs/in2it_site)
 
 ### Getting Started
 As stated previously, adding a scraper is the best way to start contributing. If you're not familiar with web scraping,
