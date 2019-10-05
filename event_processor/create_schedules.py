@@ -2,10 +2,10 @@ import math
 import time
 from scrapy import spiderloader
 from scrapy.utils import project
-from config import config
+from event_processor.config import config
 from requests.exceptions import ConnectionError
 import ptvsd
-from util.http_utils import HttpUtils
+from event_processor.util.http_utils import HttpUtils
 
 HOURS_IN_DAY = 24
 MINUTES_IN_HOUR = 60

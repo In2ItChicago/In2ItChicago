@@ -12,6 +12,9 @@ const db = knex(knexStringcase({
     connection: 'postgresql://postgres:postgres@postgres:5432/events',
 }));
 
+/**
+ * Middleware for processing geocode requests??? 
+ */
 export class GeocodeDAL {
     async getNeighborhoods(): Promise<Object[]> {
         const result = await db('geocode.location')

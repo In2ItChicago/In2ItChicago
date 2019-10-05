@@ -3,6 +3,9 @@ import { EventTime } from './eventTime';
 import { IsNotEmpty, IsNumber } from 'class-validator';
 import { Type } from 'class-transformer';
 
+/**
+ * Model representing a request for creating an event
+ */
 export class CreateEventsRequest {
     @IsNotEmpty()
     @ApiModelProperty()

@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>event_processor.scrapy_impl.pipelines API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>event_processor.scrapy_impl.pipelines</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python"># -*- coding: utf-8 -*-
+
+# Define your item pipelines here
+#
+# Don&#39;t forget to add your pipeline to the ITEM_PIPELINES setting
+# See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
+from event_processor.models.event import EventManager, Event, EventLoader
+from event_processor.util.object_hash import ObjectHash
+from threading import Lock
+from event_processor.config import config
+from event_processor.util.data_utils import DataUtils
+from event_processor.util.time_utils import TimeUtils
+from event_processor.util.http_utils import HttpUtils
+from scrapy.exceptions import DropItem
+from datetime import datetime
+import json
+
+class EventTransformPipeline:
+    &#34;&#34;&#34;??? EventTransformPipeline: &#34;&#34;&#34;
+    def __init__(self):
+        self.time_utils = TimeUtils()
+
+    def process_item(self, item, spider):
+        item[&#39;organization&#39;] = spider.organization
+        if &#39;event_time&#39; in item:
+            item[&#39;event_time&#39;][&#39;date_format&#39;] = spider.date_format
+        loader = EventLoader(**item)
+        if &#39;event_time&#39; in loader.item:
+            time = loader.item[&#39;event_time&#39;]
+            if self.time_utils.time_range_is_between(time[&#39;start_timestamp&#39;], time[&#39;end_timestamp&#39;], spider.start_timestamp, spider.end_timestamp):
+                return loader.item
+            else:
+                raise DropItem(&#39;Event is not in the configured timeframe&#39;)
+        else:
+            return loader.item
+            
+class GeocodePipeline:
+    &#34;&#34;&#34;Get the Geocodes from the parsed address, if an address was found.&#34;&#34;&#34;
+    def __init__(self):
+        self.session = HttpUtils.get_session()
+    def process_item(self, item, spider):
+        if &#39;address&#39; in item:
+            try:
+                geocode = self.session.get(config.get_geocode, params={&#39;address&#39;: item[&#39;address&#39;]})
+                geocode_json = geocode.json()
+                
+                item[&#39;geocode_id&#39;] = geocode_json[&#39;id&#39;]
+                if geocode_json[&#39;lat&#39;] == None:
+                    spider.logger.warning(f&#39;No geocode response for address {item[&#34;address&#34;]}&#39;)
+            except Exception as e:
+                spider.logger.warning(f&#39;Exception while getting geocode for address {item[&#34;address&#34;]}: {e}&#39;)
+        return item
+
+class EventBuildPipeline:
+    &#34;&#34;&#34;??? EventBuildPipeline.&#34;&#34;&#34;
+    def process_item(self, item, spider):
+        &#34;&#34;&#34;Given an item and a spider, update the item based on its url&#34;&#34;&#34;
+        spider.event_manager.update(item[&#39;url&#39;], item)
+        return item
+
+class EventSavePipeline:
+    def __init__(self):
+        self.session = HttpUtils.get_session()
+
+    def close_spider(self, spider):
+        if len(spider.event_manager.events) == 0:
+            spider.logger.info(f&#39;No data returned for &#39; + spider.base_url)
+        else:
+            self.save_events(spider)
+        if config.run_scheduler:
+            spider.notify_spider_complete()
+
+    def save_events(self, spider):
+        &#34;&#34;&#34;??? Save the given events found by a spider to the database.&#34;&#34;&#34;
+        event_list = spider.event_manager.to_dicts()
+        new_hash = ObjectHash.create_hash(event_list)
+        spider.logger.info(f&#39;Found {len(event_list)} events for {event_list[0][&#34;organization&#34;]}.&#39;)
+        if new_hash == ObjectHash.get(spider.identifier):
+            spider.logger.info(f&#39;Nothing to update.&#39;)
+            return
+        ObjectHash.set(spider.identifier, new_hash)
+        if spider.is_errored:
+            spider.logger.info(&#39;Errors occurred during processing so events will not be saved&#39;)
+        else:
+            response = self.session.post(config.put_events, json=event_list)
+            if not response.ok:
+                raise Exception(response.text)
+            else:
+                spider.logger.info(f&#39;Saved {len(event_list)} events for {event_list[0][&#34;organization&#34;]}&#39;)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="event_processor.scrapy_impl.pipelines.EventBuildPipeline"><code class="flex name class">
+<span>class <span class="ident">EventBuildPipeline</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>??? EventBuildPipeline.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class EventBuildPipeline:
+    &#34;&#34;&#34;??? EventBuildPipeline.&#34;&#34;&#34;
+    def process_item(self, item, spider):
+        &#34;&#34;&#34;Given an item and a spider, update the item based on its url&#34;&#34;&#34;
+        spider.event_manager.update(item[&#39;url&#39;], item)
+        return item</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="event_processor.scrapy_impl.pipelines.EventBuildPipeline.process_item"><code class="name flex">
+<span>def <span class="ident">process_item</span></span>(<span>self, item, spider)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Given an item and a spider, update the item based on its url</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def process_item(self, item, spider):
+    &#34;&#34;&#34;Given an item and a spider, update the item based on its url&#34;&#34;&#34;
+    spider.event_manager.update(item[&#39;url&#39;], item)
+    return item</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="event_processor.scrapy_impl.pipelines.EventSavePipeline"><code class="flex name class">
+<span>class <span class="ident">EventSavePipeline</span></span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class EventSavePipeline:
+    def __init__(self):
+        self.session = HttpUtils.get_session()
+
+    def close_spider(self, spider):
+        if len(spider.event_manager.events) == 0:
+            spider.logger.info(f&#39;No data returned for &#39; + spider.base_url)
+        else:
+            self.save_events(spider)
+        if config.run_scheduler:
+            spider.notify_spider_complete()
+
+    def save_events(self, spider):
+        &#34;&#34;&#34;??? Save the given events found by a spider to the database.&#34;&#34;&#34;
+        event_list = spider.event_manager.to_dicts()
+        new_hash = ObjectHash.create_hash(event_list)
+        spider.logger.info(f&#39;Found {len(event_list)} events for {event_list[0][&#34;organization&#34;]}.&#39;)
+        if new_hash == ObjectHash.get(spider.identifier):
+            spider.logger.info(f&#39;Nothing to update.&#39;)
+            return
+        ObjectHash.set(spider.identifier, new_hash)
+        if spider.is_errored:
+            spider.logger.info(&#39;Errors occurred during processing so events will not be saved&#39;)
+        else:
+            response = self.session.post(config.put_events, json=event_list)
+            if not response.ok:
+                raise Exception(response.text)
+            else:
+                spider.logger.info(f&#39;Saved {len(event_list)} events for {event_list[0][&#34;organization&#34;]}&#39;)</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="event_processor.scrapy_impl.pipelines.EventSavePipeline.close_spider"><code class="name flex">
+<span>def <span class="ident">close_spider</span></span>(<span>self, spider)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def close_spider(self, spider):
+    if len(spider.event_manager.events) == 0:
+        spider.logger.info(f&#39;No data returned for &#39; + spider.base_url)
+    else:
+        self.save_events(spider)
+    if config.run_scheduler:
+        spider.notify_spider_complete()</code></pre>
+</details>
+</dd>
+<dt id="event_processor.scrapy_impl.pipelines.EventSavePipeline.save_events"><code class="name flex">
+<span>def <span class="ident">save_events</span></span>(<span>self, spider)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>??? Save the given events found by a spider to the database.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def save_events(self, spider):
+    &#34;&#34;&#34;??? Save the given events found by a spider to the database.&#34;&#34;&#34;
+    event_list = spider.event_manager.to_dicts()
+    new_hash = ObjectHash.create_hash(event_list)
+    spider.logger.info(f&#39;Found {len(event_list)} events for {event_list[0][&#34;organization&#34;]}.&#39;)
+    if new_hash == ObjectHash.get(spider.identifier):
+        spider.logger.info(f&#39;Nothing to update.&#39;)
+        return
+    ObjectHash.set(spider.identifier, new_hash)
+    if spider.is_errored:
+        spider.logger.info(&#39;Errors occurred during processing so events will not be saved&#39;)
+    else:
+        response = self.session.post(config.put_events, json=event_list)
+        if not response.ok:
+            raise Exception(response.text)
+        else:
+            spider.logger.info(f&#39;Saved {len(event_list)} events for {event_list[0][&#34;organization&#34;]}&#39;)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="event_processor.scrapy_impl.pipelines.EventTransformPipeline"><code class="flex name class">
+<span>class <span class="ident">EventTransformPipeline</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>??? EventTransformPipeline:</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class EventTransformPipeline:
+    &#34;&#34;&#34;??? EventTransformPipeline: &#34;&#34;&#34;
+    def __init__(self):
+        self.time_utils = TimeUtils()
+
+    def process_item(self, item, spider):
+        item[&#39;organization&#39;] = spider.organization
+        if &#39;event_time&#39; in item:
+            item[&#39;event_time&#39;][&#39;date_format&#39;] = spider.date_format
+        loader = EventLoader(**item)
+        if &#39;event_time&#39; in loader.item:
+            time = loader.item[&#39;event_time&#39;]
+            if self.time_utils.time_range_is_between(time[&#39;start_timestamp&#39;], time[&#39;end_timestamp&#39;], spider.start_timestamp, spider.end_timestamp):
+                return loader.item
+            else:
+                raise DropItem(&#39;Event is not in the configured timeframe&#39;)
+        else:
+            return loader.item</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="event_processor.scrapy_impl.pipelines.EventTransformPipeline.process_item"><code class="name flex">
+<span>def <span class="ident">process_item</span></span>(<span>self, item, spider)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def process_item(self, item, spider):
+    item[&#39;organization&#39;] = spider.organization
+    if &#39;event_time&#39; in item:
+        item[&#39;event_time&#39;][&#39;date_format&#39;] = spider.date_format
+    loader = EventLoader(**item)
+    if &#39;event_time&#39; in loader.item:
+        time = loader.item[&#39;event_time&#39;]
+        if self.time_utils.time_range_is_between(time[&#39;start_timestamp&#39;], time[&#39;end_timestamp&#39;], spider.start_timestamp, spider.end_timestamp):
+            return loader.item
+        else:
+            raise DropItem(&#39;Event is not in the configured timeframe&#39;)
+    else:
+        return loader.item</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="event_processor.scrapy_impl.pipelines.GeocodePipeline"><code class="flex name class">
+<span>class <span class="ident">GeocodePipeline</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get the Geocodes from the parsed address, if an address was found.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class GeocodePipeline:
+    &#34;&#34;&#34;Get the Geocodes from the parsed address, if an address was found.&#34;&#34;&#34;
+    def __init__(self):
+        self.session = HttpUtils.get_session()
+    def process_item(self, item, spider):
+        if &#39;address&#39; in item:
+            try:
+                geocode = self.session.get(config.get_geocode, params={&#39;address&#39;: item[&#39;address&#39;]})
+                geocode_json = geocode.json()
+                
+                item[&#39;geocode_id&#39;] = geocode_json[&#39;id&#39;]
+                if geocode_json[&#39;lat&#39;] == None:
+                    spider.logger.warning(f&#39;No geocode response for address {item[&#34;address&#34;]}&#39;)
+            except Exception as e:
+                spider.logger.warning(f&#39;Exception while getting geocode for address {item[&#34;address&#34;]}: {e}&#39;)
+        return item</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="event_processor.scrapy_impl.pipelines.GeocodePipeline.process_item"><code class="name flex">
+<span>def <span class="ident">process_item</span></span>(<span>self, item, spider)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def process_item(self, item, spider):
+    if &#39;address&#39; in item:
+        try:
+            geocode = self.session.get(config.get_geocode, params={&#39;address&#39;: item[&#39;address&#39;]})
+            geocode_json = geocode.json()
+            
+            item[&#39;geocode_id&#39;] = geocode_json[&#39;id&#39;]
+            if geocode_json[&#39;lat&#39;] == None:
+                spider.logger.warning(f&#39;No geocode response for address {item[&#34;address&#34;]}&#39;)
+        except Exception as e:
+            spider.logger.warning(f&#39;Exception while getting geocode for address {item[&#34;address&#34;]}: {e}&#39;)
+    return item</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="event_processor.scrapy_impl" href="index.html">event_processor.scrapy_impl</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="event_processor.scrapy_impl.pipelines.EventBuildPipeline" href="#event_processor.scrapy_impl.pipelines.EventBuildPipeline">EventBuildPipeline</a></code></h4>
+<ul class="">
+<li><code><a title="event_processor.scrapy_impl.pipelines.EventBuildPipeline.process_item" href="#event_processor.scrapy_impl.pipelines.EventBuildPipeline.process_item">process_item</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="event_processor.scrapy_impl.pipelines.EventSavePipeline" href="#event_processor.scrapy_impl.pipelines.EventSavePipeline">EventSavePipeline</a></code></h4>
+<ul class="">
+<li><code><a title="event_processor.scrapy_impl.pipelines.EventSavePipeline.close_spider" href="#event_processor.scrapy_impl.pipelines.EventSavePipeline.close_spider">close_spider</a></code></li>
+<li><code><a title="event_processor.scrapy_impl.pipelines.EventSavePipeline.save_events" href="#event_processor.scrapy_impl.pipelines.EventSavePipeline.save_events">save_events</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="event_processor.scrapy_impl.pipelines.EventTransformPipeline" href="#event_processor.scrapy_impl.pipelines.EventTransformPipeline">EventTransformPipeline</a></code></h4>
+<ul class="">
+<li><code><a title="event_processor.scrapy_impl.pipelines.EventTransformPipeline.process_item" href="#event_processor.scrapy_impl.pipelines.EventTransformPipeline.process_item">process_item</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="event_processor.scrapy_impl.pipelines.GeocodePipeline" href="#event_processor.scrapy_impl.pipelines.GeocodePipeline">GeocodePipeline</a></code></h4>
+<ul class="">
+<li><code><a title="event_processor.scrapy_impl.pipelines.GeocodePipeline.process_item" href="#event_processor.scrapy_impl.pipelines.GeocodePipeline.process_item">process_item</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
