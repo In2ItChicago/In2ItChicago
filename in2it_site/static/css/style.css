@@ -1,5 +1,5 @@
 *{
-	font-family: 'Nunito', sans-serif;
+	font-family: 'Roboto', 'regular';
 }
 
 body{
@@ -150,17 +150,16 @@ body{
 }
 
 .events-container{
-	width:40%;
-	height:80vh;
+	width:38vw;
 }
 
 .map-container{
-	width:60%;
+	width:59vh;
 }
 
 .event-map{
 	display:flex;
-	width:58vw;
+	width:60vw;
 	height:80vh;
 }
 

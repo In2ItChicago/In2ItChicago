@@ -1,10 +1,5 @@
 <template>
 	<div class="content-row">
-		<div class="map-container">
-			<client-only>
-				<event-map :events="events" :hoveringEventId="hoveringEventId"></event-map>
-			</client-only>
-		</div>
 		<div class="events-container">
 			<div v-if="eventsAvailable">
 				<div v-for="event in events">
@@ -24,6 +19,11 @@
 			<div v-else class="no-event-message">
 				<span>No events available, please adjust your search filter.</span>
 			</div>
+		</div>
+		<div class="map-container">
+			<client-only>
+				<event-map :events="events" :hoveringEventId="hoveringEventId"></event-map>
+			</client-only>
 		</div>
 	</div>
 </template>
