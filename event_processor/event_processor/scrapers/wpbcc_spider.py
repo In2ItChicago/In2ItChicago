@@ -4,8 +4,6 @@ from scrapy.spiders import Rule
 from event_processor.base.custom_spiders import ScraperCrawlSpider
 from scrapy.linkextractors import LinkExtractor
 
-from event_processor.models.category import Category
-
 class WpbccSpider(ScraperCrawlSpider):
     name = 'wpbcc'
     allowed_domains = ['www.wickerparkbucktown.com']
@@ -26,7 +24,7 @@ class WpbccSpider(ScraperCrawlSpider):
         base_selector = response.css('.listerContent')
         def sibling_extract(field):
             return self.empty_check_extract(base_selector, self.xpath_func, f'div/span[contains(text(), "{field}: ")]/following-sibling::text()')
-        
+
         return {
             'title': response.css('.listerItem h2 a::text').extract(),
             'url': response.css('.listerItem h2 a::attr(href)').extract(),

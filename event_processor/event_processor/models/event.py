@@ -11,16 +11,16 @@ def custom_field():
 
 def price_field():
     return scrapy.Field(input_processor=MapCompose(
-            lambda value: value.replace('$', '') if type(value) == str else value, 
-            DataUtils.remove_html, float), 
+            lambda value: value.replace('$', '') if type(value) == str else value,
+            DataUtils.remove_html, float),
         output_processor=TakeFirst())
 
 def url_field():
-    return scrapy.Field(input_processor=MapCompose(DataUtils.remove_html, lambda value: value.rstrip('//')), 
+    return scrapy.Field(input_processor=MapCompose(DataUtils.remove_html, lambda value: value.rstrip('//')),
     output_processor=Join())
 
 def category_field():
-    return scrapy.Field(input_processor=MapCompose(lambda value: value.name), output_processor=Join())
+    return scrapy.Field(output_processor=Join())
 
 def address_field():
     def parse_address(value):
@@ -28,7 +28,7 @@ def address_field():
         contains_field = lambda field: any(address_part[1] == field for address_part in parsed)
         default_field = lambda field, default: f' {default}' if not contains_field(field) else ''
         return f'{value}{default_field("PlaceName", "Chicago")}{default_field("StateName", "IL")}'
-        
+
     return scrapy.Field(input_processor=MapCompose(
             DataUtils.remove_html,
             parse_address),
@@ -93,13 +93,13 @@ class EventLoader():
 class EventManager:
     def __init__(self):
         self.events = {}
-    
+
     def update(self, key, event):
         # Add properties to the event if it has been created already, else create a new event
         if key in self.events:
             self.events[key].update(event)
         else:
             self.events[key] = event
-    
+
     def to_dicts(self):
         return [dict(event) for event in list(self.events.values())]

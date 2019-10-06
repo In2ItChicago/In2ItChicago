@@ -4,7 +4,6 @@ from scrapy import Item
 from scrapy.loader import ItemLoader
 from gql import gql
 
-from event_processor.models.category import Category
 from event_processor.util.data_utils import DataUtils
 from event_processor.base.custom_spiders import ApiSpider
 from event_processor.graphql_definitions.honeycomb import definition
@@ -16,10 +15,10 @@ class Honeycomb(ApiSpider):
     def __init__(self, name=None, **kwargs):
         super().__init__(self, 'The Honeycomb Project', 'https://events.thehoneycombproject.org/', date_format = '%a %b %d %Y %H:%M:%S', **kwargs)
         self.gql_url = 'https://the-honeycomb-project-api.herokuapp.com/gql'
-    
+
     def parse(self, response):
         return self.get_events()
-    
+
     def get_events(self):
         response = self.get_response_graphql(url=self.gql_url, gql_query=definition, params={'search': {'published': True, 'view': 'grid'}})
 
