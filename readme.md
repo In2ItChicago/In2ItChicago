@@ -251,10 +251,9 @@ Optional scheduling system to run scrapers periodically.
 ndscheduler calls this to request scraper runs. Once a scraper is requested, scrapyd will start the scraper when resouces become available.
 
 ### Detailed Docs
-Detailed docs are best viewed in the Jekyll site [here](https://clipboardproject.github.io/ClipboardApp/).
- - [Event Processor](docs/event_processor)
- - [Event Service](docs/event_service)
- - [In2It Site](docs/in2it_site)
+ - [Event Processor](https://clipboardproject.github.io/ClipboardApp/docs/event_processor)
+ - [Event Service](https://clipboardproject.github.io/ClipboardApp/docs/event_service)
+ - [In2It Site](https://clipboardproject.github.io/ClipboardApp/docs/in2it_site)
 
 ### Getting Started
 As stated previously, adding a scraper is the best way to start contributing. If you're not familiar with web scraping,
