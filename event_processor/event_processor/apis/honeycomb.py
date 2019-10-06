@@ -34,5 +34,6 @@ class Honeycomb(ApiSpider):
                     'start_time': docs['startTime'],
                     'end_time': docs['endTime']
                 },
-                'url': f'{self.base_url}event/{docs["id"]}'
+                'url': f'{self.base_url}event/{docs["id"]}',
+                'category': docs['category']['name']
             }
