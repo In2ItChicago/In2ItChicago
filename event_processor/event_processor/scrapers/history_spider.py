@@ -4,7 +4,6 @@ from scrapy.spiders import Rule
 from event_processor.base.custom_spiders import ScraperCrawlSpider
 from scrapy.linkextractors import LinkExtractor
 
-from event_processor.models.category import Category
 from event_processor.util.data_utils import DataUtils
 
 class HistorySpider(ScraperCrawlSpider):
@@ -24,7 +23,7 @@ class HistorySpider(ScraperCrawlSpider):
                 'start_date': self.start_date,
                 'end_date': self.end_date
             })
-        
+
 
     def parse_start_url(self, response):
         def get_full_date(xpath_result):
@@ -39,7 +38,7 @@ class HistorySpider(ScraperCrawlSpider):
                 else:
                     result.append(f'{text} {current_month}')
             return result
-        
+
         return {
             'title': response.css('a.title::text').extract(),
             'url': response.css('a.title::attr(href)').extract(),
