@@ -251,6 +251,7 @@ Optional scheduling system to run scrapers periodically.
 ndscheduler calls this to request scraper runs. Once a scraper is requested, scrapyd will start the scraper when resouces become available.
 
 ### Detailed Docs
+
  - [Event Processor](https://clipboardproject.github.io/ClipboardApp/docs/event_processor)
  - [Event Service](https://clipboardproject.github.io/ClipboardApp/docs/event_service)
  - [In2It Site](https://clipboardproject.github.io/ClipboardApp/docs/in2it_site)
@@ -260,8 +261,9 @@ As stated previously, adding a scraper is the best way to start contributing. If
 [this](https://www.upwork.com/hiring/for-clients/web-scraping-tutorial/) gives a decent overview about what web scraping is.
 We're using Scrapy for this project, which is a complex and sophisticated web scraping framework. If you'd to start with a tutorial that will help you learn more about how to write a scraper without worrying about the complexities of Scrapy,
 take a look at [this](https://www.analyticsvidhya.com/blog/2015/10/beginner-guide-web-scraping-beautiful-soup-python/) guide which uses a library called BeautifulSoup.
-If you're comfortable with the concepts used in web scraping, take a look at [this](https://www.analyticsvidhya.com/blog/2017/07/web-scraping-in-python-using-scrapy/) tutorial.
+If you're comfortable with the concepts used in web scraping and would like to learn more about Scrapy, take a look at [this](https://www.analyticsvidhya.com/blog/2017/07/web-scraping-in-python-using-scrapy/) tutorial.
 Ignore the installation instructions because you should have installed Scrapy earlier in this guide.
+To learn more about how to add a scraper to this codebase, check out [this](https://clipboardproject.github.io/ClipboardApp/tutorial/scraperTutorial.html) tutorial.
 
 Scrapy uses the CssSelect module to implement css selectors. Docs can be found [here](https://cssselect.readthedocs.io/en/latest/).
 CssSelect defines its selectors according to the w3 specification [here](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/) with a few exceptions that are listed in CssSelect's documentation.
