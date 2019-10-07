@@ -14,11 +14,6 @@
 	import Filters from '~/components/Filters.vue';
 	import EventList from '~/components/EventList.vue';
 	
-	function getEventURL(in2itApiUrl) {
-		const eventURL = process.server ? 'event_service:5000' : in2itApiUrl;
-		return `http://${eventURL}/events`;
-	}
-
 	export default {
 		data() {
 			return {
@@ -30,12 +25,18 @@
 		},
 		methods: {
 			updateEvents: function() {
-				return axios.get(getEventURL(this.$env.IN2IT_API_URL), {
+				return axios.get(this.eventUrl, {
 					params: this.$store.state.searchFilter
 				})
 				.then((res) => {
 					this.events = res.data;
 				});
+			}
+		},
+		computed: {
+			eventUrl: function() {
+				const eventURL = process.server ? 'event_service:5000' : this.$env.IN2IT_API_URL;
+				return `http://${eventURL}/events`;
 			}
 		},
 		components: {

@@ -142,6 +142,33 @@ body{
 	font-weight: bold;
 }
 
+.autocomplete {
+	position: relative;
+}
+
+.autocomplete-results {
+	padding: 05px;
+	margin: 0;
+	border: 1px solid #eeeeee;
+	height: 120px;
+	overflow: auto;
+	position: absolute;
+	background-color:#fff;
+	width:100%;
+}
+
+.autocomplete-result {
+	list-style: none;
+	text-align: left;
+	padding: 4px 2px;
+	cursor: pointer;
+}
+
+.autocomplete-result:hover {
+	background-color: #4AAE9B;
+	color: white;
+}
+
 .search-btn{
 	background-color: #4ec0c5;
 	padding:10px 50px 10px 50px;
@@ -174,6 +201,10 @@ body{
 	display:flex;
 	width:60vw;
 	height:80vh;
+}
+
+.form-control{
+	font-family: 'Roboto', sans-serif;
 }
 
 .form-group{
