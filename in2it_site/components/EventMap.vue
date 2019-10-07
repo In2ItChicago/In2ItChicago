@@ -32,11 +32,12 @@
                 this.createMap();
                 this.createMarkers();
                 this.addMarkersToMap();
+                this.centerMap();
             },
             createMap: function() {
                 this.map = new google.maps.Map(document.getElementById("map"), {
                     center: { lat: 41.925, lng: -87.68 },
-                    zoom: 12
+                    zoom: 14
                 });
             },
             createMarkers: function() {
@@ -46,13 +47,16 @@
                         size: new google.maps.Size(35, 50),
                     };
 
+                    let latLng = {lat: this.events[i].lat, lng: this.events[i].lon};
+
                     let marker = new google.maps.Marker({
-                        position: {lat: this.events[i].lat, lng: this.events[i].lon},
+                        position: latLng,
                         icon: image,
                         title: this.events[i].title + ' | ' + this.events[i].address
                     });
 
                     marker.id = this.events[i].id;
+                    marker.latLng = latLng;
 
                     let infoContent = 
                         "<h2>" + this.events[i].title + "</h2>" +
@@ -86,6 +90,20 @@
                 for (let i in this.markers) {
                    this.markers[i].setMap(this.map);
                 }
+            },
+            centerMap: function() {
+                let latSum = 0;
+                let lonSum = 0;
+                for (let i in this.markers){
+                    latSum += this.markers[i].latLng.lat;
+                    lonSum += this.markers[i].latLng.lng;
+                }
+
+                let center = {
+                    lat: latSum / this.markers.length,
+                    lng: lonSum / this.markers.length
+                };
+                this.map.setCenter(center);
             },
             clearMarkers: function() {
                 for (let i in this.markers) {

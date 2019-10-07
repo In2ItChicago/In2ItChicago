@@ -94,7 +94,6 @@
 			},
 			setNeighborhood: function(neighborhood) {
 				this.filterForm.neighborhood = neighborhood;
-				console.log('this.filterForm.neighborhood: ' + this.filterForm.neighborhood);
 			}
 		},
 		components: {
