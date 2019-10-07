@@ -37,10 +37,12 @@ body{
 .navbar-container{
 	width:100%;
 	display: flex;
-	justify-content:space-between;
+	flex-direction: row;
 }
 
-.nav-link{
+.in2it-nav-link{
+	display:flex;
+	align-self: flex-end;
 	padding:10px 20px 0px 20px;
 	color:#173450;
 	font-size:26px;
@@ -48,9 +50,15 @@ body{
 	line-height: 75px;
 }
 
-.nav-link:hover{
-	text-decoration: underline;
+.in2it-nav-link:hover{
+	text-decoration: none;
 	color:#e3e3e3;
+}
+
+.in2it-nav-link-group{
+	display:flex;
+	flex-direction: row;
+	margin-left: auto;
 }
 
 .in2it-brand{
