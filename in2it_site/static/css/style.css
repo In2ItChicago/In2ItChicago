@@ -3,7 +3,6 @@
 }
 
 p{
-	font-family: 'Lato', sans-serif;
 	font-family: 'Roboto', sans-serif;
 }
 
@@ -160,6 +159,7 @@ body{
 
 .no-event-message{
 	padding:10px;
+	font-size:26px;
 }
 
 .events-container{

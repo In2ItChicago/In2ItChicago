@@ -17,7 +17,7 @@
 				</paginate>
 			</div>
 			<div v-else class="no-event-message">
-				<span>No events available, please adjust your search filter.</span>
+				<span>No events found, try expanding your dates or search radius</span>
 			</div>
 		</div>
 		<div class="map-container">
