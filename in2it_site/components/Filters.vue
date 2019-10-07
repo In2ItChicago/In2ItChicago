@@ -6,33 +6,41 @@
 					<label for="locationFilter" class="filter-label">Zip / Address</label>
 					<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Address" v-model="filterForm.address">
 				</div>
-				<div class="col-md-auto">
-					<client-only placeholder="Loading...">
-						<label for="startDatePicker" class="filter-label">From</label>
-						<datepicker
-							id="startDatePicker"
-							v-model="filterForm.startTime"
-							name="fromDatePicker"
-							wrapper-class="datepicker"
-							class="datepicker">
-						</datepicker>
-					</client-only>
-				</div>
-				<div class="col-md-3">
-					<client-only placeholder="Loading...">
-						<label for="endDatePicker" class="filter-label">To</label>
-						<datepicker
-							id="endDatePicker"
-							v-model="filterForm.endTime"
-							name="toDatePicker"
-							wrapper-class="datepicker"
-							class="datepicker">
-						</datepicker>
-					</client-only>
+				<div class="col-md-auto datepicker-group">
+					<div class="datepicker-input">
+						<client-only placeholder="Loading...">
+							<label for="startDatePicker" class="filter-label">From</label>
+							<datepicker
+								id="startDatePicker"
+								v-model="filterForm.startTime"
+								name="fromDatePicker"
+								class="datepicker"
+								input-class="datepicker-left">
+							</datepicker>
+						</client-only>
+					</div>
+					
+					<img src="/img/arrow.svg" class="date-arrow"/>
+
+					<div class="datepicker-input">
+						<client-only placeholder="Loading...">
+							<label for="endDatePicker" class="filter-label">To</label>
+							<datepicker
+								id="endDatePicker"
+								v-model="filterForm.endTime"
+								name="toDatePicker"
+								class="datepicker"
+								input-class="datepicker-right">
+							</datepicker>
+						</client-only>
+					</div>
 				</div>
 			</div>
 
 			<div class="filter-row form-row justify-content-center">
+				<div class="col-md-2">
+					<input type="text" class="form-control" id="organization" placeholder="Organization" v-model="filterForm.organization">
+				</div>
 				<div class="col-md-2">
 					<select class="form-control" id="distanceFilter" v-model="filterForm.miles">
 						<option value="1">1 Mile</option>
@@ -42,9 +50,6 @@
 						<option value="10">10 Miles</option>
 						<option value="15">15 Miles</option>
 					</select>
-				</div>
-				<div class="col-md-2">
-					<input type="text" class="form-control" id="organization" placeholder="Organization" v-model="filterForm.organization">
 				</div>
 				<div class="col-md-2">
 					<input type="text" class="form-control" id="neighborhood" placeholder="Neighborhood" v-model="filterForm.neighborhood">
