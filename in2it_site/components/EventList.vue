@@ -3,7 +3,7 @@
 		<div class="events-container">
 			<div v-if="eventsAvailable">
 				<div v-for="event in events">
-					<event-listing :event="event" v-on:eventHover="hoveringEventId = $event"></event-listing>
+					<event-listing :event="event" v-on:eventHover="hoveringEventId = $event" v-on:eventClick="focussedEventId = $event"></event-listing>
 				</div>
 				<paginate
 					:page-count="8"
@@ -22,7 +22,7 @@
 		</div>
 		<div class="map-container">
 			<client-only>
-				<event-map :events="events" :hoveringEventId="hoveringEventId"></event-map>
+				<event-map :events="events" :hoveringEventId="hoveringEventId" :focussedEventId="focussedEventId"></event-map>
 			</client-only>
 		</div>
 	</div>
@@ -35,7 +35,8 @@
 		props: ['events'],
 		data() {
 			return {
-				hoveringEventId: null
+				hoveringEventId: null,
+				focussedEventId: null
 			};
 		},
 		computed: {

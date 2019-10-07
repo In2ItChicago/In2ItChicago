@@ -4,7 +4,7 @@
 
 <script>
     export default {
-        props: ['events', 'hoveringEventId'],
+        props: ['events', 'hoveringEventId', 'focussedEventId'],
         data() {
             return {
                 markers: [],
@@ -67,7 +67,6 @@
 
                     const instance = this;
                     marker.addListener('click', function() {
-                        infoWindow.open(map, marker);
                         instance.setActiveMarker(marker);
                     });
 
@@ -81,6 +80,7 @@
                     this.activeMarker.infoWindow.close();
                 }
                 this.activeMarker = marker;
+                this.activeMarker.infoWindow.open(this.map, this.activeMarker);
             },
             addMarkersToMap: function() {
                 for (let i in this.markers) {
@@ -107,6 +107,13 @@
                         size: new google.maps.Size(35, 50)
                     };
                     this.markers[i].setIcon(image);
+                }
+            },
+            focussedEventId: function (id) {
+                if (!this.$google)  return;
+                for (let i in this.markers) {
+                    if (this.markers[i].id != id) continue;
+                    this.setActiveMarker(this.markers[i]);
                 }
             }
         }

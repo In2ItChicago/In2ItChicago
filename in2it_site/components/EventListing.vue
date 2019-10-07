@@ -1,5 +1,5 @@
 <template>
-    <div @mouseover="hoverOnEvent()" class="event-listing d-flex flex-row event-listing-link">
+    <div @mouseover="hoverOnEvent()"  @click="clickOnEvent()" class="event-listing d-flex flex-row event-listing-link">
         <div class="d-flex flex-column">
             <div class="d-flex w-100">
                 <h2 class="event-listing-title">{{ title }}</h2>
@@ -20,13 +20,13 @@
         props: ['event'],
         computed: {
             title: function() {
-                if(this.event.title.length > 50){
+                if(this.event.title.length > 50) {
                     return this.event.title.substr(0, 50) + '...';
                 }
                 return this.event.title;
             },
             description: function() {
-                if(this.event.description.length > 140){
+                if(this.event.description.length > 140) {
                     return this.event.description.substr(0, 140) + '...';
                 }
                 return this.event.description;
@@ -35,6 +35,9 @@
         methods: {
             hoverOnEvent: function() {
                 this.$emit('eventHover', this.event.id);
+            },
+            clickOnEvent: function() {
+                this.$emit('eventClick', this.event.id);
             }
         },
     };
