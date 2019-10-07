@@ -1,5 +1,10 @@
 *{
-	font-family: 'Roboto', 'regular';
+	font-family: 'Nunito', 'regular';
+}
+
+p{
+	font-family: 'Lato', sans-serif;
+	font-family: 'Roboto', sans-serif;
 }
 
 body{
