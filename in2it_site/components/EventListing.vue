@@ -5,7 +5,10 @@
                 <h2 class="event-listing-title">{{ title }}</h2>
             </div>
             <div class="d-flex w-100">
-                <h3 class="event-listing-time-location">{{ event.startDate }} {{ event.startTime  }} | {{ event.address }}</h3>
+                <h3 class="event-listing-organization">{{ event.organization }}</h3>
+            </div>
+            <div class="d-flex w-100">
+                <h4 class="event-listing-time-location">{{ event.startDate }} {{ event.startTime  }} | {{ event.address }}</h4>
             </div>
             <p class="event-listing-description">{{ description }}</p>
         </div>

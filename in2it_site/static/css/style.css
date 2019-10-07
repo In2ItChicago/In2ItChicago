@@ -194,8 +194,13 @@ body{
 
 .event-listing-title{
 	color:#fff;
-	font-size:24px;
-	margin-top: 10px;
+	font-size:26px;
+	margin-top: 8px;
+}
+
+.event-listing-organization{
+	color:#fff;
+	font-size:20px;
 }
 
 .event-listing-time-location{
