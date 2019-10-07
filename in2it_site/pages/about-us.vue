@@ -39,27 +39,26 @@
 
             <h2>Contributors</h2>
             <ul>
-                <li>Lydia Jessup</li>
-                <li>Cameron Sow</li>
-                <li>Austin Schey</li>
-                <li>Wes Thorburn</li>
-                <li>Kim Schaefer</li>
-                <li>Deanna Franklin</li>
-                <li>Kevin Hund</li>
-                <li>Ryan Klaus</li>
+                <li>Sam	DeFrank</li>
                 <li>Jake Egli</li>
+                <li>Deanna Franklin</li>
+                <li>Brandon	Gorson</li>
                 <li>Holden Greenberg</li>
-                <li>Sam DeFrank</li>
-                <li>Brandon Gorson</li>
+                <li>Yvonne Hangsterfer</li>
+                <li>Kevin Hund</li>
+                <li>Lydia Jessup</li>
+                <li>Ryan Klaus</li>
+                <li>Kevin Prehn</li>
+                <li>Kim	Schaefer</li>
+                <li>Austin Schey</li>
+                <li>Cameron	Sow</li>
+                <li>Wes	Thorburn</li>
             </ul>
 
-            <h3>* In2It is a project of Chi HackNight.</h3>
+            <h3>In2It is a project of Chi Hack Night.</h3>
+            <a target="_blank" href="https://chihacknight.org">chihacknight.org</a>
 
-            <h4>About Chi HackNight</h4>
-
-            <a target="_blank" href="https://chihacknight.org">www.chihacknight.org</a>
-
-            <p>Chi HackNight is a free, weekly event in Chicago to build, share and learn about tools to create, support, and serve the public good.</p>
+            <p>Chi Hack Night is a free, weekly event in Chicago to build, share and learn about tools to create, support, and serve the public good.</p>
 
             <p>Our mission is to inspire and promote civic engagement and technology.</p>
 
