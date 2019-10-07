@@ -39,6 +39,9 @@
     "tslint-config-prettier": "^1.18.0",
     "tslint-config-standard": "^8.0.1",
     "tslint-loader": "^3.5.4",
-    "vue2-google-maps": "^0.10.7"
+    "vue2-google-maps": "^0.10.7",
+    "jsdoc": "^3.6.3",
+    "jsdoc-vuejs": "^3.0.4",
+    "vue-template-compiler": "^2.1.0"
   }
 }

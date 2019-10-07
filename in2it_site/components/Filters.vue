@@ -68,6 +68,16 @@
 <script>
 	import NeighborhoodAutocomplete from '~/components/NeighborhoodAutocomplete.vue';
 
+   /** 
+   * @vue-data {Number} startTime - the start time for the filter 
+   * @vue-data {Number} endTime - the end time for the filter 
+   * @vue-data {Number} miles - filter for how far away a location can be from the adress
+   * @vue-data {Number} address - the address where the search will start from
+   * @vue-data {Number} organization - the organization filter option
+   * @vue-data {Number} neighborhood - the neighborhood being filtered
+   * @vue-data {Number} limit - The limit to the number of results returned
+   */
+
 	export default {
 		data() {
 			return {

@@ -14,6 +14,9 @@ const db = knex(knexStringcase({
     connection: 'postgresql://postgres:postgres@postgres:5432/events',
 }));
 
+/**
+ * Middleware for processing a raw event object to event response objects? 
+ */
 export class EventDAL {
     async getEvents(query: GetEventsRequest, searchBounds: SearchBounds): Promise<Object[]> {
         const result = await db('events.event as event').select(

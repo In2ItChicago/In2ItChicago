@@ -21,6 +21,9 @@ const geojsonData = readFileSync('./res/chicago_neighborhoods.geojson');
 const geojsonContent = JSON.parse(geojsonData.toString());
 const geoLookup = new GeoJsonGeometriesLookup(geojsonContent);
 
+/**
+ * Service handling all requests for GeoCodes 
+ */
 @Injectable()
 export class GeocodeService {
     lastExecuted: Date;
