@@ -5,5 +5,4 @@ COPY yarn.lock ./
 
 FROM in2it_site_common AS in2it_site_prod
 COPY . ./
-RUN yarn install --production
-RUN yarn run build
+RUN yarn install --production && yarn cache clean && yarn run build

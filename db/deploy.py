@@ -52,7 +52,6 @@ def temp_db(url):
 def sync(database):
     DB_URL = f'postgresql://postgres:postgres@postgres:5432/{database}'
     with temp_db(f'postgresql://postgres:postgres@postgres:5432/{database}temp') as TEMP_DB_URL:
-        create_database(TEMP_DB_URL)
         create_database(DB_URL)
         with S(DB_URL) as s_current, S(TEMP_DB_URL) as s_target:
             run_all(f'{database}/schemas', s_target)

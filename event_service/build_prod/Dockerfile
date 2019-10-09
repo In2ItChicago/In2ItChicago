@@ -5,5 +5,4 @@ COPY ./yarn.lock ./
 
 FROM event_service_common AS event_service_prod
 COPY . ./
-RUN yarn install --production
-RUN yarn run build
+RUN yarn install --production && yarn cache clean && yarn run build

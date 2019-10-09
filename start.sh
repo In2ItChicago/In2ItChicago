@@ -8,5 +8,5 @@ fi
 ./scripts/build-images.sh dev
 docker-compose down
 docker-compose rm -f -v
-./db/run.sh &
+./db/run.sh
 ./scripts/compose-deploy.sh --env dev "$@"

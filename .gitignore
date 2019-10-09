@@ -145,3 +145,8 @@ postgres_data
 
 # dockerhub password
 dockerhub_in2itchicago.txt
+
+.event_processor_data
+.event-service_data
+.event_service_data
+.in2it_site
