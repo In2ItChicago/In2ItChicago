@@ -29,13 +29,3 @@ services:
     command: "python -u simple_scheduler/scheduler.py"
     environment:
       - DEBUG=0
-  # nginx:
-  #   image: "nginx:1.17.3-alpine"
-  #   volumes:
-  #     - ./data/certbot/conf:/etc/letsencrypt
-  #     - ./data/certbot/www:/var/www/certbot
-  certbot:
-    image: certbot/certbot:0.39.0
-    volumes:
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot

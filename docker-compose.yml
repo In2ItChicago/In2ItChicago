@@ -10,8 +10,6 @@ services:
     labels:
       caddy.address: api.localhost:80  # your domains separated with a space
       caddy.targetport: 5000  # exposed port of this container
-      # caddy.header: /
-      # caddy.header.Access-Control-Allow-Methods: "GET"
       caddy.rewrite:
       caddy.rewrite.if: "{method} not GET"
       caddy.rewrite.to: /method_not_allowed
@@ -31,42 +29,18 @@ services:
     networks: 
       - in2it
     labels:
-      caddy.address: localhost:80  # your domains separated with a space
-      caddy.targetport: 3000  # exposed port of this container
+      caddy.address: localhost:80 
+      caddy.targetport: 3000 
   caddy:
     image: lucaslorentz/caddy-docker-proxy:alpine
-    # environment:
-    #   - CADDY_DOCKER_CADDYFILE_PATH=/etc/lala
     command: "-log stdout"
-    volumes:
-      - ./caddy/Caddyfile:/etc/lala
-      #- ./caddy/.caddy:/root/.caddy
-      #- ./caddy/entrypoint.sh:/srv/entrypoint.sh
-      #- ./caddy/certs:/root/certs
-      - /var/run/docker.sock:/var/run/docker.sock  # needs socket to read events
-      #- ./certs/acme:/etc/caddy/acme  # to save acme
-      #- ./certs/ocsp:/etc/caddy/ocsp  # to save certificates
-    #entrypoint: sh -c "chmod +x entrypoint.sh && nodemon -L --config ./nodemon.json --exec ./entrypoint.sh"
+      - /var/run/docker.sock:/var/run/docker.sock 
     ports:
       - 80:80
       - 443:443
       - 2015:2015
     networks: 
       - in2it
-  # nginx:
-  #   image: nginx_dev
-  #   volumes:
-  #     - ./nginx:/etc/nginx
-  #   ports:
-  #     - target: 80
-  #       published: 80
-  #       mode: host
-  #   deploy:
-  #     mode: global
-  #   # Sometimes nginx crashes if the site doesn't come up in time
-  #   restart: on-failure
-  #   networks: 
-  #     - in2it
   portainer:
     image: "portainer/portainer:1.22.0"
     ports:
