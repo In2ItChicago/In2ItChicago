@@ -31,10 +31,10 @@ services:
   postgres:
     volumes:
       - postgres_data:/var/lib/postgresql/data
-  nginx:
-    command: sh -c "chmod +x entrypoint.sh && nodemon -L --exec ./entrypoint.sh"
-    environment:
-      - SERVER_NAME=localhost
+  # nginx:
+  #   command: sh -c "chmod +x entrypoint.sh && nodemon -L --exec ./entrypoint.sh"
+  #   environment:
+  #     - SERVER_NAME=localhost
   ndscheduler:
     command: "./node_modules/nodemon/bin/nodemon.js -L -u simple_scheduler/scheduler.py"
     volumes:
