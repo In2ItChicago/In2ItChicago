@@ -33,3 +33,8 @@ services:
     command: "python -u simple_scheduler/scheduler.py"
     environment:
       - DEBUG=0
+  caddy:
+    volumes:
+      - caddy_certs:/root/.caddy
+volumes:
+  - caddy_certs:
