@@ -18,6 +18,7 @@ async function bootstrap() {
     .setTitle('Event API')
     .setDescription('Event API')
     .setVersion('1.0')
+    .setSchemes(process.env.URL_SCHEME)
     .build();
 
   const document = SwaggerModule.createDocument(app, options, {
