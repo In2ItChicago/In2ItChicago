@@ -5,6 +5,10 @@ services:
     volumes:
       - ./event_service:/usr/src/app/event_service
       - ./.event-service_data/vscode_server:/root/.vscode-server
+      # hack to prevent mounting node_modules
+      - /usr/src/app/event_service/node_modules/
+    labels:
+      caddy.address: api.localhost:80
   event_processor:
     command: sh -c "chmod +x entrypoint.sh && nodemon --exec ./entrypoint.sh"
     environment:
@@ -25,14 +29,12 @@ services:
       - ./in2it_site:/usr/src/app/in2it_site
       - ./.in2it_site/vscode_server:/root/.vscode-server
     environment:
-      - IN2IT_API_URL=${IN2IT_API_URL:-api.localhost}
+      - IN2IT_API_URL=${IN2IT_API_URL:-http://api.localhost}
+    labels:
+      caddy.address: localhost:80
   postgres:
     volumes:
       - postgres_data:/var/lib/postgresql/data
-  nginx:
-    command: sh -c "chmod +x entrypoint.sh && nodemon --exec ./entrypoint.sh"
-    environment:
-      - SERVER_NAME=localhost
   ndscheduler:
     command: "nodemon -u simple_scheduler/scheduler.py"
     volumes:

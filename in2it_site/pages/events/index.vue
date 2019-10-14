@@ -35,8 +35,8 @@
 		},
 		computed: {
 			eventUrl: function() {
-				const eventURL = process.server ? 'event_service:5000' : this.$env.IN2IT_API_URL;
-				return `http://${eventURL}/events`;
+				const eventURL = process.server ? 'http://event_service:5000' : this.$env.IN2IT_API_URL;
+				return `${eventURL}/events`;
 			}
 		},
 		components: {
