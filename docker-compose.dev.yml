@@ -6,6 +6,8 @@ services:
       - ./event_service:/usr/src/app/event_service
       # hack to prevent mounting node_modules
       - /usr/src/app/event_service/node_modules/
+    labels:
+      caddy.address: api.localhost:80
   event_processor:
     # -L runs nodemon in legacy mode (necessary over Docker)
     command: sh -c "chmod +x entrypoint.sh && ./node_modules/nodemon/bin/nodemon.js -L --exec ./entrypoint.sh"
@@ -27,7 +29,9 @@ services:
       - ./in2it_site:/usr/src/app/in2it_site
       - /usr/src/app/in2it_site/node_modules/
     environment:
-      - IN2IT_API_URL=${IN2IT_API_URL:-api.localhost}
+      - IN2IT_API_URL=${IN2IT_API_URL:-http://api.localhost}
+    labels:
+      caddy.address: localhost:80
   postgres:
     volumes:
       - postgres_data:/var/lib/postgresql/data
