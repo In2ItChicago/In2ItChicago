@@ -24,10 +24,14 @@ def category_field():
 
 def address_field():
     def parse_address(value):
-        parsed = usaddress.parse(value)
-        contains_field = lambda field: any(address_part[1] == field for address_part in parsed)
-        default_field = lambda field, default: f' {default}' if not contains_field(field) else ''
-        return f'{value}{default_field("PlaceName", "Chicago")}{default_field("StateName", "IL")}'
+        parsed = usaddress.parse(value) 
+        def default_or_empty(field, default):
+            if any(i[0] for i in parsed if i[1] == field):
+                return ''
+            return default 
+        city_append = default_or_empty("PlaceName", "Chicago, ")
+        state_append = default_or_empty("StateName", "IL")
+        return f'{value}{city_append}{state_append}' 
 
     return scrapy.Field(input_processor=MapCompose(
             DataUtils.remove_html,
