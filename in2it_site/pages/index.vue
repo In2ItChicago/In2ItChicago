@@ -1,8 +1,13 @@
 <template>
 	<div>
-		<h1 class="landing-page-title">Let's get into it!</h1>
-		<p class="landing-page-tagline">In2It is here to help you make an impact in your (neighborhood, city, block) community.</p>
-		<p class="landing-page-tagline">Find ways to get involved, contribute your skills, make a difference.</p>
+		<div class="landing-page-title-container">
+			<h1 class="landing-page-title">Make an impact in your</h1>
+			<span class="slidingVertical landing-page-title">
+				<span> Neighborhood</span>
+				<span> Community</span>
+				<span> City</span>
+			</span>
+		</div>
 		<filters @filterApplied="updateEvents()"></filters>
 
 		<div class="landing-page-image-row row justify-content-center">
@@ -26,3 +31,60 @@
 		}
 	};
 </script>
+
+<style scoped>
+	/*Vertical Sliding*/
+	.slidingVertical{
+		display:flex;
+		width:320px;
+		margin-top:-60px;
+	}
+	.slidingVertical span{
+		display:flex;
+		animation: topToBottom 9s linear infinite 0s;
+		-ms-animation: topToBottom 9s linear infinite 0s;
+		-webkit-animation: topToBottom 9s linear infinite 0s;
+		color: #4ec0c5;
+		opacity: 0;
+		overflow: hidden;
+		position: absolute;
+		margin-left:8px;
+		padding:4px;
+	}
+	.slidingVertical span:nth-child(2){
+		animation-delay: 3s;
+		-ms-animation-delay: 3s;
+		-webkit-animation-delay: 3s;
+	}
+	.slidingVertical span:nth-child(3){
+		animation-delay: 6s;
+		-ms-animation-delay: 6s;
+		-webkit-animation-delay: 6s;
+	}
+
+	/*topToBottom Animation*/
+@-moz-keyframes topToBottom{
+	0% { opacity: 0; }
+	5% { opacity: 0; -moz-transform: translateY(50px); }
+	15% { opacity: 1; -moz-transform: translateY(0px); }
+	35% { opacity: 1; -moz-transform: translateY(0px); }
+	45% { opacity: 0; -moz-transform: translateY(-50px); }
+	100% { opacity: 0; }
+}
+@-webkit-keyframes topToBottom{
+	0% { opacity: 0; }
+	5% { opacity: 0; -webkit-transform: translateY(50px); }
+	15% { opacity: 1; -webkit-transform: translateY(0px); }
+	35% { opacity: 1; -webkit-transform: translateY(0px); }
+	45% { opacity: 0; -webkit-transform: translateY(-50px); }
+	100% { opacity: 0; }
+}
+@-ms-keyframes topToBottom{
+	0% { opacity: 0; }
+	5% { opacity: 0; -ms-transform: translateY(50px); }
+	15% { opacity: 1; -ms-transform: translateY(0px); }
+	35% { opacity: 1; -ms-transform: translateY(0px); }
+	45% { opacity: 0; -ms-transform: translateY(-50px); }
+	100% { opacity: 0; }
+}
+</style>
