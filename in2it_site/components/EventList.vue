@@ -2,11 +2,8 @@
 	<div class="content-row">
 		<div class="events-container">
 			<div v-if="eventsAvailable">
-				<div v-for="event in events">
-					<event-listing :event="event" v-on:eventHover="hoveringEventId = $event" v-on:eventClick="focussedEventId = $event"></event-listing>
-				</div>
 				<paginate
-					:page-count="8"
+					:page-count="3"
 					:click-handler="paginateHandler"
 					:prev-text="'<'"
 					:next-text="'>'"
@@ -15,6 +12,9 @@
 					:prev-class="'event-pagination-prev-item'"
 					:next-class="'event-pagination-next-item'">
 				</paginate>
+				<div v-for="event in events">
+					<event-listing :event="event" v-on:eventHover="hoveringEventId = $event" v-on:eventClick="focussedEventId = $event"></event-listing>
+				</div>
 			</div>
 			<div v-else class="no-event-message">
 				<span>No events found, try expanding your dates or search radius</span>

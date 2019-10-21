@@ -204,7 +204,7 @@ body{
 .event-map{
 	display:flex;
 	width:60vw;
-	height:80vh;
+	height:100%;
 }
 
 .form-control{
@@ -263,6 +263,7 @@ body{
 	padding:16px;
 	background-color: #173450;
 	border-radius:0px !important;
+	margin-bottom:0px;
 }
 
 .event-pagination-item a{
