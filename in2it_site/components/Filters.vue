@@ -3,12 +3,14 @@
 		<div class="col-md-8 filters" v-if="$store.state.searchFilter">
 			<div class="filter-row form-row justify-content-center">
 				<div class="col-md-3">
-					<label for="locationFilter" class="filter-label">Zip / Address</label>
-					<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Address" v-model="filterForm.address">
+					<client-only>
+						<label for="locationFilter" class="filter-label">Zip / Address</label>
+						<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Address" v-model="filterForm.address">
+					</client-only>
 				</div>
 				<div class="col-md-auto datepicker-group">
-					<div class="datepicker-input">
-						<client-only placeholder="Loading...">
+					<client-only>
+						<div class="datepicker-input">
 							<label for="startDatePicker" class="filter-label">From</label>
 							<datepicker
 								id="startDatePicker"
@@ -17,13 +19,12 @@
 								class="datepicker"
 								input-class="datepicker-left">
 							</datepicker>
-						</client-only>
-					</div>
+						</div>
+						
 					
-					<img src="/img/arrow.svg" class="date-arrow"/>
+						<img src="/img/arrow.svg" class="date-arrow"/>
 
-					<div class="datepicker-input">
-						<client-only placeholder="Loading...">
+						<div class="datepicker-input">
 							<label for="endDatePicker" class="filter-label">To</label>
 							<datepicker
 								id="endDatePicker"
@@ -32,33 +33,37 @@
 								class="datepicker"
 								input-class="datepicker-right">
 							</datepicker>
-						</client-only>
+						</div>
+					</client-only>
+				</div>
+			</div>
+
+			<div class="filter-row form-row justify-content-center">
+				<client-only>
+					<div class="col-md-2">
+						<input type="text" class="form-control" id="organization" placeholder="Organization" v-model="filterForm.organization">
 					</div>
-				</div>
+					<div class="col-md-2">
+						<select class="form-control" id="distanceFilter" v-model="filterForm.miles">
+							<option value="1">1 Mile</option>
+							<option value="2">2 Miles</option>
+							<option value="3">3 Miles</option>
+							<option value="5">5 Miles</option>
+							<option value="10">10 Miles</option>
+							<option value="15">15 Miles</option>
+						</select>
+					</div>
+					<div class="col-md-2">
+						<neighborhood-autocomplete @changed="setNeighborhood"></neighborhood-autocomplete>
+					</div>
+				</client-only>
 			</div>
 
 			<div class="filter-row form-row justify-content-center">
 				<div class="col-md-2">
-					<input type="text" class="form-control" id="organization" placeholder="Organization" v-model="filterForm.organization">
-				</div>
-				<div class="col-md-2">
-					<select class="form-control" id="distanceFilter" v-model="filterForm.miles">
-						<option value="1">1 Mile</option>
-						<option value="2">2 Miles</option>
-						<option value="3">3 Miles</option>
-						<option value="5">5 Miles</option>
-						<option value="10">10 Miles</option>
-						<option value="15">15 Miles</option>
-					</select>
-				</div>
-				<div class="col-md-2">
-					<neighborhood-autocomplete @changed="setNeighborhood"></neighborhood-autocomplete>
-				</div>
-			</div>
-
-			<div class="filter-row form-row justify-content-center">
-				<div class="col-md-2">
-					<button class="search-btn" @click="filter()">SEARCH</button>
+					<client-only>
+						<button class="search-btn" @click="filter()">SEARCH</button>
+					</client-only>
 				</div>
 			</div>
 		</div>

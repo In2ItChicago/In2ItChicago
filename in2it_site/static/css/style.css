@@ -25,6 +25,7 @@ body{
 	position: relative;
 	bottom: 0;
 	width: 100%;
+	background-color:#173450;
 }
 
 .footer-link{
@@ -49,14 +50,15 @@ body{
 	align-self: flex-end;
 	padding:10px 20px 0px 20px;
 	color:#173450;
-	font-size:26px;
+	font-size:24px;
 	font-weight:bold;
 	line-height: 75px;
+	transition: 0.3s;
 }
 
 .in2it-nav-link:hover{
 	text-decoration: none;
-	color:#e3e3e3;
+	color:#4ec0c5;
 }
 
 .in2it-nav-link-group{
@@ -85,11 +87,19 @@ body{
 	margin-right:20px;
 }
 
+.landing-page-title-container{
+	display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
 .landing-page-title{
-	text-align: center;
+	display:flex;
 	font-size: 56px;
 	font-weight: 600;
 	margin-top:30px;
+	margin-bottom:24px;
 }
 
 .landing-page-tagline{
@@ -125,7 +135,8 @@ body{
 }
 
 .filters{
-	margin-top:20px;
+	min-height: 206px;
+	margin-top:56px;
 	margin-bottom:28px;
 	border-radius: 5px;
 	background-color:#173450;
@@ -200,7 +211,7 @@ body{
 .event-map{
 	display:flex;
 	width:60vw;
-	height:80vh;
+	height:100%;
 }
 
 .form-control{
@@ -259,6 +270,7 @@ body{
 	padding:16px;
 	background-color: #173450;
 	border-radius:0px !important;
+	margin-bottom:0px;
 }
 
 .event-pagination-item a{
