@@ -49,14 +49,15 @@ body{
 	align-self: flex-end;
 	padding:10px 20px 0px 20px;
 	color:#173450;
-	font-size:26px;
+	font-size:24px;
 	font-weight:bold;
 	line-height: 75px;
+	transition: 0.3s;
 }
 
 .in2it-nav-link:hover{
 	text-decoration: none;
-	color:#e3e3e3;
+	color:#4ec0c5;
 }
 
 .in2it-nav-link-group{
@@ -90,6 +91,7 @@ body{
 	font-size: 56px;
 	font-weight: 600;
 	margin-top:30px;
+	margin-bottom:24px;
 }
 
 .landing-page-tagline{
@@ -125,7 +127,7 @@ body{
 }
 
 .filters{
-	margin-top:20px;
+	margin-top:56px;
 	margin-bottom:28px;
 	border-radius: 5px;
 	background-color:#173450;
