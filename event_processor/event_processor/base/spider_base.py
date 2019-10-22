@@ -33,7 +33,7 @@ class SpiderBase(AggregatorBase):
         return list( \
                 map(lambda data: \
                         default_value if len(data) == 0 \
-                        else " ".join(map(lambda x: self.normalize_whitespace(x), data)), \
+                        else " ".join(map(self.normalize_whitespace, data)), \
                         [extractor(base_data)(path).extract() for base_data in base_selector]) \
                     )
 
@@ -48,5 +48,4 @@ class SpiderBase(AggregatorBase):
         """Convert all types of whitespace, including new lines, into a normal space"""
         if s == None or s == "":
             return ""
-        return (" ".join(list(filter(lambda x: re.fullmatch(r'[ ]*', x) == None, s.replace('\n', ' ').replace('\t', ' ').replace('\r', ' ').split(' '))))).strip()
-        
+        return ' '.join(s.split())        
