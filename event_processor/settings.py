@@ -77,3 +77,16 @@ HTTPCACHE_DIR = '/tmp/httpcache'
 # Comment this out to see all data being scraped
 LOG_LEVEL = 'DEBUG' if config.verbose_scrapy_output else 'WARNING'
 LOG_FORMATTER = 'event_processor.scrapy_impl.polite_log_formatter.PoliteLogFormatter'
+
+# Settings for Sprapy-Splash
+SPLASH_URL = 'http://localhost:8050'
+DOWNLOADER_MIDDLEWARES = {
+    'scrapy_splash.SplashCookiesMiddleware': 723,
+    'scrapy_splash.SplashMiddleware': 725,
+    'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
+}
+SPIDER_MIDDLEWARES = {
+    'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+}
+DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
+HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
