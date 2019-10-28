@@ -134,6 +134,10 @@ body{
 	flex-direction:column;
 }
 
+.content-col p, .content-col li, .content-col a{
+	font-size: 22px;
+}
+
 .filters{
 	min-height: 206px;
 	margin-top:56px;
