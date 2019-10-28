@@ -54,6 +54,7 @@ body{
 	font-weight:bold;
 	line-height: 75px;
 	transition: 0.3s;
+	white-space: nowrap;
 }
 
 .in2it-nav-link:hover{
@@ -83,7 +84,8 @@ body{
 }
 
 .navbar-logo{
-	width:200px;
+	width:26vw;
+	max-width: 200px;
 	margin-right:20px;
 }
 
@@ -96,15 +98,16 @@ body{
 
 .landing-page-title{
 	display:flex;
-	font-size: 56px;
+	font-size: 54px;
 	font-weight: 600;
-	margin-top:30px;
+	margin-top:26px;
 	margin-bottom:24px;
+	white-space: nowrap;
 }
 
 .landing-page-tagline{
 	text-align: center;
-	font-size:24px;
+	font-size:32px;
 	margin:0px;
 }
 
