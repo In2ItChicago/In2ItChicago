@@ -26,3 +26,16 @@
 		}
 	};
 </script>
+
+<style scoped>
+	@media (max-width: 768px) {
+        .landing-page-image-row{
+            margin-top:0px;
+		}
+		
+		.landing-page-image{
+			width:42vw;
+			height:42vw;
+		}
+    }
+</style>

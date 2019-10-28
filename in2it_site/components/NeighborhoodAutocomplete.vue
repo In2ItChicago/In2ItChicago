@@ -1,9 +1,10 @@
 <template>
     <div class="autocomplete">
+		<label for="neighborhood" class="d-md-none filter-label">Neighborhood</label>
         <input
             class="neighborhood-input form-control"
             id="neighborhood" 
-            placeholder="Neighborhood" 
+            placeholder="Neighborhood (Optional)" 
             v-model="autocompleteResult"
             @input="autocompleteNeighborhood"
             autocomplete="off">
@@ -55,3 +56,11 @@
 		}
 	};
 </script>
+
+<style scoped>
+	@media (max-width: 768px) {
+		.filter-label{
+			margin-top:12px;
+		}
+    }
+</style>
