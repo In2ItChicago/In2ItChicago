@@ -10,7 +10,7 @@
             <div class="d-flex w-100">
                 <h4 class="event-listing-time-location">{{ event.startDate }} {{ event.startTime  }} | {{ event.address }}</h4>
             </div>
-            <p class="event-listing-description">{{ description }}</p>
+            <p class="event-listing-description d-none d-md-block">{{ description }}</p>
         </div>
     </div> 
 </template>

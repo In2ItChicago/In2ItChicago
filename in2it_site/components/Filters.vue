@@ -125,7 +125,7 @@
             margin-top:0px;
 		}
 		.filters{
-			padding:12px;
+			padding: 12px 28px 12px 28px;
 		}
 		.filter-label{
 			margin-top:12px;

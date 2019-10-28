@@ -8,6 +8,7 @@ p{
 
 body{
 	background-color:#c3c3c3;
+	overflow-x: hidden;
 }
 
 .site{
@@ -207,11 +208,11 @@ body{
 }
 
 .events-container{
-	width:38vw;
+	width:40vw;
 }
 
 .map-container{
-	width:59vh;
+	width:60vh;
 }
 
 .event-map{

@@ -1,5 +1,5 @@
 <template>
-	<div class="content-row">
+	<div class="content-row event-map-container">
 		<div class="events-container">
 			<div v-if="eventsAvailable">
 				<paginate
@@ -56,3 +56,26 @@
 		}
 	};
 </script>
+
+<style scoped>
+	@media (max-width: 768px) {
+        .event-map-container{
+			display: flex;
+			flex-direction: column;
+		}
+
+		.events-container{
+			width:100%;
+		}
+
+		.map-container{
+			width:100vw;
+			height:50vh;
+		}
+
+		.event-map{
+			width:100vw;
+			height:50vh;
+		}
+    }
+</style>
