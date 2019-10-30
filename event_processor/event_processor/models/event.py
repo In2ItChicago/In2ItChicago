@@ -29,7 +29,7 @@ def address_field():
             if any(i[0] for i in parsed if i[1] == field):
                 return ''
             return default 
-        city_append = default_or_empty("PlaceName", "Chicago, ")
+        city_append = default_or_empty("PlaceName", " Chicago, ")
         state_append = default_or_empty("StateName", "IL")
         return f'{value}{city_append}{state_append}' 
 

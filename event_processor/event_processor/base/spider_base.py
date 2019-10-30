@@ -2,6 +2,7 @@ import scrapy
 import re
 from urllib import parse
 from event_processor.base.aggregator_base import AggregatorBase
+from event_processor.util.data_utils import DataUtils
 
 class SpiderBase(AggregatorBase):
     # This class includes all functionality that should be shared by spiders
@@ -33,7 +34,7 @@ class SpiderBase(AggregatorBase):
         return list( \
                 map(lambda data: \
                         default_value if len(data) == 0 \
-                        else " ".join(map(self.normalize_whitespace, data)), \
+                        else ' '.join(map(DataUtils.remove_excess_spaces, data)), \
                         [extractor(base_data)(path).extract() for base_data in base_selector]) \
                     )
 
@@ -44,8 +45,4 @@ class SpiderBase(AggregatorBase):
                 raise ValueError(f'{self.organization}: Time selectors returned data of differing lengths')
         return [{key: value[i] for key, value in kwargs.items()} for i in range(count)]
 
-    def normalize_whitespace(self, s):
-        """Convert all types of whitespace, including new lines, into a normal space"""
-        if s == None or s == "":
-            return ""
-        return ' '.join(s.split())        
+        
