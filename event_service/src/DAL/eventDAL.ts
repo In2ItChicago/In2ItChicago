@@ -8,10 +8,14 @@ import { GetEventsResponse } from 'src/DTO/getEventsResponse';
 import { AnyTxtRecord } from 'dns';
 
 const DEFAULT_LIMIT = 25;
-
 const db = knex(knexStringcase({
     client: 'postgresql',
-    connection: 'postgresql://postgres:postgres@postgres:5432/events',
+    connection: {
+        host: '/var/run/postgresql',
+        user: 'default',
+        password: 'password',
+        database: 'events'
+    }
 }));
 
 /**

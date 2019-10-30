@@ -50,17 +50,19 @@ def temp_db(url):
         drop_database(url)
 
 def sync(database):
-    DB_URL = f'postgresql://postgres:postgres@postgres:5432/{database}'
-    with temp_db(f'postgresql://postgres:postgres@postgres:5432/{database}temp') as TEMP_DB_URL:
+    print(database)
+    DB_URL = f'postgresql+psycopg2://default:password@/{database}?host=/var/run/postgresql'
+    with temp_db(f'postgresql+psycopg2://default:password@/{database}temp?host=/var/run/postgresql') as TEMP_DB_URL:
         create_database(TEMP_DB_URL)
         create_database(DB_URL)
         with S(DB_URL) as s_current, S(TEMP_DB_URL) as s_target:
+            print('test')
             run_all(f'{database}/schemas', s_target)
             run_all(f'{database}/tables', s_target)
             m = Migration(s_current, s_target)
             m.set_safety(False)
             m.add_all_changes()
-
+            print(m)
             if m.statements:
                 print('THE FOLLOWING CHANGES ARE PENDING:', end='\n\n')
                 print(m.sql)
@@ -79,8 +81,10 @@ def try_sync(database):
         try:
             sync(database)
             break
-        except OperationalError:
+        except OperationalError as e:
+            print(e)
             continue
 
 for database in databases: 
+    print('running')
     try_sync(database)

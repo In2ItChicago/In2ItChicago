@@ -32,9 +32,9 @@ services:
       - IN2IT_API_URL=${IN2IT_API_URL:-http://api.localhost}
     labels:
       caddy.address: localhost:80
-  postgres:
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+  # postgres:
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
   ndscheduler:
     command: "./node_modules/nodemon/bin/nodemon.js -L -u simple_scheduler/scheduler.py"
     volumes:

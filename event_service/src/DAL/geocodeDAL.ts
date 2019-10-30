@@ -9,7 +9,12 @@ import { SearchNeighborhoodRequest } from '@src/DTO/searchNeighborhoodRequest';
 
 const db = knex(knexStringcase({
     client: 'postgresql',
-    connection: 'postgresql://postgres:postgres@postgres:5432/events',
+    connection: {
+        host: '/var/run/postgresql',
+        user: 'default',
+        password: 'password',
+        database: 'events'
+    }
 }));
 
 /**
