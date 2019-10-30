@@ -1,8 +1,6 @@
 <template>
 	<div>
-		<h1 class="landing-page-title">Let's get into it!</h1>
-		<p class="landing-page-tagline">In2It is here to help you make an impact in your (neighborhood, city, block) community.</p>
-		<p class="landing-page-tagline">Find ways to get involved, contribute your skills, make a difference.</p>
+		<page-title></page-title>
 		<filters @filterApplied="updateEvents()"></filters>
 
 		<div class="landing-page-image-row row justify-content-center">
@@ -14,6 +12,7 @@
 
 <script lang='ts'>
 	import Filters from '~/components/Filters.vue';
+	import PageTitle from '~/components/PageTitle.vue';
 
 	export default {
 		methods: {
@@ -22,7 +21,21 @@
 			}
 		},
 		components: {
-			Filters
+			Filters,
+			PageTitle
 		}
 	};
 </script>
+
+<style scoped>
+	@media (max-width: 768px) {
+        .landing-page-image-row{
+            margin-top:0px;
+		}
+		
+		.landing-page-image{
+			width:42vw;
+			height:42vw;
+		}
+    }
+</style>
