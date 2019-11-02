@@ -55,7 +55,7 @@ def sync(database):
     if os.getenv('HOSTINGENV') == 'DEV':
         db_url_format = 'postgresql://postgres:postgres@postgres:5432/%s' 
     else:
-        db_url_format = 'postgresql+psycopg2://postgres:postgres@/%s?host=/var/run/postgresql' 
+        db_url_format = 'postgresql://postgres:postgres@/%s?host=/var/run/postgresql' 
     temp_db_url = db_url_format % f'{database}temp'
     db_url = db_url_format % database
     with temp_db(temp_db_url) as s_target_temp:
