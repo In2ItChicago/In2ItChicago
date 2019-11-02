@@ -15,8 +15,6 @@ services:
       caddy.status: "405 /method_not_allowed"
     environment:
       - URL_SCHEME=${URL_SCHEME:-http}
-    volumes:
-      - /var/run/postgresql:/var/run/postgresql
   event_processor:
     image: event_processor_dev
     ports:
@@ -33,6 +31,8 @@ services:
       - in2it
     labels:
       caddy.targetport: 3000 
+  postgres:
+    image: scratch
   caddy:
     image: lucaslorentz/caddy-docker-proxy:alpine
     command: -log stdout -agree -email in2itchicago@gmail.com
@@ -67,15 +67,6 @@ services:
       - NDSCHEDULER_SETTINGS_MODULE=simple_scheduler.settings
     networks: 
       - in2it
-  # postgres:
-  #   image: postgres:11.5-alpine
-  #   environment:
-  #     - POSTGRES_USER=postgres
-  #     - POSTGRES_PASSWORD=postgres
-  #   ports:
-  #     - "5432:5432"
-  #   networks: 
-  #     - in2it
   pgadmin:
     image: dpage/pgadmin4:4.11
     environment:
@@ -84,7 +75,6 @@ services:
       - PGADMIN_LISTEN_PORT=7000
     volumes:
       - pgadmin_data:/var/lib/pgadmin
-      - /var/run/postgresql:/var/run/postgresql
     ports:
       - "7000:7000"
     # pgadmin spams logs with http request notifications

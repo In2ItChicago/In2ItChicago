@@ -11,9 +11,9 @@ const DEFAULT_LIMIT = 25;
 const db = knex(knexStringcase({
     client: 'postgresql',
     connection: {
-        host: '/var/run/postgresql',
-        user: 'default',
-        password: 'password',
+        host: process.env.HOST,
+        user: 'postgres',
+        password: 'postgres',
         database: 'events'
     }
 }));

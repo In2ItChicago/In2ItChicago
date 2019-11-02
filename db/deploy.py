@@ -6,6 +6,7 @@ from queue import SimpleQueue
 from sqlalchemy.exc import ProgrammingError, OperationalError
 import sys
 import time
+import os
 
 databases = ['events', 'scheduler']
 sync_attempts = 100
@@ -40,6 +41,7 @@ def run_all(folder, s_target):
     if num_tries >= max_tries:
         print(f'Number of attempts exceeded configured threshold of {max_tries}')
         sys.exit(1)
+
 @contextmanager
 def temp_db(url):
     try:
@@ -50,19 +52,21 @@ def temp_db(url):
         drop_database(url)
 
 def sync(database):
-    print(database)
-    DB_URL = f'postgresql+psycopg2://default:password@/{database}?host=/var/run/postgresql'
-    with temp_db(f'postgresql+psycopg2://default:password@/{database}temp?host=/var/run/postgresql') as TEMP_DB_URL:
-        create_database(TEMP_DB_URL)
-        create_database(DB_URL)
-        with S(DB_URL) as s_current, S(TEMP_DB_URL) as s_target:
-            print('test')
+    if os.getenv('HOSTINGENV') == 'DEV':
+        db_url_format = 'postgresql://postgres:postgres@postgres:5432/%s' 
+    else:
+        db_url_format = 'postgresql+psycopg2://postgres:postgres@/%s?host=/var/run/postgresql' 
+    temp_db_url = db_url_format % f'{database}temp'
+    db_url = db_url_format % database
+    with temp_db(temp_db_url) as s_target_temp:
+        create_database(db_url)
+        with S(db_url) as s_current, S(s_target_temp) as s_target:
             run_all(f'{database}/schemas', s_target)
             run_all(f'{database}/tables', s_target)
             m = Migration(s_current, s_target)
             m.set_safety(False)
             m.add_all_changes()
-            print(m)
+
             if m.statements:
                 print('THE FOLLOWING CHANGES ARE PENDING:', end='\n\n')
                 print(m.sql)
@@ -77,14 +81,15 @@ def sync(database):
 
 def try_sync(database):
     # Wait for the database to become operational
-    for _ in range(sync_attempts):
+    for i in range(sync_attempts):
         try:
             sync(database)
             break
         except OperationalError as e:
-            print(e)
+            if i == sync_attempts - 1:
+                raise e
             continue
 
 for database in databases: 
-    print('running')
+    print(f'Syncing {database}...')
     try_sync(database)

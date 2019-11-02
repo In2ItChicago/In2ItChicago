@@ -8,6 +8,8 @@ services:
       - /usr/src/app/event_service/node_modules/
     labels:
       caddy.address: api.localhost:80
+    environment:
+      - HOST=postgres
   event_processor:
     # -L runs nodemon in legacy mode (necessary over Docker)
     command: sh -c "chmod +x entrypoint.sh && ./node_modules/nodemon/bin/nodemon.js -L --exec ./entrypoint.sh"
@@ -32,9 +34,17 @@ services:
       - IN2IT_API_URL=${IN2IT_API_URL:-http://api.localhost}
     labels:
       caddy.address: localhost:80
-  # postgres:
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
+  postgres:
+    image: postgres:11.5-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    networks: 
+      - in2it
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
   ndscheduler:
     command: "./node_modules/nodemon/bin/nodemon.js -L -u simple_scheduler/scheduler.py"
     volumes:
@@ -42,6 +52,7 @@ services:
       - ndscheduler_modules:/usr/src/app/ndscheduler/node_modules/
     environment:
       - DEBUG=${SCHEDULER_DEBUG}
+      - HOSTNAME=postgres
 volumes:
   ndscheduler_modules:
   postgres_data:
