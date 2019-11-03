@@ -1,10 +1,17 @@
 #!/bin/bash
-if [ -f ../ndscheduler/build.sh ]
+EXTRA_ARGS="${@:2}"
+ENV="$1"
+
+function build-cmd {
+  echo "docker build $EXTRA_ARGS -f $2/$1/Dockerfile -t $1_$ENV --target $1_$ENV $2/$1"
+}
+
+if [ -f ../ndscheduler ]
 then
-  ../ndscheduler/build.sh $1
+  DOCKER_BUILDKIT=1 $(build-cmd ndscheduler ..)
 fi
-DOCKER_BUILDKIT=1 docker build "${@:2}" -f event_processor/build_$1/Dockerfile -t event_processor_$1 event_processor
-DOCKER_BUILDKIT=1 docker build "${@:2}" -f in2it_site/build_$1/Dockerfile -t in2it_site_$1 in2it_site
-DOCKER_BUILDKIT=1 docker build "${@:2}" -f event_service/build_$1/Dockerfile -t event_service_$1 event_service
+DOCKER_BUILDKIT=1 $(build-cmd event_processor .)
+DOCKER_BUILDKIT=1 $(build-cmd in2it_site .)
+DOCKER_BUILDKIT=1 $(build-cmd event_service .)
 
 DOCKER_BUILDKIT=1 docker build -f db/Dockerfile -t db_deploy db

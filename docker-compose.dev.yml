@@ -5,8 +5,6 @@ services:
     volumes:
       - ./event_service:/usr/src/app/event_service
       - ./.event-service_data/vscode_server:/root/.vscode-server
-      # hack to prevent mounting node_modules
-      - /usr/src/app/event_service/node_modules/
     labels:
       caddy.address: api.localhost:80
     environment:

@@ -9,10 +9,10 @@
     "target": "es6",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "../../../../data/node_modules",
+    "baseUrl": "../service_modules",
     "incremental": true,
     "paths": {
-      "@src/*": ["../../usr/src/app/event_service/src/*"]
+      "@src/*": ["../event_service/src/*"]
     }
   },
   "exclude": ["node_modules"]

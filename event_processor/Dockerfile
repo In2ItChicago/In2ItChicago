@@ -17,3 +17,6 @@ COPY package.json ./
 RUN apk add nodejs-npm && npm install
 ENV PATH /data/node_modules/.bin:$PATH
 WORKDIR /usr/src/app/event_processor
+
+FROM event_processor_common AS event_processor_prod
+COPY . ./

@@ -1,3 +1,3 @@
 #!/bin/sh
-cp /data/yarn.lock ./
+cp /usr/src/app/build/yarn.lock ./
 yarn run start:debug
