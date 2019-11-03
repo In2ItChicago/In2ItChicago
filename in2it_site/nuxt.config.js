@@ -71,6 +71,9 @@ module.exports = {
 		/*
 		** You can extend webpack config here
 		*/
+		babel: {
+			cacheDirectory: '/data'
+		},
 		extend(config, { isClient }) {
             if (isClient)
 				config.devtool = '#eval-source-map'
