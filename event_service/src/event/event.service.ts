@@ -1,7 +1,7 @@
 import { Injectable, HttpService, Inject } from '@nestjs/common';
-import { SearchBounds } from 'src/interfaces/searchBounds';
+import { SearchBounds } from '@src/interfaces/searchBounds';
 import { EventDAL } from '@src/DAL/eventDAL';
-import { timestampToDate } from '../utilities';
+import { timestampToDate } from '@src/utilities';
 import { GetEventsRequest } from '@src/DTO/getEventsRequest';
 import { CreateEventsRequest } from '@src/DTO/createEventsRequest';
 import * as _ from 'lodash';
