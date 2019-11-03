@@ -13,6 +13,8 @@ services:
       caddy.rewrite.if: "{method} not GET"
       caddy.rewrite.to: /method_not_allowed
       caddy.status: "405 /method_not_allowed"
+    environment:
+      - URL_SCHEME=${URL_SCHEME:-http}
   event_processor:
     image: event_processor_dev
     ports:

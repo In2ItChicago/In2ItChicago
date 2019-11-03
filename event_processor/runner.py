@@ -48,6 +48,7 @@ def run():
 
 if __name__ == '__main__':
     if config.debug:
+        print('Waiting for debugger...')
         ptvsd.enable_attach(address=('0.0.0.0', 5860))
         ptvsd.wait_for_attach()
         

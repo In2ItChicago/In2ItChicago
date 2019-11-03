@@ -1,6 +1,8 @@
 import scrapy
+import re
 from urllib import parse
 from event_processor.base.aggregator_base import AggregatorBase
+from event_processor.util.data_utils import DataUtils
 
 class SpiderBase(AggregatorBase):
     # This class includes all functionality that should be shared by spiders
@@ -32,7 +34,7 @@ class SpiderBase(AggregatorBase):
         return list( \
                 map(lambda data: \
                         default_value if len(data) == 0 \
-                        else data[0], \
+                        else ' '.join(map(DataUtils.remove_excess_spaces, data)), \
                         [extractor(base_data)(path).extract() for base_data in base_selector]) \
                     )
 
@@ -42,4 +44,5 @@ class SpiderBase(AggregatorBase):
             if len(value) != count:
                 raise ValueError(f'{self.organization}: Time selectors returned data of differing lengths')
         return [{key: value[i] for key, value in kwargs.items()} for i in range(count)]
+
         
