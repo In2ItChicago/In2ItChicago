@@ -6,6 +6,7 @@ from queue import SimpleQueue
 from sqlalchemy.exc import ProgrammingError, OperationalError
 import sys
 import time
+import os
 
 databases = ['events', 'scheduler']
 sync_attempts = 100
@@ -40,6 +41,7 @@ def run_all(folder, s_target):
     if num_tries >= max_tries:
         print(f'Number of attempts exceeded configured threshold of {max_tries}')
         sys.exit(1)
+
 @contextmanager
 def temp_db(url):
     try:
@@ -50,10 +52,15 @@ def temp_db(url):
         drop_database(url)
 
 def sync(database):
-    DB_URL = f'postgresql://postgres:postgres@postgres:5432/{database}'
-    with temp_db(f'postgresql://postgres:postgres@postgres:5432/{database}temp') as TEMP_DB_URL:
-        create_database(DB_URL)
-        with S(DB_URL) as s_current, S(TEMP_DB_URL) as s_target:
+    if os.getenv('HOSTINGENV') == 'DEV':
+        db_url_format = 'postgresql://postgres:postgres@postgres:5432/%s' 
+    else:
+        db_url_format = 'postgresql://postgres:postgres@/%s?host=/var/run/postgresql' 
+    temp_db_url = db_url_format % f'{database}temp'
+    db_url = db_url_format % database
+    with temp_db(temp_db_url) as s_target_temp:
+        create_database(db_url)
+        with S(db_url) as s_current, S(s_target_temp) as s_target:
             run_all(f'{database}/schemas', s_target)
             run_all(f'{database}/tables', s_target)
             m = Migration(s_current, s_target)
@@ -74,12 +81,15 @@ def sync(database):
 
 def try_sync(database):
     # Wait for the database to become operational
-    for _ in range(sync_attempts):
+    for i in range(sync_attempts):
         try:
             sync(database)
             break
-        except OperationalError:
+        except OperationalError as e:
+            if i == sync_attempts - 1:
+                raise e
             continue
 
 for database in databases: 
+    print(f'Syncing {database}...')
     try_sync(database)

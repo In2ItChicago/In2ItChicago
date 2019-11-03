@@ -11,4 +11,4 @@ sleep 5
 ./scripts/create-network.sh
 docker build -f db/Dockerfile -t db_deploy db
 ./scripts/stack-deploy.sh prod
-./db/run-prod.sh
+./db/run.sh PROD
