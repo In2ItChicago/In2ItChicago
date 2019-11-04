@@ -3,7 +3,7 @@ EXTRA_ARGS="${@:2}"
 ENV="$1"
 
 function build-cmd {
-  echo "docker build $EXTRA_ARGS -f $2/$1/Dockerfile -t $1_$ENV --target $1_$ENV $2/$1"
+  echo "docker build $EXTRA_ARGS -f $2/$1/Dockerfile -t $1_$ENV --build-arg BUILD_ENV=$ENV --target $1_$ENV $2/$1"
 }
 
 if [ -f ../ndscheduler ]

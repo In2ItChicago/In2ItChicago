@@ -72,7 +72,7 @@ module.exports = {
 		** You can extend webpack config here
 		*/
 		babel: {
-			cacheDirectory: '/data'
+			cacheDirectory: '/usr/src/app/.service_modules'
 		},
 		extend(config, { isClient }) {
             if (isClient)
