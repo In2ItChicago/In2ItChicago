@@ -1,7 +1,6 @@
 FROM node:12.8.1-alpine AS event_service_common
 WORKDIR /usr/src/app/.service_modules
 COPY ./package.json ./
-#COPY ./.yarnrc ./
 COPY ./yarn.lock ./
 
 FROM event_service_common AS event_service_dev

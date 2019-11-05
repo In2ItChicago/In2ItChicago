@@ -4,7 +4,7 @@ services:
     command: sh -c "chmod +x entrypoint.sh && ./entrypoint.sh"
     volumes:
       - ./event_service:/usr/src/app/event_service
-      - ./.event-service_data/vscode_server:/root/.vscode-server
+      - ./.event_service_data/vscode_server:/root/.vscode-server
     labels:
       caddy.address: api.localhost:80
     environment:
@@ -44,7 +44,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
   ndscheduler:
-    command: "nodemon -u simple_scheduler/scheduler.py"
+    command: sh -c "chmod +x entrypoint.sh && nodemon --exec ./entrypoint.sh"
     volumes:
       - ../ndscheduler:/usr/src/app/ndscheduler
       - ndscheduler_modules:/usr/src/app/ndscheduler/node_modules/

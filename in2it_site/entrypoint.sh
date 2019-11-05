@@ -1,3 +1,3 @@
 #!/bin/sh
-cp ../build/yarn.lock ./
+cp /usr/src/app/.site_modules/yarn.lock ./
 yarn run docker-debug

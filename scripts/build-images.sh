@@ -6,7 +6,7 @@ function build-cmd {
   echo "docker build $EXTRA_ARGS -f $2/$1/Dockerfile -t $1_$ENV --build-arg BUILD_ENV=$ENV --target $1_$ENV $2/$1"
 }
 
-if [ -f ../ndscheduler ]
+if [ -f ../ndscheduler/Dockerfile ]
 then
   DOCKER_BUILDKIT=1 $(build-cmd ndscheduler ..)
 fi

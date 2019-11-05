@@ -5,7 +5,7 @@
   "author": "WesThorburn",
   "private": true,
   "scripts": {
-    "docker-debug": "NODE_ENV=dev NUXT_HOST=0.0.0.0 NUXT_PORT=3000 node -r ts-node/register --inspect=[::]:5859 /usr/src/app/.service_modules/node_modules/nuxt/bin/nuxt",
+    "docker-debug": "NODE_ENV=dev NUXT_HOST=0.0.0.0 NUXT_PORT=3000 node -r ts-node/register --inspect=[::]:5859 /usr/src/app/.site_modules/node_modules/nuxt/bin/nuxt",
     "build": "nuxt build",
     "start": "NODE_ENV=prod NUXT_HOST=0.0.0.0 NUXT_PORT=3000 nuxt start",
     "generate": "nuxt generate",
