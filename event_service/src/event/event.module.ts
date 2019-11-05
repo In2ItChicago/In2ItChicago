@@ -1,6 +1,6 @@
 import { Module, HttpService, HttpModule } from '@nestjs/common';
-import { EventController } from './event.controller';
-import { EventService } from './event.service';
+import { EventController } from '@src/event/event.controller';
+import { EventService } from '@src/event/event.service';
 import { GeocodeModule } from '@src/geocode/geocode.module';
 import { GeocodeService } from '@src/geocode/geocode.service';
 import { GeocodeDAL } from '@src/DAL/geocodeDAL';

@@ -1,5 +1,5 @@
 import { ApiModelProperty } from '@nestjs/swagger';
-import { EventTime } from './eventTime';
+import { EventTime } from '@src/DTO/eventTime';
 import { IsNotEmpty, IsNumber } from 'class-validator';
 import { Type } from 'class-transformer';
 

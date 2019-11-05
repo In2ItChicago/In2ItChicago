@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { GeocodeController } from './geocode.controller';
+import { GeocodeController } from '@src/geocode/geocode.controller';
 
 describe('Geocode Controller', () => {
   let controller: GeocodeController;

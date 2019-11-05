@@ -1,5 +1,5 @@
 import { Controller, Get, Query, Post, Body, Res, HttpStatus, Bind, Delete } from '@nestjs/common';
-import { EventService } from './event.service';
+import { EventService } from '@src/event/event.service';
 import { GetEventsRequest } from '@src/DTO/getEventsRequest';
 import { CreateEventsRequest } from '@src/DTO/createEventsRequest';
 import { GetEventsResponse } from '@src/DTO/getEventsResponse';

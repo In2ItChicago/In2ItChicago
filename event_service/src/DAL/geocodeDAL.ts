@@ -1,8 +1,8 @@
 import * as knex from 'knex';
 import * as knexStringcase from 'knex-stringcase';
 import * as _ from 'lodash';
-import { GetGeocodeRequest } from 'src/DTO/getGeocodeRequest';
-import { GetGeocodeResponse } from 'src/DTO/getGeocodeResponse';
+import { GetGeocodeRequest } from '@src/DTO/getGeocodeRequest';
+import { GetGeocodeResponse } from '@src/DTO/getGeocodeResponse';
 import { CreateGeocodeRequest } from '@src/DTO/createGeocodeRequest';
 import { randomExpirationTime } from '@src/utilities';
 import { SearchNeighborhoodRequest } from '@src/DTO/searchNeighborhoodRequest';
