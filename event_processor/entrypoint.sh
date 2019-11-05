@@ -14,3 +14,4 @@ then
 else
     python -u runner.py
 fi
+cp /data/Pipfile.lock ./

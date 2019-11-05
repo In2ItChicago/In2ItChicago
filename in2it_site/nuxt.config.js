@@ -71,15 +71,14 @@ module.exports = {
 		/*
 		** You can extend webpack config here
 		*/
+		babel: {
+			cacheDirectory: '/usr/src/app/.service_modules'
+		},
 		extend(config, { isClient }) {
             if (isClient)
 				config.devtool = '#eval-source-map'
 			else
 				config.devtool = '#inline-source-map'
-			config.output.devtoolNamespace = 'In2It';
-			config.output.devtoolModuleFilenameTemplate = function(info) {
-				return `webpack://${info.namespace}/${info.resourcePath}?${info.hash}`
-			}
             return config;
 		},
 		devtools: true

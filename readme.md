@@ -121,6 +121,8 @@ Open a Docker terminal on Windows Home, Git Bash or some kind of bash emulator o
 Now, run `./start.sh`. If you get a permissions error, you may need to run `chmod +x start.sh`. This will grant execution permissions to the file. 
 If all goes well, the database will be created, the scrapers will start running, and the website will start up. This process will take some time.
 Eventually, you should start seeing messages about events being saved. Once a message says `Data retrieved successfully`, the code is done running. 
+On subsequent runs, you can run `light-start.sh` instead of `start.sh`. This will skip all of the steps except for just building and running the containers. If you run into any errors while running `light-start.sh`, try running `start.sh` again to clear out any bad cached data.
+
 Several components should be visible now:
 - `localhost` and `localhost:3000` will show the site
 - `localhost:5000/docs` will show a frontend for viewing the data and testing the API

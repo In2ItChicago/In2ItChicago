@@ -1,4 +1,4 @@
-import { EventDAL } from './eventDAL';
+import { EventDAL } from '@src/DAL/eventDAL';
 import { Module } from '@nestjs/common';
 
 /**
