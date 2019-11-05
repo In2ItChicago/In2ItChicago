@@ -33,8 +33,8 @@ class Documenters(ApiSpider):
             documenters_url = "https://chicago.documenters.org/"+event["url"]
             yield {
                 "title": event["name"],
-                "description": event["agency"]["description"],
-                "address": event["location"]["display"],
+                "description": event["agency"]["description"] or '',
+                "address": event["location"]["display"] if event["location"] else None,
                 "organization": event["agency"]["name"],
                 "event_time": {
                     "date": event["start_date"],
