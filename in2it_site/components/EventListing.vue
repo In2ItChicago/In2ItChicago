@@ -1,18 +1,16 @@
 <template>
-    <div @mouseover="hoverOnEvent()"  @click="clickOnEvent()" class="event-listing d-flex flex-row event-listing-link">
+    <v-card nuxt color="#eceff1" :elevation="24" @mouseover="hoverOnEvent()"  @click="clickOnEvent()" class="event-listing event-listing-link">
+        <v-card-title class="headline" style="color: #173450">{{ title }}</v-card-title>
         <div class="d-flex flex-column">
             <div class="d-flex w-100">
-                <h2 class="event-listing-title">{{ title }}</h2>
+                <v-card-subtitle style= "color: #0D47A1"> {{ event.organization }} </v-card-subtitle>
             </div>
             <div class="d-flex w-100">
-                <h3 class="event-listing-organization">{{ event.organization }}</h3>
+                <v-card-text style="color: #212121">{{ event.startDate }} {{ event.startTime  }} | {{ event.address }}</v-card-text>
             </div>
-            <div class="d-flex w-100">
-                <h4 class="event-listing-time-location">{{ event.startDate }} {{ event.startTime  }} | {{ event.address }}</h4>
-            </div>
-            <p class="event-listing-description d-none d-md-block">{{ description }}</p>
+            <v-card-text class="d-none d-md-block" style="color: #212121">{{ description }}</v-card-text>
         </div>
-    </div> 
+    </v-card> 
 </template>
 
 <script>

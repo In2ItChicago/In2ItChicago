@@ -42,6 +42,10 @@ module.exports = {
 		{src: '~/plugins/pagination.client.js'}
 	],
 
+	buildModules: [
+		'@nuxtjs/vuetify',
+	],
+
 	/*
 	** Nuxt.js modules
 	*/

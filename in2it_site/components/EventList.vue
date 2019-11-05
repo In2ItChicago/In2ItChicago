@@ -12,9 +12,11 @@
 					:prev-class="'event-pagination-prev-item'"
 					:next-class="'event-pagination-next-item'">
 				</paginate>
-				<div v-for="event in events">
+				<v-container>
+				<v-col v-for="(event, i) in events" :key="i">
 					<event-listing :event="event" v-on:eventHover="hoveringEventId = $event" v-on:eventClick="focussedEventId = $event"></event-listing>
-				</div>
+				</v-col>
+				</v-container>
 			</div>
 			<div v-else class="no-event-message">
 				<span>No events found, try expanding your dates or search radius</span>
