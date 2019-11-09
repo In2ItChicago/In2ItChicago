@@ -303,6 +303,20 @@ body{
 	color:#4ec0c5;
 }
 
+.event-marker-description{
+	font-size:18px;
+}
+
+.event-marker-link{
+	font-size:20px;
+}
+
+.event-marker-outgoing-link-icon{
+	margin-left:10px;
+	height:20px;
+	width:20px;
+}
+
 .map-icon{
 	width: 25px;
 }
