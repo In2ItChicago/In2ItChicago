@@ -18,7 +18,11 @@ module.exports = {
 			{ rel: 'stylesheet', href: '/css/style.css' },
 			{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Nunito&display=swap' },
 			{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap' }
-		]
+		],
+		script: [
+			{ src: 'https://www.googletagmanager.com/gtag/js?id=UA-85616256-11', type: 'text/javascript' },
+			{ innerHTML: "window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'UA-85616256-11');", type: 'text/javascript'}
+		],
 	},
 
 	/*
@@ -39,7 +43,7 @@ module.exports = {
 	plugins: [
 		{src: '~/plugins/datepicker.client.js'},
 		{src: '~/plugins/notifications.client.js'},
-		{src: '~/plugins/pagination.client.js'}
+		{src: '~/plugins/pagination.client.js'},
 	],
 
 	/*
