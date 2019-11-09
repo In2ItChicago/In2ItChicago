@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { GeocodeDAL } from './geocodeDAL';
+import { GeocodeDAL } from '@src/DAL/geocodeDAL';
 
 @Module({
     providers: [{

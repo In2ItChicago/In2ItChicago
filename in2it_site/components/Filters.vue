@@ -2,13 +2,13 @@
 	<div class="row justify-content-center">
 		<div class="col-md-8 filters" v-if="$store.state.searchFilter">
 			<div class="filter-row form-row justify-content-center">
-				<div class="col-md-3">
+				<div class="col-md-4 col-sm-12">
 					<client-only>
 						<label for="locationFilter" class="filter-label">Zip / Address</label>
-						<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Address" v-model="filterForm.address">
+						<input type="text" class="form-control" id="locationFilter" placeholder="Zip / Address (Optional)" v-model="filterForm.address">
 					</client-only>
 				</div>
-				<div class="col-md-auto datepicker-group">
+				<div class="col-md-auto col-sm-12 datepicker-group">
 					<client-only>
 						<div class="datepicker-input">
 							<label for="startDatePicker" class="filter-label">From</label>
@@ -40,10 +40,12 @@
 
 			<div class="filter-row form-row justify-content-center">
 				<client-only>
-					<div class="col-md-2">
-						<input type="text" class="form-control" id="organization" placeholder="Organization" v-model="filterForm.organization">
+					<div class="col-sm-12 col-md-4 col-lg-3">
+						<label for="organization" class="d-md-none filter-label">Organization</label>
+						<input type="text" class="form-control" id="organization" placeholder="Organization (Optional)" v-model="filterForm.organization">
 					</div>
-					<div class="col-md-2">
+					<div class="col-sm-12 col-md-4 col-lg-3">
+						<label for="distanceFilter" class="d-md-none filter-label">Distance</label>
 						<select class="form-control" id="distanceFilter" v-model="filterForm.miles">
 							<option value="1">1 Mile</option>
 							<option value="2">2 Miles</option>
@@ -53,14 +55,14 @@
 							<option value="15">15 Miles</option>
 						</select>
 					</div>
-					<div class="col-md-2">
+					<div class="col-sm-12 col-md-4 col-lg-3">
 						<neighborhood-autocomplete @changed="setNeighborhood"></neighborhood-autocomplete>
 					</div>
 				</client-only>
 			</div>
 
 			<div class="filter-row form-row justify-content-center">
-				<div class="col-md-2">
+				<div class="col-md-4 col-lg-2 col-sm-12">
 					<client-only>
 						<button class="search-btn" @click="filter()">SEARCH</button>
 					</client-only>
@@ -116,3 +118,29 @@
 		}
 	};
 </script>
+
+<style scoped>
+	@media (max-width: 768px) {
+        .filter-row{
+            margin-top:0px;
+		}
+		.filters{
+			padding: 12px 28px 12px 28px;
+			margin-top: 12px;
+		}
+		.filter-label{
+			margin-top:12px;
+		}
+		.search-btn{
+			margin-top:10px;
+			margin-bottom:0px;
+			width:100%;
+		}
+		.datepicker-input{
+			width:46vw;
+		}
+		.date-arrow{
+			width:8vw;
+		}
+    }
+</style>

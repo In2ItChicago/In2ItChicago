@@ -1,4 +1,11 @@
 #!/bin/sh
-until ping -c1 postgres >/dev/null 2>&1; do :; done
+if [ "$HOSTINGENV" = "DEV" ]
+then
+    until psql postgresql://postgres:postgres@postgres:5432/postgres -c "select 1" > /dev/null 2>&1; do
+        echo "Waiting for postgres server..."
+        sleep 1
+    done
+fi
+
 cd /usr/src
 python deploy.py $1

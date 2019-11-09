@@ -1,17 +1,21 @@
 import * as knex from 'knex';
 import * as knexStringcase from 'knex-stringcase';
 import * as _ from 'lodash';
-import { GetEventsRequest } from 'src/DTO/getEventsRequest';
-import { SearchBounds } from 'src/interfaces/searchBounds';
+import { GetEventsRequest } from '@src/DTO/getEventsRequest';
+import { SearchBounds } from '@src/interfaces/searchBounds';
 import { Get } from '@nestjs/common';
-import { GetEventsResponse } from 'src/DTO/getEventsResponse';
+import { GetEventsResponse } from '@src/DTO/getEventsResponse';
 import { AnyTxtRecord } from 'dns';
 
 const DEFAULT_LIMIT = 25;
-
 const db = knex(knexStringcase({
     client: 'postgresql',
-    connection: 'postgresql://postgres:postgres@postgres:5432/events',
+    connection: {
+        host: process.env.HOST,
+        user: 'postgres',
+        password: 'postgres',
+        database: 'events'
+    }
 }));
 
 /**

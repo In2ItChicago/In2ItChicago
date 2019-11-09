@@ -8,6 +8,7 @@ p{
 
 body{
 	background-color:#c3c3c3;
+	overflow-x: hidden;
 }
 
 .site{
@@ -18,7 +19,11 @@ body{
 
 .page-container{
 	flex: 1;
-	margin-bottom:60px;
+}
+
+.chihacknight-logo{
+	height:65px;
+	width:auto;
 }
 
 .footer{
@@ -34,59 +39,6 @@ body{
 	margin:20px;
 }
 
-.in2it-navbar{
-	color:#173450;
-	height:120px;
-}
-
-.navbar-container{
-	width:100%;
-	display: flex;
-	flex-direction: row;
-}
-
-.in2it-nav-link{
-	display:flex;
-	align-self: flex-end;
-	padding:10px 20px 0px 20px;
-	color:#173450;
-	font-size:24px;
-	font-weight:bold;
-	line-height: 75px;
-	transition: 0.3s;
-}
-
-.in2it-nav-link:hover{
-	text-decoration: none;
-	color:#4ec0c5;
-}
-
-.in2it-nav-link-group{
-	display:flex;
-	flex-direction: row;
-	margin-left: auto;
-}
-
-.in2it-brand{
-	line-height:91px;
-}
-
-.logo-container{
-	padding:0px;
-	height: 60px;
-	margin-left:20px;
-}
-
-.chihacknight-logo{
-	height:65px;
-	width:auto;
-}
-
-.navbar-logo{
-	width:200px;
-	margin-right:20px;
-}
-
 .landing-page-title-container{
 	display: flex;
     flex-direction: row;
@@ -96,15 +48,16 @@ body{
 
 .landing-page-title{
 	display:flex;
-	font-size: 56px;
+	font-size: 54px;
 	font-weight: 600;
-	margin-top:30px;
+	margin-top:26px;
 	margin-bottom:24px;
+	white-space: nowrap;
 }
 
 .landing-page-tagline{
 	text-align: center;
-	font-size:24px;
+	font-size:32px;
 	margin:0px;
 }
 
@@ -132,6 +85,10 @@ body{
 	margin-top:20px;
 	display:flex;
 	flex-direction:column;
+}
+
+.content-col p, .content-col li, .content-col a{
+	font-size: 22px;
 }
 
 .filters{
@@ -200,12 +157,16 @@ body{
 	font-size:26px;
 }
 
+.event-map-container{
+	min-height: 100vh;
+}
+
 .events-container{
-	width:38vw;
+	width:40vw;
 }
 
 .map-container{
-	width:59vh;
+	width:60vh;
 }
 
 .event-map{
@@ -296,6 +257,20 @@ body{
 	color:#4ec0c5;
 }
 
+.event-marker-description{
+	font-size:18px;
+}
+
+.event-marker-link{
+	font-size:20px;
+}
+
+.event-marker-outgoing-link-icon{
+	margin-left:10px;
+	height:20px;
+	width:20px;
+}
+
 .map-icon{
 	width: 25px;
 }
@@ -311,6 +286,7 @@ body{
 }
 
 .datepicker input{
+	width:100%;
 	height:calc(2.25rem + 2px);
 	padding:0.375rem 0.75rem;
 	font-size:1rem;

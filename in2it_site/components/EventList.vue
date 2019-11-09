@@ -1,9 +1,9 @@
 <template>
-	<div class="content-row">
+	<div class="content-row event-map-container">
 		<div class="events-container">
 			<div v-if="eventsAvailable">
 				<paginate
-					:page-count="3"
+					:page-count="pageCount"
 					:click-handler="paginateHandler"
 					:prev-text="'<'"
 					:next-text="'>'"
@@ -42,6 +42,12 @@
 		computed: {
 			eventsAvailable: function() {
 				return this.events.length > 0;
+			},
+			pageCount: function() {
+				if (this.events.fullCount) {
+					return this.events.fullCount / 4;
+				}
+				return 3;
 			}
 		},
 		methods: {
@@ -56,3 +62,26 @@
 		}
 	};
 </script>
+
+<style scoped>
+	@media (max-width: 768px) {
+        .event-map-container{
+			display: flex;
+			flex-direction: column;
+		}
+
+		.events-container{
+			width:100%;
+		}
+
+		.map-container{
+			width:100vw;
+			height:50vh;
+		}
+
+		.event-map{
+			width:100vw;
+			height:50vh;
+		}
+    }
+</style>

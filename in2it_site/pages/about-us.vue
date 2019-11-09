@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="content-col">
+        <div class="content-col col-md-8 offset-md-2 col-sm-12">
             <h1>About In2It</h1>
 
             <p>We are a group of Chicagoans that believe civic engagement matters, and that our city needs more people getting involved and making a difference in their communities.</p>

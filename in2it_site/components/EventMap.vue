@@ -32,7 +32,7 @@
                 this.createMap();
                 this.createMarkers();
                 this.addMarkersToMap();
-                this.centerMap();
+                this.centerMapOnVisibleMarkers();
             },
             createMap: function() {
                 this.map = new google.maps.Map(document.getElementById("map"), {
@@ -62,8 +62,8 @@
                         "<h2>" + this.events[i].title + "</h2>" +
                         "<h4>" + this.events[i].address + "</h4>" +
                         "<h4>" + this.events[i].startTime + "</h4>" +
-                        "<p>" + this.events[i].description + "</p>" +
-                        "<a href=" + this.events[i].url + " target=" + "_blank" + ">" + "Find out more" + "</a>";
+                        "<p class='event-marker-description'>" + this.events[i].description + "</p>" +
+                        "<a class='event-marker-link' href=" + this.events[i].url + " target=" + "_blank" + ">" + "Visit event site" + "<img class='event-marker-outgoing-link-icon' src='https://img.icons8.com/metro/26/000000/external-link.png'></a>";
 
                     let infoWindow = new google.maps.InfoWindow({
                         content: infoContent
@@ -91,7 +91,14 @@
                    this.markers[i].setMap(this.map);
                 }
             },
-            centerMap: function() {
+            centerMapOnMarker: function(marker) {
+                let lat = marker.latLng.lat;
+                let lng = marker.latLng.lng;
+                this.map.setCenter({lat, lng});
+            },
+            centerMapOnVisibleMarkers: function() {
+                if(this.markers.length <= 0) return;
+
                 let latSum = 0;
                 let lonSum = 0;
                 for (let i in this.markers){
@@ -103,6 +110,7 @@
                     lat: latSum / this.markers.length,
                     lng: lonSum / this.markers.length
                 };
+
                 this.map.setCenter(center);
             },
             clearMarkers: function() {
@@ -132,6 +140,7 @@
                 for (let i in this.markers) {
                     if (this.markers[i].id != id) continue;
                     this.setActiveMarker(this.markers[i]);
+                    this.centerMapOnMarker(this.markers[i]);
                 }
             }
         }

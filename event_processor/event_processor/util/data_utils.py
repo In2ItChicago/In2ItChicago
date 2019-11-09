@@ -38,7 +38,7 @@ class DataUtils:
     @staticmethod
     def remove_excess_spaces(string):
         """Remoe spaces and tabs from around a string"""
-        return re.sub(r'[ \t]+', ' ', string.strip())
+        return ' '.join(string.split())
 
     @staticmethod
     def pretty_json(json_data):
