@@ -157,6 +157,10 @@ body{
 	font-size:26px;
 }
 
+.event-map-container{
+	min-height: 100vh;
+}
+
 .events-container{
 	width:40vw;
 }
