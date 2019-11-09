@@ -3,7 +3,7 @@
 		<div class="events-container">
 			<div v-if="eventsAvailable">
 				<paginate
-					:page-count="3"
+					:page-count="pageCount"
 					:click-handler="paginateHandler"
 					:prev-text="'<'"
 					:next-text="'>'"
@@ -42,6 +42,12 @@
 		computed: {
 			eventsAvailable: function() {
 				return this.events.length > 0;
+			},
+			pageCount: function() {
+				if (this.events.fullCount) {
+					return this.events.fullCount / 4;
+				}
+				return 3;
 			}
 		},
 		methods: {
