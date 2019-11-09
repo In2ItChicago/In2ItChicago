@@ -16,7 +16,7 @@
 	/*Vertical Sliding*/
 	.slidingVertical{
 		display:flex;
-		width:320px;
+		width:260px;
 		margin-top:-60px;
 	}
 	.slidingVertical span{
@@ -69,26 +69,33 @@
     }
 
     @media (max-width: 768px) {
-        .landing-page-title{
-            font-size: 28px;
+        .landing-page-title-container{
+            margin-left: 10px;
+            margin-right: 10px;
         }
-        .landing-page-tagline{
+        .landing-page-title{
             font-size: 20px;
         }
+        .landing-page-tagline{
+            font-size: 17px;
+        }
         .slidingVertical{
-            margin-top:-25px;
+            margin-top:-12px;
+        }
+        .slidingVertical{
+            width:200px;
         }
     }
 
     @media (min-width: 769px) and (max-width: 991px) {
         .landing-page-title{
-            font-size: 38px;
+            font-size: 32px;
         }
         .landing-page-tagline{
-            font-size: 30px;
+            font-size: 24px;
         }
         .slidingVertical{
-            margin-top:-40px;
+            margin-top:-32px;
         }
     }
 </style>
