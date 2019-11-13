@@ -28,6 +28,7 @@ services:
       - "8050:8050"
     networks: 
       - in2it
+    command: --disable-browser-caches
   in2it_site:
     image: in2it_site_dev
     ports:
