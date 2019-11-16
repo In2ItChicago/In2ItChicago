@@ -61,7 +61,7 @@
                     let infoContent = 
                         "<h2>" + this.events[i].title + "</h2>" +
                         "<h4>" + this.events[i].address + "</h4>" +
-                        "<h4>" + this.events[i].startTime + "</h4>" +
+                        "<h4>" + this.getFormattedTime(this.events[i].startTime) + "</h4>" +
                         "<p class='event-marker-description'>" + this.events[i].description + "</p>" +
                         "<a class='event-marker-link' href=" + this.events[i].url + " target=" + "_blank" + ">" + "Visit event site" + "<img class='event-marker-outgoing-link-icon' src='https://img.icons8.com/metro/26/000000/external-link.png'></a>";
 
@@ -118,6 +118,11 @@
                     this.markers[i].setMap(null);
                 }
                 this.markers = [];
+            },
+            getFormattedTime: function(timeString) {
+                let timeStringPieces = timeString.split(' ');
+                let timePieces = timeStringPieces[0].split(':');
+                return timePieces[0] + ':' + timePieces[1] + ' ' + timeStringPieces[1];
             }
         },
         watch: {

@@ -8,7 +8,7 @@
                 <h3 class="event-listing-organization">{{ event.organization }}</h3>
             </div>
             <div class="d-flex w-100">
-                <h4 class="event-listing-time-location">{{ event.startDate }} {{ event.startTime  }} | {{ event.address }}</h4>
+                <h4 class="event-listing-time-location">{{ event.startDate }} {{ formattedTime }} | {{ event.address }}</h4>
             </div>
             <p class="event-listing-description d-none d-md-block">{{ description }}</p>
         </div>
@@ -24,6 +24,11 @@
                     return this.event.title.substr(0, 50) + '...';
                 }
                 return this.event.title;
+            },
+            formattedTime: function() {
+                let timeStringPieces = this.event.startTime.split(' ');
+                let timePieces = timeStringPieces[0].split(':');
+                return timePieces[0] + ':' + timePieces[1] + ' ' + timeStringPieces[1];
             },
             description: function() {
                 if(this.event.description.length > 140) {
