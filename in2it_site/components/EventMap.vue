@@ -84,6 +84,7 @@
                     this.activeMarker.infoWindow.close();
                 }
                 this.activeMarker = marker;
+                this.updateMarkerFocusState(this.activeMarker.id);
                 this.activeMarker.infoWindow.open(this.map, this.activeMarker);
             },
             addMarkersToMap: function() {
@@ -123,6 +124,16 @@
                 let timeStringPieces = timeString.split(' ');
                 let timePieces = timeStringPieces[0].split(':');
                 return timePieces[0] + ':' + timePieces[1] + ' ' + timeStringPieces[1];
+            },
+            updateMarkerFocusState: function(focussedEventId) {
+                if (!this.$google)  return;
+                for (let i in this.markers) {
+                    let image = {
+                        url : (this.markers[i].id == focussedEventId) ? "/img/event-marker-selected.svg" : "/img/event-marker-unselected.svg",
+                        size: new google.maps.Size(35, 50)
+                    };
+                    this.markers[i].setIcon(image);
+                }
             }
         },
         watch: {
@@ -131,14 +142,7 @@
                 this.initMap();
             },
             hoveringEventId: function (id) {
-                if (!this.$google)  return;
-                for (let i in this.markers) {
-                    let image = {
-                        url : (this.markers[i].id == id) ? "/img/event-marker-selected.svg" : "/img/event-marker-unselected.svg",
-                        size: new google.maps.Size(35, 50)
-                    };
-                    this.markers[i].setIcon(image);
-                }
+                this.updateMarkerFocusState(id);
             },
             focussedEventId: function (id) {
                 if (!this.$google)  return;
