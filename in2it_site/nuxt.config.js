@@ -20,8 +20,8 @@ module.exports = {
 			{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap' }
 		],
 		script: [
-			{ src: 'https://www.googletagmanager.com/gtag/js?id=UA-85616256-11', type: 'text/javascript' },
-			{ innerHTML: "window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'UA-85616256-11');", type: 'text/javascript'}
+			{ src: 'https://www.googletagmanager.com/gtag/js?id=UA-152726306-1', type: 'text/javascript' },
+			{ innerHTML: "window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'UA-152726306-1');", type: 'text/javascript'}
 		],
 	},
 
