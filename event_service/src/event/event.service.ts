@@ -8,7 +8,6 @@ import * as _ from 'lodash';
 import { GeocodeService } from '@src/geocode/geocode.service';
 import { GetEventsResponse } from '@src/DTO/getEventsResponse';
 import { plainToClass } from 'class-transformer';
-import { EventResponse } from '../../dist/DTO/eventResponse';
 
 @Injectable()
 export class EventService {
