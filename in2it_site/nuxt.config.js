@@ -76,7 +76,7 @@ module.exports = {
 		** You can extend webpack config here
 		*/
 		babel: {
-			cacheDirectory: '/usr/src/app/.service_modules'
+			cacheDirectory: '/usr/src/app/.site_modules'
 		},
 		extend(config, { isClient }) {
             if (isClient)

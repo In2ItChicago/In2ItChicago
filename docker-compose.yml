@@ -32,7 +32,7 @@ services:
     labels:
       caddy.targetport: 3000 
   postgres:
-    image: scratch
+    image: tianon/true
   caddy:
     image: lucaslorentz/caddy-docker-proxy:alpine
     command: -log stdout -agree -email in2itchicago@gmail.com
@@ -50,7 +50,7 @@ services:
     networks: 
       - in2it
   portainer:
-    image: "portainer/portainer:1.22.0"
+    image: "portainer/portainer:1.22.2"
     ports:
       - "9000:9000"
     volumes:
