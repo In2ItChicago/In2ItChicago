@@ -8,6 +8,7 @@ import * as _ from 'lodash';
 import { GeocodeService } from '@src/geocode/geocode.service';
 import { GetEventsResponse } from '@src/DTO/getEventsResponse';
 import { plainToClass } from 'class-transformer';
+import { EventResponse } from '../../dist/DTO/eventResponse';
 
 @Injectable()
 export class EventService {
@@ -15,27 +16,25 @@ export class EventService {
     constructor(private readonly geocodeService: GeocodeService, @Inject('EventDAL') private readonly eventDAL: EventDAL) {
     }
 
-    async getEvents(query: GetEventsRequest): Promise<GetEventsResponse[]> {
+    async getEvents(query: GetEventsRequest): Promise<GetEventsResponse> {
         let searchBounds: SearchBounds | null = null;
         if (query.address) {
             searchBounds = await this.geocodeService.radiusSearch({ address: query.address }, query.miles);
         }
 
-        const events = await this.eventDAL.getEvents(query, searchBounds);
+        const eventResponse = await this.eventDAL.getEvents(query, searchBounds);
 
-        if (events) {
-            const mappedEvents = events.map(result => {
-                return plainToClass(GetEventsResponse, Object.assign(result, {
+        if (eventResponse.events) {
+            eventResponse.events = eventResponse.events.map(result => Object.assign(result, {
                     startDate: result['startTime'].toLocaleDateString(),
                     startTime: result['startTime'].toLocaleTimeString(),
                     endDate: result['endTime'].toLocaleDateString(),
                     endTime: result['endTime'].toLocaleTimeString()
                 }));
-            });
-
+            const mappedEvents = plainToClass(GetEventsResponse, eventResponse);
             return mappedEvents;
         }
-        return [];
+        return new GetEventsResponse();
     }
 
     async createEvents(contextData: CreateEventsRequest[]) {

@@ -40,5 +40,10 @@ export class CreateEventsRequest {
     @IsBoolean()
     @Type(() => Boolean)
     @ApiModelProperty()
-    isManual: number;
+    isManual: boolean;
+
+    @IsNumber()
+    @IsNotEmpty()
+    @ApiModelProperty()
+    geocodeId: number;
 }
