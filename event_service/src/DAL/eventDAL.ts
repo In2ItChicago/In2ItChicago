@@ -58,7 +58,8 @@ export class EventDAL {
                     })
                     .offset(query.offset || 0)
                     .limit(query.limit || DEFAULT_LIMIT)
-                    .orderBy('event.startTime');
+                    .orderBy('event.isManual', 'desc')
+                    .orderBy('event.startTime', 'asc');
 
         return result;
     }

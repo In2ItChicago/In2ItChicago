@@ -11,6 +11,7 @@ CREATE TABLE events.Event
     end_time TIMESTAMP NOT NULL,
     category VARCHAR(256),
     created_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    is_manual BOOLEAN NOT NULL DEFAULT FALSE,
     CONSTRAINT events_event_pkey PRIMARY KEY (id)
 )
 WITH (
