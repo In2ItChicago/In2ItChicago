@@ -38,12 +38,12 @@ export class EventDAL {
             'geo.lat',
             'geo.lon',
             'geo.neighborhood'), query, searchBounds)
-            .offset(query.offset || 0)
-            .limit(query.limit || DEFAULT_LIMIT)
-            .orderBy('event.isManual', 'desc')
-            .orderBy('event.startTime', 'asc');
+        .offset(query.offset || 0)
+        .limit(query.limit || DEFAULT_LIMIT)
+        .orderBy('event.isManual', 'desc')
+        .orderBy('event.startTime', 'asc');
 
-            const resultCount = await this.queryEvents(db('events.event as event').count('*'), query, searchBounds)
+        const resultCount = await this.queryEvents(db('events.event as event').count('*'), query, searchBounds)
                     
         return {'totalCount': resultCount[0].count, 'events': result};
     }
