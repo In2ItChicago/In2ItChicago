@@ -3,7 +3,7 @@
 		<div class="events-container">
 			<div v-if="eventsAvailable">
 				<paginate
-					:page-count="3"
+					:page-count="pageCount"
 					:click-handler="paginateHandler"
 					:prev-text="'<'"
 					:next-text="'>'"
@@ -13,7 +13,7 @@
 					:next-class="'event-pagination-next-item'">
 				</paginate>
 				<v-container>
-				<v-col v-for="(event, i) in events" :key="i">
+				<v-col v-for="(event, i) in eventResult.events" :key="i">
 					<event-listing :event="event" v-on:eventHover="hoveringEventId = $event" v-on:eventClick="focussedEventId = $event"></event-listing>
 				</v-col>
 				</v-container>
@@ -24,7 +24,7 @@
 		</div>
 		<div class="map-container">
 			<client-only>
-				<event-map :events="events" :hoveringEventId="hoveringEventId" :focussedEventId="focussedEventId"></event-map>
+				<event-map :events="eventResult.events" :hoveringEventId="hoveringEventId" :focusedEventId="focusedEventId"></event-map>
 			</client-only>
 		</div>
 	</div>
@@ -34,16 +34,25 @@
 	import EventMap from '~/components/EventMap.vue';
 	import EventListing from '~/components/EventListing.vue';
 	export default{
-		props: ['events'],
+		props: ['eventResult'],
 		data() {
 			return {
 				hoveringEventId: null,
-				focussedEventId: null
+				focusedEventId: null
 			};
 		},
 		computed: {
 			eventsAvailable: function() {
-				return this.events.length > 0;
+				if (!this.eventResult.events) {
+					return false;
+				}
+				return this.eventResult.events.length > 0;
+			},
+			pageCount: function() {
+				if (this.eventResult) {
+					return Math.floor(this.eventResult.totalCount / 4);
+				}
+				return 3;
 			}
 		},
 		methods: {

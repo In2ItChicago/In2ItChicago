@@ -19,6 +19,11 @@ export const mutations = {
         state.neighborhood = data.neighborhood;
         state.limit = data.limit;
         state.offset = data.offset;
+
+        //Miles doesn't apply without a valid origin address
+        if(!state.address || state.address.length <= 0){
+            state.miles = null;
+        }
     },
 
     setOffset (state, pageNumber) {

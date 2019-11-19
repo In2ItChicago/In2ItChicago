@@ -16,6 +16,6 @@ $pythoncmd $scriptpath dpage/pgadmin4 4.11
 $pythoncmd $scriptpath library/nginx 1.17.3 alpine
 $pythoncmd $scriptpath library/nginx 1.17.3
 $pythoncmd $scriptpath library/node 12.8.1 alpine
-$pythoncmd $scriptpath portainer/portainer 1.22.0
+$pythoncmd $scriptpath portainer/portainer 1.22.2
 echo "=============================="
 echo

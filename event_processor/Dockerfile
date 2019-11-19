@@ -19,5 +19,5 @@ ENV PATH /data/node_modules/.bin:$PATH
 WORKDIR /usr/src/app/event_processor
 
 FROM event_processor_common AS event_processor_prod
-COPY . ./
 WORKDIR /usr/src/app/event_processor
+COPY . ./

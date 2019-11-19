@@ -20,7 +20,7 @@ export class EventController {
      */
     @Get()
     @ApiResponse({status: 200, type: GetEventsResponse, isArray: true, description: 'Event list'})
-    async getEvents(@Query() request: GetEventsRequest): Promise<GetEventsResponse[]> {
+    async getEvents(@Query() request: GetEventsRequest): Promise<GetEventsResponse> {
         return await this.eventService.getEvents(request);
     }
 

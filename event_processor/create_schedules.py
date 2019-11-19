@@ -4,7 +4,6 @@ from scrapy import spiderloader
 from scrapy.utils import project
 from event_processor.config import config
 from requests.exceptions import ConnectionError
-import ptvsd
 from event_processor.util.http_utils import HttpUtils
 
 HOURS_IN_DAY = 24
@@ -67,6 +66,7 @@ def run():
 
 if __name__ == '__main__':
     if config.debug:
+        import ptvsd
         ptvsd.enable_attach(address=('0.0.0.0', 5860))
         ptvsd.wait_for_attach()
         
