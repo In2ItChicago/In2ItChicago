@@ -44,9 +44,4 @@ class SpiderBase(AggregatorBase):
             if len(value) != count:
                 raise ValueError(f'{self.organization}: Time selectors returned data of differing lengths')
         return [{key: value[i] for key, value in kwargs.items()} for i in range(count)]
-
-    def item_filter(self, item):
-        """Specify a filter for event items. This item should return True if 
-           the item should be include in the results and False if not. """
-        return True  
         

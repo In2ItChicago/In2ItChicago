@@ -26,23 +26,18 @@ class NotDIYSpider(ScraperCrawlSpider):
         return 'volunteer' in item['title'] or 'volunteer' in item['description']
 
     def parse_page(self, response): 
-        def event_date_process(str_full):
+        def event_date_extract(str_full, index_to_extract):
             dt_arr = str_full[0].split('~')
-            if len(dt_arr) > 0:
-                return [dt_arr[0]]
-            return ['']
-        def event_time_process(str_full):
-            tm_arr = str_full[0].split('~')
-            if len(tm_arr) > 0:
-                return [tm_arr[2]]
-            return ['']
+            if len(dt_arr) >= index_to_extract:
+                return [dt_arr[index_to_extract]]
+            return [''] 
         eresp = response.css('.inner-content')
         return {
             'title': self.empty_check_extract(eresp, self.css_func, '.page-title::text'),
             'url': self.empty_check_extract(eresp, self.css_func, 'a[href]::attr(href)'), 
             'event_time': self.create_time_data(
-                date=event_date_process(self.empty_check_extract(eresp, self.css_func, '.event-date-single::text')),
-                time=event_time_process(self.empty_check_extract(eresp, self.css_func, '.event-date-single::text'))
+                date=event_date_extract(self.empty_check_extract(eresp, self.css_func, '.event-date-single::text'), 0),
+                time=event_date_extract(self.empty_check_extract(eresp, self.css_func, '.event-date-single::text'), 2)
             ),
             'address': self.empty_check_extract(eresp, self.css_func, 'h3.single-event-venue::text'),
             'description': self.empty_check_extract(eresp, self.css_func, '.event-details-single::text')
