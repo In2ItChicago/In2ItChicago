@@ -56,4 +56,4 @@ class ScraperSplashSpider(Spider, SplashBase):
     custom_settings = scraper_settings
     def __init__(self, *args, **kwargs):
         Spider.__init__(self)
-        SpiderBase.__init__(*args, **kwargs)
+        SplashBase.__init__(*args, **kwargs)
