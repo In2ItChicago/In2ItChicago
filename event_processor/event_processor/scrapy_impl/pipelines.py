@@ -25,6 +25,9 @@ class EventTransformPipeline:
         if 'event_time' in item:
             item['event_time']['date_format'] = spider.date_format
         loader = EventLoader(**item)
+        # see if there is a custom filter for the item
+        if not spider.item_filter(item):
+            raise DropItem('Custom item filter did not allow this event')
         if 'event_time' in loader.item:
             time = loader.item['event_time']
             if self.time_utils.time_range_is_between(time['start_timestamp'], time['end_timestamp'], spider.start_timestamp, spider.end_timestamp):
