@@ -9,4 +9,4 @@ sleep 5
 ./scripts/create-network.sh
 ./scripts/build-images.sh $ENV
 ./scripts/stack-deploy.sh $ENV
-./db/run.sh
+./db/run.sh DEV

@@ -7,6 +7,14 @@ services:
       - "5858:5858"
     networks: 
       - in2it
+    labels:
+      caddy.targetport: 5000 
+      caddy.rewrite:
+      caddy.rewrite.if: "{method} not GET"
+      caddy.rewrite.to: /method_not_allowed
+      caddy.status: "405 /method_not_allowed"
+    environment:
+      - URL_SCHEME=${URL_SCHEME:-http}
   event_processor:
     image: event_processor_dev
     ports:
@@ -21,22 +29,28 @@ services:
       - "5859:5859"
     networks: 
       - in2it
-  nginx:
-    image: nginx_dev
+    labels:
+      caddy.targetport: 3000 
+  postgres:
+    image: tianon/true
+  caddy:
+    image: lucaslorentz/caddy-docker-proxy:alpine
+    command: -log stdout -agree -email in2itchicago@gmail.com
     volumes:
-      - ./nginx:/etc/nginx
+      - /var/run/docker.sock:/var/run/docker.sock 
     ports:
       - target: 80
         published: 80
         mode: host
+      - target: 443
+        published: 443
+        mode: host
     deploy:
       mode: global
-    # Sometimes nginx crashes if the site doesn't come up in time
-    restart: on-failure
     networks: 
       - in2it
   portainer:
-    image: "portainer/portainer:1.22.0"
+    image: "portainer/portainer:1.22.2"
     ports:
       - "9000:9000"
     volumes:
@@ -51,15 +65,6 @@ services:
       - "5861:5861"
     environment:
       - NDSCHEDULER_SETTINGS_MODULE=simple_scheduler.settings
-    networks: 
-      - in2it
-  postgres:
-    image: postgres:11.5-alpine
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-    ports:
-      - "5432:5432"
     networks: 
       - in2it
   pgadmin:

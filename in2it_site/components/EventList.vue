@@ -1,27 +1,90 @@
 <template>
-	<div class="events">
-		<div v-if="eventsAvailable">
-			<div v-for="event in events">
-				<event-listing :event="event"></event-listing>
+	<div class="content-row event-map-container">
+		<div class="events-container">
+			<div v-if="eventsAvailable">
+				<paginate
+					:page-count="pageCount"
+					:click-handler="paginateHandler"
+					:prev-text="'<'"
+					:next-text="'>'"
+					:container-class="'pagination event-pagination justify-content-center d-flex'"
+					:page-class="'event-pagination-item'"
+					:prev-class="'event-pagination-prev-item'"
+					:next-class="'event-pagination-next-item'">
+				</paginate>
+				<div v-for="event in eventResult.events">
+					<event-listing :event="event" v-on:eventHover="hoveringEventId = $event" v-on:eventClick="focusedEventId = $event"></event-listing>
+				</div>
+			</div>
+			<div v-else class="no-event-message">
+				<span>No events found, try expanding your dates or search radius</span>
 			</div>
 		</div>
-		<div v-else class="no-event-message">
-			<span>No events available, please adjust your search filter.</span>
+		<div class="map-container">
+			<client-only>
+				<event-map :events="eventResult.events" :hoveringEventId="hoveringEventId" :focusedEventId="focusedEventId"></event-map>
+			</client-only>
 		</div>
 	</div>
 </template>
 
 <script>
+	import EventMap from '~/components/EventMap.vue';
 	import EventListing from '~/components/EventListing.vue';
 	export default{
-		props: ['events'],
+		props: ['eventResult'],
+		data() {
+			return {
+				hoveringEventId: null,
+				focusedEventId: null
+			};
+		},
 		computed: {
 			eventsAvailable: function() {
-				return this.events.length > 0;
+				if (!this.eventResult.events) {
+					return false;
+				}
+				return this.eventResult.events.length > 0;
+			},
+			pageCount: function() {
+				if (this.eventResult) {
+					return Math.floor(this.eventResult.totalCount / 4);
+				}
+				return 3;
 			}
 		},
+		methods: {
+			paginateHandler: function(pageNum) {
+				this.$store.commit('searchFilter/setOffset', pageNum);
+				this.$emit('paginated');
+            }
+		},
 		components: {
+			EventMap,
 			EventListing
 		}
 	};
 </script>
+
+<style scoped>
+	@media (max-width: 768px) {
+        .event-map-container{
+			display: flex;
+			flex-direction: column;
+		}
+
+		.events-container{
+			width:100%;
+		}
+
+		.map-container{
+			width:100vw;
+			height:50vh;
+		}
+
+		.event-map{
+			width:100vw;
+			height:50vh;
+		}
+    }
+</style>

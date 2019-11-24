@@ -1,8 +1,11 @@
 import { ApiModelProperty } from '@nestjs/swagger';
-import { EventTime } from './eventTime';
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { EventTime } from '@src/DTO/eventTime';
+import { IsNotEmpty, IsNumber, IsBoolean } from 'class-validator';
 import { Type } from 'class-transformer';
 
+/**
+ * Model representing a request for creating an event
+ */
 export class CreateEventsRequest {
     @IsNotEmpty()
     @ApiModelProperty()
@@ -33,4 +36,14 @@ export class CreateEventsRequest {
     @Type(() => Number)
     @ApiModelProperty()
     price: number;
+
+    @IsBoolean()
+    @Type(() => Boolean)
+    @ApiModelProperty()
+    isManual: boolean;
+
+    @IsNumber()
+    @IsNotEmpty()
+    @ApiModelProperty()
+    geocodeId: number;
 }

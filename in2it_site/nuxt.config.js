@@ -16,11 +16,13 @@ module.exports = {
 		link: [
 			{ rel: 'icon', type: 'image/x-icon', href: '/img/favicon.jpg' },
 			{ rel: 'stylesheet', href: '/css/style.css' },
-			{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Signika' },
-			{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Signika' },
-			{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Kalam' },
-			{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Permanent+Marker' }
-		]
+			{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Nunito&display=swap' },
+			{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap' }
+		],
+		script: [
+			{ src: 'https://www.googletagmanager.com/gtag/js?id=UA-152726306-1', type: 'text/javascript' },
+			{ innerHTML: "window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'UA-152726306-1');", type: 'text/javascript'}
+		],
 	},
 
 	/*
@@ -40,7 +42,8 @@ module.exports = {
 	*/
 	plugins: [
 		{src: '~/plugins/datepicker.client.js'},
-		{src: '~/plugins/notifications.client.js'}
+		{src: '~/plugins/notifications.client.js'},
+		{src: '~/plugins/pagination.client.js'},
 	],
 
 	/*
@@ -53,7 +56,10 @@ module.exports = {
 		'bootstrap-vue/nuxt',
 		['nuxt-env', {
 			keys: ['IN2IT_API_URL']
-		}]
+		}],
+		['nuxt-google-maps-module', {
+			key: 'AIzaSyDKuKo2WRNv5IhKm_At8wGfD4T142laung',
+		}],
 	],
 	/*
 	** Axios module configuration
@@ -69,15 +75,14 @@ module.exports = {
 		/*
 		** You can extend webpack config here
 		*/
+		babel: {
+			cacheDirectory: '/usr/src/app/.site_modules'
+		},
 		extend(config, { isClient }) {
             if (isClient)
 				config.devtool = '#eval-source-map'
 			else
 				config.devtool = '#inline-source-map'
-			config.output.devtoolNamespace = 'In2It';
-			config.output.devtoolModuleFilenameTemplate = function(info) {
-				return `webpack://${info.namespace}/${info.resourcePath}?${info.hash}`
-			}
             return config;
 		},
 		devtools: true

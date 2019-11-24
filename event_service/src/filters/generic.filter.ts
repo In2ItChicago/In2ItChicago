@@ -1,6 +1,9 @@
 
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
 
+/**
+ * A filter for service requests to catch any invalid requests???
+ */
 @Catch()
 export class GenericFilter implements ExceptionFilter {
   catch(exception: Error, host: ArgumentsHost) {

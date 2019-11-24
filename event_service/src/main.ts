@@ -1,11 +1,11 @@
 import { json } from 'body-parser';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { AppModule } from '@src/app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { EventModule } from './event/event.module';
-import { GeocodeModule } from './geocode/geocode.module';
-import { GenericFilter } from './filters/generic.filter';
+import { EventModule } from '@src/event/event.module';
+import { GeocodeModule } from '@src/geocode/geocode.module';
+import { GenericFilter } from '@src/filters/generic.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,6 +18,7 @@ async function bootstrap() {
     .setTitle('Event API')
     .setDescription('Event API')
     .setVersion('1.0')
+    .setSchemes(process.env.URL_SCHEME === 'https' ? 'https' : 'http')
     .build();
 
   const document = SwaggerModule.createDocument(app, options, {

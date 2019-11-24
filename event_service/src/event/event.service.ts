@@ -1,7 +1,7 @@
 import { Injectable, HttpService, Inject } from '@nestjs/common';
-import { SearchBounds } from 'src/interfaces/searchBounds';
+import { SearchBounds } from '@src/interfaces/searchBounds';
 import { EventDAL } from '@src/DAL/eventDAL';
-import { timestampToDate } from '../utilities';
+import { timestampToDate } from '@src/utilities';
 import { GetEventsRequest } from '@src/DTO/getEventsRequest';
 import { CreateEventsRequest } from '@src/DTO/createEventsRequest';
 import * as _ from 'lodash';
@@ -15,27 +15,25 @@ export class EventService {
     constructor(private readonly geocodeService: GeocodeService, @Inject('EventDAL') private readonly eventDAL: EventDAL) {
     }
 
-    async getEvents(query: GetEventsRequest): Promise<GetEventsResponse[]> {
+    async getEvents(query: GetEventsRequest): Promise<GetEventsResponse> {
         let searchBounds: SearchBounds | null = null;
         if (query.address) {
             searchBounds = await this.geocodeService.radiusSearch({ address: query.address }, query.miles);
         }
 
-        const events = await this.eventDAL.getEvents(query, searchBounds);
+        const eventResponse = await this.eventDAL.getEvents(query, searchBounds);
 
-        if (events) {
-            const mappedEvents = events.map(result => {
-                return plainToClass(GetEventsResponse, Object.assign(result, {
+        if (eventResponse.events) {
+            eventResponse.events = eventResponse.events.map(result => Object.assign(result, {
                     startDate: result['startTime'].toLocaleDateString(),
                     startTime: result['startTime'].toLocaleTimeString(),
                     endDate: result['endTime'].toLocaleDateString(),
                     endTime: result['endTime'].toLocaleTimeString()
                 }));
-            });
-
+            const mappedEvents = plainToClass(GetEventsResponse, eventResponse);
             return mappedEvents;
         }
-        return [];
+        return new GetEventsResponse();
     }
 
     async createEvents(contextData: CreateEventsRequest[]) {
@@ -67,6 +65,7 @@ export class EventService {
     }
 
     async clearAllEvents() {
+        await this.geocodeService.clearAllGeocodes();
         await this.eventDAL.deleteAllEvents();
     }
 }

@@ -1,19 +1,26 @@
 import { Controller, Get, Query, Post, Body, Res, HttpStatus, Bind, Delete } from '@nestjs/common';
-import { EventService } from './event.service';
+import { EventService } from '@src/event/event.service';
 import { GetEventsRequest } from '@src/DTO/getEventsRequest';
 import { CreateEventsRequest } from '@src/DTO/createEventsRequest';
 import { GetEventsResponse } from '@src/DTO/getEventsResponse';
 import { ApiUseTags, ApiImplicitBody, ApiResponse } from '@nestjs/swagger';
 import {plainToClass} from "class-transformer";
 
+/**
+ * An interface class to get, create, or clear events. 
+ */
 @ApiUseTags('events')
 @Controller('events')
 export class EventController {
     constructor(private readonly eventService: EventService) {}
 
+    /**
+     * 
+     * @param request 
+     */
     @Get()
     @ApiResponse({status: 200, type: GetEventsResponse, isArray: true, description: 'Event list'})
-    async getEvents(@Query() request: GetEventsRequest): Promise<GetEventsResponse[]> {
+    async getEvents(@Query() request: GetEventsRequest): Promise<GetEventsResponse> {
         return await this.eventService.getEvents(request);
     }
 

@@ -18,13 +18,13 @@
     "allowSyntheticDefaultImports": true,
     "jsx": "preserve",
     "allowJs": true,
-    "baseUrl": ".",
+    "baseUrl": "../.site_modules/node_modules",
     "paths": {
       "~/*": [
-        "./*"
+        "../../in2it_site/*"
       ],
       "@/*": [
-        "./*"
+        "../../in2it_site/*"
       ]
     },
     "esModuleInterop": true,

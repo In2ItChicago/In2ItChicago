@@ -1,11 +1,9 @@
 <template>
 	<footer class="footer">
-        <div class="container-fluid d-flex">
-            <div class="mr-auto">Copyright 2019</div>
-            <div class="ml-auto">A ChiHackNight Project</div>
-            <div class="logo-container">
+        <div class="container">
+            <div class="container-fluid d-flex row">
                 <a href="https://chihacknight.org/" target="_blank">
-                    <img class="chihacknight-logo" src="/img/chihacknight-logo.png"/>
+                    <img src="/img/chihacknight-logo-light.png" class="chihacknight-logo" />
                 </a>
             </div>
         </div>

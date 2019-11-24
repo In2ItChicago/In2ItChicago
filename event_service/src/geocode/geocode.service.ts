@@ -1,15 +1,15 @@
 import { Injectable, HttpService, Inject } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { AxiosResponse } from 'axios';
-import { SearchBounds } from '../interfaces/searchBounds';
+import { SearchBounds } from '@src/interfaces/searchBounds';
 import { GeocodeDAL } from '@src/DAL/geocodeDAL';
 import * as GeoPoint from 'geopoint';
 import { readFileSync } from 'fs';
 import * as GeoJsonGeometriesLookup from 'geojson-geometries-lookup';
-import { AddressResult } from 'src/interfaces/addressResult';
-import { sleep } from '../utilities';
+import { AddressResult } from '@src/interfaces/addressResult';
+import { sleep } from '@src/utilities';
 import { GetGeocodeRequest } from '@src/DTO/getGeocodeRequest';
-import { geocodeApiDelayMilliseconds } from '../settings';
+import { geocodeApiDelayMilliseconds } from '@src/settings';
 import { GetGeocodeResponse } from '@src/DTO/getGeocodeResponse';
 import { CoordPair } from '@src/interfaces/coordPair';
 import { map } from 'lodash';
@@ -21,6 +21,9 @@ const geojsonData = readFileSync('./res/chicago_neighborhoods.geojson');
 const geojsonContent = JSON.parse(geojsonData.toString());
 const geoLookup = new GeoJsonGeometriesLookup(geojsonContent);
 
+/**
+ * Service handling all requests for GeoCodes 
+ */
 @Injectable()
 export class GeocodeService {
     lastExecuted: Date;

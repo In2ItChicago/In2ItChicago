@@ -1,14 +1,16 @@
 version: '3.6'
 services:
   event_service:
-    command: ["yarn", "run", "start:debug"]
+    command: sh -c "chmod +x entrypoint.sh && ./entrypoint.sh"
     volumes:
       - ./event_service:/usr/src/app/event_service
-      # hack to prevent mounting node_modules
-      - /usr/src/app/event_service/node_modules/
+      - ./.event_service_data/vscode_server:/root/.vscode-server
+    labels:
+      caddy.address: api.localhost:80
+    environment:
+      - HOST=postgres
   event_processor:
-    # -L runs nodemon in legacy mode (necessary over Docker)
-    command: sh -c "chmod +x entrypoint.sh && ./node_modules/nodemon/bin/nodemon.js -L --exec ./entrypoint.sh"
+    command: sh -c "chmod +x entrypoint.sh && nodemon --exec ./entrypoint.sh"
     environment:
       - DEBUG=${EVENT_PROCESSOR_DEBUG}
       - VERBOSE_OUTPUT=${VERBOSE_OUTPUT}
@@ -17,31 +19,39 @@ services:
       - SPIDER_NAME=${SPIDER_NAME}
     volumes:
       - ./event_processor:/usr/src/app/event_processor
-      - /usr/src/app/event_processor/node_modules/
       - event_processor_data:/usr/src/app/event_processor/data/
       - event_processor_lock:/usr/src/app/event_processor/lock/
       - event_processor_scrapy:/usr/src/app/event_processor/.scrapy/
+      - ./.event_processor_data/vscode_server:/root/.vscode-server
   in2it_site:
-    command: ["yarn", "run", "docker-debug"]
+    command: sh -c "chmod +x entrypoint.sh && ./entrypoint.sh"
     volumes:
       - ./in2it_site:/usr/src/app/in2it_site
-      - /usr/src/app/in2it_site/node_modules/
+      - ./.in2it_site/vscode_server:/root/.vscode-server
     environment:
-      - IN2IT_API_URL=${IN2IT_API_URL:-api.localhost}
+      - IN2IT_API_URL=${IN2IT_API_URL:-http://api.localhost}
+    labels:
+      caddy.address: localhost:80
   postgres:
+    image: postgres:11.5-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    networks: 
+      - in2it
     volumes:
       - postgres_data:/var/lib/postgresql/data
-  nginx:
-    command: sh -c "chmod +x entrypoint.sh && nodemon -L --exec ./entrypoint.sh"
-    environment:
-      - SERVER_NAME=localhost
   ndscheduler:
-    command: "./node_modules/nodemon/bin/nodemon.js -L -u simple_scheduler/scheduler.py"
+    command: sh -c "chmod +x entrypoint.sh && nodemon --exec ./entrypoint.sh"
     volumes:
       - ../ndscheduler:/usr/src/app/ndscheduler
       - ndscheduler_modules:/usr/src/app/ndscheduler/node_modules/
+      - ../.ndscheduler_data/vscode_remote:/root/vscode-remote
     environment:
       - DEBUG=${SCHEDULER_DEBUG}
+      - HOSTNAME=postgres
 volumes:
   ndscheduler_modules:
   postgres_data:

@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { GeocodeService } from './geocode.service';
+import { GeocodeService } from '@src/geocode/geocode.service';
 
 describe('GeocodeService', () => {
   let service: GeocodeService;

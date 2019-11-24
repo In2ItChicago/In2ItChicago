@@ -1,89 +1,41 @@
 <template>
 	<div>
-		<div class="content-row">
-			<filters @filterApplied="updateEvents()"></filters>
-			<event-list :events="events"></event-list>
+		<page-title></page-title>
+		<filters @filterApplied="updateEvents()"></filters>
+
+		<div class="landing-page-image-row row justify-content-center">
+			<img class="landing-page-image" src="/img/landing-page-left.jpg">
+			<img class="landing-page-image" src="/img/landing-page-right.png">
 		</div>
-		<no-ssr>
-			<notifications group="default"/>
-		</no-ssr>
-	</div>	
+	</div>
 </template>
 
 <script lang='ts'>
-	import axios from 'axios';
 	import Filters from '~/components/Filters.vue';
-	import EventList from '~/components/EventList.vue';
-	
-	import { dummyData } from '~/store/dummyData.js';
-	
-	// function getClient(url: string): Service<any> {
-	// 	const app = feathers();
-	// 	const restClient = rest('http://' + url);
-	// 	app.configure(restClient.axios(axios));
-	// 	return app.service('events');
-	// }
-	function getEventURL(in2itApiUrl) {
-		const eventURL = process.server ? 'event_service:5000' : in2itApiUrl;
-		return `http://${eventURL}/events`;
-	}
+	import PageTitle from '~/components/PageTitle.vue';
 
 	export default {
-		data() {
-			return {
-				events: [],
-			};
-		},
-		asyncData ({ app, params }) {
-            //Ensure get request goes to an endpoint that returns an array or json object
-            //If a regular HTML page is returned, the v-for in the view above will try to
-            //render each character in the HTML page string as a separate event and nuxt
-			//will run out of memory
-            if (process.env.DUMMY_DATA) {
-                return { events: dummyData };
-			}
-
-			return axios.get(getEventURL(app.$env.IN2IT_API_URL))
-				.then(res => {
-					return { events: res.data };
-				});
-		},
 		methods: {
 			updateEvents: function() {
-				// Manually set the time to 11:59 PM for now because we don't have a time picker yet
-				this.$store.searchFilter.endDate.setHours(23, 59, 59);
-
-				return axios.get(getEventURL(this.$env.IN2IT_API_URL), {
-					params: {
-						startTime: this.$store.searchFilter.startDate, 
-						endTime: this.$store.searchFilter.endDate,
-						miles: this.$store.searchFilter.searchRadius,
-						address: this.$store.searchFilter.addressOrZip,
-						organization: this.$store.searchFilter.organization,
-						neighborhood: this.$store.searchFilter.neighborhood
-					}
-				})
-				.then((res) => {
-					this.events = res.data;
-
-					this.$notify({
-						group: 'default',
-						title: 'Filters applied',
-						type: 'success'
-					});
-				})
-				.catch((res) => {
-					this.$notify({
-						group: 'default',
-						title: 'Error applying filters',
-						type: 'error'
-					});
-				});
+				this.$router.push('/events');
 			}
 		},
 		components: {
 			Filters,
-			EventList
+			PageTitle
 		}
 	};
 </script>
+
+<style scoped>
+	@media (max-width: 768px) {
+        .landing-page-image-row{
+            margin-top:0px;
+		}
+		
+		.landing-page-image{
+			width:42vw;
+			height:42vw;
+		}
+    }
+</style>

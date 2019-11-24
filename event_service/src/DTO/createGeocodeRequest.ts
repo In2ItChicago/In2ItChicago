@@ -1,5 +1,8 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 
+/**
+ * Model for a Geocode creation request???
+ */
 export class CreateGeocodeRequest {
     @ApiModelProperty()
     address: string;
