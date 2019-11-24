@@ -9,14 +9,11 @@ class ForMyBlockSpider(ScraperNoTransposeSpider):
     
     def __init__(self, name=None, **kwargs):
         super().__init__(self, 'My Block, My Hood, My City', base_url='https://www.formyblock.org/', date_format = '%Y-%m-%d', **kwargs)
-        #del self.custom_settings['SPIDER_MIDDLEWARES']['scrapy_impl.middlewares.SplitItemsMiddleware']
 
     def parse(self, response):
-
         all_future_events=response.css(".eventlist--upcoming")
-        #self.logger.info(all_future_events)
+
         for event in all_future_events.css("article"):
-           # self.logger.info(event)
             yield {
                 "url": response.urljoin(event.css(".eventlist-title-link::attr(href)").get()),
                 "title": event.css(".eventlist-title-link::text").get(),
