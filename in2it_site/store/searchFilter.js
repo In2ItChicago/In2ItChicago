@@ -27,6 +27,6 @@ export const mutations = {
     },
 
     setOffset (state, pageNumber) {
-        state.offset = pageNumber * state.limit;
+        state.offset = (pageNumber - 1) * state.limit;
     }
 }

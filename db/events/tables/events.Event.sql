@@ -19,9 +19,8 @@ WITH (
 )
 TABLESPACE pg_default;
 
-CREATE INDEX organization_search ON events.event USING GIN (to_tsvector('english', organization));
-CREATE INDEX event_title_search ON events.event USING GIN (to_tsvector('english', title));
-CREATE INDEX event_description_search ON events.event USING GIN (to_tsvector('english', description));
+CREATE INDEX event_text_search ON events.event USING GIN((setweight(to_tsvector('english', organization), 'A') || 
+       setweight(to_tsvector('english', title), 'B') || setweight(to_tsvector('english', description), 'C')));
 
 
 ALTER TABLE events.Event
@@ -35,3 +34,8 @@ ALTER TABLE events.Event
 -- FROM  events.event, to_tsquery('year') query
 -- WHERE title @@ query
 -- order by titlescore desc, descscore desc
+
+-- SELECT title, description, organization, ts_rank_cd(vector, query) AS score, null as titlescore
+-- FROM  events.event, to_tsquery('wicker') query, to_tsvector(organization || ' ' || title || ' ' || description) vector
+-- WHERE vector @@ query
+-- order by score desc

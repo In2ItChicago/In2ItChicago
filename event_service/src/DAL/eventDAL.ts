@@ -23,7 +23,7 @@ const db = knex(knexStringcase({
  */
 export class EventDAL {
     async getEvents(query: GetEventsRequest, searchBounds: SearchBounds): Promise<any> {
-        const result = await this.queryEvents(db('events.event as event').select(
+        let result = await this.queryEvents(db('events.event as event').select(
             'event.id',
             'event.title',
             'event.url',
@@ -42,6 +42,12 @@ export class EventDAL {
         .limit(query.limit || DEFAULT_LIMIT)
         .orderBy('event.isManual', 'desc')
         .orderBy('event.startTime', 'asc');
+        debugger;
+        if (query.keywords) {
+            const searchResults = await this.textSeach(query.keywords);
+            const searchIds = searchResults.map(r => r.id);
+            result = result.filter(r => searchIds.indexOf(r.id) > -1).map(r => Object.assign(r, searchResults.filter(s => s.id === r.id)[0].score));
+        }
 
         const resultCount = await this.queryEvents(db('events.event as event').count('*'), query, searchBounds)
                     
@@ -64,6 +70,13 @@ export class EventDAL {
 
     async deleteAllEvents() {
         await db('events.event').del();
+    }
+
+    async textSeach(keywords: string): Promise<any[]> {
+        const res = await db.select(knex.raw(
+            `id, ts_rank_cd(vector, query) AS score FROM events.event, to_tsquery(':keywords:') query, to_tsvector(organization || ' ' || title || ' ' || description) vector WHERE vector @@ query order by score desc`, { keywords }
+        ));
+        return res;
     }
 
     private queryEvents(selectFunc: any, query: GetEventsRequest, searchBounds: SearchBounds) {

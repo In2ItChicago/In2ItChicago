@@ -70,4 +70,7 @@ export class GetEventsRequest {
     @Type(() => Number)
     @ApiModelProperty({required: false})
     offset?: number;
+
+    @ApiModelProperty({required: false})
+    keywords?: string;
 }
