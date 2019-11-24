@@ -23,10 +23,10 @@ scraper_settings = {
 
 no_transpose_scraper_settings  = {
         'ITEM_PIPELINES': {
-            'scrapy_impl.pipelines.EventTransformPipeline': 300,
-            'scrapy_impl.pipelines.GeocodePipeline': 400,
-            'scrapy_impl.pipelines.EventBuildPipeline': 500,
-            'scrapy_impl.pipelines.EventSavePipeline': 600
+            'event_processor.scrapy_impl.pipelines.EventTransformPipeline': 300,
+            'event_processor.scrapy_impl.pipelines.GeocodePipeline': 400,
+            'event_processor.scrapy_impl.pipelines.EventBuildPipeline': 500,
+            'event_processor.scrapy_impl.pipelines.EventSavePipeline': 600
         }
     }
 

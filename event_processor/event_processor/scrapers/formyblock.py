@@ -1,4 +1,4 @@
-from base.custom_spiders import ScraperNoTransposeSpider
+from event_processor.base.custom_spiders import ScraperNoTransposeSpider
 
 class ForMyBlockSpider(ScraperNoTransposeSpider):
     name = 'formyblock'
