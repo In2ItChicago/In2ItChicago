@@ -15,3 +15,11 @@ TABLESPACE pg_default;
 
 ALTER TABLE geocode.Location
     OWNER to postgres;
+
+CREATE EXTENSION cube;
+CREATE EXTENSION earthdistance;
+
+CREATE INDEX lat_lon_distance
+ON geocode.location
+USING gist(ll_to_earth(lat, lon))
+WHERE lat IS NOT NULL AND Lon IS NOT NULL AND Lat != 'NaN' AND Lon != 'NaN';

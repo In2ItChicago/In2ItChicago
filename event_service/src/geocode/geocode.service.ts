@@ -1,7 +1,6 @@
 import { Injectable, HttpService, Inject } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { AxiosResponse } from 'axios';
-import { SearchBounds } from '@src/interfaces/searchBounds';
 import { GeocodeDAL } from '@src/DAL/geocodeDAL';
 import * as GeoPoint from 'geopoint';
 import { readFileSync } from 'fs';
@@ -34,21 +33,6 @@ export class GeocodeService {
         @Inject('EventDAL') private readonly eventDAL: EventDAL
     ) {
         this.lastExecuted = new Date();
-    }
-    async radiusSearch(request: GetGeocodeRequest, miles: number): Promise<SearchBounds> {
-        let searchBounds: SearchBounds;
-        const foundAddress = await this.getGeocode(request);
-        if (foundAddress.lat && foundAddress.lon) {
-            const point = new GeoPoint(foundAddress.lat, foundAddress.lon);
-            const bounds = point.boundingCoordinates(miles);
-            searchBounds = {
-                minLat: Math.min(bounds[0]._degLat, bounds[1]._degLat),
-                maxLat: Math.max(bounds[0]._degLat, bounds[1]._degLat),
-                minLon: Math.min(bounds[0]._degLon, bounds[1]._degLon),
-                maxLon: Math.max(bounds[0]._degLon, bounds[1]._degLon),
-            };
-        }
-        return searchBounds;
     }
 
     async geoSearch(address: string): Promise<AddressResult | null> {
