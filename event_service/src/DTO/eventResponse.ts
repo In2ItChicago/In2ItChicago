@@ -92,6 +92,9 @@ export class EventResponse {
     @ApiModelProperty()
     lon: number;
 
+    /**
+     * Score returned from text search ranking
+     */
     @Type(() => Number)
     @ApiModelProperty()
     score: number;
