@@ -91,4 +91,8 @@ export class EventResponse {
     @Type(() => Number)
     @ApiModelProperty()
     lon: number;
+
+    @Type(() => Number)
+    @ApiModelProperty()
+    score: number;
 }

@@ -3,11 +3,9 @@ import * as knexStringcase from 'knex-stringcase';
 import * as _ from 'lodash';
 import { GetEventsRequest } from '@src/DTO/getEventsRequest';
 import { SearchBounds } from '@src/interfaces/searchBounds';
-import { Get } from '@nestjs/common';
-import { GetEventsResponse } from '@src/DTO/getEventsResponse';
-import { AnyTxtRecord } from 'dns';
 
 const DEFAULT_LIMIT = 25;
+const makeVector = `to_tsvector(organization || ' ' || title || ' ' || description)`;
 const db = knex(knexStringcase({
     client: 'postgresql',
     connection: {
@@ -23,6 +21,7 @@ const db = knex(knexStringcase({
  */
 export class EventDAL {
     async getEvents(query: GetEventsRequest, searchBounds: SearchBounds): Promise<any> {
+
         let result = await this.queryEvents(db('events.event as event').select(
             'event.id',
             'event.title',
@@ -37,21 +36,17 @@ export class EventDAL {
             'geo.address',
             'geo.lat',
             'geo.lon',
-            'geo.neighborhood'), query, searchBounds)
+            'geo.neighborhood')
+            .select(db.raw(`${query.keywords ? `ts_rank_cd(${makeVector}, to_tsquery(?))` : '0'} as rank`, query.keywords)), query, searchBounds)
         .offset(query.offset || 0)
         .limit(query.limit || DEFAULT_LIMIT)
+        .orderBy('rank', 'desc')
         .orderBy('event.isManual', 'desc')
         .orderBy('event.startTime', 'asc');
-        debugger;
-        if (query.keywords) {
-            const searchResults = await this.textSeach(query.keywords);
-            const searchIds = searchResults.map(r => r.id);
-            result = result.filter(r => searchIds.indexOf(r.id) > -1).map(r => Object.assign(r, searchResults.filter(s => s.id === r.id)[0].score));
-        }
 
-        const resultCount = await this.queryEvents(db('events.event as event').count('*'), query, searchBounds)
+        const resultCount = await this.queryEvents(db('events.event as event').count('*'), query, searchBounds).first();
                     
-        return {'totalCount': resultCount[0].count, 'events': result};
+        return {'totalCount': resultCount.count, 'events': result};
     }
 
     async createEvents(data: any): Promise<any> {
@@ -72,13 +67,6 @@ export class EventDAL {
         await db('events.event').del();
     }
 
-    async textSeach(keywords: string): Promise<any[]> {
-        const res = await db.select(knex.raw(
-            `id, ts_rank_cd(vector, query) AS score FROM events.event, to_tsquery(':keywords:') query, to_tsvector(organization || ' ' || title || ' ' || description) vector WHERE vector @@ query order by score desc`, { keywords }
-        ));
-        return res;
-    }
-
     private queryEvents(selectFunc: any, query: GetEventsRequest, searchBounds: SearchBounds) {
         const res = selectFunc
                     .innerJoin('geocode.location as geo', 'event.geocode_id', 'geo.id')
@@ -97,6 +85,9 @@ export class EventDAL {
                         }
                         if (query.neighborhood) {
                             queryBuilder.andWhere('geo.neighborhood', '=', query.neighborhood);
+                        }
+                        if (query.keywords) {
+                            queryBuilder.andWhereRaw(`${makeVector} @@ to_tsquery(?)`, query.keywords)
                         }
                     });
         return res;

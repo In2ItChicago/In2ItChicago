@@ -71,6 +71,9 @@ export class GetEventsRequest {
     @ApiModelProperty({required: false})
     offset?: number;
 
+    /**
+     * Keywords for full text search on organization, title, and description
+     */
     @ApiModelProperty({required: false})
     keywords?: string;
 }
