@@ -44,5 +44,4 @@ class SpiderBase(AggregatorBase):
             if len(value) != count:
                 raise ValueError(f'{self.organization}: Time selectors returned data of differing lengths')
         return [{key: value[i] for key, value in kwargs.items()} for i in range(count)]
-
         
