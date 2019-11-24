@@ -21,7 +21,7 @@ export class EventService {
             searchBounds = await this.geocodeService.radiusSearch({ address: query.address }, query.miles);
         }
         if (query.keywords) {
-            query.keywords = query.keywords.split(' ').join('|');
+            query.keywords = query.keywords.split(' ').join('&');
         }
         const eventResponse = await this.eventDAL.getEvents(query, searchBounds);
 

@@ -23,12 +23,6 @@ export class GetEventsRequest {
     endTime?: Date;
 
     /**
-     * The organiztion running the events. Optional.
-     */
-    @ApiModelProperty({required: false})
-    organization?: string;
-
-    /**
      * The address of where to search for the events from??? Optional unless "miles" is provided
      */
     @ValidateIf(o => o.miles != null)

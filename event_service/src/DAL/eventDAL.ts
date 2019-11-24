@@ -37,7 +37,7 @@ export class EventDAL {
             'geo.lat',
             'geo.lon',
             'geo.neighborhood')
-            .select(db.raw(`${query.keywords ? `ts_rank_cd(${makeVector}, to_tsquery(?))` : '0'} as rank`, query.keywords)), query, searchBounds)
+            .select(db.raw(`${query.keywords ? `ts_rank_cd(${makeVector}, to_tsquery(?))` : '?'} as rank`, query.keywords ? query.keywords : 0)), query, searchBounds)
         .offset(query.offset || 0)
         .limit(query.limit || DEFAULT_LIMIT)
         .orderBy('rank', 'desc')
@@ -80,9 +80,7 @@ export class EventDAL {
                                 .andWhere('geo.lon', '>=', searchBounds.minLon)
                                 .andWhere('geo.lon', '<=', searchBounds.maxLon);
                         }
-                        if (query.organization) {
-                            queryBuilder.andWhere('event.organization', '=', query.organization);
-                        }
+                        
                         if (query.neighborhood) {
                             queryBuilder.andWhere('geo.neighborhood', '=', query.neighborhood);
                         }
