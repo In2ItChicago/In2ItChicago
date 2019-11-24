@@ -80,7 +80,7 @@ export class EventDAL {
                                 .whereNotNull('geo.lon')
                                 .andWhere('geo.lat', '!=', 'NaN')
                                 .andWhere('geo.lon', '!=', 'NaN')
-                                .andWhereRaw(`earth_distance(ll_to_earth(geo.lat, geo.lon), ll_to_earth(${geocode.lat}, ${geocode.lon})) <= ${query.miles * MILES_TO_METERS}`)
+                                .andWhereRaw('earth_distance(ll_to_earth(geo.lat, geo.lon), ll_to_earth(?, ?)) <= ?', [geocode.lat, geocode.lon, query.miles * MILES_TO_METERS])
                         }
                         
                         if (query.neighborhood) {
