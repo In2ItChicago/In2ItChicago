@@ -24,4 +24,4 @@ Beaker = "==1.11.0"
 timefhuman = {editable = true,git = "https://github.com/alvinwan/timefhuman",ref = "2595375dd7793c0760663a24f420dfb2d12673ff"}
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"
