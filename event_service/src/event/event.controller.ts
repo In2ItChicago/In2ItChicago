@@ -29,6 +29,7 @@ export class EventController {
     @ApiImplicitBody({name: 'Array', type: CreateEventsRequest, isArray: true})
     @ApiResponse({status: 201, description: 'Created'})
     async createEvents(@Body() request: CreateEventsRequest[]) {
+        request = request.map(r => plainToClass(CreateEventsRequest, r));
         await this.eventService.createEvents(request);
     }
 

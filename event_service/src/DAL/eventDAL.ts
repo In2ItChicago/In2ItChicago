@@ -51,7 +51,18 @@ export class EventDAL {
     }
 
     async createEvents(data: any): Promise<any> {
-        const val = await db('events.event').insert(data);
+        const val = await db('events.event').insert(data.map(d => ({
+            title: d.title, 
+            url: d.url,
+            description: d.description,
+            organization: d.organization,
+            price: d.price,
+            geocodeId: d.geocodeId,
+            start_time: d.start_time,
+            endTime: d.end_time,
+            category: d.category,
+            is_manual: d.is_manual
+        })));
         return val;
     }
 

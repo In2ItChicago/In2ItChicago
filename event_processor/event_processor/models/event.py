@@ -9,6 +9,9 @@ from scrapy.loader import ItemLoader
 def custom_field():
     return scrapy.Field(input_processor=MapCompose(DataUtils.remove_html), output_processor=Join())
 
+def numeric_field():
+    return scrapy.Field(input_processor=MapCompose(DataUtils.remove_html), output_processor=TakeFirst())
+
 def price_field():
     return scrapy.Field(input_processor=MapCompose(
             lambda value: value.replace('$', '') if type(value) == str else value,
@@ -78,6 +81,8 @@ class Event(scrapy.Item):
     title = custom_field()
     description = custom_field()
     address = address_field()
+    lat = numeric_field()
+    lon = numeric_field()
     url = url_field()
     price = price_field()
     category = category_field()

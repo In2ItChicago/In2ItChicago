@@ -16,8 +16,8 @@ TABLESPACE pg_default;
 ALTER TABLE geocode.Location
     OWNER to postgres;
 
-CREATE EXTENSION cube;
-CREATE EXTENSION earthdistance;
+CREATE EXTENSION cube schema pg_catalog;
+CREATE EXTENSION earthdistance schema pg_catalog;
 
 CREATE INDEX lat_lon_distance
 ON geocode.location

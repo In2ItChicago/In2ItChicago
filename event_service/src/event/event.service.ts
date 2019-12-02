@@ -18,7 +18,7 @@ export class EventService {
     async getEvents(query: GetEventsRequest): Promise<GetEventsResponse> {
         let geocode: GetGeocodeResponse | null = null;
         if (query.address) {
-            geocode = await this.geocodeService.getGeocode({ address: query.address });
+            geocode = await this.geocodeService.getGeocode({ address: query.address, lat: null, lon: null });
         }
         if (query.keywords) {
             query.keywords = query.keywords.split(' ').join('&');
@@ -39,6 +39,7 @@ export class EventService {
     }
 
     async createEvents(contextData: CreateEventsRequest[]) {
+        contextData = contextData.map(c => plainToClass(CreateEventsRequest, c));
         const invalid = contextData.filter(data => !(
             data.organization && 
             data.eventTime && 

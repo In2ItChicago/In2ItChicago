@@ -35,35 +35,45 @@ export class GeocodeService {
         this.lastExecuted = new Date();
     }
 
-    async geoSearch(address: string): Promise<AddressResult | null> {
-        const baseUrl = 'https://nominatim.openstreetmap.org/search';
-        const diff = new Date().valueOf() - this.lastExecuted.valueOf();
-        if (diff <= geocodeApiDelayMilliseconds) {
-            await sleep(diff);
-        }
-        let response: AxiosResponse<CoordPair[]>;
-        response = await this.httpService.get<CoordPair[]>(encodeURI(`${baseUrl}?q=${address}&format=json`)).toPromise();;
-
-        this.lastExecuted = new Date();
-
-        if (response.data.length === 0) {
-            return {
-                address,
-                lat: null,
-                lon: null,
-                neighborhood: null,
-            };
-        }
-
-        const data = response.data[0];
+    async geoSearch(request: GetGeocodeRequest): Promise<AddressResult> {
         const result: AddressResult = {
-            address,
-            lat: parseFloat(data.lat),
-            lon: parseFloat(data.lon),
+            address: request.address,
+            lat: null,
+            lon: null,
             neighborhood: null,
         };
+        let coords: string[];
+        if (request.lat && request.lon) {
+            result.lat = request.lat;
+            result.lon = request.lon; 
+            coords = [request.lon.toString(), request.lat.toString()];
+        }
+        else {
+            const baseUrl = 'https://nominatim.openstreetmap.org/search';
+            const diff = new Date().valueOf() - this.lastExecuted.valueOf();
+            if (diff <= geocodeApiDelayMilliseconds) {
+                await sleep(diff);
+            }
+            let response: AxiosResponse<CoordPair[]>;
+            response = await this.httpService.get<CoordPair[]>(encodeURI(`${baseUrl}?q=${request.address}&format=json`)).toPromise();;
 
-        const geojsonPoint = { type: 'Point', coordinates: [data.lon, data.lat] };
+            this.lastExecuted = new Date();
+
+            if (response.data.length === 0) {
+                return {
+                    address: request.address,
+                    lat: null,
+                    lon: null,
+                    neighborhood: null,
+                };
+            }
+            const data = response.data[0];
+            result.lat = parseFloat(data.lat),
+            result.lon = parseFloat(data.lon);
+            coords = [data.lon, data.lat]
+        }
+
+        const geojsonPoint = { type: 'Point', coordinates: coords };
         const matches = geoLookup.getContainers(geojsonPoint).features;
         if (matches.length > 0) {
             result.neighborhood = matches[0].properties.pri_neigh;
@@ -94,7 +104,7 @@ export class GeocodeService {
         }
         let webServiceResult: AddressResult | null = null;
         if (query.address) {
-            webServiceResult = await this.geoSearch(query.address);
+            webServiceResult = await this.geoSearch(query);
         }
 
         const id = await this.geocodeDAL.createGeocode(webServiceResult);
