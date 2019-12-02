@@ -1,4 +1,4 @@
-FROM node:12.8.1-alpine AS event_service_common
+FROM node:13.2-alpine AS event_service_common
 ENV NODE_PATH=/usr/src/app/.service_modules/node_modules
 ENV PATH=/usr/src/app/.service_modules/node_modules/.bin:$PATH
 WORKDIR /usr/src/app/.service_modules
