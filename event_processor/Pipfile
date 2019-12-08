@@ -23,6 +23,7 @@ Scrapy = "==1.8.0"
 DateRangeParser = "==1.3.2"
 Beaker = "==1.11.0"
 timefhuman = {editable = true,git = "https://github.com/alvinwan/timefhuman",ref = "2595375dd7793c0760663a24f420dfb2d12673ff"}
+scrapy-splash = "==0.7.2"
 
 [requires]
 python_version = "3.8"
