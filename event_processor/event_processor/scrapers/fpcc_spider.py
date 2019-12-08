@@ -8,8 +8,6 @@ from scrapy_splash import SplashRequest
 
 
 class FpccSpider(ScraperSplashSpider):
-    """Base class for spiders that use splash for retrieving data generated through dynamic javascript content"""
-    # Placeholder values that can be used if no request needs to be made through Scrapy
     allowed_domains = ['ec.samaritan.com', 'splash']
     start_urls = ['https://ec.samaritan.com/recruiter/index.php?class=RecruiterCalendar&recruiterID=1405']
     name = "fpcc"
@@ -41,15 +39,16 @@ class FpccSpider(ScraperSplashSpider):
         if 'title' in response:
             find_start_time = ''
             find_end_time = ''
+            time_find_index = -1
             extract_times = re.findall("([0-9]?[0-9]:[0-9][0-9] [ap]m)", response['date_unparsed'])
             if len(extract_times) > 0:
                 find_start_time = extract_times[0]
+                extract_date = response['date_unparsed']
+            time_find_index = response['date_unparsed'].index(extract_times[0])
             if len(extract_times) > 1:
                 find_end_time = extract_times[1]
 
-            extract_date = response['date_unparsed']
-            time_find_index = response['date_unparsed'].index(extract_times[0])
-            if time_find_index != None and time_find_index >= 0:
+            if time_find_index >= 0:
                 extract_date = response['date_unparsed'][:(time_find_index - 1)]
                 
             return {
