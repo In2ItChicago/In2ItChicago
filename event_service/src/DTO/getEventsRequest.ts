@@ -23,12 +23,6 @@ export class GetEventsRequest {
     endTime?: Date;
 
     /**
-     * The organiztion running the events. Optional.
-     */
-    @ApiModelProperty({required: false})
-    organization?: string;
-
-    /**
      * The address of where to search for the events from??? Optional unless "miles" is provided
      */
     @ValidateIf(o => o.miles != null)
@@ -70,4 +64,10 @@ export class GetEventsRequest {
     @Type(() => Number)
     @ApiModelProperty({required: false})
     offset?: number;
+
+    /**
+     * Keywords for full text search on organization, title, and description
+     */
+    @ApiModelProperty({required: false})
+    keywords?: string;
 }

@@ -48,7 +48,7 @@
 			},
 			pageCount: function() {
 				if (this.eventResult) {
-					return Math.floor(this.eventResult.totalCount / 4);
+					return Math.ceil(this.eventResult.totalCount / 4);
 				}
 				return 3;
 			}

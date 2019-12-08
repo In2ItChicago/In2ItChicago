@@ -44,7 +44,12 @@ class GeocodePipeline:
     def process_item(self, item, spider):
         if 'address' in item:
             try:
-                geocode = self.session.get(config.get_geocode, params={'address': item['address']})
+                params = {
+                    'address': item['address'], 
+                    'lat': item['lat'] if 'lat' in item else None, 
+                    'lon': item['lon'] if 'lon' in item else None
+                }
+                geocode = self.session.get(config.get_geocode, params=params)
                 geocode_json = geocode.json()
                 
                 item['geocode_id'] = geocode_json['id']

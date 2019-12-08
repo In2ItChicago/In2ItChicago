@@ -2,12 +2,11 @@ import * as knex from 'knex';
 import * as knexStringcase from 'knex-stringcase';
 import * as _ from 'lodash';
 import { GetEventsRequest } from '@src/DTO/getEventsRequest';
-import { SearchBounds } from '@src/interfaces/searchBounds';
-import { Get } from '@nestjs/common';
-import { GetEventsResponse } from '@src/DTO/getEventsResponse';
-import { AnyTxtRecord } from 'dns';
+import { GetGeocodeResponse } from '@src/DTO/getGeocodeResponse';
 
 const DEFAULT_LIMIT = 25;
+const MILES_TO_METERS = 1609.34;
+const makeVector = `to_tsvector(organization || ' ' || title || ' ' || description)`;
 const db = knex(knexStringcase({
     client: 'postgresql',
     connection: {
@@ -22,8 +21,9 @@ const db = knex(knexStringcase({
  * Middleware for processing a raw event object to event response objects? 
  */
 export class EventDAL {
-    async getEvents(query: GetEventsRequest, searchBounds: SearchBounds): Promise<any> {
-        const result = await this.queryEvents(db('events.event as event').select(
+    async getEvents(query: GetEventsRequest, geocode: GetGeocodeResponse): Promise<any> {
+
+        let result = await this.queryEvents(db('events.event as event').select(
             'event.id',
             'event.title',
             'event.url',
@@ -37,19 +37,32 @@ export class EventDAL {
             'geo.address',
             'geo.lat',
             'geo.lon',
-            'geo.neighborhood'), query, searchBounds)
+            'geo.neighborhood')
+            .select(db.raw(`${query.keywords ? `ts_rank_cd(${makeVector}, to_tsquery(?))` : '?'} as rank`, query.keywords ? query.keywords : 0)), query, geocode)
         .offset(query.offset || 0)
         .limit(query.limit || DEFAULT_LIMIT)
+        .orderBy('rank', 'desc')
         .orderBy('event.isManual', 'desc')
         .orderBy('event.startTime', 'asc');
 
-        const resultCount = await this.queryEvents(db('events.event as event').count('*'), query, searchBounds)
+        const resultCount = await this.queryEvents(db('events.event as event').count('*'), query, geocode).first();
                     
-        return {'totalCount': resultCount[0].count, 'events': result};
+        return {'totalCount': resultCount.count, 'events': result};
     }
 
     async createEvents(data: any): Promise<any> {
-        const val = await db('events.event').insert(data);
+        const val = await db('events.event').insert(data.map(d => ({
+            title: d.title, 
+            url: d.url,
+            description: d.description,
+            organization: d.organization,
+            price: d.price,
+            geocodeId: d.geocodeId,
+            start_time: d.start_time,
+            endTime: d.end_time,
+            category: d.category,
+            is_manual: d.is_manual
+        })));
         return val;
     }
 
@@ -66,24 +79,26 @@ export class EventDAL {
         await db('events.event').del();
     }
 
-    private queryEvents(selectFunc: any, query: GetEventsRequest, searchBounds: SearchBounds) {
+    private queryEvents(selectFunc: any, query: GetEventsRequest, geocode: GetGeocodeResponse) {
         const res = selectFunc
                     .innerJoin('geocode.location as geo', 'event.geocode_id', 'geo.id')
                     .where('event.startTime', '>=', query.startTime || '01-01-1970')
                     .andWhere('event.endTime', '<=', query.endTime || '12-31-2099')
                     .modify((queryBuilder) => {
-                        if (searchBounds) {
+                        if (geocode) {
                             queryBuilder
-                                .andWhere('geo.lat', '>=', searchBounds.minLat)
-                                .andWhere('geo.lat', '<=', searchBounds.maxLat)
-                                .andWhere('geo.lon', '>=', searchBounds.minLon)
-                                .andWhere('geo.lon', '<=', searchBounds.maxLon);
+                                .whereNotNull('geo.lat')
+                                .whereNotNull('geo.lon')
+                                .andWhere('geo.lat', '!=', 'NaN')
+                                .andWhere('geo.lon', '!=', 'NaN')
+                                .andWhereRaw('earth_distance(ll_to_earth(geo.lat, geo.lon), ll_to_earth(?, ?)) <= ?', [geocode.lat, geocode.lon, query.miles * MILES_TO_METERS])
                         }
-                        if (query.organization) {
-                            queryBuilder.andWhere('event.organization', '=', query.organization);
-                        }
+                        
                         if (query.neighborhood) {
                             queryBuilder.andWhere('geo.neighborhood', '=', query.neighborhood);
+                        }
+                        if (query.keywords) {
+                            queryBuilder.andWhereRaw(`${makeVector} @@ to_tsquery(?)`, query.keywords)
                         }
                     });
         return res;

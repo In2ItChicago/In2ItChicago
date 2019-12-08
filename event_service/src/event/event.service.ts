@@ -1,5 +1,4 @@
 import { Injectable, HttpService, Inject } from '@nestjs/common';
-import { SearchBounds } from '@src/interfaces/searchBounds';
 import { EventDAL } from '@src/DAL/eventDAL';
 import { timestampToDate } from '@src/utilities';
 import { GetEventsRequest } from '@src/DTO/getEventsRequest';
@@ -8,6 +7,7 @@ import * as _ from 'lodash';
 import { GeocodeService } from '@src/geocode/geocode.service';
 import { GetEventsResponse } from '@src/DTO/getEventsResponse';
 import { plainToClass } from 'class-transformer';
+import { GetGeocodeResponse } from '@src/DTO/getGeocodeResponse';
 
 @Injectable()
 export class EventService {
@@ -16,12 +16,14 @@ export class EventService {
     }
 
     async getEvents(query: GetEventsRequest): Promise<GetEventsResponse> {
-        let searchBounds: SearchBounds | null = null;
+        let geocode: GetGeocodeResponse | null = null;
         if (query.address) {
-            searchBounds = await this.geocodeService.radiusSearch({ address: query.address }, query.miles);
+            geocode = await this.geocodeService.getGeocode({ address: query.address, lat: null, lon: null });
         }
-
-        const eventResponse = await this.eventDAL.getEvents(query, searchBounds);
+        if (query.keywords) {
+            query.keywords = query.keywords.split(' ').join('&');
+        }
+        const eventResponse = await this.eventDAL.getEvents(query, geocode);
 
         if (eventResponse.events) {
             eventResponse.events = eventResponse.events.map(result => Object.assign(result, {
@@ -37,6 +39,7 @@ export class EventService {
     }
 
     async createEvents(contextData: CreateEventsRequest[]) {
+        contextData = contextData.map(c => plainToClass(CreateEventsRequest, c));
         const invalid = contextData.filter(data => !(
             data.organization && 
             data.eventTime && 

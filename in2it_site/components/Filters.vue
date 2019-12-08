@@ -41,8 +41,8 @@
 			<div class="filter-row form-row justify-content-center">
 				<client-only>
 					<div class="col-sm-12 col-md-4 col-lg-3">
-						<label for="organization" class="d-md-none filter-label">Organization</label>
-						<input type="text" class="form-control" id="organization" placeholder="Organization (Optional)" v-model="filterForm.organization">
+						<label for="keywords" class="d-md-none filter-label">Organization</label>
+						<input type="text" class="form-control" id="keywords" placeholder="Keywords (Optional)" v-model="filterForm.keywords">
 					</div>
 					<div class="col-sm-12 col-md-4 col-lg-3">
 						<label for="distanceFilter" class="d-md-none filter-label">Distance</label>
@@ -93,7 +93,7 @@
 					endTime: this.$store.state.searchFilter.endTime,
 					miles: this.$store.state.searchFilter.miles,
 					address: this.$store.state.searchFilter.address,
-					organization: this.$store.state.searchFilter.organization,
+					keywords: this.$store.state.searchFilter.keywords,
 					neighborhood: this.$store.state.searchFilter.neighborhood,
 					limit: this.$store.state.searchFilter.limit
 				}

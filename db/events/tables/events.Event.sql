@@ -19,5 +19,11 @@ WITH (
 )
 TABLESPACE pg_default;
 
+CREATE INDEX event_text_search ON events.event USING GIN((
+    setweight(to_tsvector('english', organization), 'A') || 
+    setweight(to_tsvector('english', title), 'B') || 
+    setweight(to_tsvector('english', description), 'C')));
+
+
 ALTER TABLE events.Event
     OWNER to postgres;
