@@ -1,20 +1,16 @@
 #!/bin/bash
-if command -v python3 &>/dev/null; then
-	pythoncmd=python3
-else
-	pythoncmd=python
-fi
 
 scriptpath=$(dirname $0)/check_image_updates.py
 
 echo
 echo "============================="
 echo "Checking for image updates..."
-$pythoncmd $scriptpath library/python 3.8 alpine
-$pythoncmd $scriptpath library/postgres 11.5 alpine
-$pythoncmd $scriptpath dpage/pgadmin4 4.15
-$pythoncmd $scriptpath lucaslorentz/caddy-docker-proxy 0.3.3 alpine
-$pythoncmd $scriptpath library/node 13.2 alpine
-$pythoncmd $scriptpath portainer/portainer 1.22.2
+$scriptpath library/python 3.8 alpine
+$scriptpath library/postgres 11.5 alpine
+$scriptpath dpage/pgadmin4 4.15
+$scriptpath lucaslorentz/caddy-docker-proxy 0.3.3 alpine
+$scriptpath library/node 13.2 alpine
+$scriptpath portainer/portainer 1.22.2
+$scriptpath scrapinghub/splash 3.4
 echo "=============================="
 echo

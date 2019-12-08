@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.0" />
+<meta name="generator" content="pdoc 0.7.1" />
 <title>event_processor.base.custom_spiders API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
@@ -27,6 +27,7 @@
 <pre><code class="python">from scrapy.spiders import Spider, CrawlSpider
 from event_processor.base.spider_base import SpiderBase
 from event_processor.base.api_base import ApiBase
+from event_processor.base.splash_base import SplashBase
 api_settings = {
         &#39;ITEM_PIPELINES&#39;: {
             &#39;event_processor.scrapy_impl.pipelines.EventTransformPipeline&#39;: 300,
@@ -43,7 +44,15 @@ scraper_settings = {
             &#39;event_processor.scrapy_impl.pipelines.EventSavePipeline&#39;: 600
         },
         &#39;SPIDER_MIDDLEWARES&#39;: {
+            &#39;scrapy_splash.SplashDeduplicateArgsMiddleware&#39;: 100,
             &#39;event_processor.scrapy_impl.middlewares.SplitItemsMiddleware&#39;: 400
+        },
+        &#39;DUPEFILTER_CLASS&#39; : &#39;scrapy_splash.SplashAwareDupeFilter&#39;,
+        &#39;HTTPCACHE_STORAGE&#39; : &#39;scrapy_splash.SplashAwareFSCacheStorage&#39;,
+        &#39;DOWNLOADER_MIDDLEWARES&#39; : { 
+            &#39;scrapy_splash.SplashCookiesMiddleware&#39;: 723,
+            &#39;scrapy_splash.SplashMiddleware&#39;: 725,
+            &#39;scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware&#39;: 810,
         }
     }
 
@@ -68,7 +77,12 @@ class ScraperCrawlSpider(CrawlSpider, SpiderBase):
         CrawlSpider.__init__(self)
         SpiderBase.__init__(*args, **kwargs)
 
-# todo; make a spider that can traverse java script click events?  </code></pre>
+class ScraperSplashSpider(Spider, SplashBase):
+    &#34;&#34;&#34;??? Base spider for web crawling with Splash, which can render and extract data from pages that have javascript generated dynamic content&#34;&#34;&#34;
+    custom_settings = scraper_settings
+    def __init__(self, *args, **kwargs):
+        Spider.__init__(self)
+        SplashBase.__init__(*args, **kwargs)</code></pre>
 </details>
 </section>
 <section>
@@ -106,10 +120,11 @@ class ScraperCrawlSpider(CrawlSpider, SpiderBase):
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
-<li><a title="event_processor.apis.greatlakes_ical.GreatLakesReader" href="../apis/greatlakes_ical.html#event_processor.apis.greatlakes_ical.GreatLakesReader">GreatLakesReader</a></li>
-<li><a title="event_processor.apis.honeycomb.Honeycomb" href="../apis/honeycomb.html#event_processor.apis.honeycomb.Honeycomb">Honeycomb</a></li>
 <li><a title="event_processor.apis.library_events.LibraryEvents" href="../apis/library_events.html#event_processor.apis.library_events.LibraryEvents">LibraryEvents</a></li>
 <li><a title="event_processor.apis.lwv_chicago.LWVChicago" href="../apis/lwv_chicago.html#event_processor.apis.lwv_chicago.LWVChicago">LWVChicago</a></li>
+<li><a title="event_processor.apis.honeycomb.Honeycomb" href="../apis/honeycomb.html#event_processor.apis.honeycomb.Honeycomb">Honeycomb</a></li>
+<li><a title="event_processor.apis.documenters.Documenters" href="../apis/documenters.html#event_processor.apis.documenters.Documenters">Documenters</a></li>
+<li><a title="event_processor.apis.greatlakes_ical.GreatLakesReader" href="../apis/greatlakes_ical.html#event_processor.apis.greatlakes_ical.GreatLakesReader">GreatLakesReader</a></li>
 </ul>
 <h3>Class variables</h3>
 <dl>
@@ -169,6 +184,7 @@ dict(one=1, two=2)</p></section>
 <ul class="hlist">
 <li><a title="event_processor.scrapers.history_spider.HistorySpider" href="../scrapers/history_spider.html#event_processor.scrapers.history_spider.HistorySpider">HistorySpider</a></li>
 <li><a title="event_processor.scrapers.wpbcc_spider.WpbccSpider" href="../scrapers/wpbcc_spider.html#event_processor.scrapers.wpbcc_spider.WpbccSpider">WpbccSpider</a></li>
+<li><a title="event_processor.scrapers.chihacknight_crawl_spider.ChiHackNightCrawlSpider" href="../scrapers/chihacknight_crawl_spider.html#event_processor.scrapers.chihacknight_crawl_spider.ChiHackNightCrawlSpider">ChiHackNightCrawlSpider</a></li>
 </ul>
 <h3>Class variables</h3>
 <dl>
@@ -225,6 +241,7 @@ dict(one=1, two=2)</p></section>
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
+<li><a title="event_processor.scrapers.chihacknight_simple_spider.ChiHackNightSpider" href="../scrapers/chihacknight_simple_spider.html#event_processor.scrapers.chihacknight_simple_spider.ChiHackNightSpider">ChiHackNightSpider</a></li>
 <li><a title="event_processor.scrapers.greatlakes_spider.GreatLakesSpider" href="../scrapers/greatlakes_spider.html#event_processor.scrapers.greatlakes_spider.GreatLakesSpider">GreatLakesSpider</a></li>
 </ul>
 <h3>Class variables</h3>
@@ -252,6 +269,66 @@ dict(one=1, two=2)</p></section>
 <li><code><a title="event_processor.base.spider_base.SpiderBase.enabled" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.enabled">enabled</a></code></li>
 <li><code><a title="event_processor.base.spider_base.SpiderBase.get_request" href="spider_base.html#event_processor.base.spider_base.SpiderBase.get_request">get_request</a></code></li>
 <li><code><a title="event_processor.base.spider_base.SpiderBase.name" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.name">name</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="event_processor.base.custom_spiders.ScraperSplashSpider"><code class="flex name class">
+<span>class <span class="ident">ScraperSplashSpider</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>??? Base spider for web crawling with Splash, which can render and extract data from pages that have javascript generated dynamic content</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ScraperSplashSpider(Spider, SplashBase):
+    &#34;&#34;&#34;??? Base spider for web crawling with Splash, which can render and extract data from pages that have javascript generated dynamic content&#34;&#34;&#34;
+    custom_settings = scraper_settings
+    def __init__(self, *args, **kwargs):
+        Spider.__init__(self)
+        SplashBase.__init__(*args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>scrapy.spiders.Spider</li>
+<li>scrapy.utils.trackref.object_ref</li>
+<li><a title="event_processor.base.splash_base.SplashBase" href="splash_base.html#event_processor.base.splash_base.SplashBase">SplashBase</a></li>
+<li><a title="event_processor.base.spider_base.SpiderBase" href="spider_base.html#event_processor.base.spider_base.SpiderBase">SpiderBase</a></li>
+<li><a title="event_processor.base.aggregator_base.AggregatorBase" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase">AggregatorBase</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="event_processor.scrapers.fpcc_spider.FpccSpider" href="../scrapers/fpcc_spider.html#event_processor.scrapers.fpcc_spider.FpccSpider">FpccSpider</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="event_processor.base.custom_spiders.ScraperSplashSpider.custom_settings"><code class="name">var <span class="ident">custom_settings</span></code></dt>
+<dd>
+<section class="desc"><p>dict() -&gt; new empty dictionary
+dict(mapping) -&gt; new dictionary initialized from a mapping object's
+(key, value) pairs
+dict(iterable) -&gt; new dictionary initialized as if via:
+d = {}
+for k, v in iterable:
+d[k] = v
+dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
+in the keyword argument list.
+For example:
+dict(one=1, two=2)</p></section>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="event_processor.base.splash_base.SplashBase" href="splash_base.html#event_processor.base.splash_base.SplashBase">SplashBase</a></b></code>:
+<ul class="hlist">
+<li><code><a title="event_processor.base.splash_base.SplashBase.construct_lua_click_script" href="splash_base.html#event_processor.base.splash_base.SplashBase.construct_lua_click_script">construct_lua_click_script</a></code></li>
+<li><code><a title="event_processor.base.splash_base.SplashBase.empty_check_extract" href="spider_base.html#event_processor.base.spider_base.SpiderBase.empty_check_extract">empty_check_extract</a></code></li>
+<li><code><a title="event_processor.base.splash_base.SplashBase.enabled" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.enabled">enabled</a></code></li>
+<li><code><a title="event_processor.base.splash_base.SplashBase.get_request" href="spider_base.html#event_processor.base.spider_base.SpiderBase.get_request">get_request</a></code></li>
+<li><code><a title="event_processor.base.splash_base.SplashBase.name" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.name">name</a></code></li>
+<li><code><a title="event_processor.base.splash_base.SplashBase.splash_parse" href="splash_base.html#event_processor.base.splash_base.SplashBase.splash_parse">splash_parse</a></code></li>
 </ul>
 </li>
 </ul>
@@ -290,13 +367,19 @@ dict(one=1, two=2)</p></section>
 <li><code><a title="event_processor.base.custom_spiders.ScraperSpider.custom_settings" href="#event_processor.base.custom_spiders.ScraperSpider.custom_settings">custom_settings</a></code></li>
 </ul>
 </li>
+<li>
+<h4><code><a title="event_processor.base.custom_spiders.ScraperSplashSpider" href="#event_processor.base.custom_spiders.ScraperSplashSpider">ScraperSplashSpider</a></code></h4>
+<ul class="">
+<li><code><a title="event_processor.base.custom_spiders.ScraperSplashSpider.custom_settings" href="#event_processor.base.custom_spiders.ScraperSplashSpider.custom_settings">custom_settings</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.0</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.1</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>

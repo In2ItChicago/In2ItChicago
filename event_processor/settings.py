@@ -77,3 +77,5 @@ HTTPCACHE_DIR = '/tmp/httpcache'
 # Comment this out to see all data being scraped
 LOG_LEVEL = 'DEBUG' if config.verbose_scrapy_output else 'WARNING'
 LOG_FORMATTER = 'event_processor.scrapy_impl.polite_log_formatter.PoliteLogFormatter'
+
+SPLASH_URL = 'http://splash:8050'

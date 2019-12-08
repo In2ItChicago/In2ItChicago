@@ -9,8 +9,8 @@
 					:next-text="'>'"
 					:container-class="'pagination event-pagination justify-content-center d-flex'"
 					:page-class="'event-pagination-item'"
-					:prev-class="'event-pagination-prev-item'"
-					:next-class="'event-pagination-next-item'">
+					:prev-class="'event-pagination-item'"
+					:next-class="'event-pagination-item'">
 				</paginate>
 				<div v-for="event in eventResult.events">
 					<event-listing :event="event" v-on:eventHover="hoveringEventId = $event" v-on:eventClick="focusedEventId = $event"></event-listing>
