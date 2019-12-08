@@ -10,12 +10,11 @@ scriptpath=$(dirname $0)/check_image_updates.py
 echo
 echo "============================="
 echo "Checking for image updates..."
-$pythoncmd $scriptpath library/python 3.7.3 alpine
+$pythoncmd $scriptpath library/python 3.8 alpine
 $pythoncmd $scriptpath library/postgres 11.5 alpine
-$pythoncmd $scriptpath dpage/pgadmin4 4.11
-$pythoncmd $scriptpath library/nginx 1.17.3 alpine
-$pythoncmd $scriptpath library/nginx 1.17.3
-$pythoncmd $scriptpath library/node 12.8.1 alpine
-$pythoncmd $scriptpath portainer/portainer 1.22.0
+$pythoncmd $scriptpath dpage/pgadmin4 4.15
+$pythoncmd $scriptpath lucaslorentz/caddy-docker-proxy 0.3.3 alpine
+$pythoncmd $scriptpath library/node 13.2 alpine
+$pythoncmd $scriptpath portainer/portainer 1.22.2
 echo "=============================="
 echo

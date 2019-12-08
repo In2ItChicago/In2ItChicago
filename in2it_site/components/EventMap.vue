@@ -4,7 +4,7 @@
 
 <script>
     export default {
-        props: ['events', 'hoveringEventId', 'focussedEventId'],
+        props: ['events', 'hoveringEventId', 'focusedEventId'],
         data() {
             return {
                 markers: [],
@@ -41,29 +41,30 @@
                 });
             },
             createMarkers: function() {
-                for (let i in this.events) {
+                const events = this.events;
+                for (let i in events) {
                     let image = {
                         url: "/img/event-marker-unselected.svg",
                         size: new google.maps.Size(35, 50),
                     };
 
-                    let latLng = {lat: this.events[i].lat, lng: this.events[i].lon};
+                    let latLng = {lat: events[i].lat, lng: events[i].lon};
 
                     let marker = new google.maps.Marker({
                         position: latLng,
                         icon: image,
-                        title: this.events[i].title + ' | ' + this.events[i].address
+                        title: events[i].title + ' | ' + events[i].address
                     });
 
-                    marker.id = this.events[i].id;
+                    marker.id = events[i].id;
                     marker.latLng = latLng;
 
                     let infoContent = 
-                        "<h2>" + this.events[i].title + "</h2>" +
-                        "<h4>" + this.events[i].address + "</h4>" +
-                        "<h4>" + this.events[i].startTime + "</h4>" +
-                        "<p class='event-marker-description'>" + this.events[i].description + "</p>" +
-                        "<a class='event-marker-link' href=" + this.events[i].url + " target=" + "_blank" + ">" + "Visit event site" + "<img class='event-marker-outgoing-link-icon' src='https://img.icons8.com/metro/26/000000/external-link.png'></a>";
+                        "<h2>" + events[i].title + "</h2>" +
+                        "<h4>" + events[i].address + "</h4>" +
+                        "<h4>" + this.getFormattedTime(events[i].startTime) + "</h4>" +
+                        "<p class='event-marker-description'>" + events[i].description + "</p>" +
+                        "<a class='event-marker-link' href=" + events[i].url + " target=" + "_blank" + ">" + "Visit event site" + "<img class='event-marker-outgoing-link-icon' src='https://img.icons8.com/metro/26/000000/external-link.png'></a>";
 
                     let infoWindow = new google.maps.InfoWindow({
                         content: infoContent
@@ -84,6 +85,7 @@
                     this.activeMarker.infoWindow.close();
                 }
                 this.activeMarker = marker;
+                this.updateMarkerFocusState(this.activeMarker.id);
                 this.activeMarker.infoWindow.open(this.map, this.activeMarker);
             },
             addMarkersToMap: function() {
@@ -118,6 +120,21 @@
                     this.markers[i].setMap(null);
                 }
                 this.markers = [];
+            },
+            getFormattedTime: function(timeString) {
+                let timeStringPieces = timeString.split(' ');
+                let timePieces = timeStringPieces[0].split(':');
+                return timePieces[0] + ':' + timePieces[1] + ' ' + timeStringPieces[1];
+            },
+            updateMarkerFocusState: function(focusedEventId) {
+                if (!this.$google)  return;
+                for (let i in this.markers) {
+                    let image = {
+                        url : (this.markers[i].id == focusedEventId) ? "/img/event-marker-selected.svg" : "/img/event-marker-unselected.svg",
+                        size: new google.maps.Size(35, 50)
+                    };
+                    this.markers[i].setIcon(image);
+                }
             }
         },
         watch: {
@@ -126,16 +143,9 @@
                 this.initMap();
             },
             hoveringEventId: function (id) {
-                if (!this.$google)  return;
-                for (let i in this.markers) {
-                    let image = {
-                        url : (this.markers[i].id == id) ? "/img/event-marker-selected.svg" : "/img/event-marker-unselected.svg",
-                        size: new google.maps.Size(35, 50)
-                    };
-                    this.markers[i].setIcon(image);
-                }
+                this.updateMarkerFocusState(id);
             },
-            focussedEventId: function (id) {
+            focusedEventId: function (id) {
                 if (!this.$google)  return;
                 for (let i in this.markers) {
                     if (this.markers[i].id != id) continue;

@@ -3,7 +3,6 @@ import json
 import re
 import logging
 import logging.handlers
-import ptvsd
 
 from multiprocessing import Lock
 from event_processor.config import config
@@ -27,6 +26,7 @@ class AggregatorBase:
     def __init__(self, organization, base_url, date_format, request_date_format = None, **kwargs):
         if config.debug:
             try:
+                import ptvsd
                 ptvsd.enable_attach(address=('0.0.0.0', 5860))
             except:
                 # attach already enabled
@@ -83,3 +83,8 @@ class AggregatorBase:
         return self.session.post(config.scheduler_spider_complete, 
                             json={'jobid': self.jobid, 'errored': self.is_errored, 'logs': logs}, 
                             headers={'Content-Type': 'application/json'})
+
+    def item_filter(self, item):
+        """Specify a filter for event items. This item should return True if 
+           the item should be included in the results and False if not. """
+        return True  

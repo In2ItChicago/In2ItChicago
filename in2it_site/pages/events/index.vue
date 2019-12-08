@@ -1,7 +1,7 @@
 <template>
     <div>
 		<filters @filterApplied="updateEvents()"></filters>
-		<event-list :events="events" @paginated="updateEvents()"></event-list>
+		<event-list :eventResult="eventResult" @paginated="updateEvents()"></event-list>
 
 		<client-only>
 			<notifications group="default"/>
@@ -17,7 +17,7 @@
 	export default {
 		data() {
 			return {
-				events: []
+				eventResult: {}
 			};
 		},
 		mounted() {
@@ -29,7 +29,7 @@
 					params: this.$store.state.searchFilter
 				})
 				.then((res) => {
-					this.events = res.data;
+					this.eventResult = res.data;
 				});
 			}
 		},

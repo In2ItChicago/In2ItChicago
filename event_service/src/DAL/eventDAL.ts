@@ -22,8 +22,8 @@ const db = knex(knexStringcase({
  * Middleware for processing a raw event object to event response objects? 
  */
 export class EventDAL {
-    async getEvents(query: GetEventsRequest, searchBounds: SearchBounds): Promise<Object[]> {
-        const result = await db('events.event as event').select(
+    async getEvents(query: GetEventsRequest, searchBounds: SearchBounds): Promise<any> {
+        const result = await this.queryEvents(db('events.event as event').select(
             'event.id',
             'event.title',
             'event.url',
@@ -37,30 +37,15 @@ export class EventDAL {
             'geo.address',
             'geo.lat',
             'geo.lon',
-            'geo.neighborhood')
-                    .leftOuterJoin('geocode.location as geo', 'event.geocode_id', 'geo.id')
-                    .where('event.startTime', '>=', query.startTime || '01-01-1970')
-                    .andWhere('event.endTime', '<=', query.endTime || '12-31-2099')
-                    .modify((queryBuilder) => {
-                        if (searchBounds) {
-                            queryBuilder
-                                .andWhere('geo.lat', '>=', searchBounds.minLat)
-                                .andWhere('geo.lat', '<=', searchBounds.maxLat)
-                                .andWhere('geo.lon', '>=', searchBounds.minLon)
-                                .andWhere('geo.lon', '<=', searchBounds.maxLon);
-                        }
-                        if (query.organization) {
-                            queryBuilder.andWhere('event.organization', '=', query.organization);
-                        }
-                        if (query.neighborhood) {
-                            queryBuilder.andWhere('geo.neighborhood', '=', query.neighborhood);
-                        }
-                    })
-                    .offset(query.offset || 0)
-                    .limit(query.limit || DEFAULT_LIMIT)
-                    .orderBy('event.startTime');
+            'geo.neighborhood'), query, searchBounds)
+        .offset(query.offset || 0)
+        .limit(query.limit || DEFAULT_LIMIT)
+        .orderBy('event.isManual', 'desc')
+        .orderBy('event.startTime', 'asc');
 
-        return result;
+        const resultCount = await this.queryEvents(db('events.event as event').count('*'), query, searchBounds)
+                    
+        return {'totalCount': resultCount[0].count, 'events': result};
     }
 
     async createEvents(data: any): Promise<any> {
@@ -79,5 +64,28 @@ export class EventDAL {
 
     async deleteAllEvents() {
         await db('events.event').del();
+    }
+
+    private queryEvents(selectFunc: any, query: GetEventsRequest, searchBounds: SearchBounds) {
+        const res = selectFunc
+                    .innerJoin('geocode.location as geo', 'event.geocode_id', 'geo.id')
+                    .where('event.startTime', '>=', query.startTime || '01-01-1970')
+                    .andWhere('event.endTime', '<=', query.endTime || '12-31-2099')
+                    .modify((queryBuilder) => {
+                        if (searchBounds) {
+                            queryBuilder
+                                .andWhere('geo.lat', '>=', searchBounds.minLat)
+                                .andWhere('geo.lat', '<=', searchBounds.maxLat)
+                                .andWhere('geo.lon', '>=', searchBounds.minLon)
+                                .andWhere('geo.lon', '<=', searchBounds.maxLon);
+                        }
+                        if (query.organization) {
+                            queryBuilder.andWhere('event.organization', '=', query.organization);
+                        }
+                        if (query.neighborhood) {
+                            queryBuilder.andWhere('geo.neighborhood', '=', query.neighborhood);
+                        }
+                    });
+        return res;
     }
 }

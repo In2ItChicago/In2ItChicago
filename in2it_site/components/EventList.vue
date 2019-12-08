@@ -12,8 +12,8 @@
 					:prev-class="'event-pagination-prev-item'"
 					:next-class="'event-pagination-next-item'">
 				</paginate>
-				<div v-for="event in events">
-					<event-listing :event="event" v-on:eventHover="hoveringEventId = $event" v-on:eventClick="focussedEventId = $event"></event-listing>
+				<div v-for="event in eventResult.events">
+					<event-listing :event="event" v-on:eventHover="hoveringEventId = $event" v-on:eventClick="focusedEventId = $event"></event-listing>
 				</div>
 			</div>
 			<div v-else class="no-event-message">
@@ -22,7 +22,7 @@
 		</div>
 		<div class="map-container">
 			<client-only>
-				<event-map :events="events" :hoveringEventId="hoveringEventId" :focussedEventId="focussedEventId"></event-map>
+				<event-map :events="eventResult.events" :hoveringEventId="hoveringEventId" :focusedEventId="focusedEventId"></event-map>
 			</client-only>
 		</div>
 	</div>
@@ -32,20 +32,23 @@
 	import EventMap from '~/components/EventMap.vue';
 	import EventListing from '~/components/EventListing.vue';
 	export default{
-		props: ['events'],
+		props: ['eventResult'],
 		data() {
 			return {
 				hoveringEventId: null,
-				focussedEventId: null
+				focusedEventId: null
 			};
 		},
 		computed: {
 			eventsAvailable: function() {
-				return this.events.length > 0;
+				if (!this.eventResult.events) {
+					return false;
+				}
+				return this.eventResult.events.length > 0;
 			},
 			pageCount: function() {
-				if (this.events.fullCount) {
-					return this.events.fullCount / 4;
+				if (this.eventResult) {
+					return Math.floor(this.eventResult.totalCount / 4);
 				}
 				return 3;
 			}

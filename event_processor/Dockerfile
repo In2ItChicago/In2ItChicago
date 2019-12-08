@@ -1,4 +1,4 @@
-FROM python:3.7.3-alpine AS event_processor_common
+FROM python:3.8-alpine AS event_processor_common
 ARG BUILD_ENV
 WORKDIR /data/
 COPY Pipfile Pipfile.lock install.sh ./
@@ -19,5 +19,5 @@ ENV PATH /data/node_modules/.bin:$PATH
 WORKDIR /usr/src/app/event_processor
 
 FROM event_processor_common AS event_processor_prod
-COPY . ./
 WORKDIR /usr/src/app/event_processor
+COPY . ./

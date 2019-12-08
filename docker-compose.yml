@@ -39,9 +39,9 @@ services:
     labels:
       caddy.targetport: 3000 
   postgres:
-    image: scratch
+    image: tianon/true
   caddy:
-    image: lucaslorentz/caddy-docker-proxy:alpine
+    image: lucaslorentz/caddy-docker-proxy:0.3.3-alpine
     command: -log stdout -agree -email in2itchicago@gmail.com
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock 
@@ -57,7 +57,7 @@ services:
     networks: 
       - in2it
   portainer:
-    image: "portainer/portainer:1.22.0"
+    image: "portainer/portainer:1.22.2"
     ports:
       - "9000:9000"
     volumes:
@@ -75,7 +75,7 @@ services:
     networks: 
       - in2it
   pgadmin:
-    image: dpage/pgadmin4:4.11
+    image: dpage/pgadmin4:4.15
     environment:
       - PGADMIN_DEFAULT_EMAIL=user@domain.com
       - PGADMIN_DEFAULT_PASSWORD=pgadmin
