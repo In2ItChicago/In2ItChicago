@@ -41,7 +41,7 @@
 			<div class="filter-row form-row justify-content-center">
 				<client-only>
 					<div class="col-sm-12 col-md-4 col-lg-3">
-						<label for="keywords" class="d-md-none filter-label">Organization</label>
+						<label for="keywords" class="d-md-none filter-label">Keywords</label>
 						<input type="text" class="form-control" id="keywords" placeholder="Keywords (Optional)" v-model="filterForm.keywords">
 					</div>
 					<div class="col-sm-12 col-md-4 col-lg-3">
