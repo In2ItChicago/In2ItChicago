@@ -2,7 +2,6 @@ import time
 import scrapy
 from scrapy import Item
 from scrapy.loader import ItemLoader
-from gql import gql
 
 from event_processor.util.data_utils import DataUtils
 from event_processor.base.custom_spiders import ApiSpider

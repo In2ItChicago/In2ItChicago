@@ -1,9 +1,6 @@
 import json
 import time
 
-from gql import gql, Client
-from gql.transport.requests import RequestsHTTPTransport
-
 from event_processor.base.aggregator_base import AggregatorBase
 from event_processor.util.cache_call import cache_call
 from event_processor.util.http_utils import HttpUtils
@@ -31,21 +28,27 @@ class ApiBase(AggregatorBase):
             time.sleep(sleep_time)
 
     @cache_call
-    def get_response(self, url=None, endpoint='', request_params=None, headers=None):
+    def get_response(self, url=None, endpoint='', request_params=None, headers=None, method='GET'):
+        method = method.upper()
         if url == None:
             url = self.base_url + endpoint
-        response = self.session.get(url, params = request_params, headers = headers)
+        if method == 'GET':
+            response = self.session.get(url, params = request_params, headers = headers)
+        elif method == 'POST':
+            response = self.session.post(url, json = request_params, headers = headers)
         if not response.ok:
             raise ValueError(response.text)
         return response
 
     def parse_response_json(self, response):
         loads = json.loads(response.content)
-        # Don't return an array if it only contains one element
-        return loads if (len(loads) != 1) else loads[0]
+        if isinstance(loads, list):
+            # Don't return an array if it only contains one element
+            return loads if (len(loads) != 1) else loads[0]
+        return loads
         
-    def get_response_json(self, url=None, endpoint='', request_params=None, property_to_return=None):
-        response = self.get_response(url, endpoint, request_params, {'Accept': 'application/json, text/javascript, */*; q=0.01'})
+    def get_response_json(self, url=None, endpoint='', request_params=None, property_to_return=None, method='GET'):
+        response = self.get_response(url, endpoint, request_params, {'Accept': 'application/json, text/javascript, */*; q=0.01'}, method)
         if not response.ok:
             raise ValueError(response.text)
         response_json = self.parse_response_json(response)
@@ -53,11 +56,12 @@ class ApiBase(AggregatorBase):
 
     @cache_call
     def get_response_graphql(self, url=None, endpoint='', gql_query=None, params=None):
-        if url == None:
-            url = self.base_url + endpoint
-        transport = RequestsHTTPTransport(url=url, use_json=True)
-        client = Client(transport=transport, fetch_schema_from_transport=True)
-        return client.execute(gql_query, params)
+        if params is not None:
+            params['query'] = gql_query
+        else:
+            params = {'query': gql_query}
+        response = self.get_response_json(url, endpoint, params, 'data', 'POST')
+        return response
 
     def get_events(self):
         # Override me

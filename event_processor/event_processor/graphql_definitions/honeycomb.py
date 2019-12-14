@@ -1,5 +1,4 @@
-from gql import gql
-definition = gql('''
+definition = '''
             query EVENTS($search: EventSearchInput) {
                 events(search: $search) {
                     docs {
@@ -29,4 +28,4 @@ definition = gql('''
                     }
                 }
             }
-        ''')
+        '''
