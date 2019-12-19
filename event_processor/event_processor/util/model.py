@@ -30,7 +30,7 @@ class Net(nn.Module):
 to_torch = lambda x: auto.Variable(torch.from_numpy(x))
 
 def predict_event_category(event_description, vectorizer, models):
-    input_vec = to_torch(vectorizer.fit(event_description)).float()
+    input_vec = to_torch(vectorizer.transform(event_description)).float()
     preds = [model(input_vec).data.numpy() for model in models]
     probs = []
     for i, pred in enumerate(preds[:-1]): # omits "Community"
