@@ -20,12 +20,14 @@ class Net(nn.Module):
 
     def __init__(self):
         super(Net, self).__init__()
-        self.w1 = nn.Linear(vocab_size, 10)
-        self.w2 = nn.Linear(10, 2)
+        self.w1 = nn.Linear(vocab_size, 1000)
+        self.w2 = nn.Linear(vocab_size, 100)
+        self.w3 = nn.Linear(100, 2)
 
     def forward(self, x):
         x = F.relu(self.w1(x))
-        return F.log_softmax(self.w2(x))
+        x = F.relu(self.w2(x))
+        return F.log_softmax(self.w3(x))
 
 to_torch = lambda x: auto.Variable(torch.from_numpy(x))
 
