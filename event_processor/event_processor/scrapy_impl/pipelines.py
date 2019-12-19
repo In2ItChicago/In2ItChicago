@@ -6,14 +6,18 @@
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 from event_processor.models.event import EventManager, Event, EventLoader
 from event_processor.util.object_hash import ObjectHash
+from event_processor.util.model import Net, predict_event_category
 from threading import Lock
 from event_processor.config import config
 from event_processor.util.data_utils import DataUtils
 from event_processor.util.time_utils import TimeUtils
 from event_processor.util.http_utils import HttpUtils
+from sklearn.feature_extraction import TfidfVectorizer
 from scrapy.exceptions import DropItem
 from datetime import datetime
+import pickle
 import json
+import torch
 
 class EventTransformPipeline:
     """??? EventTransformPipeline: """
@@ -36,7 +40,23 @@ class EventTransformPipeline:
                 raise DropItem('Event is not in the configured timeframe')
         else:
             return loader.item
-            
+
+class CategorizationPipeline:
+
+    def __init__(self):
+        with open('vectorizer.pickle', 'rb') as vec_f:
+            self.vecr = pickle.load(vec_f)
+        self.models = []
+        for i in range(10):
+            new_model = Net()
+            new_model.load_state_dict(torch.load(f'nns/MODEL_{i}.pt'))
+
+    def categorize(self, item, spider):
+        category = predict_event_categories(item['description'],
+                                              self.vecr, self.models)
+        item['category'] = category
+        return item
+
 class GeocodePipeline:
     """Get the Geocodes from the parsed address, if an address was found."""
     def __init__(self):

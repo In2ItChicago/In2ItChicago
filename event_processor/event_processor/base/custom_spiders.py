@@ -13,6 +13,7 @@ api_settings = {
 scraper_settings = {
         'ITEM_PIPELINES': {
             'event_processor.scrapy_impl.pipelines.EventTransformPipeline': 300,
+            'event_processor.scrqpy_impl.pipelines.CategorizationPipeline': 350,
             'event_processor.scrapy_impl.pipelines.GeocodePipeline': 400,
             'event_processor.scrapy_impl.pipelines.EventBuildPipeline': 500,
             'event_processor.scrapy_impl.pipelines.EventSavePipeline': 600
@@ -33,6 +34,7 @@ scraper_settings = {
 no_transpose_scraper_settings  = {
         'ITEM_PIPELINES': {
             'event_processor.scrapy_impl.pipelines.EventTransformPipeline': 300,
+            'event_processor.scrqpy_impl.pipelines.CategorizationPipeline': 350,
             'event_processor.scrapy_impl.pipelines.GeocodePipeline': 400,
             'event_processor.scrapy_impl.pipelines.EventBuildPipeline': 500,
             'event_processor.scrapy_impl.pipelines.EventSavePipeline': 600
