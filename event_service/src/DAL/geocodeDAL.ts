@@ -7,6 +7,7 @@ import { CreateGeocodeRequest } from '@src/DTO/createGeocodeRequest';
 import { randomExpirationTime } from '@src/utilities';
 import { SearchNeighborhoodRequest } from '@src/DTO/searchNeighborhoodRequest';
 
+// Max number of geocodes not tied to events to cache
 const MAX_GEOCODES = 1000;
 
 const db = knex(knexStringcase({
@@ -67,10 +68,8 @@ export class GeocodeDAL {
 
     async cleanUpGeocodes() {
         await db('geocode.location as geo')
-            //.whereNotExists(db())
-            .leftOuterJoin('events.event as event', 'geo.id', 'event.geocode_id')
-            .whereNull('event.geocode_id')
-            .orderBy('expire_at', 'asc')
+            .whereNotExists(db('events.event as event').select('*').whereRaw('event.geocode_id = geo.id'))
+            .orderBy('geo.expire_at', 'asc')
             .offset(MAX_GEOCODES)
             .del();
     }
