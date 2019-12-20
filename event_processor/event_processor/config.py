@@ -19,6 +19,7 @@ class Config:
         self.put_events = self.event_service_url + '/events'
         self.get_geocode = self.event_service_url + '/geocode'
         self.service_status = self.event_service_url + '/status'
+        self.cleanup_events = self.event_service_url + '/events/CleanupEvents'
 
         self.scheduler_url = 'http://ndscheduler:8888/api/v1'
         self.scheduler_spider_complete = self.scheduler_url + '/spiderComplete'
