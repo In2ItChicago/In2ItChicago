@@ -67,7 +67,8 @@ export class GeocodeDAL {
 
     async cleanUpGeocodes() {
         await db('geocode.location as geo')
-            .leftOuterJoin('events.event as event')
+            //.whereNotExists(db())
+            .leftOuterJoin('events.event as event', 'geo.id', 'event.geocode_id')
             .whereNull('event.geocode_id')
             .orderBy('expire_at', 'asc')
             .offset(MAX_GEOCODES)

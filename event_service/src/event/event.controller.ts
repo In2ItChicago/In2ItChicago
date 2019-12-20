@@ -33,9 +33,15 @@ export class EventController {
         await this.eventService.createEvents(request);
     }
 
-    @Delete()
+    @Delete('ClearAllEvents')
     @ApiResponse({status: 200, description: 'Deleted'})
     async clearAllEvents() {
         await this.eventService.clearAllEvents();
+    }
+
+    @Delete('CleanupEvents')
+    @ApiResponse({status: 200, description: 'Deleted'})
+    async cleanupEvents() {
+        await this.eventService.cleanupEvents();
     }
 }

@@ -71,4 +71,9 @@ export class EventService {
         await this.geocodeService.clearAllGeocodes();
         await this.eventDAL.deleteAllEvents();
     }
+
+    async cleanupEvents() {
+        await this.geocodeService.cleanupGeocodes();
+        await this.eventDAL.cleanupEvents();
+    }
 }

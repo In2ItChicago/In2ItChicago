@@ -79,8 +79,8 @@ export class EventDAL {
         await db('events.event').del();
     }
 
-    async deleteOldEvents() {
-        await db('events.event').where('endDate', '<', new Date()).del();
+    async cleanupEvents() {
+        await db('events.event').where('end_time', '<', new Date()).del();
     }
 
     private queryEvents(selectFunc: any, query: GetEventsRequest, geocode: GetGeocodeResponse) {
