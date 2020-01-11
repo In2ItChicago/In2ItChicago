@@ -38,8 +38,6 @@ services:
       - in2it
     labels:
       caddy.targetport: 3000 
-  postgres:
-    image: tianon/true
   caddy:
     image: lucaslorentz/caddy-docker-proxy:0.3.3-alpine
     command: -log stdout -agree -email in2itchicago@gmail.com
@@ -56,15 +54,6 @@ services:
       mode: global
     networks: 
       - in2it
-  portainer:
-    image: "portainer/portainer:1.22.2"
-    ports:
-      - "9000:9000"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainerdata:/data
-    networks: 
-      - in2it
   ndscheduler:
     image: ndscheduler_dev
     ports: 
@@ -74,24 +63,13 @@ services:
       - NDSCHEDULER_SETTINGS_MODULE=simple_scheduler.settings
     networks: 
       - in2it
+  # these services are only used in dev
   pgadmin:
-    image: dpage/pgadmin4:4.15
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=user@domain.com
-      - PGADMIN_DEFAULT_PASSWORD=pgadmin
-      - PGADMIN_LISTEN_PORT=7000
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
-    ports:
-      - "7000:7000"
-    # pgadmin spams logs with http request notifications
-    logging:
-      driver: none
-    networks: 
-      - in2it
-volumes:
-  portainerdata:
-  pgadmin_data:
+    image: tianon/true
+  postgres:
+    image: tianon/true
+  portainer:
+    image: tianon/true
 networks:
   in2it:
     external: true

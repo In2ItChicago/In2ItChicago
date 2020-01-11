@@ -1,0 +1,1 @@
+docker run --rm -it --net=host -v pgadminprod:/var/lib/pgadmin -e PGADMIN_DEFAULT_EMAIL=user@domain.com -e PGADMIN_DEFAULT_PASSWORD=pgadmin -e PGADMIN_LISTEN_PORT=7000 dpage/pgadmin4

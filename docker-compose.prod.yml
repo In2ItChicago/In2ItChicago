@@ -12,6 +12,7 @@ services:
       resources:
         limits:
           cpus: '0.7'
+          memory: '200M'
   event_service:
     image: in2itchicago/event_service:20191208.2
     command: "yarn run start:prod"
@@ -25,6 +26,7 @@ services:
       resources:
         limits:
           cpus: '0.7'
+          memory: '200M'
   in2it_site:
     image: in2itchicago/in2it_site:20191208.2
     command: "yarn run start"
@@ -36,6 +38,7 @@ services:
       resources:
         limits:
           cpus: '0.7'
+          memory: '200M'
   ndscheduler:
     image: in2itchicago/ndscheduler:20191208.2
     command: "python -u simple_scheduler/scheduler.py"
@@ -48,13 +51,19 @@ services:
       resources:
         limits:
           cpus: '0.7'
+          memory: '200M'
   caddy:
     volumes:
       - caddy_certs:/root/.caddy
-  pgadmin:
-    volumes:
-      - /var/run/postgresql:/var/run/postgresql
   postgres:
+    deploy:
+      restart_policy:
+        condition: none
+  pgadmin:
+    deploy:
+      restart_policy:
+        condition: none
+  portainer:
     deploy:
       restart_policy:
         condition: none

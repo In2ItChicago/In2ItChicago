@@ -52,9 +52,35 @@ services:
     environment:
       - DEBUG=${SCHEDULER_DEBUG}
       - HOSTNAME=postgres
+  pgadmin:
+    image: dpage/pgadmin4:4.15
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=user@domain.com
+      - PGADMIN_DEFAULT_PASSWORD=pgadmin
+      - PGADMIN_LISTEN_PORT=7000
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    ports:
+      - "7000:7000"
+    # pgadmin spams logs with http request notifications
+    logging:
+      driver: none
+    networks: 
+      - in2it
+  portainer:
+    image: "portainer/portainer:1.22.2"
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    networks: 
+      - in2it
 volumes:
   ndscheduler_modules:
   postgres_data:
   event_processor_data:
   event_processor_lock:
   event_processor_scrapy:
+  portainer_data:
+  pgadmin_data:
