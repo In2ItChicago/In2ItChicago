@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.0" />
+<meta name="generator" content="pdoc 0.7.1" />
 <title>event_processor.apis.library_events API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
@@ -27,7 +27,6 @@
 <pre><code class="python">import time
 from scrapy import Item
 from scrapy.loader import ItemLoader
-from event_processor.models.category import Category
 from event_processor.util.data_utils import DataUtils
 from event_processor.base.custom_spiders import ApiSpider
 import scrapy
@@ -38,18 +37,18 @@ class LibraryEvents(ApiSpider):
     MAX_ROWS = 50
 
     name = &#39;library&#39;
-    
+
     def __init__(self, name=None, **kwargs):
         super().__init__(self, &#39;Chicago Public Library&#39;, &#39;https://chipublib.bibliocommons.com/&#39;, date_format = &#39;%Y-%m-%d&#39;, **kwargs)
-    
+
     def parse(self, response):
         return self.get_events()
 
     def get_next_events_json(self, start):
         request_params = {
-            &#39;client_scope&#39;: &#39;events&#39;, 
+            &#39;client_scope&#39;: &#39;events&#39;,
             &#39;query&#39;: f&#39;start={start}&amp;rows={self.MAX_ROWS}&#39;,
-            &#39;facet_fields&#39;: &#39;branch_location_id&#39;, 
+            &#39;facet_fields&#39;: &#39;branch_location_id&#39;,
             &#39;local_start&#39;: f&#39;{self.start_date} TO {self.end_date}&#39;,
             &#39;include_near_location&#39;: &#39;false&#39;
         }
@@ -69,23 +68,23 @@ class LibraryEvents(ApiSpider):
             # Keep querying until no more data is returned
             more_data = num_results &gt; 0
             start += num_results
-        
+
         return events_json
 
     def get_locations_json(self, location_category):
         # location_category = &#39;locations&#39; for branch locations and &#39;places&#39; for non-branch locations
         request_params = {
-            &#39;client_scope&#39;: &#39;events&#39;, 
+            &#39;client_scope&#39;: &#39;events&#39;,
             &#39;limit&#39;: &#39;0&#39;
         }
         return self.get_response_json(endpoint=&#39;events/&#39; + location_category, request_params=request_params, property_to_return = location_category)
-    
+
     def get_branch_locations_json(self):
         return self.get_locations_json(&#39;locations&#39;)
 
     def get_nonbranch_locations_json(self):
         return self.get_locations_json(&#39;places&#39;)
-    
+
     def get_locations_list(self, get_locations_func):
         return { location[&#39;id&#39;]: location[&#39;address&#39;] for location in get_locations_func() }
 
@@ -125,7 +124,7 @@ class LibraryEvents(ApiSpider):
             # Don&#39;t show cancelled or full events
             if details[&#39;is_cancelled&#39;] == True or event[&#39;is_full&#39;] == True:
                 continue
-            
+
             yield {
                 &#39;title&#39;: details[&#39;title&#39;],
                 &#39;description&#39;: details[&#39;description&#39;],
@@ -137,7 +136,7 @@ class LibraryEvents(ApiSpider):
                 },
                 &#39;url&#39;: f&#39;{self.base_url}events/search/index/event/{event[&#34;id&#34;]}&#39;,
                 &#39;price&#39;: 0.0,
-                &#39;category&#39;: Category.LIBRARY
+                &#39;category&#39;: &#39;LIBRARY&#39;
             }</code></pre>
 </details>
 </section>
@@ -166,18 +165,18 @@ class LibraryEvents(ApiSpider):
     MAX_ROWS = 50
 
     name = &#39;library&#39;
-    
+
     def __init__(self, name=None, **kwargs):
         super().__init__(self, &#39;Chicago Public Library&#39;, &#39;https://chipublib.bibliocommons.com/&#39;, date_format = &#39;%Y-%m-%d&#39;, **kwargs)
-    
+
     def parse(self, response):
         return self.get_events()
 
     def get_next_events_json(self, start):
         request_params = {
-            &#39;client_scope&#39;: &#39;events&#39;, 
+            &#39;client_scope&#39;: &#39;events&#39;,
             &#39;query&#39;: f&#39;start={start}&amp;rows={self.MAX_ROWS}&#39;,
-            &#39;facet_fields&#39;: &#39;branch_location_id&#39;, 
+            &#39;facet_fields&#39;: &#39;branch_location_id&#39;,
             &#39;local_start&#39;: f&#39;{self.start_date} TO {self.end_date}&#39;,
             &#39;include_near_location&#39;: &#39;false&#39;
         }
@@ -197,23 +196,23 @@ class LibraryEvents(ApiSpider):
             # Keep querying until no more data is returned
             more_data = num_results &gt; 0
             start += num_results
-        
+
         return events_json
 
     def get_locations_json(self, location_category):
         # location_category = &#39;locations&#39; for branch locations and &#39;places&#39; for non-branch locations
         request_params = {
-            &#39;client_scope&#39;: &#39;events&#39;, 
+            &#39;client_scope&#39;: &#39;events&#39;,
             &#39;limit&#39;: &#39;0&#39;
         }
         return self.get_response_json(endpoint=&#39;events/&#39; + location_category, request_params=request_params, property_to_return = location_category)
-    
+
     def get_branch_locations_json(self):
         return self.get_locations_json(&#39;locations&#39;)
 
     def get_nonbranch_locations_json(self):
         return self.get_locations_json(&#39;places&#39;)
-    
+
     def get_locations_list(self, get_locations_func):
         return { location[&#39;id&#39;]: location[&#39;address&#39;] for location in get_locations_func() }
 
@@ -253,7 +252,7 @@ class LibraryEvents(ApiSpider):
             # Don&#39;t show cancelled or full events
             if details[&#39;is_cancelled&#39;] == True or event[&#39;is_full&#39;] == True:
                 continue
-            
+
             yield {
                 &#39;title&#39;: details[&#39;title&#39;],
                 &#39;description&#39;: details[&#39;description&#39;],
@@ -265,7 +264,7 @@ class LibraryEvents(ApiSpider):
                 },
                 &#39;url&#39;: f&#39;{self.base_url}events/search/index/event/{event[&#34;id&#34;]}&#39;,
                 &#39;price&#39;: 0.0,
-                &#39;category&#39;: Category.LIBRARY
+                &#39;category&#39;: &#39;LIBRARY&#39;
             }</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -377,7 +376,7 @@ Base 0 means to interpret the base from the string as an integer literal.</p>
         # Don&#39;t show cancelled or full events
         if details[&#39;is_cancelled&#39;] == True or event[&#39;is_full&#39;] == True:
             continue
-        
+
         yield {
             &#39;title&#39;: details[&#39;title&#39;],
             &#39;description&#39;: details[&#39;description&#39;],
@@ -389,7 +388,7 @@ Base 0 means to interpret the base from the string as an integer literal.</p>
             },
             &#39;url&#39;: f&#39;{self.base_url}events/search/index/event/{event[&#34;id&#34;]}&#39;,
             &#39;price&#39;: 0.0,
-            &#39;category&#39;: Category.LIBRARY
+            &#39;category&#39;: &#39;LIBRARY&#39;
         }</code></pre>
 </details>
 </dd>
@@ -416,7 +415,7 @@ Base 0 means to interpret the base from the string as an integer literal.</p>
         # Keep querying until no more data is returned
         more_data = num_results &gt; 0
         start += num_results
-    
+
     return events_json</code></pre>
 </details>
 </dd>
@@ -432,7 +431,7 @@ Base 0 means to interpret the base from the string as an integer literal.</p>
 <pre><code class="python">def get_locations_json(self, location_category):
     # location_category = &#39;locations&#39; for branch locations and &#39;places&#39; for non-branch locations
     request_params = {
-        &#39;client_scope&#39;: &#39;events&#39;, 
+        &#39;client_scope&#39;: &#39;events&#39;,
         &#39;limit&#39;: &#39;0&#39;
     }
     return self.get_response_json(endpoint=&#39;events/&#39; + location_category, request_params=request_params, property_to_return = location_category)</code></pre>
@@ -462,9 +461,9 @@ Base 0 means to interpret the base from the string as an integer literal.</p>
 </summary>
 <pre><code class="python">def get_next_events_json(self, start):
     request_params = {
-        &#39;client_scope&#39;: &#39;events&#39;, 
+        &#39;client_scope&#39;: &#39;events&#39;,
         &#39;query&#39;: f&#39;start={start}&amp;rows={self.MAX_ROWS}&#39;,
-        &#39;facet_fields&#39;: &#39;branch_location_id&#39;, 
+        &#39;facet_fields&#39;: &#39;branch_location_id&#39;,
         &#39;local_start&#39;: f&#39;{self.start_date} TO {self.end_date}&#39;,
         &#39;include_near_location&#39;: &#39;false&#39;
     }
@@ -518,6 +517,7 @@ Base 0 means to interpret the base from the string as an integer literal.</p>
 <li><code><a title="event_processor.base.custom_spiders.ApiSpider.allowed_domains" href="../base/api_base.html#event_processor.base.api_base.ApiBase.allowed_domains">allowed_domains</a></code></li>
 <li><code><a title="event_processor.base.custom_spiders.ApiSpider.custom_settings" href="../base/custom_spiders.html#event_processor.base.custom_spiders.ApiSpider.custom_settings">custom_settings</a></code></li>
 <li><code><a title="event_processor.base.custom_spiders.ApiSpider.enabled" href="../base/aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.enabled">enabled</a></code></li>
+<li><code><a title="event_processor.base.custom_spiders.ApiSpider.item_filter" href="../base/aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.item_filter">item_filter</a></code></li>
 <li><code><a title="event_processor.base.custom_spiders.ApiSpider.name" href="../base/aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.name">name</a></code></li>
 <li><code><a title="event_processor.base.custom_spiders.ApiSpider.start_urls" href="../base/api_base.html#event_processor.base.api_base.ApiBase.start_urls">start_urls</a></code></li>
 </ul>
@@ -563,7 +563,7 @@ Base 0 means to interpret the base from the string as an integer literal.</p>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.0</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.1</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>

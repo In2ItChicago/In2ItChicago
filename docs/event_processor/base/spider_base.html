@@ -70,7 +70,6 @@ class SpiderBase(AggregatorBase):
             if len(value) != count:
                 raise ValueError(f&#39;{self.organization}: Time selectors returned data of differing lengths&#39;)
         return [{key: value[i] for key, value in kwargs.items()} for i in range(count)]
-
         </code></pre>
 </details>
 </section>
@@ -143,6 +142,7 @@ class SpiderBase(AggregatorBase):
 <li><a title="event_processor.base.splash_base.SplashBase" href="splash_base.html#event_processor.base.splash_base.SplashBase">SplashBase</a></li>
 <li><a title="event_processor.base.custom_spiders.ScraperSpider" href="custom_spiders.html#event_processor.base.custom_spiders.ScraperSpider">ScraperSpider</a></li>
 <li><a title="event_processor.base.custom_spiders.ScraperCrawlSpider" href="custom_spiders.html#event_processor.base.custom_spiders.ScraperCrawlSpider">ScraperCrawlSpider</a></li>
+<li><a title="event_processor.base.custom_spiders.ScraperNoTransposeSpider" href="custom_spiders.html#event_processor.base.custom_spiders.ScraperNoTransposeSpider">ScraperNoTransposeSpider</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
@@ -255,6 +255,7 @@ If this is not specified, it will be an empty string.</p></section>
 <li><code><b><a title="event_processor.base.aggregator_base.AggregatorBase" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase">AggregatorBase</a></b></code>:
 <ul class="hlist">
 <li><code><a title="event_processor.base.aggregator_base.AggregatorBase.enabled" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.enabled">enabled</a></code></li>
+<li><code><a title="event_processor.base.aggregator_base.AggregatorBase.item_filter" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.item_filter">item_filter</a></code></li>
 <li><code><a title="event_processor.base.aggregator_base.AggregatorBase.name" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.name">name</a></code></li>
 </ul>
 </li>

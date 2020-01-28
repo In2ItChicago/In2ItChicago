@@ -111,7 +111,6 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_geocode_geocode_service_.geocodeservice.html#getallgeocodes" class="tsd-kind-icon">get<wbr>All<wbr>Geocodes</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_geocode_geocode_service_.geocodeservice.html#getgeocode" class="tsd-kind-icon">get<wbr>Geocode</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_geocode_geocode_service_.geocodeservice.html#listneighborhoods" class="tsd-kind-icon">list<wbr>Neighborhoods</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_geocode_geocode_service_.geocodeservice.html#radiussearch" class="tsd-kind-icon">radius<wbr>Search</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_geocode_geocode_service_.geocodeservice.html#searchneighborhood" class="tsd-kind-icon">search<wbr>Neighborhood</a></li>
 							</ul>
 						</section>
@@ -130,7 +129,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in geocode/geocode.service.ts:29</li>
+									<li>Defined in geocode/geocode.service.ts:28</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -158,7 +157,7 @@
 					<div class="tsd-signature tsd-kind-icon">eventDAL<span class="tsd-signature-symbol">:</span> <a href="_dal_eventdal_.eventdal.html" class="tsd-signature-type">EventDAL</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in geocode/geocode.service.ts:34</li>
+							<li>Defined in geocode/geocode.service.ts:33</li>
 						</ul>
 					</aside>
 				</section>
@@ -168,7 +167,7 @@
 					<div class="tsd-signature tsd-kind-icon">geocodeDAL<span class="tsd-signature-symbol">:</span> <a href="_dal_geocodedal_.geocodedal.html" class="tsd-signature-type">GeocodeDAL</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in geocode/geocode.service.ts:33</li>
+							<li>Defined in geocode/geocode.service.ts:32</li>
 						</ul>
 					</aside>
 				</section>
@@ -178,7 +177,7 @@
 					<div class="tsd-signature tsd-kind-icon">http<wbr>Service<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">HttpService</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in geocode/geocode.service.ts:32</li>
+							<li>Defined in geocode/geocode.service.ts:31</li>
 						</ul>
 					</aside>
 				</section>
@@ -188,7 +187,7 @@
 					<div class="tsd-signature tsd-kind-icon">last<wbr>Executed<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Date</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in geocode/geocode.service.ts:29</li>
+							<li>Defined in geocode/geocode.service.ts:28</li>
 						</ul>
 					</aside>
 				</section>
@@ -205,7 +204,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in geocode/geocode.service.ts:126</li>
+									<li>Defined in geocode/geocode.service.ts:120</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -216,22 +215,22 @@
 					<a name="geosearch" class="tsd-anchor"></a>
 					<h3>geo<wbr>Search</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">geo<wbr>Search<span class="tsd-signature-symbol">(</span>address<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_interfaces_addressresult_.addressresult.html" class="tsd-signature-type">AddressResult</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">geo<wbr>Search<span class="tsd-signature-symbol">(</span>request<span class="tsd-signature-symbol">: </span><a href="_dto_getgeocoderequest_.getgeocoderequest.html" class="tsd-signature-type">GetGeocodeRequest</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_interfaces_addressresult_.addressresult.html" class="tsd-signature-type">AddressResult</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in geocode/geocode.service.ts:54</li>
+									<li>Defined in geocode/geocode.service.ts:38</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>address: <span class="tsd-signature-type">string</span></h5>
+									<h5>request: <a href="_dto_getgeocoderequest_.getgeocoderequest.html" class="tsd-signature-type">GetGeocodeRequest</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_interfaces_addressresult_.addressresult.html" class="tsd-signature-type">AddressResult</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_interfaces_addressresult_.addressresult.html" class="tsd-signature-type">AddressResult</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -245,7 +244,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in geocode/geocode.service.ts:90</li>
+									<li>Defined in geocode/geocode.service.ts:84</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_dto_getgeocoderesponse_.getgeocoderesponse.html" class="tsd-signature-type">GetGeocodeResponse</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -262,7 +261,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in geocode/geocode.service.ts:105</li>
+									<li>Defined in geocode/geocode.service.ts:99</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -285,36 +284,10 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in geocode/geocode.service.ts:100</li>
+									<li>Defined in geocode/geocode.service.ts:94</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">String</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="radiussearch" class="tsd-anchor"></a>
-					<h3>radius<wbr>Search</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">radius<wbr>Search<span class="tsd-signature-symbol">(</span>request<span class="tsd-signature-symbol">: </span><a href="_dto_getgeocoderequest_.getgeocoderequest.html" class="tsd-signature-type">GetGeocodeRequest</a>, miles<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_interfaces_searchbounds_.searchbounds.html" class="tsd-signature-type">SearchBounds</a><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in geocode/geocode.service.ts:38</li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>request: <a href="_dto_getgeocoderequest_.getgeocoderequest.html" class="tsd-signature-type">GetGeocodeRequest</a></h5>
-								</li>
-								<li>
-									<h5>miles: <span class="tsd-signature-type">number</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_interfaces_searchbounds_.searchbounds.html" class="tsd-signature-type">SearchBounds</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -328,7 +301,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in geocode/geocode.service.ts:95</li>
+									<li>Defined in geocode/geocode.service.ts:89</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -350,7 +323,7 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="../modules/_geocode_geocode_service_.html">"geocode/geocode.service"</a>
+						<a href="../modules/_geocode_geocode_service_.html">&quot;geocode/geocode.service&quot;</a>
 					</li>
 				</ul>
 			</nav>
@@ -392,9 +365,6 @@
 								<a href="_geocode_geocode_service_.geocodeservice.html#listneighborhoods" class="tsd-kind-icon">list<wbr>Neighborhoods</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_geocode_geocode_service_.geocodeservice.html#radiussearch" class="tsd-kind-icon">radius<wbr>Search</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_geocode_geocode_service_.geocodeservice.html#searchneighborhood" class="tsd-kind-icon">search<wbr>Neighborhood</a>
 							</li>
 						</ul>
@@ -427,6 +397,7 @@
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
 				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
@@ -475,7 +446,7 @@
 	</div>
 </footer>
 <div class="container tsd-generator">
-	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>

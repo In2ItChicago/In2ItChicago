@@ -33,7 +33,7 @@ class ChiHackNightCrawlSpider(ScraperCrawlSpider):
     name = &#39;chihacknightcrawl&#39;
     allowed_domains = [&#39;chihacknight.org&#39;]
     start_urls = [&#39;https://chihacknight.org/events&#39;]
-    enabled = False
+    enabled = True
 
     rules = (
         Rule(LinkExtractor(restrict_css = &#39;table tr td:nth-child(3) a&#39;), callback=&#34;parse_page&#34;, follow=True),
@@ -77,7 +77,7 @@ class ChiHackNightCrawlSpider(ScraperCrawlSpider):
     name = &#39;chihacknightcrawl&#39;
     allowed_domains = [&#39;chihacknight.org&#39;]
     start_urls = [&#39;https://chihacknight.org/events&#39;]
-    enabled = False
+    enabled = True
 
     rules = (
         Rule(LinkExtractor(restrict_css = &#39;table tr td:nth-child(3) a&#39;), callback=&#34;parse_page&#34;, follow=True),
@@ -160,6 +160,7 @@ The argument must be an iterable if specified.</p></section>
 <li><code><a title="event_processor.base.custom_spiders.ScraperCrawlSpider.empty_check_extract" href="../base/spider_base.html#event_processor.base.spider_base.SpiderBase.empty_check_extract">empty_check_extract</a></code></li>
 <li><code><a title="event_processor.base.custom_spiders.ScraperCrawlSpider.enabled" href="../base/aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.enabled">enabled</a></code></li>
 <li><code><a title="event_processor.base.custom_spiders.ScraperCrawlSpider.get_request" href="../base/spider_base.html#event_processor.base.spider_base.SpiderBase.get_request">get_request</a></code></li>
+<li><code><a title="event_processor.base.custom_spiders.ScraperCrawlSpider.item_filter" href="../base/aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.item_filter">item_filter</a></code></li>
 <li><code><a title="event_processor.base.custom_spiders.ScraperCrawlSpider.name" href="../base/aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.name">name</a></code></li>
 </ul>
 </li>

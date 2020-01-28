@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.0" />
+<meta name="generator" content="pdoc 0.7.1" />
 <title>event_processor.base.api_base API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
@@ -26,9 +26,6 @@
 </summary>
 <pre><code class="python">import json
 import time
-
-from gql import gql, Client
-from gql.transport.requests import RequestsHTTPTransport
 
 from event_processor.base.aggregator_base import AggregatorBase
 from event_processor.util.cache_call import cache_call
@@ -57,21 +54,27 @@ class ApiBase(AggregatorBase):
             time.sleep(sleep_time)
 
     @cache_call
-    def get_response(self, url=None, endpoint=&#39;&#39;, request_params=None, headers=None):
+    def get_response(self, url=None, endpoint=&#39;&#39;, request_params=None, headers=None, method=&#39;GET&#39;):
+        method = method.upper()
         if url == None:
             url = self.base_url + endpoint
-        response = self.session.get(url, params = request_params, headers = headers)
+        if method == &#39;GET&#39;:
+            response = self.session.get(url, params = request_params, headers = headers)
+        elif method == &#39;POST&#39;:
+            response = self.session.post(url, json = request_params, headers = headers)
         if not response.ok:
             raise ValueError(response.text)
         return response
 
     def parse_response_json(self, response):
         loads = json.loads(response.content)
-        # Don&#39;t return an array if it only contains one element
-        return loads if (len(loads) != 1) else loads[0]
+        if isinstance(loads, list):
+            # Don&#39;t return an array if it only contains one element
+            return loads if (len(loads) != 1) else loads[0]
+        return loads
         
-    def get_response_json(self, url=None, endpoint=&#39;&#39;, request_params=None, property_to_return=None):
-        response = self.get_response(url, endpoint, request_params, {&#39;Accept&#39;: &#39;application/json, text/javascript, */*; q=0.01&#39;})
+    def get_response_json(self, url=None, endpoint=&#39;&#39;, request_params=None, property_to_return=None, method=&#39;GET&#39;):
+        response = self.get_response(url, endpoint, request_params, {&#39;Accept&#39;: &#39;application/json, text/javascript, */*; q=0.01&#39;}, method)
         if not response.ok:
             raise ValueError(response.text)
         response_json = self.parse_response_json(response)
@@ -79,11 +82,12 @@ class ApiBase(AggregatorBase):
 
     @cache_call
     def get_response_graphql(self, url=None, endpoint=&#39;&#39;, gql_query=None, params=None):
-        if url == None:
-            url = self.base_url + endpoint
-        transport = RequestsHTTPTransport(url=url, use_json=True)
-        client = Client(transport=transport, fetch_schema_from_transport=True)
-        return client.execute(gql_query, params)
+        if params is not None:
+            params[&#39;query&#39;] = gql_query
+        else:
+            params = {&#39;query&#39;: gql_query}
+        response = self.get_response_json(url, endpoint, params, &#39;data&#39;, &#39;POST&#39;)
+        return response
 
     def get_events(self):
         # Override me
@@ -130,21 +134,27 @@ class ApiBase(AggregatorBase):
             time.sleep(sleep_time)
 
     @cache_call
-    def get_response(self, url=None, endpoint=&#39;&#39;, request_params=None, headers=None):
+    def get_response(self, url=None, endpoint=&#39;&#39;, request_params=None, headers=None, method=&#39;GET&#39;):
+        method = method.upper()
         if url == None:
             url = self.base_url + endpoint
-        response = self.session.get(url, params = request_params, headers = headers)
+        if method == &#39;GET&#39;:
+            response = self.session.get(url, params = request_params, headers = headers)
+        elif method == &#39;POST&#39;:
+            response = self.session.post(url, json = request_params, headers = headers)
         if not response.ok:
             raise ValueError(response.text)
         return response
 
     def parse_response_json(self, response):
         loads = json.loads(response.content)
-        # Don&#39;t return an array if it only contains one element
-        return loads if (len(loads) != 1) else loads[0]
+        if isinstance(loads, list):
+            # Don&#39;t return an array if it only contains one element
+            return loads if (len(loads) != 1) else loads[0]
+        return loads
         
-    def get_response_json(self, url=None, endpoint=&#39;&#39;, request_params=None, property_to_return=None):
-        response = self.get_response(url, endpoint, request_params, {&#39;Accept&#39;: &#39;application/json, text/javascript, */*; q=0.01&#39;})
+    def get_response_json(self, url=None, endpoint=&#39;&#39;, request_params=None, property_to_return=None, method=&#39;GET&#39;):
+        response = self.get_response(url, endpoint, request_params, {&#39;Accept&#39;: &#39;application/json, text/javascript, */*; q=0.01&#39;}, method)
         if not response.ok:
             raise ValueError(response.text)
         response_json = self.parse_response_json(response)
@@ -152,11 +162,12 @@ class ApiBase(AggregatorBase):
 
     @cache_call
     def get_response_graphql(self, url=None, endpoint=&#39;&#39;, gql_query=None, params=None):
-        if url == None:
-            url = self.base_url + endpoint
-        transport = RequestsHTTPTransport(url=url, use_json=True)
-        client = Client(transport=transport, fetch_schema_from_transport=True)
-        return client.execute(gql_query, params)
+        if params is not None:
+            params[&#39;query&#39;] = gql_query
+        else:
+            params = {&#39;query&#39;: gql_query}
+        response = self.get_response_json(url, endpoint, params, &#39;data&#39;, &#39;POST&#39;)
+        return response
 
     def get_events(self):
         # Override me
@@ -236,7 +247,7 @@ The argument must be an iterable if specified.</p></section>
 </details>
 </dd>
 <dt id="event_processor.base.api_base.ApiBase.get_response_json"><code class="name flex">
-<span>def <span class="ident">get_response_json</span></span>(<span>self, url=None, endpoint=&#39;&#39;, request_params=None, property_to_return=None)</span>
+<span>def <span class="ident">get_response_json</span></span>(<span>self, url=None, endpoint='', request_params=None, property_to_return=None, method='GET')</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -244,8 +255,8 @@ The argument must be an iterable if specified.</p></section>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_response_json(self, url=None, endpoint=&#39;&#39;, request_params=None, property_to_return=None):
-    response = self.get_response(url, endpoint, request_params, {&#39;Accept&#39;: &#39;application/json, text/javascript, */*; q=0.01&#39;})
+<pre><code class="python">def get_response_json(self, url=None, endpoint=&#39;&#39;, request_params=None, property_to_return=None, method=&#39;GET&#39;):
+    response = self.get_response(url, endpoint, request_params, {&#39;Accept&#39;: &#39;application/json, text/javascript, */*; q=0.01&#39;}, method)
     if not response.ok:
         raise ValueError(response.text)
     response_json = self.parse_response_json(response)
@@ -263,8 +274,10 @@ The argument must be an iterable if specified.</p></section>
 </summary>
 <pre><code class="python">def parse_response_json(self, response):
     loads = json.loads(response.content)
-    # Don&#39;t return an array if it only contains one element
-    return loads if (len(loads) != 1) else loads[0]</code></pre>
+    if isinstance(loads, list):
+        # Don&#39;t return an array if it only contains one element
+        return loads if (len(loads) != 1) else loads[0]
+    return loads</code></pre>
 </details>
 </dd>
 <dt id="event_processor.base.api_base.ApiBase.wait"><code class="name flex">
@@ -289,6 +302,7 @@ The argument must be an iterable if specified.</p></section>
 <li><code><b><a title="event_processor.base.aggregator_base.AggregatorBase" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase">AggregatorBase</a></b></code>:
 <ul class="hlist">
 <li><code><a title="event_processor.base.aggregator_base.AggregatorBase.enabled" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.enabled">enabled</a></code></li>
+<li><code><a title="event_processor.base.aggregator_base.AggregatorBase.item_filter" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.item_filter">item_filter</a></code></li>
 <li><code><a title="event_processor.base.aggregator_base.AggregatorBase.name" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.name">name</a></code></li>
 </ul>
 </li>
@@ -329,7 +343,7 @@ The argument must be an iterable if specified.</p></section>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.0</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.1</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>

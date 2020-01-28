@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.0" />
+<meta name="generator" content="pdoc 0.7.1" />
 <title>event_processor.base.aggregator_base API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
@@ -29,7 +29,6 @@ import json
 import re
 import logging
 import logging.handlers
-import ptvsd
 
 from multiprocessing import Lock
 from event_processor.config import config
@@ -53,6 +52,7 @@ class AggregatorBase:
     def __init__(self, organization, base_url, date_format, request_date_format = None, **kwargs):
         if config.debug:
             try:
+                import ptvsd
                 ptvsd.enable_attach(address=(&#39;0.0.0.0&#39;, 5860))
             except:
                 # attach already enabled
@@ -108,7 +108,12 @@ class AggregatorBase:
         logs = [self.memory_handler.format(log) for log in self.memory_handler.buffer]
         return self.session.post(config.scheduler_spider_complete, 
                             json={&#39;jobid&#39;: self.jobid, &#39;errored&#39;: self.is_errored, &#39;logs&#39;: logs}, 
-                            headers={&#39;Content-Type&#39;: &#39;application/json&#39;})</code></pre>
+                            headers={&#39;Content-Type&#39;: &#39;application/json&#39;})
+
+    def item_filter(self, item):
+        &#34;&#34;&#34;Specify a filter for event items. This item should return True if 
+           the item should be included in the results and False if not. &#34;&#34;&#34;
+        return True  </code></pre>
 </details>
 </section>
 <section>
@@ -142,6 +147,7 @@ class AggregatorBase:
     def __init__(self, organization, base_url, date_format, request_date_format = None, **kwargs):
         if config.debug:
             try:
+                import ptvsd
                 ptvsd.enable_attach(address=(&#39;0.0.0.0&#39;, 5860))
             except:
                 # attach already enabled
@@ -197,7 +203,12 @@ class AggregatorBase:
         logs = [self.memory_handler.format(log) for log in self.memory_handler.buffer]
         return self.session.post(config.scheduler_spider_complete, 
                             json={&#39;jobid&#39;: self.jobid, &#39;errored&#39;: self.is_errored, &#39;logs&#39;: logs}, 
-                            headers={&#39;Content-Type&#39;: &#39;application/json&#39;})</code></pre>
+                            headers={&#39;Content-Type&#39;: &#39;application/json&#39;})
+
+    def item_filter(self, item):
+        &#34;&#34;&#34;Specify a filter for event items. This item should return True if 
+           the item should be included in the results and False if not. &#34;&#34;&#34;
+        return True  </code></pre>
 </details>
 <h3>Subclasses</h3>
 <ul class="hlist">
@@ -257,6 +268,22 @@ def is_errored(self):
     logging.getLogger(logger).setLevel(log_level)</code></pre>
 </details>
 </dd>
+<dt id="event_processor.base.aggregator_base.AggregatorBase.item_filter"><code class="name flex">
+<span>def <span class="ident">item_filter</span></span>(<span>self, item)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Specify a filter for event items. This item should return True if
+the item should be included in the results and False if not.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def item_filter(self, item):
+    &#34;&#34;&#34;Specify a filter for event items. This item should return True if 
+       the item should be included in the results and False if not. &#34;&#34;&#34;
+    return True  </code></pre>
+</details>
+</dd>
 <dt id="event_processor.base.aggregator_base.AggregatorBase.notify_spider_complete"><code class="name flex">
 <span>def <span class="ident">notify_spider_complete</span></span>(<span>self)</span>
 </code></dt>
@@ -297,6 +324,7 @@ def is_errored(self):
 <li><code><a title="event_processor.base.aggregator_base.AggregatorBase.configure_logger" href="#event_processor.base.aggregator_base.AggregatorBase.configure_logger">configure_logger</a></code></li>
 <li><code><a title="event_processor.base.aggregator_base.AggregatorBase.enabled" href="#event_processor.base.aggregator_base.AggregatorBase.enabled">enabled</a></code></li>
 <li><code><a title="event_processor.base.aggregator_base.AggregatorBase.is_errored" href="#event_processor.base.aggregator_base.AggregatorBase.is_errored">is_errored</a></code></li>
+<li><code><a title="event_processor.base.aggregator_base.AggregatorBase.item_filter" href="#event_processor.base.aggregator_base.AggregatorBase.item_filter">item_filter</a></code></li>
 <li><code><a title="event_processor.base.aggregator_base.AggregatorBase.name" href="#event_processor.base.aggregator_base.AggregatorBase.name">name</a></code></li>
 <li><code><a title="event_processor.base.aggregator_base.AggregatorBase.notify_spider_complete" href="#event_processor.base.aggregator_base.AggregatorBase.notify_spider_complete">notify_spider_complete</a></code></li>
 </ul>
@@ -307,7 +335,7 @@ def is_errored(self):
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.0</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.1</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>

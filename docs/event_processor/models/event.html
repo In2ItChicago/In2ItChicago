@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.0" />
+<meta name="generator" content="pdoc 0.7.1" />
 <title>event_processor.models.event API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
@@ -35,26 +35,33 @@ from scrapy.loader import ItemLoader
 def custom_field():
     return scrapy.Field(input_processor=MapCompose(DataUtils.remove_html), output_processor=Join())
 
+def numeric_field():
+    return scrapy.Field(input_processor=MapCompose(DataUtils.remove_html), output_processor=TakeFirst())
+
 def price_field():
     return scrapy.Field(input_processor=MapCompose(
-            lambda value: value.replace(&#39;$&#39;, &#39;&#39;) if type(value) == str else value, 
-            DataUtils.remove_html, float), 
+            lambda value: value.replace(&#39;$&#39;, &#39;&#39;) if type(value) == str else value,
+            DataUtils.remove_html, float),
         output_processor=TakeFirst())
 
 def url_field():
-    return scrapy.Field(input_processor=MapCompose(DataUtils.remove_html, lambda value: value.rstrip(&#39;//&#39;)), 
+    return scrapy.Field(input_processor=MapCompose(DataUtils.remove_html, lambda value: value.replace(&#39;//&#39;, &#39;/&#39;).rstrip(&#39;//&#39;)),
     output_processor=Join())
 
 def category_field():
-    return scrapy.Field(input_processor=MapCompose(lambda value: value.name), output_processor=Join())
+    return scrapy.Field(output_processor=Join())
 
 def address_field():
     def parse_address(value):
-        parsed = usaddress.parse(value)
-        contains_field = lambda field: any(address_part[1] == field for address_part in parsed)
-        default_field = lambda field, default: f&#39; {default}&#39; if not contains_field(field) else &#39;&#39;
-        return f&#39;{value}{default_field(&#34;PlaceName&#34;, &#34;Chicago&#34;)}{default_field(&#34;StateName&#34;, &#34;IL&#34;)}&#39;
-        
+        parsed = usaddress.parse(value) 
+        def default_or_empty(field, default):
+            if any(i[0] for i in parsed if i[1] == field):
+                return &#39;&#39;
+            return default 
+        city_append = default_or_empty(&#34;PlaceName&#34;, &#34; Chicago, &#34;)
+        state_append = default_or_empty(&#34;StateName&#34;, &#34;IL&#34;)
+        return f&#39;{value}{city_append}{state_append}&#39; 
+
     return scrapy.Field(input_processor=MapCompose(
             DataUtils.remove_html,
             parse_address),
@@ -100,6 +107,8 @@ class Event(scrapy.Item):
     title = custom_field()
     description = custom_field()
     address = address_field()
+    lat = numeric_field()
+    lon = numeric_field()
     url = url_field()
     price = price_field()
     category = category_field()
@@ -119,14 +128,14 @@ class EventLoader():
 class EventManager:
     def __init__(self):
         self.events = {}
-    
+
     def update(self, key, event):
         # Add properties to the event if it has been created already, else create a new event
         if key in self.events:
             self.events[key].update(event)
         else:
             self.events[key] = event
-    
+
     def to_dicts(self):
         return [dict(event) for event in list(self.events.values())]</code></pre>
 </details>
@@ -149,11 +158,15 @@ class EventManager:
 </summary>
 <pre><code class="python">def address_field():
     def parse_address(value):
-        parsed = usaddress.parse(value)
-        contains_field = lambda field: any(address_part[1] == field for address_part in parsed)
-        default_field = lambda field, default: f&#39; {default}&#39; if not contains_field(field) else &#39;&#39;
-        return f&#39;{value}{default_field(&#34;PlaceName&#34;, &#34;Chicago&#34;)}{default_field(&#34;StateName&#34;, &#34;IL&#34;)}&#39;
-        
+        parsed = usaddress.parse(value) 
+        def default_or_empty(field, default):
+            if any(i[0] for i in parsed if i[1] == field):
+                return &#39;&#39;
+            return default 
+        city_append = default_or_empty(&#34;PlaceName&#34;, &#34; Chicago, &#34;)
+        state_append = default_or_empty(&#34;StateName&#34;, &#34;IL&#34;)
+        return f&#39;{value}{city_append}{state_append}&#39; 
+
     return scrapy.Field(input_processor=MapCompose(
             DataUtils.remove_html,
             parse_address),
@@ -170,7 +183,7 @@ class EventManager:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def category_field():
-    return scrapy.Field(input_processor=MapCompose(lambda value: value.name), output_processor=Join())</code></pre>
+    return scrapy.Field(output_processor=Join())</code></pre>
 </details>
 </dd>
 <dt id="event_processor.models.event.create_time_data"><code class="name flex">
@@ -241,6 +254,19 @@ class EventManager:
     return scrapy.Field(input_processor=MapCompose(DataUtils.remove_html, parse_date), output_processor=TakeFirst())</code></pre>
 </details>
 </dd>
+<dt id="event_processor.models.event.numeric_field"><code class="name flex">
+<span>def <span class="ident">numeric_field</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def numeric_field():
+    return scrapy.Field(input_processor=MapCompose(DataUtils.remove_html), output_processor=TakeFirst())</code></pre>
+</details>
+</dd>
 <dt id="event_processor.models.event.price_field"><code class="name flex">
 <span>def <span class="ident">price_field</span></span>(<span>)</span>
 </code></dt>
@@ -252,8 +278,8 @@ class EventManager:
 </summary>
 <pre><code class="python">def price_field():
     return scrapy.Field(input_processor=MapCompose(
-            lambda value: value.replace(&#39;$&#39;, &#39;&#39;) if type(value) == str else value, 
-            DataUtils.remove_html, float), 
+            lambda value: value.replace(&#39;$&#39;, &#39;&#39;) if type(value) == str else value,
+            DataUtils.remove_html, float),
         output_processor=TakeFirst())</code></pre>
 </details>
 </dd>
@@ -267,7 +293,7 @@ class EventManager:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def url_field():
-    return scrapy.Field(input_processor=MapCompose(DataUtils.remove_html, lambda value: value.rstrip(&#39;//&#39;)), 
+    return scrapy.Field(input_processor=MapCompose(DataUtils.remove_html, lambda value: value.replace(&#39;//&#39;, &#39;/&#39;).rstrip(&#39;//&#39;)),
     output_processor=Join())</code></pre>
 </details>
 </dd>
@@ -281,7 +307,15 @@ class EventManager:
 <span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Base class for all scraped items.</p></section>
+<section class="desc"><p>Base class for all scraped items.</p>
+<p>In Scrapy, an object is considered an <em>item</em> if it is an instance of either
+:class:<code>BaseItem</code> or :class:<code>dict</code>. For example, when the output of a
+spider callback is evaluated, only instances of :class:<code>BaseItem</code> or
+:class:<code>dict</code> are passed to :ref:<code>item pipelines &lt;topics-item-pipeline&gt;</code>.</p>
+<p>If you need instances of a custom class to be considered items by Scrapy,
+you must inherit from either :class:<code>BaseItem</code> or :class:<code>dict</code>.</p>
+<p>Unlike instances of :class:<code>dict</code>, instances of :class:<code>BaseItem</code> may be
+:ref:<code>tracked &lt;topics-leaks-trackrefs&gt;</code> to debug memory leaks.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -291,6 +325,8 @@ class EventManager:
     title = custom_field()
     description = custom_field()
     address = address_field()
+    lat = numeric_field()
+    lon = numeric_field()
     url = url_field()
     price = price_field()
     category = category_field()
@@ -361,14 +397,14 @@ dict(one=1, two=2)</p></section>
 <pre><code class="python">class EventManager:
     def __init__(self):
         self.events = {}
-    
+
     def update(self, key, event):
         # Add properties to the event if it has been created already, else create a new event
         if key in self.events:
             self.events[key].update(event)
         else:
             self.events[key] = event
-    
+
     def to_dicts(self):
         return [dict(event) for event in list(self.events.values())]</code></pre>
 </details>
@@ -427,6 +463,7 @@ dict(one=1, two=2)</p></section>
 <li><code><a title="event_processor.models.event.create_time_data" href="#event_processor.models.event.create_time_data">create_time_data</a></code></li>
 <li><code><a title="event_processor.models.event.custom_field" href="#event_processor.models.event.custom_field">custom_field</a></code></li>
 <li><code><a title="event_processor.models.event.date_field" href="#event_processor.models.event.date_field">date_field</a></code></li>
+<li><code><a title="event_processor.models.event.numeric_field" href="#event_processor.models.event.numeric_field">numeric_field</a></code></li>
 <li><code><a title="event_processor.models.event.price_field" href="#event_processor.models.event.price_field">price_field</a></code></li>
 <li><code><a title="event_processor.models.event.url_field" href="#event_processor.models.event.url_field">url_field</a></code></li>
 </ul>
@@ -455,7 +492,7 @@ dict(one=1, two=2)</p></section>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.0</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.1</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>
