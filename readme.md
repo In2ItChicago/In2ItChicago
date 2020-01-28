@@ -1,9 +1,9 @@
-# In2It App
+# In2It Chicago
 
 View these docs [here](https://in2itchicago.github.io/In2ItChicago/) if you like pretty colors.
 
 ## Table of Contents
-   * [In2It App](#in2it-app)
+   * [In2It Chicago](#in2it-Chicago)
       * [Table of Contents](#table-of-contents)
       * [Setup](#setup)
          * [Get the Code](#get-the-code)
