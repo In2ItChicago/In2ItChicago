@@ -19,7 +19,7 @@ def price_field():
         output_processor=TakeFirst())
 
 def url_field():
-    return scrapy.Field(input_processor=MapCompose(DataUtils.remove_html, lambda value: value.rstrip('//')),
+    return scrapy.Field(input_processor=MapCompose(DataUtils.remove_html, lambda value: value.replace('//', '/').rstrip('//')),
     output_processor=Join())
 
 def category_field():
