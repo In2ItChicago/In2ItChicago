@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -e
+
 PARAMS=""
 PARAMS_COPY="$@"
 while (( "$#" )); do

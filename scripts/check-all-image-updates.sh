@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -e
 
 scriptpath=$(dirname $0)/check_image_updates.py
 

@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -e
+
 ./scripts/create-network.sh
 if [ "$CHECK_IMAGE_UPDATES" == "1" ]
 then

@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -e
+
 PARAMS=""
 EVENT_PROCESSOR_DEBUG=0
 SCHEDULER_DEBUG=0
