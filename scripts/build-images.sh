@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -e
+
 EXTRA_ARGS="${@:2}"
 ENV="$1"
 

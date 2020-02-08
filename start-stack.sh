@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -e
+
 ENV=${1:-dev}
 if [ ! -d ./postgres_data ] then
     mkdir postgres_data

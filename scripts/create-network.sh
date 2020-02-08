@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -e
+
 if [ ! "$(docker network ls | grep in2it)" ]
 then
     docker swarm leave -f >/dev/null 2>&1

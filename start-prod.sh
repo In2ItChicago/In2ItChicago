@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -e
+
 ./scripts/create-network.sh
 docker stack rm In2ItChicago
 sleep 5
