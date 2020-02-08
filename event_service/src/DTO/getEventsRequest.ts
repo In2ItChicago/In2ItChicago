@@ -1,5 +1,5 @@
-import { ApiModelProperty } from '@nestjs/swagger';
-import { IsDate, IsEmpty, IsNumber, ValidateIf, IsNotEmpty, IsPositive, IsDefined } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsDate, IsEmpty, IsNumber, ValidateIf, IsNotEmpty, IsPositive, IsDefined, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
 
 /**
@@ -9,17 +9,19 @@ export class GetEventsRequest {
     /**
      * The start time to search for the events. Optional.
      */
+    @IsOptional()
     @IsDate()
     @Type(() => Date)
-    @ApiModelProperty({type: 'string', format: 'date-time', required: false})
+    @ApiProperty({type: 'string', format: 'date-time', required: false})
     startTime?: Date;
 
     /**
      * The end time to search for events? Optional.
      */
+    @IsOptional()
     @IsDate()
     @Type(() => Date)
-    @ApiModelProperty({type: 'string', format: 'date-time',  required: false})
+    @ApiProperty({type: 'string', format: 'date-time',  required: false})
     endTime?: Date;
 
     /**
@@ -28,7 +30,7 @@ export class GetEventsRequest {
     @ValidateIf(o => o.miles != null)
     @IsDefined()
     @IsNotEmpty()
-    @ApiModelProperty({required: false})
+    @ApiProperty({required: false})
     address?: string;
 
     /**
@@ -38,36 +40,40 @@ export class GetEventsRequest {
     @IsDefined()
     @IsPositive()
     @Type(() => Number)
-    @ApiModelProperty({required: false})
+    @ApiProperty({required: false})
     miles?: number;
 
     /**
      * The neighborhood where this event is occurring. Optional
      * Note: Should this be an Enum of some kind?? Does typescript have those? 
      */
-    @ApiModelProperty({required: false})
+    @IsOptional()
+    @ApiProperty({required: false})
     neighborhood?: string;
 
     /**
      * Limit the number of events returned by this request??? Optional.
      */
+    @IsOptional()
     @IsNumber()
     @Type(() => Number)
-    @ApiModelProperty({required: false})
+    @ApiProperty({required: false})
     limit?: number;
 
     /**
      * The offset of events to return by this request. For pagination??? Optional???
      * Note: Should all pagination related variables be required? 
      */
+    @IsOptional()
     @IsNumber()
     @Type(() => Number)
-    @ApiModelProperty({required: false})
+    @ApiProperty({required: false})
     offset?: number;
 
     /**
      * Keywords for full text search on organization, title, and description
      */
-    @ApiModelProperty({required: false})
+    @IsOptional()
+    @ApiProperty({required: false})
     keywords?: string;
 }

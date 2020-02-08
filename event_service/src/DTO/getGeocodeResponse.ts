@@ -1,4 +1,4 @@
-import { ApiModelProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 
 /**
@@ -8,33 +8,33 @@ export class GetGeocodeResponse {
     /**
      * The ID of this request????
      */
-    @ApiModelProperty()
+    @ApiProperty()
     id: number;
 
     /**
      * The (normalized??) address returned by this request.
      */
-    @ApiModelProperty()
+    @ApiProperty()
     address: string;
 
     /**
      * The GeoCode latitude of the address.
      */
     @Type(() => Number)
-    @ApiModelProperty()
+    @ApiProperty()
     lat: number;
 
     /**
      * The GeoCode longitude of the address.
      */
     @Type(() => Number)
-    @ApiModelProperty()
+    @ApiProperty()
     lon: number;
 
     /**
      * The neighborhood of where this request occurs? 
      * Note: Should this be an enum? What if an event happens in many neighborhoods? 
      */
-    @ApiModelProperty()
+    @ApiProperty()
     neighborhood: string;
 }

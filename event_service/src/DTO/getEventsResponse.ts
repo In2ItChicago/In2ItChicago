@@ -1,4 +1,4 @@
-import { ApiModelProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { EventResponse } from '@src/DTO/eventResponse';
 
@@ -7,10 +7,10 @@ import { EventResponse } from '@src/DTO/eventResponse';
  */
 export class GetEventsResponse {
     @Type(() => Number)
-    @ApiModelProperty()
+    @ApiProperty()
     totalCount: number;
 
     @Type(() => EventResponse)
-    @ApiModelProperty()
+    @ApiProperty({isArray: true, type: EventResponse})
     events: EventResponse[];
 }

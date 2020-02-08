@@ -1,5 +1,5 @@
-import { ApiModelProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { ApiProperty } from "@nestjs/swagger";
+import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
 /**
  * Model representing a Geocode request??
@@ -10,16 +10,18 @@ export class GetGeocodeRequest {
      * The address a GeoCode is being requested for.
      */
     @IsNotEmpty()
-    @ApiModelProperty()
+    @ApiProperty()
     address: string;
 
+    @IsOptional()
     @IsNumber()
     @Type(() => Number)
-    @ApiModelProperty({required: false})
+    @ApiProperty({required: false})
     lat?: number;
 
+    @IsOptional()
     @IsNumber()
     @Type(() => Number)
-    @ApiModelProperty({required: false})
+    @ApiProperty({required: false})
     lon?: number;
 }

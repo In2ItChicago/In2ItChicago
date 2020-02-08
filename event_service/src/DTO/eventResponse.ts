@@ -1,4 +1,4 @@
-import { ApiModelProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 
 /**
@@ -8,94 +8,94 @@ export class EventResponse {
     /**
      * ID of the event.
      */
-    @ApiModelProperty()
+    @ApiProperty()
     id: number;
 
     /**
      * Title of the event.
      */
-    @ApiModelProperty()
+    @ApiProperty()
     title: string;
 
     /**
      * The external URL associated with this event.
      */
-    @ApiModelProperty()
+    @ApiProperty()
     url: string;
 
     /**
      * A description of this event.
      */
-    @ApiModelProperty()
+    @ApiProperty()
     description: string;
 
     /**
      * The organization which is holding the event
      */
-    @ApiModelProperty()
+    @ApiProperty()
     organization: string;
 
     /**
      * The cost of attending this event.
      */
-    @ApiModelProperty()
+    @ApiProperty()
     price: number;
 
     /**
      * The event start time.
      */
-    @ApiModelProperty()
+    @ApiProperty()
     startTime: string;
 
     /**
      * The event end time.
      */
-    @ApiModelProperty()
+    @ApiProperty()
     endTime: string;
 
     /**
      * What category? (categories?) does this event fall under?
      * Note: Should this be an enum or a list of enums? list of strings?
      */
-    @ApiModelProperty()
+    @ApiProperty()
     category: string;
 
     /**
      * The address of this event.
      */
-    @ApiModelProperty()
+    @ApiProperty()
     address: string;
 
     /**
      * The start date of this event.
      */
-    @ApiModelProperty()
+    @ApiProperty()
     startDate: string;
 
     /**
      * The end date of this event.
      */
-    @ApiModelProperty()
+    @ApiProperty()
     endDate: string;
 
     /**
      * The GeoCode latitude of this event.
      */
     @Type(() => Number)
-    @ApiModelProperty()
+    @ApiProperty()
     lat: number;
     
     /**
      * The GeoCode longitude of this event.
      */
     @Type(() => Number)
-    @ApiModelProperty()
+    @ApiProperty()
     lon: number;
 
     /**
      * Score returned from text search ranking
      */
     @Type(() => Number)
-    @ApiModelProperty()
+    @ApiProperty()
     score: number;
 }
