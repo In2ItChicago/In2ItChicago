@@ -21,7 +21,7 @@ class AggregatorBase:
 
     @property
     def is_errored(self):
-        return any(log.levelno == logging.ERROR for log in self.memory_handler.buffer)
+        return any(log.levelno == logging.ERROR and log.spider.name == self.name for log in self.memory_handler.buffer)
 
     def __init__(self, organization, base_url, date_format, request_date_format = None, **kwargs):
         if config.debug:
