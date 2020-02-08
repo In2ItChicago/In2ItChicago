@@ -1,9 +1,9 @@
-# In2It App
+# In2It Chicago
 
-View these docs [here](https://clipboardproject.github.io/ClipboardApp/) if you like pretty colors.
+View these docs [here](https://in2itchicago.github.io/In2ItChicago/) if you like pretty colors.
 
 ## Table of Contents
-   * [In2It App](#in2it-app)
+   * [In2It Chicago](#in2it-Chicago)
       * [Table of Contents](#table-of-contents)
       * [Setup](#setup)
          * [Get the Code](#get-the-code)
@@ -32,7 +32,7 @@ View these docs [here](https://clipboardproject.github.io/ClipboardApp/) if you 
 ## Setup
 
 ### Get the Code
-Clone the ClipboardApp repository into your preferred directory with Git Bash on Windows or a normal terminal otherwise: `git clone https://github.com/ClipboardProject/ClipboardApp.git`
+Clone the In2ItChicago repository into your preferred directory with Git Bash on Windows or a normal terminal otherwise: `git clone https://github.com/In2ItChicago/In2ItChicago.git`
 
 If you have any issues, see the troubleshooting guide further down in this document.
 
@@ -137,9 +137,9 @@ For debugging, we've set up configurations to allow for remote debugging in Dock
 You can use another editor if you'd like, but you'll have to set up remote debugging yourself. Whenever you open VS Code, it creates a directory called `.vscode` which stores local configurations.
 
 This repo contains all of the components needed to run the system in separate folders:
-- `clipboardapp/in2it_site` contains all code pertaining to the site itself
-- `clipboardapp/event_processor` contains the web scrapers
-- `clipboardapp/event_service` contains the API that the site and the event processor both call to interface with the database
+- `in2it_site` contains all code pertaining to the site itself
+- `event_processor` contains the web scrapers
+- `event_service` contains the API that the site and the event processor both call to interface with the database
 
 When you're developing, you'll want to think of those folders as separate projects and open a separate instance of VS Code in each of those subdirectories. This is important because the remote debugger requires
 the folder structure of the remote and local repository to match. To do so, you can launch VS Code, then choose `File -> Open Folder` or open it from the command line like this: `code ./in2it_site`. 
@@ -218,7 +218,7 @@ Time in seconds that Scrapy data will be cached for.
 We've forked a project from Nextdoor called ndscheduler to use as a scheduling system for this project.
 To run the scheduler with this application, the scheduler repository must be checked out into the same parent folder as this one.
 
-To use, run `cd {parent directory of the directory you cloned this repository into}`, `git clone https://github.com/ClipboardProject/ndscheduler`, and `git checkout clipboard_changes`. The startup scripts in this repository check for the existence of the ndscheduler folder when running. Once this is completed, go back to the `ClipboardApp` folder and run `./start.sh -s` to start the application with the scheduler.
+To use, run `cd {parent directory of the directory you cloned this repository into}` and `git clone https://github.com/In2ItChicago/ndscheduler`. The startup scripts in this repository check for the existence of the ndscheduler folder when running. Once this is completed, go back to the `In2ItChicago` folder and run `./start.sh -s` to start the application with the scheduler.
 
 If all goes well, you should be able to navigate to `localhost:8888` and see the scheduler. From there, you can let the scrapers run on a schedule or run them manually with the UI. `localhost:6800` is the url for scrapyd, which is the middleman between the scrapers and ndscheduler.
 
@@ -226,8 +226,8 @@ If all goes well, you should be able to navigate to `localhost:8888` and see the
 
 __IMPORTANT: If you're using Windows, please run `git config --global core.autocrlf input` before committing anything. This prevents carriage returns from getting sent to the remote repository.__
 
-Our current development tasks and bugs are kept in the issues list [here](https://github.com/ClipboardProject/ClipboardApp/issues).  
-The easiest way to learn the code base and get started contributing is to add a new scraper as defined in [this](https://github.com/ClipboardProject/ClipboardApp/issues/14) issue.  
+Our current development tasks and bugs are kept in the issues list [here](https://github.com/In2ItChicago/In2ItChicago/issues).  
+The easiest way to learn the code base and get started contributing is to add a new scraper as defined in [this](https://github.com/In2ItChicago/In2ItChicago/issues/14) issue.  
 The issue contains instructions on how to pick a specific site.
 
 ### Technical Overview
@@ -236,7 +236,7 @@ This project consists of four parts
 This is the heart of the application. It asynchronously scrapes websites and pulls in data from APIs, cleans and formats the data, then sends it to the event service.
 
 - **Event Service**:
-This is a standalone service that receives data from the event processor for insertion into MongoDB and processes requests from the clipboard site to display data to the user.  
+This is a standalone service that receives data from the event processor for insertion into MongoDB and processes requests from the site to display data to the user.  
 Any time data is received from a website, the old data from that site is deleted and refreshed with the new data.
 Detailed documentation can be found [here](docs/event_service)
 
@@ -255,9 +255,9 @@ ndscheduler calls this to request scraper runs. Once a scraper is requested, scr
 
 ### Detailed Docs
 
- - [Event Processor](https://clipboardproject.github.io/ClipboardApp/docs/event_processor)
- - [Event Service](https://clipboardproject.github.io/ClipboardApp/docs/event_service)
- - [In2It Site](https://clipboardproject.github.io/ClipboardApp/docs/in2it_site)
+ - [Event Processor](https://In2ItChicago.github.io/In2ItChicago/docs/event_processor)
+ - [Event Service](https://In2ItChicago.github.io/In2ItChicago/docs/event_service)
+ - [In2It Site](https://In2ItChicago.github.io/In2ItChicago/docs/in2it_site)
 
 ### Getting Started
 As stated previously, adding a scraper is the best way to start contributing.
@@ -268,7 +268,7 @@ Check out the below tutorials for some introductions to web scraping and Scrapy.
 - [Basics concepts of web scraping](https://www.upwork.com/hiring/for-clients/web-scraping-tutorial/)
 - [Basic web scraping with Python](https://www.analyticsvidhya.com/blog/2015/10/beginner-guide-web-scraping-beautiful-soup-python/)
 - [More advanced web scraping/crawling with Scrapy](https://www.analyticsvidhya.com/blog/2017/07/web-scraping-in-python-using-scrapy/)
-- [Adding a scraper to our codebase](https://clipboardproject.github.io/ClipboardApp/tutorial/scraperTutorial.html) 
+- [Adding a scraper to our codebase](https://In2ItChicago.github.io/In2ItChicago/tutorial/scraperTutorial.html) 
 
 Scrapy uses the CssSelect module to implement css selectors. Docs can be found [here](https://cssselect.readthedocs.io/en/latest/).
 CssSelect defines its selectors according to the w3 specification [here](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/) with a few exceptions that are listed in CssSelect's documentation.
@@ -290,17 +290,17 @@ Here is an example of how to detect if a site has an API we can use.
 8. Click on the "Headers" tab. The Request URL is what was requested by your browser to retrieve the json data. We can use that same url to get that data in our application.
 9. If you keep clicking through more requests, you should see several more that also returned json data.
 
-[This](https://github.com/ClipboardProject/ClipboardApp/blob/master/event_processor/apis/library_events.py) is the code that was used to create an API client for that site.  
+[This](https://github.com/In2ItChicago/In2ItChicago/blob/master/event_processor/apis/library_events.py) is the code that was used to create an API client for that site.  
 You can use this as a guide if you need to create your own API client. Some sites have APIs that are well-documented and designed for external use. These should be used if they are available.
 
-Some sites may provide an iCalendar feed. Try to use the [iCal reader](https://github.com/ClipboardProject/ClipboardApp/blob/master/event_processor/apis/ical_reader.py) if it is possible to do so. 
-Some sites may also provide an RSS feed. [This](https://github.com/ClipboardProject/ClipboardApp/blob/master/event_processor/apis/lwv_chicago.py) is an example of how to use the `feedparser` module to parse a feed.
+Some sites may provide an iCalendar feed. Try to use the [iCal reader](https://github.com/In2ItChicago/In2ItChicago/blob/master/event_processor/apis/ical_reader.py) if it is possible to do so. 
+Some sites may also provide an RSS feed. [This](https://github.com/In2ItChicago/In2ItChicago/blob/master/event_processor/apis/lwv_chicago.py) is an example of how to use the `feedparser` module to parse a feed.
 
 ### How to integrate new scrapers and API clients with the core code
-All new scrapers should inherit from one of the classes listed [here](https://github.com/ClipboardProject/ClipboardApp/blob/master/event_processor/custom_spiders.py)
+All new scrapers should inherit from one of the classes listed [here](https://github.com/In2ItChicago/In2ItChicago/blob/master/event_processor/custom_spiders.py)
 All new API clients should inherit from ApiSpider and scrapers should inherit from ScraperSpider or ScraperCrawlSpider, depending on if the spider needs to visit multiple urls or not.
 
-The end goal of all scrapers and API clients is to transform the raw data into event objects that conform to the Event class in [this file](https://github.com/ClipboardProject/ClipboardApp/blob/master/event_processor/event.py).  
+The end goal of all scrapers and API clients is to transform the raw data into event objects that conform to the Event class in [this file](https://github.com/In2ItChicago/In2ItChicago/blob/master/event_processor/event.py).  
 For each item, you'll want to parse out the following data (as much as is available). 
 - **`organization`**: The name of the organization that's putting on the event
 - **`title`**: The name of the event
@@ -308,7 +308,7 @@ For each item, you'll want to parse out the following data (as much as is availa
 - **`address`**: Location of the event (okay if exact address is not known)
 - **`url`**: Link to url for event. Link to specific event is preferred, but a link to a page containing general event listings is okay.
 - **`price`**: Cost to attend, if provided
-- **`category`**: Category of event, as defined [here](https://github.com/ClipboardProject/ClipboardApp/blob/master/event_processor/categories.py). (Work in progress. We'll flesh out categories more eventually)  
+- **`category`**: Category of event, as defined [here](https://github.com/In2ItChicago/In2ItChicago/blob/master/event_processor/categories.py). (Work in progress. We'll flesh out categories more eventually)  
 - **Start/End Time and Date**: Dates and times can be supplied with several parameters. Choose one date formate and one time format. Eventually, all dates and times will be converted into Unix timestamps.
     - **`time`**: Use if only one time is supplied for the event (not time range)
     - **`start_time` and `end_time`**: Use if the site supplies distinct data for these two values

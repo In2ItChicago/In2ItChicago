@@ -80,7 +80,9 @@
 							<h3>Variables</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_dal_eventdal_.html#default_limit" class="tsd-kind-icon">DEFAULT_<wbr>LIMIT</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_dal_eventdal_.html#miles_to_meters" class="tsd-kind-icon">MILES_<wbr>TO_<wbr>METERS</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_dal_eventdal_.html#db" class="tsd-kind-icon">db</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_dal_eventdal_.html#makevector" class="tsd-kind-icon">make<wbr>Vector</a></li>
 							</ul>
 						</section>
 					</div>
@@ -94,17 +96,37 @@
 					<div class="tsd-signature tsd-kind-icon">DEFAULT_<wbr>LIMIT<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">25</span><span class="tsd-signature-symbol"> =&nbsp;25</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in DAL/eventDAL.ts:10</li>
+							<li>Defined in DAL/eventDAL.ts:7</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
+					<a name="miles_to_meters" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> MILES_<wbr>TO_<wbr>METERS</h3>
+					<div class="tsd-signature tsd-kind-icon">MILES_<wbr>TO_<wbr>METERS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">1609.34</span><span class="tsd-signature-symbol"> =&nbsp;1609.34</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in DAL/eventDAL.ts:8</li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
 					<a name="db" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> db</h3>
-					<div class="tsd-signature tsd-kind-icon">db<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Knex</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;knex(knexStringcase({client: &#x27;postgresql&#x27;,connection: &#x27;postgresql://postgres:postgres@postgres:5432/events&#x27;,}))</span></div>
+					<div class="tsd-signature tsd-kind-icon">db<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Knex</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;knex(knexStringcase({client: &#x27;postgresql&#x27;,connection: {host: process.env.HOST,user: &#x27;postgres&#x27;,password: &#x27;postgres&#x27;,database: &#x27;events&#x27;}}))</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in DAL/eventDAL.ts:12</li>
+							<li>Defined in DAL/eventDAL.ts:10</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
+					<a name="makevector" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> make<wbr>Vector</h3>
+					<div class="tsd-signature tsd-kind-icon">make<wbr>Vector<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"to_tsvector(organization || &#x27; &#x27; || title || &#x27; &#x27; || description)"</span><span class="tsd-signature-symbol"> =&nbsp;&#x60;to_tsvector(organization || &#x27; &#x27; || title || &#x27; &#x27; || description)&#x60;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in DAL/eventDAL.ts:9</li>
 						</ul>
 					</aside>
 				</section>
@@ -117,7 +139,7 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="_dal_eventdal_.html">"DAL/eventDAL"</a>
+						<a href="_dal_eventdal_.html">&quot;DAL/eventDAL&quot;</a>
 					</li>
 				</ul>
 			</nav>
@@ -130,7 +152,13 @@
 						<a href="_dal_eventdal_.html#default_limit" class="tsd-kind-icon">DEFAULT_<wbr>LIMIT</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_dal_eventdal_.html#miles_to_meters" class="tsd-kind-icon">MILES_<wbr>TO_<wbr>METERS</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="_dal_eventdal_.html#db" class="tsd-kind-icon">db</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_dal_eventdal_.html#makevector" class="tsd-kind-icon">make<wbr>Vector</a>
 					</li>
 				</ul>
 			</nav>
@@ -149,6 +177,7 @@
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
 				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
@@ -197,7 +226,7 @@
 	</div>
 </footer>
 <div class="container tsd-generator">
-	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>

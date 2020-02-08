@@ -33,7 +33,7 @@ echo "Moved event_service docs to the /docs folder..."
 echo "Generating docs for in2it_site..."
 in2it_id=$(docker container ls -q --filter "name=in2it_site")
 sudo rm -rf ./in2it_site/docs
-docker exec -t $in2it_id ./node_modules/.bin/jsdoc ./ -r -c jsdoc-conf.json 
+docker exec -t $in2it_id npx jsdoc ./ -r -c jsdoc-conf.json 
 mkdir ./docs/in2it_site 
 sudo mv -u ./in2it_site/docs/* ./docs/in2it_site
 sudo rm -rf ./in2it_site/docs

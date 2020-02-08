@@ -3,7 +3,7 @@ cd ndscheduler
 git checkout .
 git pull
 
-cd ../ClipboardApp
+cd ../In2ItChicago
 git checkout .
 git pull
 chmod +x start-prod.sh

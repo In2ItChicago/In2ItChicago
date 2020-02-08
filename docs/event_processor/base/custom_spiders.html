@@ -56,6 +56,15 @@ scraper_settings = {
         }
     }
 
+no_transpose_scraper_settings  = {
+        &#39;ITEM_PIPELINES&#39;: {
+            &#39;event_processor.scrapy_impl.pipelines.EventTransformPipeline&#39;: 300,
+            &#39;event_processor.scrapy_impl.pipelines.GeocodePipeline&#39;: 400,
+            &#39;event_processor.scrapy_impl.pipelines.EventBuildPipeline&#39;: 500,
+            &#39;event_processor.scrapy_impl.pipelines.EventSavePipeline&#39;: 600
+        }
+    }
+
 class ApiSpider(Spider, ApiBase):
     &#34;&#34;&#34;Base spider for reading Apis&#34;&#34;&#34;
     custom_settings = api_settings
@@ -82,7 +91,13 @@ class ScraperSplashSpider(Spider, SplashBase):
     custom_settings = scraper_settings
     def __init__(self, *args, **kwargs):
         Spider.__init__(self)
-        SplashBase.__init__(*args, **kwargs)</code></pre>
+        SplashBase.__init__(*args, **kwargs)
+
+class ScraperNoTransposeSpider(Spider, SpiderBase):
+    custom_settings = no_transpose_scraper_settings
+    def __init__(self, *args, **kwargs):
+        Spider.__init__(self)
+        SpiderBase.__init__(*args, **kwargs)</code></pre>
 </details>
 </section>
 <section>
@@ -120,11 +135,11 @@ class ScraperSplashSpider(Spider, SplashBase):
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
+<li><a title="event_processor.apis.greatlakes_ical.GreatLakesReader" href="../apis/greatlakes_ical.html#event_processor.apis.greatlakes_ical.GreatLakesReader">GreatLakesReader</a></li>
+<li><a title="event_processor.apis.honeycomb.Honeycomb" href="../apis/honeycomb.html#event_processor.apis.honeycomb.Honeycomb">Honeycomb</a></li>
 <li><a title="event_processor.apis.library_events.LibraryEvents" href="../apis/library_events.html#event_processor.apis.library_events.LibraryEvents">LibraryEvents</a></li>
 <li><a title="event_processor.apis.lwv_chicago.LWVChicago" href="../apis/lwv_chicago.html#event_processor.apis.lwv_chicago.LWVChicago">LWVChicago</a></li>
-<li><a title="event_processor.apis.honeycomb.Honeycomb" href="../apis/honeycomb.html#event_processor.apis.honeycomb.Honeycomb">Honeycomb</a></li>
 <li><a title="event_processor.apis.documenters.Documenters" href="../apis/documenters.html#event_processor.apis.documenters.Documenters">Documenters</a></li>
-<li><a title="event_processor.apis.greatlakes_ical.GreatLakesReader" href="../apis/greatlakes_ical.html#event_processor.apis.greatlakes_ical.GreatLakesReader">GreatLakesReader</a></li>
 </ul>
 <h3>Class variables</h3>
 <dl>
@@ -149,6 +164,7 @@ dict(one=1, two=2)</p></section>
 <ul class="hlist">
 <li><code><a title="event_processor.base.api_base.ApiBase.allowed_domains" href="api_base.html#event_processor.base.api_base.ApiBase.allowed_domains">allowed_domains</a></code></li>
 <li><code><a title="event_processor.base.api_base.ApiBase.enabled" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.enabled">enabled</a></code></li>
+<li><code><a title="event_processor.base.api_base.ApiBase.item_filter" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.item_filter">item_filter</a></code></li>
 <li><code><a title="event_processor.base.api_base.ApiBase.name" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.name">name</a></code></li>
 <li><code><a title="event_processor.base.api_base.ApiBase.start_urls" href="api_base.html#event_processor.base.api_base.ApiBase.start_urls">start_urls</a></code></li>
 </ul>
@@ -182,9 +198,10 @@ dict(one=1, two=2)</p></section>
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
+<li><a title="event_processor.scrapers.chihacknight_crawl_spider.ChiHackNightCrawlSpider" href="../scrapers/chihacknight_crawl_spider.html#event_processor.scrapers.chihacknight_crawl_spider.ChiHackNightCrawlSpider">ChiHackNightCrawlSpider</a></li>
+<li><a title="event_processor.scrapers.notdiy_spider.NotDIYSpider" href="../scrapers/notdiy_spider.html#event_processor.scrapers.notdiy_spider.NotDIYSpider">NotDIYSpider</a></li>
 <li><a title="event_processor.scrapers.history_spider.HistorySpider" href="../scrapers/history_spider.html#event_processor.scrapers.history_spider.HistorySpider">HistorySpider</a></li>
 <li><a title="event_processor.scrapers.wpbcc_spider.WpbccSpider" href="../scrapers/wpbcc_spider.html#event_processor.scrapers.wpbcc_spider.WpbccSpider">WpbccSpider</a></li>
-<li><a title="event_processor.scrapers.chihacknight_crawl_spider.ChiHackNightCrawlSpider" href="../scrapers/chihacknight_crawl_spider.html#event_processor.scrapers.chihacknight_crawl_spider.ChiHackNightCrawlSpider">ChiHackNightCrawlSpider</a></li>
 </ul>
 <h3>Class variables</h3>
 <dl>
@@ -210,6 +227,65 @@ dict(one=1, two=2)</p></section>
 <li><code><a title="event_processor.base.spider_base.SpiderBase.empty_check_extract" href="spider_base.html#event_processor.base.spider_base.SpiderBase.empty_check_extract">empty_check_extract</a></code></li>
 <li><code><a title="event_processor.base.spider_base.SpiderBase.enabled" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.enabled">enabled</a></code></li>
 <li><code><a title="event_processor.base.spider_base.SpiderBase.get_request" href="spider_base.html#event_processor.base.spider_base.SpiderBase.get_request">get_request</a></code></li>
+<li><code><a title="event_processor.base.spider_base.SpiderBase.item_filter" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.item_filter">item_filter</a></code></li>
+<li><code><a title="event_processor.base.spider_base.SpiderBase.name" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.name">name</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="event_processor.base.custom_spiders.ScraperNoTransposeSpider"><code class="flex name class">
+<span>class <span class="ident">ScraperNoTransposeSpider</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Base class for scrapy spiders. All spiders must inherit from this
+class.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ScraperNoTransposeSpider(Spider, SpiderBase):
+    custom_settings = no_transpose_scraper_settings
+    def __init__(self, *args, **kwargs):
+        Spider.__init__(self)
+        SpiderBase.__init__(*args, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>scrapy.spiders.Spider</li>
+<li>scrapy.utils.trackref.object_ref</li>
+<li><a title="event_processor.base.spider_base.SpiderBase" href="spider_base.html#event_processor.base.spider_base.SpiderBase">SpiderBase</a></li>
+<li><a title="event_processor.base.aggregator_base.AggregatorBase" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase">AggregatorBase</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="event_processor.scrapers.formyblock.ForMyBlockSpider" href="../scrapers/formyblock.html#event_processor.scrapers.formyblock.ForMyBlockSpider">ForMyBlockSpider</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="event_processor.base.custom_spiders.ScraperNoTransposeSpider.custom_settings"><code class="name">var <span class="ident">custom_settings</span></code></dt>
+<dd>
+<section class="desc"><p>dict() -&gt; new empty dictionary
+dict(mapping) -&gt; new dictionary initialized from a mapping object's
+(key, value) pairs
+dict(iterable) -&gt; new dictionary initialized as if via:
+d = {}
+for k, v in iterable:
+d[k] = v
+dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
+in the keyword argument list.
+For example:
+dict(one=1, two=2)</p></section>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="event_processor.base.spider_base.SpiderBase" href="spider_base.html#event_processor.base.spider_base.SpiderBase">SpiderBase</a></b></code>:
+<ul class="hlist">
+<li><code><a title="event_processor.base.spider_base.SpiderBase.empty_check_extract" href="spider_base.html#event_processor.base.spider_base.SpiderBase.empty_check_extract">empty_check_extract</a></code></li>
+<li><code><a title="event_processor.base.spider_base.SpiderBase.enabled" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.enabled">enabled</a></code></li>
+<li><code><a title="event_processor.base.spider_base.SpiderBase.get_request" href="spider_base.html#event_processor.base.spider_base.SpiderBase.get_request">get_request</a></code></li>
+<li><code><a title="event_processor.base.spider_base.SpiderBase.item_filter" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.item_filter">item_filter</a></code></li>
 <li><code><a title="event_processor.base.spider_base.SpiderBase.name" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.name">name</a></code></li>
 </ul>
 </li>
@@ -241,8 +317,8 @@ dict(one=1, two=2)</p></section>
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
-<li><a title="event_processor.scrapers.chihacknight_simple_spider.ChiHackNightSpider" href="../scrapers/chihacknight_simple_spider.html#event_processor.scrapers.chihacknight_simple_spider.ChiHackNightSpider">ChiHackNightSpider</a></li>
 <li><a title="event_processor.scrapers.greatlakes_spider.GreatLakesSpider" href="../scrapers/greatlakes_spider.html#event_processor.scrapers.greatlakes_spider.GreatLakesSpider">GreatLakesSpider</a></li>
+<li><a title="event_processor.scrapers.chihacknight_simple_spider.ChiHackNightSpider" href="../scrapers/chihacknight_simple_spider.html#event_processor.scrapers.chihacknight_simple_spider.ChiHackNightSpider">ChiHackNightSpider</a></li>
 </ul>
 <h3>Class variables</h3>
 <dl>
@@ -268,6 +344,7 @@ dict(one=1, two=2)</p></section>
 <li><code><a title="event_processor.base.spider_base.SpiderBase.empty_check_extract" href="spider_base.html#event_processor.base.spider_base.SpiderBase.empty_check_extract">empty_check_extract</a></code></li>
 <li><code><a title="event_processor.base.spider_base.SpiderBase.enabled" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.enabled">enabled</a></code></li>
 <li><code><a title="event_processor.base.spider_base.SpiderBase.get_request" href="spider_base.html#event_processor.base.spider_base.SpiderBase.get_request">get_request</a></code></li>
+<li><code><a title="event_processor.base.spider_base.SpiderBase.item_filter" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.item_filter">item_filter</a></code></li>
 <li><code><a title="event_processor.base.spider_base.SpiderBase.name" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.name">name</a></code></li>
 </ul>
 </li>
@@ -327,6 +404,7 @@ dict(one=1, two=2)</p></section>
 <li><code><a title="event_processor.base.splash_base.SplashBase.empty_check_extract" href="spider_base.html#event_processor.base.spider_base.SpiderBase.empty_check_extract">empty_check_extract</a></code></li>
 <li><code><a title="event_processor.base.splash_base.SplashBase.enabled" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.enabled">enabled</a></code></li>
 <li><code><a title="event_processor.base.splash_base.SplashBase.get_request" href="spider_base.html#event_processor.base.spider_base.SpiderBase.get_request">get_request</a></code></li>
+<li><code><a title="event_processor.base.splash_base.SplashBase.item_filter" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.item_filter">item_filter</a></code></li>
 <li><code><a title="event_processor.base.splash_base.SplashBase.name" href="aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.name">name</a></code></li>
 <li><code><a title="event_processor.base.splash_base.SplashBase.splash_parse" href="splash_base.html#event_processor.base.splash_base.SplashBase.splash_parse">splash_parse</a></code></li>
 </ul>
@@ -359,6 +437,12 @@ dict(one=1, two=2)</p></section>
 <h4><code><a title="event_processor.base.custom_spiders.ScraperCrawlSpider" href="#event_processor.base.custom_spiders.ScraperCrawlSpider">ScraperCrawlSpider</a></code></h4>
 <ul class="">
 <li><code><a title="event_processor.base.custom_spiders.ScraperCrawlSpider.custom_settings" href="#event_processor.base.custom_spiders.ScraperCrawlSpider.custom_settings">custom_settings</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="event_processor.base.custom_spiders.ScraperNoTransposeSpider" href="#event_processor.base.custom_spiders.ScraperNoTransposeSpider">ScraperNoTransposeSpider</a></code></h4>
+<ul class="">
+<li><code><a title="event_processor.base.custom_spiders.ScraperNoTransposeSpider.custom_settings" href="#event_processor.base.custom_spiders.ScraperNoTransposeSpider.custom_settings">custom_settings</a></code></li>
 </ul>
 </li>
 <li>

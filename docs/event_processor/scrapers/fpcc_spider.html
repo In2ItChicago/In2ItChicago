@@ -34,8 +34,6 @@ from scrapy_splash import SplashRequest
 
 
 class FpccSpider(ScraperSplashSpider):
-    &#34;&#34;&#34;Base class for spiders that use splash for retrieving data generated through dynamic javascript content&#34;&#34;&#34;
-    # Placeholder values that can be used if no request needs to be made through Scrapy
     allowed_domains = [&#39;ec.samaritan.com&#39;, &#39;splash&#39;]
     start_urls = [&#39;https://ec.samaritan.com/recruiter/index.php?class=RecruiterCalendar&amp;recruiterID=1405&#39;]
     name = &#34;fpcc&#34;
@@ -67,15 +65,16 @@ class FpccSpider(ScraperSplashSpider):
         if &#39;title&#39; in response:
             find_start_time = &#39;&#39;
             find_end_time = &#39;&#39;
+            time_find_index = -1
             extract_times = re.findall(&#34;([0-9]?[0-9]:[0-9][0-9] [ap]m)&#34;, response[&#39;date_unparsed&#39;])
             if len(extract_times) &gt; 0:
                 find_start_time = extract_times[0]
+                extract_date = response[&#39;date_unparsed&#39;]
+            time_find_index = response[&#39;date_unparsed&#39;].index(extract_times[0])
             if len(extract_times) &gt; 1:
                 find_end_time = extract_times[1]
 
-            extract_date = response[&#39;date_unparsed&#39;]
-            time_find_index = response[&#39;date_unparsed&#39;].index(extract_times[0])
-            if time_find_index != None and time_find_index &gt;= 0:
+            if time_find_index &gt;= 0:
                 extract_date = response[&#39;date_unparsed&#39;][:(time_find_index - 1)]
                 
             return {
@@ -107,14 +106,12 @@ class FpccSpider(ScraperSplashSpider):
 <span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Base class for spiders that use splash for retrieving data generated through dynamic javascript content</p></section>
+<section class="desc"><p>??? Base spider for web crawling with Splash, which can render and extract data from pages that have javascript generated dynamic content</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class FpccSpider(ScraperSplashSpider):
-    &#34;&#34;&#34;Base class for spiders that use splash for retrieving data generated through dynamic javascript content&#34;&#34;&#34;
-    # Placeholder values that can be used if no request needs to be made through Scrapy
     allowed_domains = [&#39;ec.samaritan.com&#39;, &#39;splash&#39;]
     start_urls = [&#39;https://ec.samaritan.com/recruiter/index.php?class=RecruiterCalendar&amp;recruiterID=1405&#39;]
     name = &#34;fpcc&#34;
@@ -146,15 +143,16 @@ class FpccSpider(ScraperSplashSpider):
         if &#39;title&#39; in response:
             find_start_time = &#39;&#39;
             find_end_time = &#39;&#39;
+            time_find_index = -1
             extract_times = re.findall(&#34;([0-9]?[0-9]:[0-9][0-9] [ap]m)&#34;, response[&#39;date_unparsed&#39;])
             if len(extract_times) &gt; 0:
                 find_start_time = extract_times[0]
+                extract_date = response[&#39;date_unparsed&#39;]
+            time_find_index = response[&#39;date_unparsed&#39;].index(extract_times[0])
             if len(extract_times) &gt; 1:
                 find_end_time = extract_times[1]
 
-            extract_date = response[&#39;date_unparsed&#39;]
-            time_find_index = response[&#39;date_unparsed&#39;].index(extract_times[0])
-            if time_find_index != None and time_find_index &gt;= 0:
+            if time_find_index &gt;= 0:
                 extract_date = response[&#39;date_unparsed&#39;][:(time_find_index - 1)]
                 
             return {
@@ -212,15 +210,16 @@ The argument must be an iterable if specified.</p></section>
     if &#39;title&#39; in response:
         find_start_time = &#39;&#39;
         find_end_time = &#39;&#39;
+        time_find_index = -1
         extract_times = re.findall(&#34;([0-9]?[0-9]:[0-9][0-9] [ap]m)&#34;, response[&#39;date_unparsed&#39;])
         if len(extract_times) &gt; 0:
             find_start_time = extract_times[0]
+            extract_date = response[&#39;date_unparsed&#39;]
+        time_find_index = response[&#39;date_unparsed&#39;].index(extract_times[0])
         if len(extract_times) &gt; 1:
             find_end_time = extract_times[1]
 
-        extract_date = response[&#39;date_unparsed&#39;]
-        time_find_index = response[&#39;date_unparsed&#39;].index(extract_times[0])
-        if time_find_index != None and time_find_index &gt;= 0:
+        if time_find_index &gt;= 0:
             extract_date = response[&#39;date_unparsed&#39;][:(time_find_index - 1)]
             
         return {
@@ -275,6 +274,7 @@ The argument must be an iterable if specified.</p></section>
 <li><code><a title="event_processor.base.custom_spiders.ScraperSplashSpider.empty_check_extract" href="../base/spider_base.html#event_processor.base.spider_base.SpiderBase.empty_check_extract">empty_check_extract</a></code></li>
 <li><code><a title="event_processor.base.custom_spiders.ScraperSplashSpider.enabled" href="../base/aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.enabled">enabled</a></code></li>
 <li><code><a title="event_processor.base.custom_spiders.ScraperSplashSpider.get_request" href="../base/spider_base.html#event_processor.base.spider_base.SpiderBase.get_request">get_request</a></code></li>
+<li><code><a title="event_processor.base.custom_spiders.ScraperSplashSpider.item_filter" href="../base/aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.item_filter">item_filter</a></code></li>
 <li><code><a title="event_processor.base.custom_spiders.ScraperSplashSpider.name" href="../base/aggregator_base.html#event_processor.base.aggregator_base.AggregatorBase.name">name</a></code></li>
 <li><code><a title="event_processor.base.custom_spiders.ScraperSplashSpider.splash_parse" href="../base/splash_base.html#event_processor.base.splash_base.SplashBase.splash_parse">splash_parse</a></code></li>
 </ul>
