@@ -1,5 +1,5 @@
 import { json } from 'body-parser';
-import { ValidationPipe } from '@src/pipes/ValidationPipe';
+import { ValidationPipe } from '@src/pipes/validation.pipe';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '@src/app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -18,7 +18,6 @@ async function bootstrap() {
     .setTitle('Event API')
     .setDescription('Event API')
     .setVersion('1.0')
-    //.setSchemes(process.env.URL_SCHEME === 'https' ? 'https' : 'http')
     .build();
 
   const document = SwaggerModule.createDocument(app, options, {
