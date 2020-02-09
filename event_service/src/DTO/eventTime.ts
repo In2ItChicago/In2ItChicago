@@ -1,4 +1,4 @@
-import { ApiModelProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -9,11 +9,11 @@ import { Type } from 'class-transformer';
 export class EventTime {
     @IsNumber()
     @Type(() => Number)
-    @ApiModelProperty()
+    @ApiProperty()
     startTimestamp: number;
     
     @IsNumber()
     @Type(() => Number)
-    @ApiModelProperty()
+    @ApiProperty()
     endTimestamp: number;
 }

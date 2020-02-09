@@ -7,6 +7,9 @@ import { CreateGeocodeRequest } from '@src/DTO/createGeocodeRequest';
 import { randomExpirationTime } from '@src/utilities';
 import { SearchNeighborhoodRequest } from '@src/DTO/searchNeighborhoodRequest';
 
+// Max number of geocodes not tied to events to cache
+const MAX_GEOCODES = 1000;
+
 const db = knex(knexStringcase({
     client: 'postgresql',
     connection: {
@@ -38,16 +41,16 @@ export class GeocodeDAL {
     }
 
     async getGeocode(params: GetGeocodeRequest): Promise<Object[]> {
-        const result = await db.select('id', 'address', 'lat', 'lon', 'neighborhood')
-            .from('geocode.location')
+        const result = await db('geocode.location')
+            .select('id', 'address', 'lat', 'lon', 'neighborhood')
             .where('address', params.address);
 
         return result;
     }
 
     async searchNeighborhood(params: SearchNeighborhoodRequest): Promise<Object[]> {
-        const result = await db.select('id', 'address', 'lat', 'lon', 'neighborhood')
-            .from('geocode.location')
+        const result = await db('geocode.location')
+            .select('id', 'address', 'lat', 'lon', 'neighborhood')
             .where('neighborhood', params.neighborhood);
 
         return result;
@@ -61,5 +64,13 @@ export class GeocodeDAL {
 
     async deleteAllGeocodes() {
         await db('geocode.location').del();
+    }
+
+    async cleanUpGeocodes() {
+        await db('geocode.location as geo')
+            .whereNotExists(db('events.event as event').select('*').whereRaw('event.geocode_id = geo.id'))
+            .orderBy('geo.expireAt', 'asc')
+            .offset(MAX_GEOCODES)
+            .del();
     }
 }

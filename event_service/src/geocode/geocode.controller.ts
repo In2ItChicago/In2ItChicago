@@ -1,12 +1,11 @@
 import { Controller, Get, Query, UseInterceptors, Post, Delete } from '@nestjs/common';
 import { GeocodeService } from '@src/geocode/geocode.service';
 import { GetGeocodeRequest } from '@src/DTO/getGeocodeRequest';
-import { ApiUseTags, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiResponse } from '@nestjs/swagger';
 import { GetGeocodeResponse } from '@src/DTO/getGeocodeResponse';
 import { SearchNeighborhoodRequest } from '@src/DTO/searchNeighborhoodRequest';
-import {plainToClass} from "class-transformer";
 
-@ApiUseTags('geocode')
+@ApiTags('geocode')
 @Controller('geocode')
 export class GeocodeController {
     constructor(private readonly geocodeService: GeocodeService) {}
@@ -14,7 +13,6 @@ export class GeocodeController {
     @Get()
     @ApiResponse({status: 200, type: GetGeocodeResponse, description: 'Geocode response'})
     async getGeocode(@Query() query: GetGeocodeRequest): Promise<GetGeocodeResponse> {
-        query = plainToClass(GetGeocodeRequest, query);
         return await this.geocodeService.getGeocode(query);
     }
 

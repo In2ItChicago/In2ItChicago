@@ -8,6 +8,7 @@ import { GeocodeService } from '@src/geocode/geocode.service';
 import { GetEventsResponse } from '@src/DTO/getEventsResponse';
 import { plainToClass } from 'class-transformer';
 import { GetGeocodeResponse } from '@src/DTO/getGeocodeResponse';
+import { CreateEventRequest } from '@src/DTO/createEventRequest';
 
 @Injectable()
 export class EventService {
@@ -38,8 +39,7 @@ export class EventService {
         return new GetEventsResponse();
     }
 
-    async createEvents(contextData: CreateEventsRequest[]) {
-        contextData = contextData.map(c => plainToClass(CreateEventsRequest, c));
+    async createEvents(contextData: CreateEventRequest[]) {
         const invalid = contextData.filter(data => !(
             data.organization && 
             data.eventTime && 
@@ -70,5 +70,10 @@ export class EventService {
     async clearAllEvents() {
         await this.geocodeService.clearAllGeocodes();
         await this.eventDAL.deleteAllEvents();
+    }
+
+    async cleanupEvents() {
+        await this.geocodeService.cleanupGeocodes();
+        await this.eventDAL.cleanupEvents();
     }
 }

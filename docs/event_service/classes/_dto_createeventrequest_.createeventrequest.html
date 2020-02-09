@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>GetGeocodeRequest | event-service</title>
+	<title>CreateEventRequest | event-service</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_dto_getgeocoderequest_.html">&quot;DTO/getGeocodeRequest&quot;</a>
+					<a href="../modules/_dto_createeventrequest_.html">&quot;DTO/createEventRequest&quot;</a>
 				</li>
 				<li>
-					<a href="_dto_getgeocoderequest_.getgeocoderequest.html">GetGeocodeRequest</a>
+					<a href="_dto_createeventrequest_.createeventrequest.html">CreateEventRequest</a>
 				</li>
 			</ul>
-			<h1>Class GetGeocodeRequest</h1>
+			<h1>Class CreateEventRequest</h1>
 		</div>
 	</div>
 </header>
@@ -72,8 +72,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Model representing a Geocode request??
-						(What does DTO stand for anyways???)</p>
+						<p>Model representing a request for creating an event</p>
 					</div>
 				</div>
 			</section>
@@ -81,7 +80,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">GetGeocodeRequest</span>
+						<span class="target">CreateEventRequest</span>
 					</li>
 				</ul>
 			</section>
@@ -92,9 +91,15 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_dto_getgeocoderequest_.getgeocoderequest.html#address" class="tsd-kind-icon">address</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_dto_getgeocoderequest_.getgeocoderequest.html#lat" class="tsd-kind-icon">lat</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_dto_getgeocoderequest_.getgeocoderequest.html#lon" class="tsd-kind-icon">lon</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_dto_createeventrequest_.createeventrequest.html#address" class="tsd-kind-icon">address</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_dto_createeventrequest_.createeventrequest.html#description" class="tsd-kind-icon">description</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_dto_createeventrequest_.createeventrequest.html#eventtime" class="tsd-kind-icon">event<wbr>Time</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_dto_createeventrequest_.createeventrequest.html#geocodeid" class="tsd-kind-icon">geocode<wbr>Id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_dto_createeventrequest_.createeventrequest.html#ismanual" class="tsd-kind-icon">is<wbr>Manual</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_dto_createeventrequest_.createeventrequest.html#organization" class="tsd-kind-icon">organization</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_dto_createeventrequest_.createeventrequest.html#price" class="tsd-kind-icon">price</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_dto_createeventrequest_.createeventrequest.html#title" class="tsd-kind-icon">title</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_dto_createeventrequest_.createeventrequest.html#url" class="tsd-kind-icon">url</a></li>
 							</ul>
 						</section>
 					</div>
@@ -108,32 +113,87 @@
 					<div class="tsd-signature tsd-kind-icon">address<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in DTO/getGeocodeRequest.ts:14</li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The address a GeoCode is being requested for.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="lat" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> lat</h3>
-					<div class="tsd-signature tsd-kind-icon">lat<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in DTO/getGeocodeRequest.ts:20</li>
+							<li>Defined in DTO/createEventRequest.ts:26</li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="lon" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> lon</h3>
-					<div class="tsd-signature tsd-kind-icon">lon<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<a name="description" class="tsd-anchor"></a>
+					<h3>description</h3>
+					<div class="tsd-signature tsd-kind-icon">description<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in DTO/getGeocodeRequest.ts:26</li>
+							<li>Defined in DTO/createEventRequest.ts:34</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="eventtime" class="tsd-anchor"></a>
+					<h3>event<wbr>Time</h3>
+					<div class="tsd-signature tsd-kind-icon">event<wbr>Time<span class="tsd-signature-symbol">:</span> <a href="_dto_eventtime_.eventtime.html" class="tsd-signature-type">EventTime</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in DTO/createEventRequest.ts:18</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="geocodeid" class="tsd-anchor"></a>
+					<h3>geocode<wbr>Id</h3>
+					<div class="tsd-signature tsd-kind-icon">geocode<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in DTO/createEventRequest.ts:51</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="ismanual" class="tsd-anchor"></a>
+					<h3>is<wbr>Manual</h3>
+					<div class="tsd-signature tsd-kind-icon">is<wbr>Manual<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in DTO/createEventRequest.ts:46</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="organization" class="tsd-anchor"></a>
+					<h3>organization</h3>
+					<div class="tsd-signature tsd-kind-icon">organization<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in DTO/createEventRequest.ts:13</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="price" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> price</h3>
+					<div class="tsd-signature tsd-kind-icon">price<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in DTO/createEventRequest.ts:40</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="title" class="tsd-anchor"></a>
+					<h3>title</h3>
+					<div class="tsd-signature tsd-kind-icon">title<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in DTO/createEventRequest.ts:22</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="url" class="tsd-anchor"></a>
+					<h3>url</h3>
+					<div class="tsd-signature tsd-kind-icon">url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in DTO/createEventRequest.ts:30</li>
 						</ul>
 					</aside>
 				</section>
@@ -146,7 +206,7 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="../modules/_dto_getgeocoderequest_.html">&quot;DTO/get<wbr>Geocode<wbr>Request&quot;</a>
+						<a href="../modules/_dto_createeventrequest_.html">&quot;DTO/create<wbr>Event<wbr>Request&quot;</a>
 					</li>
 				</ul>
 			</nav>
@@ -155,16 +215,34 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_dto_getgeocoderequest_.getgeocoderequest.html" class="tsd-kind-icon">Get<wbr>Geocode<wbr>Request</a>
+						<a href="_dto_createeventrequest_.createeventrequest.html" class="tsd-kind-icon">Create<wbr>Event<wbr>Request</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_dto_getgeocoderequest_.getgeocoderequest.html#address" class="tsd-kind-icon">address</a>
+								<a href="_dto_createeventrequest_.createeventrequest.html#address" class="tsd-kind-icon">address</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_dto_getgeocoderequest_.getgeocoderequest.html#lat" class="tsd-kind-icon">lat</a>
+								<a href="_dto_createeventrequest_.createeventrequest.html#description" class="tsd-kind-icon">description</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_dto_getgeocoderequest_.getgeocoderequest.html#lon" class="tsd-kind-icon">lon</a>
+								<a href="_dto_createeventrequest_.createeventrequest.html#eventtime" class="tsd-kind-icon">event<wbr>Time</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_dto_createeventrequest_.createeventrequest.html#geocodeid" class="tsd-kind-icon">geocode<wbr>Id</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_dto_createeventrequest_.createeventrequest.html#ismanual" class="tsd-kind-icon">is<wbr>Manual</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_dto_createeventrequest_.createeventrequest.html#organization" class="tsd-kind-icon">organization</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_dto_createeventrequest_.createeventrequest.html#price" class="tsd-kind-icon">price</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_dto_createeventrequest_.createeventrequest.html#title" class="tsd-kind-icon">title</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_dto_createeventrequest_.createeventrequest.html#url" class="tsd-kind-icon">url</a>
 							</li>
 						</ul>
 					</li>

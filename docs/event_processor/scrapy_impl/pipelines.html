@@ -116,7 +116,7 @@ class EventSavePipeline:
         if spider.is_errored:
             spider.logger.info(&#39;Errors occurred during processing so events will not be saved&#39;)
         else:
-            response = self.session.post(config.put_events, json=event_list)
+            response = self.session.post(config.put_events, json={&#39;events&#39;: event_list})
             if not response.ok:
                 raise Exception(response.text)
             else:
@@ -201,7 +201,7 @@ class EventSavePipeline:
         if spider.is_errored:
             spider.logger.info(&#39;Errors occurred during processing so events will not be saved&#39;)
         else:
-            response = self.session.post(config.put_events, json=event_list)
+            response = self.session.post(config.put_events, json={&#39;events&#39;: event_list})
             if not response.ok:
                 raise Exception(response.text)
             else:
@@ -248,7 +248,7 @@ class EventSavePipeline:
     if spider.is_errored:
         spider.logger.info(&#39;Errors occurred during processing so events will not be saved&#39;)
     else:
-        response = self.session.post(config.put_events, json=event_list)
+        response = self.session.post(config.put_events, json={&#39;events&#39;: event_list})
         if not response.ok:
             raise Exception(response.text)
         else:

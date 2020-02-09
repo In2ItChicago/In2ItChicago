@@ -1,5 +1,5 @@
 import { json } from 'body-parser';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@src/pipes/validation.pipe';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '@src/app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -12,13 +12,12 @@ async function bootstrap() {
   app.use(json({ limit: '50mb' }));
   app.enableCors();
   app.useGlobalFilters(new GenericFilter())
-  app.useGlobalPipes(new ValidationPipe({transform: true, skipMissingProperties: true}))
+  app.useGlobalPipes(new ValidationPipe())
   
   const options = new DocumentBuilder()
     .setTitle('Event API')
     .setDescription('Event API')
     .setVersion('1.0')
-    .setSchemes(process.env.URL_SCHEME === 'https' ? 'https' : 'http')
     .build();
 
   const document = SwaggerModule.createDocument(app, options, {

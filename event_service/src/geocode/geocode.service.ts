@@ -121,4 +121,8 @@ export class GeocodeService {
         await this.eventDAL.nullifyGeocodeIds();
         await this.geocodeDAL.deleteAllGeocodes();
     }
+
+    async cleanupGeocodes() {
+        await this.geocodeDAL.cleanUpGeocodes();
+    }
 }

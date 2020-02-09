@@ -79,6 +79,10 @@ export class EventDAL {
         await db('events.event').del();
     }
 
+    async cleanupEvents() {
+        await db('events.event').where('end_time', '<', new Date()).del();
+    }
+
     private queryEvents(selectFunc: any, query: GetEventsRequest, geocode: GetGeocodeResponse) {
         const res = selectFunc
                     .innerJoin('geocode.location as geo', 'event.geocode_id', 'geo.id')
