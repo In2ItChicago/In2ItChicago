@@ -54,6 +54,7 @@ module.exports = {
 		'@nuxtjs/axios',
 		// Doc: https://bootstrap-vue.js.org/docs/
 		'bootstrap-vue/nuxt',
+		'@nuxtjs/vuetify',
 		['nuxt-env', {
 			keys: ['IN2IT_API_URL']
 		}],
