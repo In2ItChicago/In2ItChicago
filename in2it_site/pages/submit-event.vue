@@ -8,6 +8,9 @@
                 lazy-validation
             >
                 <v-row>
+                    <h2>General Info</h2>
+                </v-row>
+                <v-row>
                     <v-text-field
                         v-model="event.organization"
                         label="Organization"
@@ -22,30 +25,11 @@
                     ></v-text-field>
                 </v-row>
                 <v-row>
-                    <v-text-field
+                    <v-textarea
                         v-model="event.description"
                         label="Description of Event"
                         required
-                    ></v-text-field>
-                </v-row>
-                <v-row>
-                    <v-text-field
-                        v-model="event.addressLine1"
-                        label="Event Address Line 1 (Optional)"
-                    ></v-text-field>
-                </v-row>
-                <v-row>
-                    <v-text-field
-                        v-model="event.addressLine2"
-                        label="Event Address Line 2 (Optional)"
-                    ></v-text-field>
-                </v-row>
-                <v-row>
-                    <v-text-field
-                        v-model="event.neighborhood"
-                        label="Neighborhood (Optional)"
-                        hint="Input the Chicago neighborhood this event will be taking place in (i.e. Logan Square, Wrigleyville, etc.)"
-                    ></v-text-field>
+                    ></v-textarea>
                 </v-row>
                 <v-row>
                     <v-text-field
@@ -61,7 +45,7 @@
                         prepend-icon="mdi-currency-usd"
                     ></v-text-field>
                 </v-row>
-                <v-row>
+                 <v-row>
                     <v-btn class="ma-2" outlined large color="indigo">
                         <v-icon>mdi-human-female-boy</v-icon>
                         <span class="hidden-sm-and-down">Family</span>
@@ -77,62 +61,178 @@
                         <span class="hidden-sm-and-down">Environmental</span>
                     </v-btn>
                 </v-row>
-
+                <v-row>
+                    <h2>Location</h2>
+                </v-row>
+                <v-row>
+                    <v-checkbox
+                        v-model="event.isHiddenFromPublic"
+                        label="I don't want this event's location to be shown publicly"
+                    ></v-checkbox>
+                </v-row>
+                <v-row v-if="!event.isHiddenFromPublic">
+                    <v-text-field
+                        v-model="event.addressLine1"
+                        label="Event Address Line 1 (Optional)"
+                    ></v-text-field>
+                </v-row>
+                <v-row v-if="!event.isHiddenFromPublic">
+                    <v-text-field
+                        v-model="event.addressLine2"
+                        label="Event Address Line 2 (Optional)"
+                    ></v-text-field>
+                </v-row>
+                <v-row>
+                    <v-text-field
+                        v-model="event.neighborhood"
+                        label="Neighborhood (Optional)"
+                        hint="Input the Chicago neighborhood this event will be taking place in (i.e. Logan Square, Wrigleyville, etc.)"
+                    ></v-text-field>
+                </v-row>
+                <v-row>
+                    <h2>Date & Time</h2>
+                </v-row>
                 <v-row>
                     <v-col>
                         <v-menu
                             ref="startDateMenu"
                             v-model="isStartDatePickerOpen"
                             :close-on-content-click="false"
-                            :return-value.sync="event.startDate"
+                            :return-value.sync="event.startDatePickerValue"
                             transition="scale-transition"
                             offset-y
                             min-width="290px"
                         >
                             <template v-slot:activator="{ on }">
                                 <v-text-field
-                                v-model="event.startDate"
+                                v-model="event.startDatePickerValue"
                                 label="Event Start Date"
                                 prepend-icon="mdi-calendar"
                                 readonly
                                 v-on="on"
                                 ></v-text-field>
                             </template>
-                            <v-date-picker v-model="event.startDate" no-title scrollable>
+                            <v-date-picker v-model="event.startDatePickerValue" no-title scrollable @change="setStartDate">
                                 <v-spacer></v-spacer>
                                 <v-btn text color="primary" @click="isStartDatePickerOpen = false">Cancel</v-btn>
-                                <v-btn text color="primary" @click="$refs.startDateMenu.save(event.startDate)">OK</v-btn>
+                                <v-btn text color="primary" @click="$refs.startDateMenu.save(event.startDatePickerValue)">OK</v-btn>
                             </v-date-picker>
                         </v-menu>
                     </v-col>
                 </v-row>
-
                 <v-row>
                     <v-col>
                         <v-menu
                             ref="endDateMenu"
                             v-model="isEndDatePickerOpen"
                             :close-on-content-click="false"
-                            :return-value.sync="event.endDate"
+                            :return-value.sync="event.endDatePickerValue"
                             transition="scale-transition"
                             offset-y
                             min-width="290px"
                         >
                             <template v-slot:activator="{ on }">
                                 <v-text-field
-                                v-model="event.endDate"
+                                v-model="event.endDatePickerValue"
                                 label="Event End Date"
                                 prepend-icon="mdi-calendar"
                                 readonly
                                 v-on="on"
                                 ></v-text-field>
                             </template>
-                            <v-date-picker v-model="event.endDate" no-title scrollable>
+                            <v-date-picker v-model="event.endDatePickerValue" no-title scrollable @change="setEndDate">
                                 <v-spacer></v-spacer>
                                 <v-btn text color="primary" @click="isEndDatePickerOpen = false">Cancel</v-btn>
-                                <v-btn text color="primary" @click="$refs.endDateMenu.save(event.endDate)">OK</v-btn>
+                                <v-btn text color="primary" @click="$refs.endDateMenu.save(event.endDatePickerValue)">OK</v-btn>
                             </v-date-picker>
                         </v-menu>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-checkbox
+                        v-model="event.isRecurring"
+                        label="This is a recurring event"
+                    ></v-checkbox>
+                </v-row>
+                <div v-if="event.isRecurring">
+                    <v-row>
+                        <v-col class="d-flex flex-row">
+                            <v-label>This is event is held</v-label>
+                            <v-select :items="recurringTimeIntervals" v-model="event.recurringTimeInterval"></v-select>
+                        </v-col>
+                    </v-row>
+                    <v-row v-if="event.recurringTimeInterval == 'Weekly'">
+                        <v-col>
+                            <v-row>
+                                <v-label v-if="event.weeklyRecurringDayName">
+                                    Every {{ event.weeklyRecurringDayName }}
+                                </v-label>
+                            </v-row>
+                            <v-row>
+                                <v-btn-toggle
+                                    v-model="event.weeklyRecurringDayName"
+                                    tile
+                                    color="deep-purple accent-3"
+                                    group
+                                >
+                                    <v-btn value="Sunday">
+                                        Su
+                                    </v-btn>
+
+                                    <v-btn value="Monday">
+                                        M
+                                    </v-btn>
+
+                                    <v-btn value="Tuesday">
+                                        Tu
+                                    </v-btn>
+
+                                    <v-btn value="Wednesday">
+                                        W
+                                    </v-btn>
+
+                                    <v-btn value="Thursday">
+                                        Th
+                                    </v-btn>
+
+                                    <v-btn value="Friday">
+                                        F
+                                    </v-btn>
+
+                                    <v-btn value="Saturday">
+                                        Sa
+                                    </v-btn>
+                                </v-btn-toggle>
+                            </v-row>
+                        </v-col>
+                    </v-row>
+                    <v-row v-if="event.recurringTimeInterval == 'Monthly'">
+                        <v-col>
+                            <v-radio-group v-model="event.monthlyRecurringValue">
+                                <v-radio :label="recurringDayNumLabel" :value="recurringDayNumValue"></v-radio>
+                                <v-radio :label="recurringNthDayLabel" :value="recurringNthDayValue"></v-radio>
+                            </v-radio-group>
+                        </v-col>
+                    </v-row>
+                </div>
+                <v-row>
+                    <h2>Accessibility</h2>
+                </v-row>
+                <v-row>
+                    <v-col>
+                        <v-radio-group v-model="event.isHandicapAccessible" label="Is this event handicap accessible?" row>
+                            <v-radio label="Yes" value="1"></v-radio>
+                            <v-radio label="No" value="0"></v-radio>
+                        </v-radio-group>
+                    </v-col>
+                </v-row>
+
+                <v-row>
+                    <v-col>
+                        <v-radio-group v-model="event.requiresPhysicalActivities" label="Will participants be required to perform any strenuous physical activities?" row>
+                            <v-radio label="Yes" value="1"></v-radio>
+                            <v-radio label="No" value="0"></v-radio>
+                        </v-radio-group>
                     </v-col>
                 </v-row>
 
@@ -152,6 +252,7 @@
 			return {
                 isStartDatePickerOpen: false,
                 isEndDatePickerOpen: false,
+                recurringTimeIntervals: ['Weekly', 'Monthly'],
 				event: {
                     organization: '',
                     title: '',
@@ -161,16 +262,82 @@
                     neighborhood: '',
                     url: '',
                     cost: '',
-
-                    startDate: new Date().toISOString().substr(0, 10),
-                    endDate: new Date().toISOString().substr(0, 10),
+                    isHiddenFromPublic: false,
+                    startDate: new Date(),
+                    endDate: new Date(),
+                    startDatePickerValue: '',
+                    endDatePickerValue: '',
+                    isRecurring: false,
+                    recurringTimeInterval: 'Weekly',
+                    weeklyRecurringDayName: '',
+                    monthlyRecurringValue: '',
+                    isHandicapAccessible: false,
+                    requiresPhysicalActivities: false
                 }
 			};
         },
+        computed: {
+            recurringDayNumLabel: function () {
+                return 'The ' + this.getOrdinalSuffix(this.event.startDate.getDate() + 1) + ' of every month';
+            },
+            recurringDayNumValue: function () {
+                return this.getOrdinalSuffix(this.event.startDate.getDate() + 1)
+            },
+            recurringNthDayLabel: function () {
+                return this.recurringNthDayValue + ' of every month';
+            },
+            recurringNthDayValue: function () {
+                let nth = 1;
+                let eventDayNum = (this.event.startDate.getDate() + 1);
+                let eventMonth = this.event.startDate.getMonth();
+                
+                let eventDayName = this.getDayName(this.event.startDate);
+                for(let i = 1; i < eventDayNum; ++i){
+                    let testDate = new Date(this.event.startDate.getYear() + '-' + (eventMonth + 1) + '-01');
+                    
+                    testDate.setDate(testDate.getDate() + i);
+                    
+                    if(testDate.getMonth() != eventMonth) break; //Reached end of month
+                    if(this.getDayName(testDate) == eventDayName){
+                        ++nth;
+                    }
+                }
+                return this.getOrdinalSuffix(nth) + ' ' + this.getDayName(this.event.startDate);
+            }
+        },
         methods: {
+            setStartDate: function (date) {
+                this.event.startDate = new Date(date);
+                this.event.weeklyRecurringDayName = this.getDayName(this.event.startDate);
+                this.event.startDatePickerValue = date;
+            },
+            setEndDate: function (date) {
+                this.event.endDate = new Date(date);
+                this.event.endDatePickerValue = date;
+            },
             submitEvent: function () {
                 console.log('submitEvent called');
                 console.log(this.event);
+            },
+            getOrdinalSuffix: function (i) {
+                let j = i % 10,
+                    k = i % 100;
+                if (j == 1 && k != 11) {
+                    return i + "st";
+                }
+                if (j == 2 && k != 12) {
+                    return i + "nd";
+                }
+                if (j == 3 && k != 13) {
+                    return i + "rd";
+                }
+                return i + "th";
+            },
+            getDayName: function (date) {
+                //Adjusts weekday num to start at 1
+                let adjustedDate = new Date(date);
+                adjustedDate.setDate(adjustedDate.getDate() + 1);
+                return adjustedDate.toLocaleDateString('en-US', { weekday: 'long' });
             }
         }
     };
