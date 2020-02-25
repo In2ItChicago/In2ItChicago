@@ -79,6 +79,10 @@
                 <v-row>
                     <v-col>
                         <v-label>Date of Event</v-label>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col>
                         <v-menu
                             ref="startDateMenu"
                             v-model="isStartDatePickerOpen"
@@ -321,27 +325,30 @@
         },
         computed: {
             recurringDayNumLabel: function () {
-                return 'The ' + this.getOrdinalSuffix(this.event.startDate.getDate() + 1) + ' of every month';
+                return 'The ' + this.getOrdinalSuffix(this.event.startDate.getDate()) + ' of every month';
             },
             recurringDayNumValue: function () {
-                return this.getOrdinalSuffix(this.event.startDate.getDate() + 1)
+                return this.getOrdinalSuffix(this.event.startDate.getDate());
             },
             recurringNthDayLabel: function () {
                 return this.recurringNthDayValue + ' of every month';
             },
             recurringNthDayValue: function () {
-                let nth = 1;
-                let eventDayNum = (this.event.startDate.getDate() + 1);
+                let nth = 0;
+                let eventDayNum = this.event.startDate.getDate();
                 let eventMonth = this.event.startDate.getMonth();
-                
                 let eventDayName = this.getDayName(this.event.startDate);
-                for (let i = 1; i < eventDayNum; ++i) {
-                    let testDate = new Date(this.event.startDate.getYear() + '-' + (eventMonth + 1) + '-01');
-                    
+
+                for (let i = 0; i < eventDayNum; ++i) {
+                    //Start at first date of current month
+                    let testDateString = this.event.startDate.getFullYear() + '-' + (eventMonth + 1) + '-1';
+                    let testDate = this.getDateObjectFromYYYYMMDD(testDateString);
+
+                    //Iterate through days of month
                     testDate.setDate(testDate.getDate() + i);
-                    
+
                     if (testDate.getMonth() != eventMonth) break; //Reached end of month
-                    if (this.getDayName(testDate) == eventDayName) {
+                    if (this.getDayName(testDate) == eventDayName) { //Day name matches
                         ++nth;
                     }
                 }
@@ -372,14 +379,18 @@
             }
         },
         methods: {
-            setStartDate: function (date) {
-                this.event.startDate = new Date(date);
-                this.event.weeklyRecurringDays.push(this.getDayName(this.event.startDate));
-                this.event.startDatePickerValue = date;
+            getDateObjectFromYYYYMMDD: function (YYYYMMDD) {
+                let datePieces = YYYYMMDD.split('-');
+                return new Date(datePieces[0], (datePieces[1] - 1), datePieces[2]);
             },
-            setEndDate: function (date) {
-                this.event.endDate = new Date(date);
-                this.event.endDatePickerValue = date;
+            setStartDate: function (YYYYMMDD) {
+                this.event.startDate = this.getDateObjectFromYYYYMMDD(YYYYMMDD);
+                this.event.weeklyRecurringDays.push(this.getDayName(this.event.startDate));
+                this.event.startDatePickerValue = YYYYMMDD;
+            },
+            setEndDate: function (YYYYMMDD) {
+                this.event.endDate = this.getDateObjectFromYYYYMMDD(YYYYMMDD);
+                this.event.endDatePickerValue = YYYYMMDD;
             },
             submitEvent: function () {
                 console.log('submitEvent called');
@@ -399,11 +410,8 @@
                 }
                 return i + "th";
             },
-            getDayName: function (date) {
-                //Adjusts weekday num to start at 1
-                let adjustedDate = new Date(date);
-                adjustedDate.setDate(adjustedDate.getDate() + 1);
-                return adjustedDate.toLocaleDateString('en-US', { weekday: 'long' });
+            getDayName: function (dateObject) {
+                return dateObject.toLocaleDateString('en-US', { weekday: 'long' });
             }
         }
     };
