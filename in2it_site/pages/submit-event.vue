@@ -78,6 +78,7 @@
                 </v-row>
                 <v-row>
                     <v-col>
+                        <v-label>Date of Event</v-label>
                         <v-menu
                             ref="startDateMenu"
                             v-model="isStartDatePickerOpen"
@@ -103,9 +104,7 @@
                             </v-date-picker>
                         </v-menu>
                     </v-col>
-                </v-row>
-                <v-row>
-                    <v-col>
+                    <v-col v-if="event.isMultiDayEvent">
                         <v-menu
                             ref="endDateMenu"
                             v-model="isEndDatePickerOpen"
@@ -130,6 +129,55 @@
                                 <v-btn text color="primary" @click="$refs.endDateMenu.save(event.endDatePickerValue)">OK</v-btn>
                             </v-date-picker>
                         </v-menu>
+                    </v-col>
+                    <v-col>
+                        <v-checkbox
+                            v-model="event.isMultiDayEvent"
+                            label="This is a multi day event"
+                        ></v-checkbox>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col>
+                        <v-label>Start Time</v-label>
+                    </v-col>
+                    <v-col>
+                        <v-label>End Time (Optional)</v-label>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col class="d-flex flex-row">
+                        <v-select
+                            :items="hourSelectionItems"
+                            v-model="event.startTimeHrs"
+                            label="Hour"
+                        ></v-select>
+                        <v-select
+                            :items="minuteSelectionItems"
+                            v-model="event.startTimeMins"
+                            label="Min"
+                        ></v-select>
+                        <v-select
+                            :items="amPmSelectionItems"
+                            v-model="event.startTimeAmPm"
+                        ></v-select>
+                    </v-col>
+                    
+                    <v-col class="d-flex flex-row">
+                        <v-select
+                            :items="hourSelectionItems"
+                            v-model="event.endTimeHrs"
+                            label="Hour"
+                        ></v-select>
+                        <v-select
+                            :items="minuteSelectionItems"
+                            v-model="event.endTimeMins"
+                            label="Min"
+                        ></v-select>
+                        <v-select
+                            :items="amPmSelectionItems"
+                            v-model="event.endTimeAmPm"
+                        ></v-select>
                     </v-col>
                 </v-row>
                 <v-row>
@@ -238,6 +286,9 @@
                 isStartDatePickerOpen: false,
                 isEndDatePickerOpen: false,
                 recurringTimeIntervals: ['Weekly', 'Monthly'],
+                hourSelectionItems: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                minuteSelectionItems: [0, 15, 30, 45],
+                amPmSelectionItems: ['AM', 'PM'],
 				event: {
                     organization: '',
                     title: '',
@@ -248,10 +299,17 @@
                     url: '',
                     cost: '',
                     isHiddenFromPublic: false,
+                    isMultiDayEvent: false,
                     startDate: new Date(),
                     endDate: new Date(),
                     startDatePickerValue: '',
                     endDatePickerValue: '',
+                    startTimeHrs: 9,
+                    startTimeMins: 0,
+                    startTimeAmPm: 'AM',
+                    endTimeHrs: '',
+                    endTimeMins: '',
+                    endTimeAmPm: '',
                     isRecurring: false,
                     recurringTimeInterval: 'Weekly',
                     weeklyRecurringDays: [],
