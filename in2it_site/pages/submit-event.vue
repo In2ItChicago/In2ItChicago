@@ -45,22 +45,6 @@
                         prepend-icon="mdi-currency-usd"
                     ></v-text-field>
                 </v-row>
-                 <v-row>
-                    <v-btn class="ma-2" outlined large color="indigo">
-                        <v-icon>mdi-human-female-boy</v-icon>
-                        <span class="hidden-sm-and-down">Family</span>
-                    </v-btn>
-
-                    <v-btn class="ma-2" outlined large color="indigo">
-                        <v-icon>mdi-earth</v-icon>
-                        <span class="hidden-sm-and-down">Cultural</span>
-                    </v-btn>
-
-                    <v-btn class="ma-2" outlined large color="indigo">
-                        <v-icon>mdi-pine-tree</v-icon>
-                        <span class="hidden-sm-and-down">Environmental</span>
-                    </v-btn>
-                </v-row>
                 <v-row>
                     <h2>Location</h2>
                 </v-row>
@@ -164,16 +148,17 @@
                     <v-row v-if="event.recurringTimeInterval == 'Weekly'">
                         <v-col>
                             <v-row>
-                                <v-label v-if="event.weeklyRecurringDayName">
-                                    Every {{ event.weeklyRecurringDayName }}
+                                <v-label v-if="event.weeklyRecurringDays.length">
+                                    {{ weeklyRecurringDaysLabelText }}
                                 </v-label>
                             </v-row>
                             <v-row>
                                 <v-btn-toggle
-                                    v-model="event.weeklyRecurringDayName"
+                                    v-model="event.weeklyRecurringDays"
                                     tile
                                     color="deep-purple accent-3"
                                     group
+                                    multiple
                                 >
                                     <v-btn value="Sunday">
                                         Su
@@ -269,7 +254,7 @@
                     endDatePickerValue: '',
                     isRecurring: false,
                     recurringTimeInterval: 'Weekly',
-                    weeklyRecurringDayName: '',
+                    weeklyRecurringDays: [],
                     monthlyRecurringValue: '',
                     isHandicapAccessible: false,
                     requiresPhysicalActivities: false
@@ -292,23 +277,46 @@
                 let eventMonth = this.event.startDate.getMonth();
                 
                 let eventDayName = this.getDayName(this.event.startDate);
-                for(let i = 1; i < eventDayNum; ++i){
+                for (let i = 1; i < eventDayNum; ++i) {
                     let testDate = new Date(this.event.startDate.getYear() + '-' + (eventMonth + 1) + '-01');
                     
                     testDate.setDate(testDate.getDate() + i);
                     
-                    if(testDate.getMonth() != eventMonth) break; //Reached end of month
-                    if(this.getDayName(testDate) == eventDayName){
+                    if (testDate.getMonth() != eventMonth) break; //Reached end of month
+                    if (this.getDayName(testDate) == eventDayName) {
                         ++nth;
                     }
                 }
                 return this.getOrdinalSuffix(nth) + ' ' + this.getDayName(this.event.startDate);
+            },
+            weeklyRecurringDaysLabelText: function () {
+                if (this.event.weeklyRecurringDays.length <= 0) {
+                    return '';
+                }
+                else if (this.event.weeklyRecurringDays.length == 1) {
+                    return 'Every ' + this.event.weeklyRecurringDays[0];
+                }
+                else if (this.event.weeklyRecurringDays.length == 2) {
+                    return 'Every ' + this.event.weeklyRecurringDays[0] + ' and ' + this.event.weeklyRecurringDays[1];
+                }
+                else {
+                    let text = 'Every ';
+                    for (let i in this.event.weeklyRecurringDays) {
+                        if (i < this.event.weeklyRecurringDays.length - 1) {
+                            text += this.event.weeklyRecurringDays[i] + ', ';
+                        }
+                        else { //Use 'and' instead of comma on last day
+                            text += 'and ' + this.event.weeklyRecurringDays[i];
+                        }
+                    }
+                    return text;
+                }
             }
         },
         methods: {
             setStartDate: function (date) {
                 this.event.startDate = new Date(date);
-                this.event.weeklyRecurringDayName = this.getDayName(this.event.startDate);
+                this.event.weeklyRecurringDays.push(this.getDayName(this.event.startDate));
                 this.event.startDatePickerValue = date;
             },
             setEndDate: function (date) {
