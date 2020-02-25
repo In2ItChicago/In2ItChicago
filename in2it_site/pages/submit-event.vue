@@ -1,281 +1,344 @@
 <template>
     <div class="container">
         <div class="content-col col-md-8 offset-md-2 col-sm-12">
-            <h1>Post an Event</h1>
+            <v-row class="page-heading-row">
+                <v-col>
+                    <h1 class="post-event-heading">Post an Event</h1>
+                </v-col>
+            </v-row>
 
             <v-form
                 ref="form"
                 lazy-validation
             >
                 <v-row>
-                    <h2>General Info</h2>
-                </v-row>
-                <v-row>
-                    <v-text-field
-                        v-model="event.organization"
-                        label="Organization"
-                        required
-                    ></v-text-field>
-                </v-row>
-                <v-row>
-                    <v-text-field
-                        v-model="event.title"
-                        label="Event Title"
-                        required
-                    ></v-text-field>
-                </v-row>
-                <v-row>
-                    <v-textarea
-                        v-model="event.description"
-                        label="Description of Event"
-                        required
-                    ></v-textarea>
-                </v-row>
-                <v-row>
-                    <v-text-field
-                        v-model="event.url"
-                        label="Event URL (Optional)"
-                        hint="Link to a specific event is preferred, but link to a page containing general event listings is okay"
-                    ></v-text-field>
-                </v-row>
-                <v-row>
-                    <v-text-field
-                        v-model="event.cost"
-                        label="Cost (Optional)"
-                        prepend-icon="mdi-currency-usd"
-                    ></v-text-field>
-                </v-row>
-                <v-row>
-                    <h2>Location</h2>
-                </v-row>
-                <v-row>
-                    <v-checkbox
-                        v-model="event.isHiddenFromPublic"
-                        label="I don't want this event's location to be shown publicly"
-                    ></v-checkbox>
-                </v-row>
-                <v-row v-if="!event.isHiddenFromPublic">
-                    <v-text-field
-                        v-model="event.addressLine1"
-                        label="Event Address Line 1 (Optional)"
-                    ></v-text-field>
-                </v-row>
-                <v-row v-if="!event.isHiddenFromPublic">
-                    <v-text-field
-                        v-model="event.addressLine2"
-                        label="Event Address Line 2 (Optional)"
-                    ></v-text-field>
-                </v-row>
-                <v-row>
-                    <v-text-field
-                        v-model="event.neighborhood"
-                        label="Neighborhood (Optional)"
-                        hint="Input the Chicago neighborhood this event will be taking place in (i.e. Logan Square, Wrigleyville, etc.)"
-                    ></v-text-field>
-                </v-row>
-                <v-row>
-                    <h2>Date & Time</h2>
-                </v-row>
-                <v-row>
-                    <v-col>
-                        <v-label>Date of Event</v-label>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col>
-                        <v-menu
-                            ref="startDateMenu"
-                            v-model="isStartDatePickerOpen"
-                            :close-on-content-click="false"
-                            :return-value.sync="event.startDatePickerValue"
-                            transition="scale-transition"
-                            offset-y
-                            min-width="290px"
-                        >
-                            <template v-slot:activator="{ on }">
-                                <v-text-field
-                                v-model="event.startDatePickerValue"
-                                label="Event Start Date"
-                                prepend-icon="mdi-calendar"
-                                readonly
-                                v-on="on"
-                                ></v-text-field>
-                            </template>
-                            <v-date-picker v-model="event.startDatePickerValue" no-title scrollable @change="setStartDate">
-                                <v-spacer></v-spacer>
-                                <v-btn text color="primary" @click="isStartDatePickerOpen = false">Cancel</v-btn>
-                                <v-btn text color="primary" @click="$refs.startDateMenu.save(event.startDatePickerValue)">OK</v-btn>
-                            </v-date-picker>
-                        </v-menu>
-                    </v-col>
-                    <v-col v-if="event.isMultiDayEvent">
-                        <v-menu
-                            ref="endDateMenu"
-                            v-model="isEndDatePickerOpen"
-                            :close-on-content-click="false"
-                            :return-value.sync="event.endDatePickerValue"
-                            transition="scale-transition"
-                            offset-y
-                            min-width="290px"
-                        >
-                            <template v-slot:activator="{ on }">
-                                <v-text-field
-                                v-model="event.endDatePickerValue"
-                                label="Event End Date"
-                                prepend-icon="mdi-calendar"
-                                readonly
-                                v-on="on"
-                                ></v-text-field>
-                            </template>
-                            <v-date-picker v-model="event.endDatePickerValue" no-title scrollable @change="setEndDate">
-                                <v-spacer></v-spacer>
-                                <v-btn text color="primary" @click="isEndDatePickerOpen = false">Cancel</v-btn>
-                                <v-btn text color="primary" @click="$refs.endDateMenu.save(event.endDatePickerValue)">OK</v-btn>
-                            </v-date-picker>
-                        </v-menu>
-                    </v-col>
-                    <v-col>
-                        <v-checkbox
-                            v-model="event.isMultiDayEvent"
-                            label="This is a multi day event"
-                        ></v-checkbox>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col>
-                        <v-label>Start Time</v-label>
-                    </v-col>
-                    <v-col>
-                        <v-label>End Time (Optional)</v-label>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col class="d-flex flex-row">
-                        <v-select
-                            :items="hourSelectionItems"
-                            v-model="event.startTimeHrs"
-                            label="Hour"
-                        ></v-select>
-                        <v-select
-                            :items="minuteSelectionItems"
-                            v-model="event.startTimeMins"
-                            label="Min"
-                        ></v-select>
-                        <v-select
-                            :items="amPmSelectionItems"
-                            v-model="event.startTimeAmPm"
-                        ></v-select>
-                    </v-col>
-                    
-                    <v-col class="d-flex flex-row">
-                        <v-select
-                            :items="hourSelectionItems"
-                            v-model="event.endTimeHrs"
-                            label="Hour"
-                        ></v-select>
-                        <v-select
-                            :items="minuteSelectionItems"
-                            v-model="event.endTimeMins"
-                            label="Min"
-                        ></v-select>
-                        <v-select
-                            :items="amPmSelectionItems"
-                            v-model="event.endTimeAmPm"
-                        ></v-select>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-checkbox
-                        v-model="event.isRecurring"
-                        label="This is a recurring event"
-                    ></v-checkbox>
-                </v-row>
-                <div v-if="event.isRecurring">
-                    <v-row>
-                        <v-col class="d-flex flex-row">
-                            <v-label>This is event is held</v-label>
-                            <v-select :items="recurringTimeIntervals" v-model="event.recurringTimeInterval"></v-select>
-                        </v-col>
-                    </v-row>
-                    <v-row v-if="event.recurringTimeInterval == 'Weekly'">
-                        <v-col>
-                            <v-row>
-                                <v-label v-if="event.weeklyRecurringDays.length">
-                                    {{ weeklyRecurringDaysLabelText }}
+                    <v-col sm="12" md="8">
+                        <v-row>
+                            <h2 class="post-event-subheading">General Info</h2>
+                        </v-row>
+                        <v-row>
+                            <v-col>
+                                <v-label>
+                                    Organization
+                                    <span class="required-star"> *</span>
                                 </v-label>
-                            </v-row>
-                            <v-row>
-                                <v-btn-toggle
-                                    v-model="event.weeklyRecurringDays"
-                                    tile
-                                    color="deep-purple accent-3"
-                                    group
-                                    multiple
+                                <v-text-field
+                                    v-model="event.organization"
+                                    required
+                                    outlined
+                                ></v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col>
+                                <v-label>
+                                    Event Title
+                                    <span class="required-star"> *</span>
+                                </v-label>
+                                <v-text-field
+                                    v-model="event.title"
+                                    required
+                                    outlined
+                                ></v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col>
+                                <v-label>
+                                    Description of Event
+                                    <span class="required-star"> *</span>
+                                </v-label>
+                                <v-textarea
+                                    v-model="event.description"
+                                    required
+                                    outlined
+                                ></v-textarea>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col>
+                                <v-label>
+                                    Event URL (Optional)
+                                </v-label>
+                                <v-text-field
+                                    v-model="event.url"
+                                    hint="Link to a specific event is preferred, but link to a page containing general event listings is okay"
+                                    outlined
+                                ></v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col>
+                                <v-label>
+                                    Cost (Optional)
+                                </v-label>
+                                <v-text-field
+                                    v-model="event.cost"
+                                    prepend-inner-icon="mdi-currency-usd"
+                                    outlined
+                                ></v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <h2 class="post-event-subheading">Location</h2>
+                        </v-row>
+                        <v-row>
+                            <v-col>
+                                <v-checkbox
+                                    v-model="event.isHiddenFromPublic"
+                                    label="I don't want this event's location to be shown publicly"
+                                ></v-checkbox>
+                            </v-col>
+                        </v-row>
+                        <v-row v-if="!event.isHiddenFromPublic">
+                            <v-col>
+                                <v-label>
+                                    Event Address Line 1
+                                    <span class="required-star"> *</span>
+                                </v-label>
+                                <v-text-field
+                                    v-model="event.addressLine1"
+                                    outlined
+                                ></v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row v-if="!event.isHiddenFromPublic">
+                            <v-col>
+                                <v-label>Event Address Line 2 (Optional)</v-label>
+                                <v-text-field
+                                    v-model="event.addressLine2"
+                                    outlined
+                                ></v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col>
+                                <v-label>Neighborhood (Optional)</v-label>
+                                <v-text-field
+                                    v-model="event.neighborhood"
+                                    hint="Input the Chicago neighborhood this event will be taking place in (i.e. Logan Square, Wrigleyville, etc.)"
+                                    outlined
+                                ></v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <h2 class="post-event-subheading">Date & Time</h2>
+                        </v-row>
+                        <v-row>
+                            <v-col>
+                                <v-label>
+                                    Event Start Date
+                                    <span class="required-star"> *</span>
+                                </v-label>
+                                <v-menu
+                                    ref="startDateMenu"
+                                    v-model="isStartDatePickerOpen"
+                                    :close-on-content-click="false"
+                                    :return-value.sync="event.startDatePickerValue"
+                                    transition="scale-transition"
+                                    offset-y
+                                    min-width="290px"
                                 >
-                                    <v-btn value="Sunday">
-                                        Su
-                                    </v-btn>
-
-                                    <v-btn value="Monday">
-                                        M
-                                    </v-btn>
-
-                                    <v-btn value="Tuesday">
-                                        Tu
-                                    </v-btn>
-
-                                    <v-btn value="Wednesday">
-                                        W
-                                    </v-btn>
-
-                                    <v-btn value="Thursday">
-                                        Th
-                                    </v-btn>
-
-                                    <v-btn value="Friday">
-                                        F
-                                    </v-btn>
-
-                                    <v-btn value="Saturday">
-                                        Sa
-                                    </v-btn>
-                                </v-btn-toggle>
+                                    <template v-slot:activator="{ on }">
+                                        <v-text-field
+                                            v-model="event.startDatePickerValue"
+                                            prepend-inner-icon="mdi-calendar"
+                                            readonly
+                                            v-on="on"
+                                            outlined
+                                        ></v-text-field>
+                                    </template>
+                                    <v-date-picker v-model="event.startDatePickerValue" no-title scrollable @change="setStartDate">
+                                        <v-spacer></v-spacer>
+                                        <v-btn text color="primary" @click="isStartDatePickerOpen = false">Cancel</v-btn>
+                                        <v-btn text color="primary" @click="$refs.startDateMenu.save(event.startDatePickerValue)">OK</v-btn>
+                                    </v-date-picker>
+                                </v-menu>
+                            </v-col>
+                            <v-col v-if="event.isMultiDayEvent">
+                                <v-label>Event End Date</v-label>
+                                <v-menu
+                                    ref="endDateMenu"
+                                    v-model="isEndDatePickerOpen"
+                                    :close-on-content-click="false"
+                                    :return-value.sync="event.endDatePickerValue"
+                                    transition="scale-transition"
+                                    offset-y
+                                    min-width="290px"
+                                >
+                                    <template v-slot:activator="{ on }">
+                                        <v-text-field
+                                            v-model="event.endDatePickerValue"
+                                            prepend-inner-icon="mdi-calendar"
+                                            readonly
+                                            v-on="on"
+                                            outlined
+                                        ></v-text-field>
+                                    </template>
+                                    <v-date-picker v-model="event.endDatePickerValue" no-title scrollable @change="setEndDate">
+                                        <v-spacer></v-spacer>
+                                        <v-btn text color="primary" @click="isEndDatePickerOpen = false">Cancel</v-btn>
+                                        <v-btn text color="primary" @click="$refs.endDateMenu.save(event.endDatePickerValue)">OK</v-btn>
+                                    </v-date-picker>
+                                </v-menu>
+                            </v-col>
+                            <v-col>
+                                <v-checkbox
+                                    v-model="event.isMultiDayEvent"
+                                    label="This is a multi day event"
+                                ></v-checkbox>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col>
+                                <v-label>
+                                    Start Time
+                                    <span class="required-star"> *</span>
+                                </v-label>
+                            </v-col>
+                            <v-col>
+                                <v-label>End Time (Optional)</v-label>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col class="d-flex flex-row">
+                                <v-select
+                                    :items="hourSelectionItems"
+                                    v-model="event.startTimeHrs"
+                                    outlined
+                                ></v-select>
+                                <v-select
+                                    :items="minuteSelectionItems"
+                                    v-model="event.startTimeMins"
+                                    outlined
+                                ></v-select>
+                                <v-select
+                                    :items="amPmSelectionItems"
+                                    v-model="event.startTimeAmPm"
+                                    outlined
+                                ></v-select>
+                            </v-col>
+                            
+                            <v-col class="d-flex flex-row">
+                                <v-select
+                                    :items="hourSelectionItems"
+                                    v-model="event.endTimeHrs"
+                                    outlined
+                                ></v-select>
+                                <v-select
+                                    :items="minuteSelectionItems"
+                                    v-model="event.endTimeMins"
+                                    outlined
+                                ></v-select>
+                                <v-select
+                                    :items="amPmSelectionItems"
+                                    v-model="event.endTimeAmPm"
+                                    outlined
+                                ></v-select>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-checkbox
+                                v-model="event.isRecurring"
+                                label="This is a recurring event"
+                            ></v-checkbox>
+                        </v-row>
+                        <div v-if="event.isRecurring">
+                            <v-row>
+                                <v-col>
+                                    <v-label>This is event is held</v-label>
+                                    <v-select :items="recurringTimeIntervals" v-model="event.recurringTimeInterval" outlined></v-select>
+                                </v-col>
                             </v-row>
-                        </v-col>
-                    </v-row>
-                    <v-row v-if="event.recurringTimeInterval == 'Monthly'">
-                        <v-col>
-                            <v-radio-group v-model="event.monthlyRecurringValue">
-                                <v-radio :label="recurringDayNumLabel" :value="recurringDayNumValue"></v-radio>
-                                <v-radio :label="recurringNthDayLabel" :value="recurringNthDayValue"></v-radio>
-                            </v-radio-group>
-                        </v-col>
-                    </v-row>
-                </div>
-                <v-row>
-                    <h2>Accessibility</h2>
-                </v-row>
-                <v-row>
-                    <v-col>
-                        <v-radio-group v-model="event.isHandicapAccessible" label="Is this event handicap accessible?" row>
-                            <v-radio label="Yes" value="1"></v-radio>
-                            <v-radio label="No" value="0"></v-radio>
-                        </v-radio-group>
-                    </v-col>
-                </v-row>
+                            <v-row v-if="event.recurringTimeInterval == 'Weekly'">
+                                <v-col>
+                                    <v-row>
+                                        <v-label v-if="event.weeklyRecurringDays.length">
+                                            {{ weeklyRecurringDaysLabelText }}
+                                        </v-label>
+                                    </v-row>
+                                    <v-row>
+                                        <v-btn-toggle
+                                            v-model="event.weeklyRecurringDays"
+                                            tile
+                                            background-color="primary"
+                                            group
+                                            multiple
+                                        >
+                                            <v-btn value="Sunday" class="weekday-button">
+                                                Su
+                                            </v-btn>
 
-                <v-row>
-                    <v-col>
-                        <v-radio-group v-model="event.requiresPhysicalActivities" label="Will participants be required to perform any strenuous physical activities?" row>
-                            <v-radio label="Yes" value="1"></v-radio>
-                            <v-radio label="No" value="0"></v-radio>
-                        </v-radio-group>
-                    </v-col>
-                </v-row>
+                                            <v-btn value="Monday">
+                                                M
+                                            </v-btn>
 
-                <v-row>
-                    <v-col>
-                        <v-btn @click="submitEvent">Submit</v-btn>
+                                            <v-btn value="Tuesday">
+                                                Tu
+                                            </v-btn>
+
+                                            <v-btn value="Wednesday">
+                                                W
+                                            </v-btn>
+
+                                            <v-btn value="Thursday">
+                                                Th
+                                            </v-btn>
+
+                                            <v-btn value="Friday">
+                                                F
+                                            </v-btn>
+
+                                            <v-btn value="Saturday">
+                                                Sa
+                                            </v-btn>
+                                        </v-btn-toggle>
+                                    </v-row>
+                                </v-col>
+                            </v-row>
+                            <v-row v-if="event.recurringTimeInterval == 'Monthly'">
+                                <v-col>
+                                    <v-radio-group v-model="event.monthlyRecurringValue">
+                                        <v-radio :label="recurringDayNumLabel" :value="recurringDayNumValue"></v-radio>
+                                        <v-radio :label="recurringNthDayLabel" :value="recurringNthDayValue"></v-radio>
+                                    </v-radio-group>
+                                </v-col>
+                            </v-row>
+                        </div>
+                        <v-row>
+                            <h2 class="post-event-subheading">Accessibility</h2>
+                        </v-row>
+                        <v-row>
+                            <v-col>
+                                <v-label>
+                                    Is this event handicap accessible?
+                                    <span class="required-star"> *</span>
+                                </v-label>
+                                <v-radio-group v-model="event.isHandicapAccessible" row>
+                                    <v-radio label="Yes" value="1"></v-radio>
+                                    <v-radio label="No" value="0"></v-radio>
+                                </v-radio-group>
+                            </v-col>
+                        </v-row>
+
+                        <v-row>
+                            <v-col>
+                                <v-label>
+                                    Will participants be required to perform any strenuous physical activities?
+                                    <span class="required-star"> *</span>
+                                </v-label>
+                                <v-radio-group v-model="event.requiresPhysicalActivities" row>
+                                    <v-radio label="Yes" value="1"></v-radio>
+                                    <v-radio label="No" value="0"></v-radio>
+                                </v-radio-group>
+                            </v-col>
+                        </v-row>
+
+                        <v-row>
+                            <v-col>
+                                <v-btn color="#173450" @click="submitEvent" dark large>Submit</v-btn>
+                            </v-col>
+                        </v-row>
                     </v-col>
                 </v-row>
             </v-form>
@@ -311,9 +374,9 @@
                     startTimeHrs: 9,
                     startTimeMins: 0,
                     startTimeAmPm: 'AM',
-                    endTimeHrs: '',
-                    endTimeMins: '',
-                    endTimeAmPm: '',
+                    endTimeHrs: 12,
+                    endTimeMins: 0,
+                    endTimeAmPm: 'PM',
                     isRecurring: false,
                     recurringTimeInterval: 'Weekly',
                     weeklyRecurringDays: [],
@@ -385,7 +448,7 @@
             },
             setStartDate: function (YYYYMMDD) {
                 this.event.startDate = this.getDateObjectFromYYYYMMDD(YYYYMMDD);
-                this.event.weeklyRecurringDays.push(this.getDayName(this.event.startDate));
+                this.event.weeklyRecurringDays = [this.getDayName(this.event.startDate)];
                 this.event.startDatePickerValue = YYYYMMDD;
             },
             setEndDate: function (YYYYMMDD) {
@@ -416,3 +479,41 @@
         }
     };
 </script>
+
+<style scoped>
+    .page-heading-row {
+        background-color: #173450;
+    }
+
+    .post-event-heading {
+        color: #fff;
+        font-size: 48px;
+        margin-bottom: 0px;
+    }
+
+    .post-event-subheading {
+        margin-top: 20px;
+        font-weight: bold;
+        font-size: 26px;
+        color: rgba(0, 0, 0, 0.7);
+    }
+
+    .v-label {
+        font-size: 16px;
+        font-weight: bold;
+        color: rgba(0, 0, 0, 0.6);
+    }
+
+    .v-input {
+        border-radius: 0px;
+    }
+
+    .required-star {
+        color: #c51313;
+    }
+
+    .weekday-button{
+        border: 1px solid;
+        border-color: #000;
+    }
+</style>
