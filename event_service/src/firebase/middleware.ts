@@ -7,7 +7,9 @@ import { Request, Response } from 'express'
 export class FirebaseAuthMiddleware implements NestMiddleware {
   async use(req: Request, _: Response, next: Function) {
     const { authorization } = req.headers;
-    
+    if (!authorization) {
+      throw new HttpException({ message: 'No auth supplied' }, HttpStatus.UNAUTHORIZED)
+    }
     const token = authorization.slice(7);
 
     const user = await firebase
