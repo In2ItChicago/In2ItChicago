@@ -100,10 +100,6 @@ body{
 	z-index:2;
 }
 
-.filter-row {
-	margin-top:24px;
-}
-
 .filter-label{
 	margin-bottom:0px;
 	color:#fff;
@@ -311,14 +307,6 @@ body{
 
 .datepicker-right{
 	border-radius:0rem 0.25rem 0.25rem 0rem;
-}
-
-.date-arrow{
-	width:38px;
-	height:38px;
-	display:flex;
-	align-self: flex-end;
-	background-color:#fff;
 }
 
 .event-page-heading{

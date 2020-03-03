@@ -1,13 +1,16 @@
 <template>
     <div class="autocomplete">
 		<label for="neighborhood" class="d-md-none filter-label">Neighborhood</label>
-        <input
-            class="neighborhood-input form-control"
-            id="neighborhood" 
-            placeholder="Neighborhood (Optional)" 
-            v-model="autocompleteResult"
-            @input="autocompleteNeighborhood"
+		<v-text-field 
+			solo 
+			hide-details
+			v-model="autocompleteResult" 
+			id="neighborhood" 
+			placeholder="Neighborhood (Optional)" 
+			background-color="#fff" 
+			@input="autocompleteNeighborhood"
             autocomplete="off">
+		</v-text-field>	
         <ul v-show="autocompleteOpen" class="autocomplete-results">
             <li v-for="(result, i) in autocompleteResults" :key="i" class="autocomplete-result" @click="setResult(result)">
                 {{ result }}
