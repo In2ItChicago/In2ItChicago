@@ -3,11 +3,12 @@ import { EventService } from '@src/event/event.service';
 import { GetEventsRequest } from '@src/DTO/getEventsRequest';
 import { CreateEventsRequest } from '@src/DTO/createEventsRequest';
 import { GetEventsResponse } from '@src/DTO/getEventsResponse';
-import { ApiTags, ApiBody, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiBody, ApiResponse, ApiBearerAuth, ApiBasicAuth } from '@nestjs/swagger';
 
 /**
  * An interface class to get, create, or clear events. 
  */
+@ApiBearerAuth()
 @ApiTags('events')
 @Controller('events')
 export class EventController {

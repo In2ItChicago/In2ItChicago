@@ -44,6 +44,7 @@ module.exports = {
 		{src: '~/plugins/datepicker.client.js'},
 		{src: '~/plugins/notifications.client.js'},
 		{src: '~/plugins/pagination.client.js'},
+		{src: '~/plugins/firebase.js'}
 	],
 
 	/*
@@ -55,7 +56,8 @@ module.exports = {
 		// Doc: https://bootstrap-vue.js.org/docs/
 		'bootstrap-vue/nuxt',
 		['nuxt-env', {
-			keys: ['IN2IT_API_URL']
+			keys: ['IN2IT_API_URL', 'FIREBASE_API_KEY', 'FIREBASE_AUTH_DOMAIN', 'FIREBASE_DATABASE_URL', 
+			'FIREBASE_PROJECT_ID', 'FIREBASE_STORAGE_BUCKET', 'FIREBASE_MESSAGING_SENDER_ID', 'FIREBASE_APP_ID', 'FIREBASE_MEASUREMENT_ID']
 		}],
 		['nuxt-google-maps-module', {
 			key: 'AIzaSyDKuKo2WRNv5IhKm_At8wGfD4T142laung',

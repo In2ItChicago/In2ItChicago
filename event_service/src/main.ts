@@ -15,6 +15,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe())
   
   const options = new DocumentBuilder()
+    .addBearerAuth()
     .setTitle('Event API')
     .setDescription('Event API')
     .setVersion('1.0')

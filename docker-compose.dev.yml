@@ -9,6 +9,9 @@ services:
       caddy.address: api.localhost:80
     environment:
       - HOST=postgres
+      - FIREBASE_PRIVATE_KEY=${FIREBASE_PRIVATE_KEY}
+      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
+      - FIREBASE_CLIENT_EMAIL=${FIREBASE_CLIENT_EMAIL}
   event_processor:
     command: sh -c "chmod +x entrypoint.sh && nodemon --exec ./entrypoint.sh"
     environment:
@@ -30,6 +33,14 @@ services:
       - ./.in2it_site/vscode_server:/root/.vscode-server
     environment:
       - IN2IT_API_URL=${IN2IT_API_URL:-http://api.localhost}
+      - FIREBASE_API_KEY=${FIREBASE_API_KEY}
+      - FIREBASE_AUTH_DOMAIN=${FIREBASE_AUTH_DOMAIN}
+      - FIREBASE_DATABASE_URL=${FIREBASE_DATABASE_URL}
+      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
+      - FIREBASE_STORAGE_BUCKET=${FIREBASE_STORAGE_BUCKET}
+      - FIREBASE_MESSAGING_SENDER_ID=${FIREBASE_MESSAGING_SENDER_ID}
+      - FIREBASE_APP_ID=${FIREBASE_APP_ID}
+      - FIREBASE_MEASUREMENT_ID=${FIREBASE_MEASUREMENT_ID}
     labels:
       caddy.address: localhost:80
   postgres:

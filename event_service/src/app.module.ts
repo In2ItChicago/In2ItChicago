@@ -11,17 +11,21 @@ import { GeocodeDAL } from '@src/DAL/geocodeDAL';
 import { GeocodeDALModule } from '@src/DAL/geocodeDAL.module';
 import { EventDALModule } from '@src/DAL/eventDAL.module';
 import { EventDAL } from '@src/DAL/eventDAL';
-import { SchedulerController } from './scheduler/scheduler.controller';
-import { SchedulerModule } from './scheduler/scheduler.module';
-import { SchedulerService } from './scheduler/scheduler.service';
-import { SchedulerDAL } from './DAL/schedulerDAL';
+import { SchedulerController } from '@src/scheduler/scheduler.controller';
+import { SchedulerModule } from '@src/scheduler/scheduler.module';
+import { SchedulerService } from '@src/scheduler/scheduler.service';
+import { SchedulerDAL } from '@src/DAL/schedulerDAL';
+import { FirebaseAuthMiddleware } from '@src/firebase';
 
 @Module({
   imports: [HttpModule, GeocodeModule, EventModule, GeocodeDALModule, EventDALModule, SchedulerModule],
   controllers: [GeocodeController, EventController, AppController, SchedulerController],
   providers: [GeocodeService, EventService, AppService, SchedulerService, GeocodeDAL, EventDAL, SchedulerDAL],
 })
-export class AppModule {
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(FirebaseAuthMiddleware).forRoutes('events');
+  }
   constructor(private readonly appService: AppService) {}
   
 }
