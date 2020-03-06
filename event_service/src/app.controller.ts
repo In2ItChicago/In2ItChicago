@@ -1,5 +1,8 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import { AppService } from '@src/app.service';
+import { AuthRequest } from '@src/DTO/authRequest';
+import * as firebase from 'firebase';
+import * as admin from 'firebase-admin'
 
 @Controller()
 export class AppController {
@@ -8,5 +11,10 @@ export class AppController {
   @Get('/status')
   getStatus(): string {
     return this.appService.getStatus();
+  }
+
+  @Post('/auth')
+  async auth(@Body() authRequest: AuthRequest): Promise<string> {
+    return await this.appService.auth(authRequest);
   }
 }
