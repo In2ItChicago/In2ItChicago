@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -e
 
 if [ ! "$(docker network ls | grep in2it)" ]
 then
