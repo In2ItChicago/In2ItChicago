@@ -193,6 +193,9 @@ This is the same behavior as `-d` but for the scheduler. More information about 
 - `-n or --spider-name`
 Example: `./start.sh -n library`. Only run the specified spider instead of all of them. Must match the `name` variable that's defined on the spider class. No effect when used with `-s`.
 
+- `-p or --profile-queries`
+Log all sql queries to the console along with the execution time.
+
 - `service names`
 Example: `./start.sh -v -n library event_service event_processor postgres`. Trailing keywords indicate which docker services to start if you do not want to start all of them.
 

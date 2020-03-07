@@ -1,24 +1,15 @@
-import * as knex from 'knex';
-import * as knexStringcase from 'knex-stringcase';
 import * as _ from 'lodash';
 import { GetGeocodeRequest } from '@src/DTO/getGeocodeRequest';
 import { GetGeocodeResponse } from '@src/DTO/getGeocodeResponse';
 import { CreateGeocodeRequest } from '@src/DTO/createGeocodeRequest';
 import { randomExpirationTime } from '@src/utilities';
 import { SearchNeighborhoodRequest } from '@src/DTO/searchNeighborhoodRequest';
+import { getDb } from '@src/DAL/setup';
 
 // Max number of geocodes not tied to events to cache
 const MAX_GEOCODES = 1000;
 
-const db = knex(knexStringcase({
-    client: 'postgresql',
-    connection: {
-        host: process.env.HOST,
-        user: 'postgres',
-        password: 'postgres',
-        database: 'events'
-    }
-}));
+const db = getDb('events');
 
 /**
  * Middleware for processing geocode requests??? 

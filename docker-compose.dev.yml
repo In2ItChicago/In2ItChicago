@@ -9,6 +9,8 @@ services:
       caddy.address: api.localhost:80
     environment:
       - HOST=postgres
+      - PROFILE_QUERIES=${PROFILE_QUERIES:-0}
+    tty: true
   event_processor:
     command: sh -c "chmod +x entrypoint.sh && nodemon --exec ./entrypoint.sh"
     environment:

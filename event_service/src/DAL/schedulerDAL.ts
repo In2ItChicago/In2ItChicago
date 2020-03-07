@@ -1,18 +1,9 @@
-import * as knex from 'knex';
-import * as knexStringcase from 'knex-stringcase';
 import * as _ from 'lodash';
+import { getDb } from '@src/DAL/setup';
 
 const DAYS_TO_KEEP = 14;
 
-const db = knex(knexStringcase({
-    client: 'postgresql',
-    connection: {
-        host: process.env.HOST,
-        user: 'postgres',
-        password: 'postgres',
-        database: 'scheduler'
-    }
-}));
+const db = getDb('scheduler');
 
 export class SchedulerDAL {
     async cleanupScheduler() {

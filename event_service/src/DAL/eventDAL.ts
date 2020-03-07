@@ -1,22 +1,13 @@
-import * as knex from 'knex';
-import * as knexStringcase from 'knex-stringcase';
 import * as _ from 'lodash';
 import { GetEventsRequest } from '@src/DTO/getEventsRequest';
 import { GetGeocodeResponse } from '@src/DTO/getGeocodeResponse';
+import { getDb } from '@src/DAL/setup';
 
 const DEFAULT_LIMIT = 25;
 const MILES_TO_METERS = 1609.34;
 const makeVector = `to_tsvector(organization || ' ' || title || ' ' || description)`;
-const db = knex(knexStringcase({
-    client: 'postgresql',
-    connection: {
-        host: process.env.HOST,
-        user: 'postgres',
-        password: 'postgres',
-        database: 'events'
-    }
-}));
 
+const db = getDb('events');
 /**
  * Middleware for processing a raw event object to event response objects? 
  */
@@ -44,7 +35,7 @@ export class EventDAL {
         .orderBy('rank', 'desc')
         .orderBy('event.isManual', 'desc')
         .orderBy('event.startTime', 'asc');
-
+        
         const resultCount = await this.queryEvents(db('events.event as event').count('*'), query, geocode).first();
                     
         return {'totalCount': resultCount.count, 'events': result};
