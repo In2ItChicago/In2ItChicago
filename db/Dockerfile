@@ -1,4 +1,4 @@
-FROM python:3.7.3-alpine
+FROM python:3.8.2-alpine
 WORKDIR /usr/src
 COPY . ./
 RUN apk add --no-cache postgresql-libs postgresql-client && \

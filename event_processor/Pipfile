@@ -24,4 +24,4 @@ timefhuman = {editable = true,git = "https://github.com/alvinwan/timefhuman",ref
 scrapy-splash = "==0.7.2"
 
 [requires]
-python_version = "3.8"
+python_version = "3.8.2"

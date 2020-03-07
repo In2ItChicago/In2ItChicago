@@ -1,4 +1,4 @@
-FROM node:13.2-alpine AS in2it_site_common
+FROM node:13.10.1-alpine AS in2it_site_common
 
 FROM in2it_site_common AS in2it_site_dev
 WORKDIR /usr/src/app/.site_modules

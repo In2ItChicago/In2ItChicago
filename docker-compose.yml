@@ -21,7 +21,7 @@ services:
     networks: 
       - in2it
   splash:
-    image: "scrapinghub/splash:3.4"
+    image: "scrapinghub/splash:3.4.1"
     ports:
       - "8050:8050"
     networks: 
@@ -37,7 +37,7 @@ services:
     labels:
       caddy.targetport: 3000 
   caddy:
-    image: lucaslorentz/caddy-docker-proxy:0.3.3-alpine
+    image: lucaslorentz/caddy-docker-proxy:0.3.6-alpine
     command: -log stdout -agree -email in2itchicago@gmail.com
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock 
