@@ -72,7 +72,7 @@ services:
       - DEBUG=${SCHEDULER_DEBUG}
       - HOSTNAME=postgres
   pgadmin:
-    image: dpage/pgadmin4:4.15
+    image: dpage/pgadmin4:4.19
     environment:
       - PGADMIN_DEFAULT_EMAIL=user@domain.com
       - PGADMIN_DEFAULT_PASSWORD=pgadmin
@@ -87,7 +87,7 @@ services:
     networks: 
       - in2it
   portainer:
-    image: "portainer/portainer:1.22.2"
+    image: "portainer/portainer:1.23.1"
     ports:
       - "9000:9000"
     volumes:
