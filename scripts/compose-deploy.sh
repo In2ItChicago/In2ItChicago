@@ -5,6 +5,7 @@ PARAMS=""
 EVENT_PROCESSOR_DEBUG=0
 SCHEDULER_DEBUG=0
 VERBOSE_OUTPUT=0
+PROFILE_QUERIES=0
 EXCLUDE="ndscheduler"
 RUN_SCHEDULER=0
 ENV="dev"
@@ -35,6 +36,10 @@ while (( "$#" )); do
     -n|--spider-name)
       SPIDER_NAME=$2
       shift 2
+      ;;
+    -p|--profile-queries)
+      PROFILE_QUERIES=1
+      shift
       ;;
     --) # end argument parsing
       shift
@@ -74,4 +79,5 @@ EVENT_PROCESSOR_DEBUG=$EVENT_PROCESSOR_DEBUG \
 VERBOSE_OUTPUT=$VERBOSE_OUTPUT \
 RUN_SCHEDULER=$RUN_SCHEDULER \
 SPIDER_NAME=$SPIDER_NAME \
+PROFILE_QUERIES=$PROFILE_QUERIES \
 docker-compose -f docker-compose.yml -f docker-compose.${ENV}.yml up $SERVICES

@@ -1,9 +1,6 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import { AppService } from '@src/app.service';
 import { AuthRequest } from '@src/DTO/authRequest';
-import * as firebase from 'firebase';
-import * as admin from 'firebase-admin'
-
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}

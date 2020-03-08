@@ -1,5 +1,4 @@
 import { Injectable, HttpService } from '@nestjs/common';
-import * as firebase from 'firebase';
 import * as admin from 'firebase-admin'
 import { AuthRequest } from '@src/DTO/authRequest';
 

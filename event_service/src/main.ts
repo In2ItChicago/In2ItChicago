@@ -6,7 +6,6 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { EventModule } from '@src/event/event.module';
 import { GeocodeModule } from '@src/geocode/geocode.module';
 import { GenericFilter } from '@src/filters/generic.filter';
-import * as firebase from 'firebase';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -25,12 +24,6 @@ async function bootstrap() {
       appId: process.env.FIREBASE_APP_ID,
       measurementId: process.env.FIREBASE_MEASUREMENT_ID
   };
-  console.log(firebaseConfig);
-
-  // Initialize Firebase
-  const firebaseApp = firebase.apps.length
-      ? firebase.app()
-      : firebase.initializeApp(firebaseConfig);
   
   const options = new DocumentBuilder()
     .addBearerAuth()
