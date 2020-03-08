@@ -5,6 +5,7 @@ import { ApiTags, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { GetGeocodeResponse } from '@src/DTO/getGeocodeResponse';
 import { SearchNeighborhoodRequest } from '@src/DTO/searchNeighborhoodRequest';
 import { Roles } from '@src/decorators/roles.decorator';
+import { UserMetadata } from '@src/enums/userMetadata';
 
 @ApiBearerAuth()
 @ApiTags('geocode')
@@ -36,7 +37,7 @@ export class GeocodeController {
         return await this.geocodeService.listNeighborhoods();
     }
 
-    @Roles('systemAdmin')
+    @Roles(UserMetadata.SystemAdmin)
     @Delete('/clearAllGeocodes')
     @ApiResponse({status: 200, description: 'Deleted'})
     async clear() {

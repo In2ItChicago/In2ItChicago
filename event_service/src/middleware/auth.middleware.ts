@@ -13,9 +13,9 @@ export const auth = (whitelist: RouteInfo[]) =>
         // Skip auth for any routes in whitelist
         // Check if whitelist rule ends with *, then use startsWith comparison to allow
         if (whitelist.some(routeInfo => req.method === RequestMethod[routeInfo.method] && 
-            routeInfo.path.endsWith('*') 
+            (routeInfo.path.endsWith('*') 
                 ? route.startsWith(routeInfo.path.substr(0, routeInfo.path.length - 1))
-                : route === routeInfo.path)) {
+                : route === routeInfo.path))) {
             next();
             return;
         } 
@@ -29,8 +29,8 @@ export const auth = (whitelist: RouteInfo[]) =>
             .auth()
             .verifyIdToken(token)
             .then(user => {
-                req.firebaseUser = user
-            next();
+                req.firebaseUser = user;
+                next();
             })
             .catch(err => {
                 throw new HttpException({ message: 'Input data validation failed', err }, HttpStatus.UNAUTHORIZED)

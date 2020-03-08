@@ -2,6 +2,7 @@ import { Controller, Get, Query, UseInterceptors, Post, Delete } from '@nestjs/c
 import { ApiTags, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { SchedulerService } from './scheduler.service';
 import { Roles } from '@src/decorators/roles.decorator';
+import { UserMetadata } from '@src/enums/userMetadata';
 
 @ApiBearerAuth()
 @ApiTags('scheduler')
@@ -9,7 +10,7 @@ import { Roles } from '@src/decorators/roles.decorator';
 export class SchedulerController {
     constructor(private readonly schedulerService: SchedulerService) {}
 
-    @Roles('systemAdmin')
+    @Roles(UserMetadata.SystemAdmin)
     @Delete('/cleanupScheduler')
     @ApiResponse({status: 200, description: 'Deleted'})
     async cleanup() {

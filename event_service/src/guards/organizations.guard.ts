@@ -3,22 +3,19 @@ import { Reflector } from '@nestjs/core';
 import { UserMetadata } from '@src/enums/userMetadata';
 
 @Injectable()
-export class RolesGuard implements CanActivate {
+export class OrganizationsGuard implements CanActivate {
     constructor(private readonly reflector: Reflector) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
-        const roles = this.reflector.get<UserMetadata[]>('roles', context.getHandler());
-        
-        if (!roles) {
-            return true;
-        }
-        // godUser can do anything
-        const checkRoles = roles.concat([UserMetadata.GodUser]);
         const request = context.switchToHttp().getRequest();
-        if (!request.firebaseUser) {
+        if (!request?.firebaseUser?.allowedOrgs || !request?.body?.events) {
             return false;
         }
         
-        return checkRoles.some(role => request.firebaseUser[role]);
+        if (request.firebaseUser[UserMetadata.GodUser] || request.firebaseUser[UserMetadata.EventAdmin]) {
+            return true;
+        }
+
+        return request.body.events.every(event => request.firebaseUser.allowedOrgs.includes(event.organization));
     }
 }
