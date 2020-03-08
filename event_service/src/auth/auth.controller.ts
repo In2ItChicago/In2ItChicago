@@ -12,6 +12,13 @@ import { Roles } from '@src/decorators/roles.decorator';
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
+    @Roles('userAdmin')
+    @Get('/user')
+    async getUser(@Query() emailRequest: EmailRequest): Promise<object> {
+        const user = await this.authService.getUser(emailRequest);
+        return user;
+    }
+
     @Post('/login')
     async login(@Body() authRequest: AuthRequest): Promise<string> {
         const token = await this.authService.login(authRequest);
@@ -33,15 +40,15 @@ export class AuthController {
     }
 
     @Roles('userAdmin')
-    @Delete('/deleteAccount')
-    async deleteAccount(@Query() emailRequest: EmailRequest) {
-        await this.authService.deleteAccount(emailRequest);
+    @Post('/changePassword')
+    async changePassword(@Body() authRequest: AuthRequest): Promise<object> {
+        const newUser = this.authService.changePassword(authRequest);
+        return newUser;
     }
 
     @Roles('userAdmin')
-    @Get('/user')
-    async getUser(@Query() emailRequest: EmailRequest): Promise<object> {
-        const user = await this.authService.getUser(emailRequest);
-        return user;
+    @Delete('/deleteAccount')
+    async deleteAccount(@Query() emailRequest: EmailRequest) {
+        await this.authService.deleteAccount(emailRequest);
     }
 }

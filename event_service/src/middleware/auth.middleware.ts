@@ -31,8 +31,8 @@ export const auth = (whitelist: RouteInfo[]) =>
             .then(user => {
                 req.firebaseUser = user
             next();
-        })
-        .catch(err => {
-            throw new HttpException({ message: 'Input data validation failed', err }, HttpStatus.UNAUTHORIZED)
-        });  
-}
+            })
+            .catch(err => {
+                throw new HttpException({ message: 'Input data validation failed', err }, HttpStatus.UNAUTHORIZED)
+            });  
+    }

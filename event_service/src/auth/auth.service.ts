@@ -18,8 +18,8 @@ export class AuthService {
     }
 
     async deleteAccount(emailRequest: EmailRequest) {
-        const user = await firebase.auth().getUserByEmail(emailRequest.email);
-        await firebase.auth().deleteUser(user.uid);
+        const uid = await this.getUidFromEmail(emailRequest.email);
+        await firebase.auth().deleteUser(uid);
     }
 
     async updateClaims(claimsRequest: ClaimsRequest): Promise<object> {
@@ -36,6 +36,17 @@ export class AuthService {
     async getUser(emailRequest: EmailRequest): Promise<object> {
         const user = await firebase.auth().getUserByEmail(emailRequest.email);
         return user;
+    }
+
+    async changePassword(authRequest: AuthRequest): Promise<object> {
+        const uid = await this.getUidFromEmail(authRequest.email);
+        const newUser = await firebase.auth().updateUser(uid, { password: authRequest.password});
+        return newUser;
+    }
+
+    private async getUidFromEmail(email: string): Promise<string> {
+        const user = await firebase.auth().getUserByEmail(email);
+        return user.uid;
     }
 
     private async auth(path: string, authRequest: AuthRequest): Promise<string> {
