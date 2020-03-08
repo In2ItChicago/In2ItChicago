@@ -15,7 +15,6 @@ import { SchedulerController } from '@src/scheduler/scheduler.controller';
 import { SchedulerModule } from '@src/scheduler/scheduler.module';
 import { SchedulerService } from '@src/scheduler/scheduler.service';
 import { SchedulerDAL } from '@src/DAL/schedulerDAL';
-import { FirebaseAuthMiddleware } from '@src/firebase';
 import { AuthController } from '@src/auth/auth.controller';
 import { AuthService } from '@src/auth/auth.service';
 import { AuthModule } from '@src/auth/auth.module';
@@ -26,9 +25,6 @@ import { AuthModule } from '@src/auth/auth.module';
   providers: [GeocodeService, EventService, AppService, SchedulerService, GeocodeDAL, EventDAL, SchedulerDAL, AuthService],
 })
 export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(FirebaseAuthMiddleware).forRoutes('events');
-  }
+  configure(consumer: MiddlewareConsumer) {}
   constructor(private readonly appService: AppService) {}
-  
 }

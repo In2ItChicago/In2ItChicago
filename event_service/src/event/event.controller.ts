@@ -16,24 +16,26 @@ export class EventController {
     constructor(private readonly eventService: EventService) {}
 
     @Get()
-    @Roles('isAdmin')
     @ApiResponse({status: 200, type: GetEventsResponse, isArray: true, description: 'Event list'})
     async getEvents(@Query() request: GetEventsRequest): Promise<GetEventsResponse> {
         return await this.eventService.getEvents(request);
     }
 
     @Post()
+    @Roles('eventCreator')
     @ApiResponse({status: 201, description: 'Created'})
     async createEvents(@Body() request: CreateEventsRequest) {
         await this.eventService.createEvents(request.events);
     }
 
+    @Roles('systemAdmin')
     @Delete('ClearAllEvents')
     @ApiResponse({status: 200, description: 'Deleted'})
     async clearAllEvents() {
         await this.eventService.clearAllEvents();
     }
 
+    @Roles('systemAdmin')
     @Delete('CleanupEvents')
     @ApiResponse({status: 200, description: 'Deleted'})
     async cleanupEvents() {

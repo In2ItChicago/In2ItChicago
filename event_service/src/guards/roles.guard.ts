@@ -8,26 +8,14 @@ export class RolesGuard implements CanActivate {
     constructor(private readonly reflector: Reflector) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
-        //console.log(context);
-        // if (this.reflector) {
-        //     return true;
-        // }
-        // return true;
         const roles = this.reflector.get<string[]>('roles', context.getHandler());
-        console.log(roles);
+
         if (!roles) {
             return true;
         }
+        // godUser can do anything
+        roles.push('godUser');
         const request = context.switchToHttp().getRequest();
-        console.log(request.firebaseUser);
-        for (let role of roles) {
-            if (!request.firebaseUser[role]) {
-                return false;
-            }
-        }
-        //firebase.auth().getUser()
-        
-        //console.log(request);
-        return true;//validateRequest(request);
+        return roles.some(role => request.firebaseUser[role]);
     }
 }

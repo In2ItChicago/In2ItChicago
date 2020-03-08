@@ -33,6 +33,11 @@ export class AuthService {
         return newUser.customClaims;
     }
 
+    async getUser(emailRequest: EmailRequest): Promise<object> {
+        const user = await firebase.auth().getUserByEmail(emailRequest.email);
+        return user;
+    }
+
     private async auth(path: string, authRequest: AuthRequest): Promise<string> {
         let res = await this.firebaseRequest(path,
             { email: authRequest.email, password: authRequest.password, returnSecureToken: true });
