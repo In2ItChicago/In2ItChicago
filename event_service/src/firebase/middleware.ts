@@ -1,4 +1,4 @@
-import firebase from './initialize'
+import firebase from '@src/firebase/initialize'
 import { Injectable, NestMiddleware, HttpStatus } from '@nestjs/common'
 import { HttpException } from '@nestjs/common/exceptions/http.exception'
 import { Request, Response } from 'express'
@@ -11,7 +11,7 @@ export class FirebaseAuthMiddleware implements NestMiddleware {
       throw new HttpException({ message: 'No auth supplied' }, HttpStatus.UNAUTHORIZED)
     }
     const token = authorization.slice(7);
-
+    
     const user = await firebase
       .auth()
       .verifyIdToken(token)
@@ -20,6 +20,6 @@ export class FirebaseAuthMiddleware implements NestMiddleware {
       })
 
     req.firebaseUser = user
-    next()
+    next();
   }
 }
