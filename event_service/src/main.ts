@@ -3,7 +3,7 @@ import * as csurf from 'csurf';
 import * as helmet from 'helmet';
 import * as rateLimit from 'express-rate-limit';
 import { ValidationPipe } from '@src/pipes/validation.pipe';
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from '@src/app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -11,6 +11,7 @@ import { EventModule } from '@src/event/event.module';
 import { GeocodeModule } from '@src/geocode/geocode.module';
 import { GenericFilter } from '@src/filters/generic.filter';
 import { AuthModule } from '@src/auth/auth.module';
+import { RolesGuard } from './guards/roles.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -27,6 +28,7 @@ async function bootstrap() {
     }));
   app.useGlobalFilters(new GenericFilter());
   app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalGuards(new RolesGuard(new Reflector()));
   
   const options = new DocumentBuilder()
     .addBearerAuth()

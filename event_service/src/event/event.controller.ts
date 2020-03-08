@@ -4,6 +4,7 @@ import { GetEventsRequest } from '@src/DTO/getEventsRequest';
 import { CreateEventsRequest } from '@src/DTO/createEventsRequest';
 import { GetEventsResponse } from '@src/DTO/getEventsResponse';
 import { ApiTags, ApiBody, ApiResponse, ApiBearerAuth, ApiBasicAuth } from '@nestjs/swagger';
+import { Roles } from '@src/decorators/roles.decorator';
 
 /**
  * An interface class to get, create, or clear events. 
@@ -15,6 +16,7 @@ export class EventController {
     constructor(private readonly eventService: EventService) {}
 
     @Get()
+    @Roles('isAdmin')
     @ApiResponse({status: 200, type: GetEventsResponse, isArray: true, description: 'Event list'})
     async getEvents(@Query() request: GetEventsRequest): Promise<GetEventsResponse> {
         return await this.eventService.getEvents(request);

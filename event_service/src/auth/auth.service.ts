@@ -1,7 +1,7 @@
 import { Injectable, HttpService } from '@nestjs/common';
 import { AxiosResponse } from 'axios';
 import { AuthRequest } from '@src/DTO/authRequest';
-import firebase from '@src/firebase/initialize'
+import firebase from '@src/firebase/initialize';
 import { EmailRequest } from '@src/DTO/emailRequest';
 import { ClaimsRequest } from '@src/DTO/claimsRequest';
 
@@ -26,9 +26,9 @@ export class AuthService {
         const user = await firebase.auth().getUserByEmail(claimsRequest.email);
         let claims = claimsRequest.claims;
         if (!claimsRequest.overwriteExisting) {
-            claims = Object.assign(claims, user.customClaims);
+            claims = Object.assign(user.customClaims, claims);
         }
-        await firebase.auth().setCustomUserClaims(user.uid, claimsRequest.claims);
+        await firebase.auth().setCustomUserClaims(user.uid, claims);
         const newUser = await firebase.auth().getUser(user.uid);
         return newUser.customClaims;
     }
