@@ -177,7 +177,6 @@ body{
 
 .events-container{
 	width:40vw;
-	background-color: #287696;
 }
 
 .map-container{
@@ -196,50 +195,6 @@ body{
 
 .form-group{
 	margin-top:10px;
-}
-
-.event-listing-link:hover{
-	text-decoration: none;
-}
-
-.event-listing{
-	display:flex;
-	padding:16px;
-	justify-content: space-between;
-	border-top:1px solid #b3b3b3;
-	cursor: pointer;
-	background-color: #287696;
-}
-
-.event-listing:hover{
-	background-color: #4ec0c5;
-}
-
-.event-listing-title{
-	color:#fff;
-	font-size:26px;
-	margin-top: 8px;
-}
-
-.event-listing-organization{
-	color:#fff;
-	font-size:20px;
-}
-
-.event-listing-time-location{
-	color:#fff;
-	font-size:16px;
-	margin-top:12px;
-	margin-bottom:12px;
-}
-
-.event-listing-description{
-	color:#fff;
-	font-size:16px;
-}
-
-.event-card-icon{
-	margin-bottom:8px;
 }
 
 .event-pagination{

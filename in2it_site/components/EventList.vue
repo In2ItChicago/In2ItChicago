@@ -13,7 +13,7 @@
 					:next-class="'event-pagination-item'">
 				</paginate>
 				<div v-for="event in eventResult.events">
-					<event-listing :event="event" v-on:eventHover="hoveringEventId = $event" v-on:eventClick="focusedEventId = $event"></event-listing>
+					<event-card :event="event" v-on:eventHover="hoveringEventId = $event" v-on:eventClick="focusedEventId = $event"></event-card>
 				</div>
 			</div>
 			<div v-else class="no-event-message">
@@ -30,7 +30,7 @@
 
 <script>
 	import EventMap from '~/components/EventMap.vue';
-	import EventListing from '~/components/EventListing.vue';
+	import EventCard from '~/components/EventCard.vue';
 	export default{
 		props: ['eventResult'],
 		data() {
@@ -61,7 +61,7 @@
 		},
 		components: {
 			EventMap,
-			EventListing
+			EventCard
 		}
 	};
 </script>
