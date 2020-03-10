@@ -74,7 +74,7 @@ class AggregatorBase:
         self.start_timestamp = request_format_utils.min_timestamp_for_day(start_date)
         self.end_timestamp = request_format_utils.max_timestamp_for_day(end_date)
 
-        self.token = self.session.post(config.login, json={'email': config.scraper_username, 'password': config.scraper_password}).content.decode('utf-8')
+        self.token = self.session.post(config.login, json={'email': config.scraper_username, 'password': config.scraper_password}).content.decode()
 
     def configure_logger(self, logger, handler, log_level):
         logging.getLogger(logger).addHandler(handler)
