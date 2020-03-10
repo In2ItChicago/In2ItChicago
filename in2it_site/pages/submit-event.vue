@@ -135,24 +135,24 @@
                                     ref="startDateMenu"
                                     v-model="isStartDatePickerOpen"
                                     :close-on-content-click="false"
-                                    :return-value.sync="event.startDatePickerValue"
+                                    :return-value.sync="startDatePickerValue"
                                     transition="scale-transition"
                                     offset-y
                                     min-width="290px"
                                 >
                                     <template v-slot:activator="{ on }">
                                         <v-text-field
-                                            v-model="event.startDatePickerValue"
+                                            v-model="startDatePickerValue"
                                             prepend-inner-icon="mdi-calendar"
                                             readonly
                                             v-on="on"
                                             outlined
                                         ></v-text-field>
                                     </template>
-                                    <v-date-picker v-model="event.startDatePickerValue" no-title scrollable @change="setStartDate">
+                                    <v-date-picker v-model="startDatePickerValue" no-title scrollable @change="setStartDate">
                                         <v-spacer></v-spacer>
                                         <v-btn text color="primary" @click="isStartDatePickerOpen = false">Cancel</v-btn>
-                                        <v-btn text color="primary" @click="$refs.startDateMenu.save(event.startDatePickerValue)">OK</v-btn>
+                                        <v-btn text color="primary" @click="$refs.startDateMenu.save(startDatePickerValue)">OK</v-btn>
                                     </v-date-picker>
                                 </v-menu>
                             </v-col>
@@ -162,24 +162,24 @@
                                     ref="endDateMenu"
                                     v-model="isEndDatePickerOpen"
                                     :close-on-content-click="false"
-                                    :return-value.sync="event.endDatePickerValue"
+                                    :return-value.sync="endDatePickerValue"
                                     transition="scale-transition"
                                     offset-y
                                     min-width="290px"
                                 >
                                     <template v-slot:activator="{ on }">
                                         <v-text-field
-                                            v-model="event.endDatePickerValue"
+                                            v-model="endDatePickerValue"
                                             prepend-inner-icon="mdi-calendar"
                                             readonly
                                             v-on="on"
                                             outlined
                                         ></v-text-field>
                                     </template>
-                                    <v-date-picker v-model="event.endDatePickerValue" no-title scrollable @change="setEndDate">
+                                    <v-date-picker v-model="endDatePickerValue" no-title scrollable @change="setEndDate">
                                         <v-spacer></v-spacer>
                                         <v-btn text color="primary" @click="isEndDatePickerOpen = false">Cancel</v-btn>
-                                        <v-btn text color="primary" @click="$refs.endDateMenu.save(event.endDatePickerValue)">OK</v-btn>
+                                        <v-btn text color="primary" @click="$refs.endDateMenu.save(endDatePickerValue)">OK</v-btn>
                                     </v-date-picker>
                                 </v-menu>
                             </v-col>
@@ -348,6 +348,7 @@
 </template>
 
 <script>
+    import axios from 'axios';
     import NeighborhoodAutocomplete from '~/components/NeighborhoodAutocomplete';
 
     export default{
@@ -359,6 +360,9 @@
                 hourSelectionItems: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
                 minuteSelectionItems: ['00', '15', '30', '45'],
                 amPmSelectionItems: ['AM', 'PM'],
+                startDatePickerValue: '',
+                endDatePickerValue: '',
+                submissionCompleted: false,
 				event: {
                     organization: '',
                     title: '',
@@ -372,8 +376,6 @@
                     isMultiDayEvent: false,
                     startDate: new Date(),
                     endDate: new Date(),
-                    startDatePickerValue: '',
-                    endDatePickerValue: '',
                     startTimeHrs: '9',
                     startTimeMins: '00',
                     startTimeAmPm: 'AM',
@@ -442,7 +444,11 @@
                     }
                     return text;
                 }
-            }
+            },
+            submitUrl: function() {
+				const eventURL = process.server ? 'http://event_service:5000' : this.$env.IN2IT_API_URL;
+				return `${eventURL}/events/submitEvent`;
+			},
         },
         methods: {
             getDateObjectFromYYYYMMDD: function (YYYYMMDD) {
@@ -452,15 +458,17 @@
             setStartDate: function (YYYYMMDD) {
                 this.event.startDate = this.getDateObjectFromYYYYMMDD(YYYYMMDD);
                 this.event.weeklyRecurringDays = [this.getDayName(this.event.startDate)];
-                this.event.startDatePickerValue = YYYYMMDD;
+                this.startDatePickerValue = YYYYMMDD;
             },
             setEndDate: function (YYYYMMDD) {
                 this.event.endDate = this.getDateObjectFromYYYYMMDD(YYYYMMDD);
-                this.event.endDatePickerValue = YYYYMMDD;
+                this.endDatePickerValue = YYYYMMDD;
             },
             submitEvent: function () {
-                console.log('submitEvent called');
-                console.log(this.event);
+                axios.post(this.submitUrl, this.event)
+                .then((res) => {
+                    this.submissionCompleted = true;
+                });
             },
             getOrdinalSuffix: function (i) {
                 let j = i % 10,
