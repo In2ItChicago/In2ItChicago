@@ -35,8 +35,8 @@ async function bootstrap() {
   app.enableCors();
   app.use(
     rateLimit({
-      windowMs:  60 * 1000, // 1 minute
-      max: 100
+      windowMs:  5 * 60 * 1000, // 1 minute
+      max: 5000
     }));
   app.useGlobalFilters(new GenericFilter());
   app.useGlobalPipes(new ValidationPipe());

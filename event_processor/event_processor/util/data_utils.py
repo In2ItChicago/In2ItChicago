@@ -41,6 +41,15 @@ class DataUtils:
         return ' '.join(string.split())
 
     @staticmethod
+    def safe_get(dict_, *keys):
+        for key in keys:
+            if dict_ and key in dict_:
+                dict_ = dict_[key]
+            else:
+                return None
+        return dict_
+
+    @staticmethod
     def pretty_json(json_data):
         """??? Format a string containing json"""
         return json.dumps(json_data, indent = 4)

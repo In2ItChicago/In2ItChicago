@@ -30,6 +30,9 @@ services:
       - RUN_SCHEDULER=${RUN_SCHEDULER}
       - SCHEDULE_INTERVAL=5
       - SPIDER_NAME=${SPIDER_NAME}
+      - ENABLE_RESPONSE_CACHE=${ENABLE_RESPONSE_CACHE}
+      - SCRAPER_USERNAME=scraper@in2itchicago.com
+      - SCRAPER_PASSWORD=string
     volumes:
       - ./event_processor:/usr/src/app/event_processor
       - event_processor_data:/usr/src/app/event_processor/data/

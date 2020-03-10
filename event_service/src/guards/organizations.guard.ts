@@ -8,11 +8,12 @@ export class OrganizationsGuard implements CanActivate {
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
-        if (!request?.firebaseUser?.allowedOrgs || !request?.body?.events) {
+        const isEventAdmin = request.firebaseUser && request.firebaseUser[UserMetadata.EventAdmin];
+        if (!(isEventAdmin || request?.firebaseUser?.allowedOrgs) || !request?.body?.events) {
             return false;
         }
         
-        if (request.firebaseUser[UserMetadata.GodUser] || request.firebaseUser[UserMetadata.EventAdmin]) {
+        if (request.firebaseUser[UserMetadata.GodUser] || isEventAdmin) {
             return true;
         }
 

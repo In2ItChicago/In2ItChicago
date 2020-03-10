@@ -1,4 +1,5 @@
 from event_processor.base.custom_spiders import ApiSpider
+from event_processor.util.data_utils import DataUtils
 
 import json
 
@@ -7,11 +8,11 @@ class Documenters(ApiSpider):
     """Crawler for the API on the chicago.documenters website."""
     name = 'documenters'
 
-    start_urls = ['https://chicago.documenters.org/meetings/api/']
+    start_urls = ['https://chicago.documenters.org/search/meetings/']
 
     def __init__(self, *args, **kwargs):
         super().__init__(self, 'Documenters',
-                         'https://chicago.documenters.org/meetings/api/',
+                        'https://chicago.documenters.org/search/meetings/',
                          date_format='%Y-%m-%d', **kwargs)
         
     def parse(self, response):
@@ -26,19 +27,20 @@ class Documenters(ApiSpider):
                 response = self.get_response(next_page_url)
                 response.body = response.content
     
-    def has_coords(self, event):
-        has = event["location"] and event["location"]["coordinates"] and len(event["location"]["coordinates"]) > 0
-        if has:
-            return True
-        else:
-            return False
+    def get_coord(self, event, index):
+        coord = DataUtils.safe_get(event, "location", "geom", "coordinates")
+        if coord:
+            return coord[index]
+        return None
+
+    
     
     def get_address(self, event):
-        if self.has_coords(event):
-            return event["location"]["display"]
-        elif event["location"]:
+        if DataUtils.safe_get(event, 'location', 'geom', 'coordinates'):
+            return DataUtils.safe_get(event, "location", "display")
+        elif event["location"] and event["location"]["street_address"]:
             return event["location"]["street_address"]
-        else:
+        elif event["location"] and event["location"]["display"]:
             return None
 
     def get_events(self, data):
@@ -46,20 +48,20 @@ class Documenters(ApiSpider):
         for event in data["results"]:
             category = ",".join([tag["name"] for tag in event["tags"]])
             documenters_url = "https://chicago.documenters.org/"+event["url"]
-            yield {
-                "title": event["name"],
-                "description": event["agency"]["description"] or '',
-                "address": self.get_address(event),
-                "lat": event["location"]["coordinates"][1] if self.has_coords(event) else None,
-                "lon": event["location"]["coordinates"][0] if self.has_coords(event) else None,
-                "organization": event["agency"]["name"],
-                "event_time": {
-                    "date": event["start_date"],
-                    "start_time": event["start_time"],
-                    "end_time": event["end_time"],
-                },
-                "url": event["source"] or documenters_url,
-                "category": category,
-            }
+            if DataUtils.safe_get(event, "agency", "name") and DataUtils.safe_get(event, "location", "display"):
+                yield {
+                    "title": event["name"],
+                    "description": DataUtils.safe_get(event, "agency", "description") or '',
+                    "address": event["location"]["display"],
+                    "lat": self.get_coord(event, 1),
+                    "lon": self.get_coord(event, 0),
+                    "organization": event["agency"]["name"],
+                    "event_time": {
+                        "date": event["start_date"],
+                        "start_time": event["start_time"]
+                    },
+                    "url": DataUtils.safe_get(event, "source") or documenters_url,
+                    "category": category,
+                }
 
 

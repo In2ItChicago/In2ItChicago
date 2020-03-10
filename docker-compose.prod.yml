@@ -8,6 +8,7 @@ services:
       - VERBOSE_OUTPUT=0
       - SCHEDULE_INTERVAL=120
       - RUN_SCHEDULER=1
+      - ENABLE_RESPONSE_CACHE=1
     deploy:
       resources:
         limits:
