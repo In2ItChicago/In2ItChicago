@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Delete, Query, Get } from '@nestjs/common';
+import { Controller, Post, Body, Delete, Query, Get, Headers, Request } from '@nestjs/common';
 import { ApiTags, ApiBody, ApiResponse, ApiBearerAuth, ApiBasicAuth } from '@nestjs/swagger';
 import { AuthService } from '@src/auth/auth.service';
 import { AuthRequest } from '@src/DTO/authRequest';
@@ -18,6 +18,12 @@ export class AuthController {
     async getUser(@Query() emailRequest: EmailRequest): Promise<object> {
         const user = await this.authService.getUser(emailRequest);
         return user;
+    }
+
+    @Roles(UserMetadata.EventCreator)
+    @Get('/allowedOrgs')
+    async getAllowedOrgs(@Request() req) {
+        return req?.firebaseUser?.allowedOrgs ?? [];
     }
 
     @Post('/login')

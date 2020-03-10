@@ -20,6 +20,8 @@ async function bootstrap() {
   app.set('trust proxy', 1);
   app.use(helmet());
   app.use(json({ limit: '50mb' }));
+  // The supplied parameters are the whitelist of routes not to authorize
+  // Otherwise, any route requires auth by default
   app.use(auth([
     { method: RequestMethod.GET, path: '/' },
     { method: RequestMethod.GET, path: '/docs*' },
