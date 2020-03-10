@@ -133,6 +133,24 @@ body{
 	color: white;
 }
 
+.event-neighborhood-autocomplete {
+	border-radius: 0px !important;
+	border:1px solid rgba(0, 0, 0, 0.38) !important;
+	box-shadow: none !important;
+}
+
+.event-neighborhood-autocomplete:hover {
+	border:1px solid #000 !important;
+}
+
+.event-neighborhood-autocomplete:focus-within {
+	border:2px solid #000 !important;
+}
+
+.event-neighborhood-autocomplete-results {
+	position: relative;
+}
+
 .search-btn{
 	background-color: #4ec0c5;
 	padding:10px 50px 10px 50px;

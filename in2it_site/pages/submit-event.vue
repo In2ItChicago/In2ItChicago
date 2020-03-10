@@ -114,11 +114,12 @@
                         <v-row>
                             <v-col>
                                 <v-label>Neighborhood (Optional)</v-label>
-                                <v-text-field
-                                    v-model="event.neighborhood"
-                                    hint="Input the Chicago neighborhood this event will be taking place in (i.e. Logan Square, Wrigleyville, etc.)"
-                                    outlined
-                                ></v-text-field>
+                                <neighborhood-autocomplete 
+                                    @changed="setNeighborhood"
+                                    textfieldClass="event-neighborhood-autocomplete"
+                                    resultsClass="event-neighborhood-autocomplete-results"
+                                    hint="Input the Chicago neighborhood this event will be taking place in (i.e. Logan Square, Wrigleyville, etc.)">
+                                </neighborhood-autocomplete>
                             </v-col>
                         </v-row>
                         <v-row>
@@ -347,6 +348,8 @@
 </template>
 
 <script>
+    import NeighborhoodAutocomplete from '~/components/NeighborhoodAutocomplete';
+
     export default{
         data() {
 			return {
@@ -475,7 +478,13 @@
             },
             getDayName: function (dateObject) {
                 return dateObject.toLocaleDateString('en-US', { weekday: 'long' });
+            },
+            setNeighborhood: function (neighborhood) {
+                this.event.neighborhood = neighborhood;
             }
+        },
+        components: {
+            NeighborhoodAutocomplete
         }
     };
 </script>

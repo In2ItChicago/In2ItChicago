@@ -106,6 +106,7 @@
 						></v-select>
 					</div>
 					<div class="col-sm-12 col-md-4 col-lg-3">
+						<label for="neighborhood" class="d-md-none filter-label">Neighborhood</label>
 						<neighborhood-autocomplete @changed="setNeighborhood"></neighborhood-autocomplete>
 					</div>
 				</client-only>
