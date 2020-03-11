@@ -197,38 +197,6 @@ body{
 	margin-top:10px;
 }
 
-.event-pagination{
-	padding:24px;
-	margin:0px;
-	background-color: #173450;
-	border-radius:0px !important;
-}
-
-.event-pagination-item{
-	color: #fff;
-}
-
-.event-pagination a{
-	color:#fff;
-	padding: 16px 20px 16px 20px;
-	margin:5px;
-	border-radius: 5px;
-	background-color: #173450;
-	border:1px #fff solid;
-	font-size:22px;
-}
-
-.event-pagination a:hover{
-	background-color:#53a6aa;
-	cursor: pointer;
-	text-decoration: none;
-	color:#fff;
-}
-
-.event-pagination .active a{
-	background-color:#53a6aa;
-}
-
 .event-marker-description{
 	font-size:18px;
 }

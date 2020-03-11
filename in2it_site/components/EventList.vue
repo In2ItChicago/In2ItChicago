@@ -2,16 +2,13 @@
 	<div class="content-row event-map-container">
 		<div class="events-container">
 			<div v-if="eventsAvailable">
-				<paginate
-					:page-count="pageCount"
-					:click-handler="paginateHandler"
-					:prev-text="'<'"
-					:next-text="'>'"
-					:container-class="'pagination event-pagination justify-content-center d-flex'"
-					:page-class="'event-pagination-item'"
-					:prev-class="'event-pagination-item'"
-					:next-class="'event-pagination-item'">
-				</paginate>
+				<v-pagination
+					color="#53a6aa"
+					class="event-pagination"
+					v-model="pageNum"
+					:length="4"
+					@input="paginateHandler"
+				></v-pagination>
 				<div v-for="event in eventResult.events">
 					<event-card :event="event" v-on:eventHover="hoveringEventId = $event" v-on:eventClick="focusedEventId = $event"></event-card>
 				</div>
@@ -35,6 +32,7 @@
 		props: ['eventResult'],
 		data() {
 			return {
+				pageNum: 1,
 				hoveringEventId: null,
 				focusedEventId: null
 			};
@@ -67,22 +65,29 @@
 </script>
 
 <style scoped>
+	.event-pagination {
+		padding:10px;
+		margin:0px;
+		background-color: #173450;
+		border-radius:0px !important;
+	}
+
 	@media (max-width: 768px) {
-        .event-map-container{
+        .event-map-container {
 			display: flex;
 			flex-direction: column;
 		}
 
-		.events-container{
+		.events-container {
 			width:100%;
 		}
 
-		.map-container{
+		.map-container {
 			width:100vw;
 			height:50vh;
 		}
 
-		.event-map{
+		.event-map {
 			width:100vw;
 			height:50vh;
 		}

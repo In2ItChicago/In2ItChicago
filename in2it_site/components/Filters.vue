@@ -38,7 +38,6 @@
 										hide-details
 										v-on="on"
 										outlined
-										background-color="#fff"
 										class="datepicker-text-field-left"
 									></v-text-field>
 								</template>
@@ -50,8 +49,10 @@
 							</v-menu>
 						</div>
 						
-					
-						<img src="/img/arrow.svg" class="date-arrow"/>
+						<div class="datepicker-input">
+							<label class="filter-label"></label>
+							<img src="/img/arrow.svg" class="date-arrow"/>
+						</div>
 
 						<div class="datepicker-input">
 							<label class="filter-label">
@@ -74,7 +75,6 @@
 										hide-details
 										v-on="on"
 										outlined
-										background-color="#fff"
 										class="datepicker-text-field-right"
 									></v-text-field>
 								</template>
@@ -196,11 +196,13 @@
 	.datepicker-text-field-left.v-input {
 		border-radius: 5px 0px 0px 5px;
 		border:none;
+		background-color:#fff;
 	}
 
 	.datepicker-text-field-right.v-input {
 		border-radius: 0px 5px 5px 0px;
 		border:none;
+		background-color:#fff;
 	}
 
 	.date-arrow{
@@ -208,7 +210,6 @@
 		height:55px;
 		display:flex;
 		align-self: center;
-		margin-top:-6px;
 		background-color:#fff;
 		border-radius:0px;
 	}
