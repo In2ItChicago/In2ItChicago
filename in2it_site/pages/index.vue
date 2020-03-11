@@ -5,7 +5,7 @@
 
 		<div class="landing-page-image-row row justify-content-center">
 			<img class="landing-page-image" src="/img/landing-page-left.jpg">
-			<img class="landing-page-image" src="/img/landing-page-right.png">
+			<img class="landing-page-image" src="/img/landing-page-right.jpg">
 		</div>
 	</div>
 </template>

@@ -69,7 +69,6 @@ body{
 .landing-page-image{
 	z-index: 1;
 	width:35vw;
-	height:35vw;
 	border-radius: 8px;
 	display:flex;
 	margin:8px;
