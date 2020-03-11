@@ -97,7 +97,7 @@
                                     <span class="required-star"> *</span>
                                 </v-label>
                                 <v-text-field
-                                    v-model="event.addressLine1"
+                                    v-model="addressLine1"
                                     outlined
                                 ></v-text-field>
                             </v-col>
@@ -106,7 +106,7 @@
                             <v-col>
                                 <v-label>Event Address Line 2 (Optional)</v-label>
                                 <v-text-field
-                                    v-model="event.addressLine2"
+                                    v-model="addressLine2"
                                     outlined
                                 ></v-text-field>
                             </v-col>
@@ -205,17 +205,17 @@
                             <v-col class="d-flex flex-row">
                                 <v-select
                                     :items="hourSelectionItems"
-                                    v-model="event.startTimeHrs"
+                                    v-model="startTimeHrs"
                                     outlined
                                 ></v-select>
                                 <v-select
                                     :items="minuteSelectionItems"
-                                    v-model="event.startTimeMins"
+                                    v-model="startTimeMins"
                                     outlined
                                 ></v-select>
                                 <v-select
                                     :items="amPmSelectionItems"
-                                    v-model="event.startTimeAmPm"
+                                    v-model="startTimeAmPm"
                                     outlined
                                 ></v-select>
                             </v-col>
@@ -223,17 +223,17 @@
                             <v-col class="d-flex flex-row">
                                 <v-select
                                     :items="hourSelectionItems"
-                                    v-model="event.endTimeHrs"
+                                    v-model="endTimeHrs"
                                     outlined
                                 ></v-select>
                                 <v-select
                                     :items="minuteSelectionItems"
-                                    v-model="event.endTimeMins"
+                                    v-model="endTimeMins"
                                     outlined
                                 ></v-select>
                                 <v-select
                                     :items="amPmSelectionItems"
-                                    v-model="event.endTimeAmPm"
+                                    v-model="endTimeAmPm"
                                     outlined
                                 ></v-select>
                             </v-col>
@@ -242,6 +242,7 @@
                             <v-checkbox
                                 v-model="event.isRecurring"
                                 label="This is a recurring event"
+                                @change="setRecurringWeekdays"
                             ></v-checkbox>
                         </v-row>
                         <div v-if="event.isRecurring">
@@ -354,6 +355,10 @@
     export default{
         data() {
 			return {
+                //event object properties are limited to only those accepted by the API
+                //form-specific variables like the amPm values are stored outside the event object
+                addressLine1: '',
+                addressLine2: '',
                 isStartDatePickerOpen: false,
                 isEndDatePickerOpen: false,
                 recurringTimeIntervals: ['Weekly', 'Monthly'],
@@ -363,27 +368,28 @@
                 startDatePickerValue: '',
                 endDatePickerValue: '',
                 submissionCompleted: false,
+                startDate: new Date(),
+                endDate: new Date(),
+                startTimeHrs: '9',
+                startTimeMins: '00',
+                startTimeAmPm: 'AM',
+                endTimeHrs: '12',
+                endTimeMins: '00',
+                endTimeAmPm: 'PM',
 				event: {
                     organization: '',
                     title: '',
                     description: '',
-                    addressLine1: '',
-                    addressLine2: '',
+                    address: '',
                     neighborhood: '',
                     url: '',
                     cost: '',
                     isHiddenFromPublic: false,
                     isMultiDayEvent: false,
-                    startDate: new Date(),
-                    endDate: new Date(),
-                    startTimeHrs: '9',
-                    startTimeMins: '00',
-                    startTimeAmPm: 'AM',
-                    endTimeHrs: '12',
-                    endTimeMins: '00',
-                    endTimeAmPm: 'PM',
+                    startDateTime: '',
+                    endDateTime: '',
                     isRecurring: false,
-                    recurringTimeInterval: 'Weekly',
+                    recurringTimeInterval: '',
                     weeklyRecurringDays: [],
                     monthlyRecurringValue: '',
                     isHandicapAccessible: false,
@@ -392,24 +398,52 @@
 			};
         },
         computed: {
+            address: function () {
+                return this.addressLine1 + ' ' + this.addressLine2;
+            },
+            startDateTime: function () {
+                return new Date(
+                    this.startDate.getFullYear(), 
+                    this.startDate.getMonth(), 
+                    this.startDate.getDate(),
+                    this.getStartHourInt(),
+                    parseInt(this.startTimeMins)
+                );
+            },
+            endDateTime: function () {
+                let endHourInt = this.getEndHourInt();
+                if (!this.event.isMultiDayEvent) {
+                    //Event ends on same day as start + 3 hours
+                    this.endDate = this.startDate;
+                    endHourInt = this.getStartHourInt() + 3;
+                }
+
+                return new Date(
+                    this.endDate.getFullYear(), 
+                    this.endDate.getMonth(), 
+                    this.endDate.getDate(),
+                    endHourInt,
+                    parseInt(this.endTimeMins)
+                );
+            },
             recurringDayNumLabel: function () {
-                return 'The ' + this.getOrdinalSuffix(this.event.startDate.getDate()) + ' of every month';
+                return 'The ' + this.getOrdinalSuffix(this.startDate.getDate()) + ' of every month';
             },
             recurringDayNumValue: function () {
-                return this.getOrdinalSuffix(this.event.startDate.getDate());
+                return this.getOrdinalSuffix(this.startDate.getDate());
             },
             recurringNthDayLabel: function () {
                 return this.recurringNthDayValue + ' of every month';
             },
             recurringNthDayValue: function () {
                 let nth = 0;
-                let eventDayNum = this.event.startDate.getDate();
-                let eventMonth = this.event.startDate.getMonth();
-                let eventDayName = this.getDayName(this.event.startDate);
+                let eventDayNum = this.startDate.getDate();
+                let eventMonth = this.startDate.getMonth();
+                let eventDayName = this.getDayName(this.startDate);
 
                 for (let i = 0; i < eventDayNum; ++i) {
                     //Start at first date of current month
-                    let testDateString = this.event.startDate.getFullYear() + '-' + (eventMonth + 1) + '-1';
+                    let testDateString = this.startDate.getFullYear() + '-' + (eventMonth + 1) + '-1';
                     let testDate = this.getDateObjectFromYYYYMMDD(testDateString);
 
                     //Iterate through days of month
@@ -420,7 +454,7 @@
                         ++nth;
                     }
                 }
-                return this.getOrdinalSuffix(nth) + ' ' + this.getDayName(this.event.startDate);
+                return this.getOrdinalSuffix(nth) + ' ' + this.getDayName(this.startDate);
             },
             weeklyRecurringDaysLabelText: function () {
                 if (this.event.weeklyRecurringDays.length <= 0) {
@@ -456,19 +490,46 @@
                 return new Date(datePieces[0], (datePieces[1] - 1), datePieces[2]);
             },
             setStartDate: function (YYYYMMDD) {
-                this.event.startDate = this.getDateObjectFromYYYYMMDD(YYYYMMDD);
-                this.event.weeklyRecurringDays = [this.getDayName(this.event.startDate)];
+                this.startDate = this.getDateObjectFromYYYYMMDD(YYYYMMDD);
                 this.startDatePickerValue = YYYYMMDD;
             },
             setEndDate: function (YYYYMMDD) {
-                this.event.endDate = this.getDateObjectFromYYYYMMDD(YYYYMMDD);
+                this.endDate = this.getDateObjectFromYYYYMMDD(YYYYMMDD);
                 this.endDatePickerValue = YYYYMMDD;
             },
+            setRecurringWeekdays: function () {
+                if (this.event.isRecurring) {
+                    this.event.weeklyRecurringDays = [this.getDayName(this.startDate)];
+                }
+                else {
+                    this.event.recurringTimeInterval = '';
+                    this.event.weeklyRecurringDays = [];
+                }
+            },
+            getStartHourInt: function () {
+                return this.get24HourInt(this.startTimeHrs, this.startTimeAmPm);
+            },
+            getEndHourInt: function () {
+                return this.get24HourInt(this.endTimeHrs, this.endTimeAmPm);
+            },
+            get24HourInt: function (time12HourString, amPmString) {
+                let hourInt = parseInt(time12HourString);
+                if (amPmString == 'PM' && hourInt != 12) {
+                    hourInt += 12;
+                }
+                return hourInt;
+            },
             submitEvent: function () {
+                this.prepareEventPayload();
                 axios.post(this.submitUrl, this.event)
                 .then((res) => {
                     this.submissionCompleted = true;
                 });
+            },
+            prepareEventPayload: function () {
+                this.event.address = this.address;
+                this.event.startDateTime = this.startDateTime;
+                this.event.endDateTime = this.endDateTime;
             },
             getOrdinalSuffix: function (i) {
                 let j = i % 10,
