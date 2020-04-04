@@ -1,7 +1,7 @@
 export const state = () => ({
     startTime: new Date(new Date().getFullYear(), new Date().getMonth(),  new Date().getDate()),
     endTime: new Date(new Date().getFullYear(), new Date().getMonth(),  new Date().getDate() + 7),
-    miles: 3,
+    miles: '3',
     address: '60647',
     keywords: '',
     neighborhood: '',

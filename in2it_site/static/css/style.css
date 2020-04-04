@@ -69,7 +69,6 @@ body{
 .landing-page-image{
 	z-index: 1;
 	width:35vw;
-	height:35vw;
 	border-radius: 8px;
 	display:flex;
 	margin:8px;
@@ -98,10 +97,6 @@ body{
 	border-radius: 5px;
 	background-color:#173450;
 	z-index:2;
-}
-
-.filter-row {
-	margin-top:24px;
 }
 
 .filter-label{
@@ -137,6 +132,24 @@ body{
 	color: white;
 }
 
+.event-neighborhood-autocomplete {
+	border-radius: 0px !important;
+	border:1px solid rgba(0, 0, 0, 0.38) !important;
+	box-shadow: none !important;
+}
+
+.event-neighborhood-autocomplete:hover {
+	border:1px solid #000 !important;
+}
+
+.event-neighborhood-autocomplete:focus-within {
+	border:2px solid #000 !important;
+}
+
+.event-neighborhood-autocomplete-results {
+	position: relative;
+}
+
 .search-btn{
 	background-color: #4ec0c5;
 	padding:10px 50px 10px 50px;
@@ -163,7 +176,6 @@ body{
 
 .events-container{
 	width:40vw;
-	background-color: #287696;
 }
 
 .map-container{
@@ -182,82 +194,6 @@ body{
 
 .form-group{
 	margin-top:10px;
-}
-
-.event-listing-link:hover{
-	text-decoration: none;
-}
-
-.event-listing{
-	display:flex;
-	padding:16px;
-	justify-content: space-between;
-	border-top:1px solid #b3b3b3;
-	cursor: pointer;
-	background-color: #287696;
-}
-
-.event-listing:hover{
-	background-color: #4ec0c5;
-}
-
-.event-listing-title{
-	color:#fff;
-	font-size:26px;
-	margin-top: 8px;
-}
-
-.event-listing-organization{
-	color:#fff;
-	font-size:20px;
-}
-
-.event-listing-time-location{
-	color:#fff;
-	font-size:16px;
-	margin-top:12px;
-	margin-bottom:12px;
-}
-
-.event-listing-description{
-	color:#fff;
-	font-size:16px;
-}
-
-.event-card-icon{
-	margin-bottom:8px;
-}
-
-.event-pagination{
-	padding:24px;
-	margin:0px;
-	background-color: #173450;
-	border-radius:0px !important;
-}
-
-.event-pagination-item{
-	color: #fff;
-}
-
-.event-pagination a{
-	color:#fff;
-	padding: 16px 20px 16px 20px;
-	margin:5px;
-	border-radius: 5px;
-	background-color: #173450;
-	border:1px #fff solid;
-	font-size:22px;
-}
-
-.event-pagination a:hover{
-	background-color:#53a6aa;
-	cursor: pointer;
-	text-decoration: none;
-	color:#fff;
-}
-
-.event-pagination .active a{
-	background-color:#53a6aa;
 }
 
 .event-marker-description{
@@ -311,14 +247,6 @@ body{
 
 .datepicker-right{
 	border-radius:0rem 0.25rem 0.25rem 0rem;
-}
-
-.date-arrow{
-	width:38px;
-	height:38px;
-	display:flex;
-	align-self: flex-end;
-	background-color:#fff;
 }
 
 .event-page-heading{
