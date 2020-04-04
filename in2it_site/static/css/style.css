@@ -152,12 +152,11 @@ body{
 
 .search-btn{
 	background-color: #4ec0c5;
-	padding:10px 50px 10px 50px;
-	margin-bottom:-20px;
+	padding:20px 100px 20px 100px;
 	border:none;
 	border-radius:5px;
 	color:#fff;
-	font-size: 18px;
+	font-size: 20px;
 	font-weight: bold;
 }
 
