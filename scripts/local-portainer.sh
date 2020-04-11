@@ -1,0 +1,1 @@
+docker run --rm -it --net=host -v portainerlocal:/data -v /var/run/docker.sock:/var/run/docker.sock portainer/portainer
