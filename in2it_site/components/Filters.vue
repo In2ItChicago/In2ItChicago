@@ -37,7 +37,6 @@
 										readonly
 										hide-details
 										v-on="on"
-										outlined
 										class="datepicker-text-field-left"
 									></v-text-field>
 								</template>
@@ -74,7 +73,6 @@
 										readonly
 										hide-details
 										v-on="on"
-										outlined
 										class="datepicker-text-field-right"
 									></v-text-field>
 								</template>
@@ -197,17 +195,22 @@
 		border-radius: 5px 0px 0px 5px;
 		border:none;
 		background-color:#fff;
+		padding:12px;
+		margin-top:0px;
 	}
 
 	.datepicker-text-field-right.v-input {
 		border-radius: 0px 5px 5px 0px;
 		border:none;
 		background-color:#fff;
+		padding:12px;
+		margin-top:0px;
 	}
 
 	.date-arrow{
 		width:56px;
-		height:55px;
+		height:56px;
+		margin-top:3px;
 		display:flex;
 		align-self: center;
 		background-color:#fff;

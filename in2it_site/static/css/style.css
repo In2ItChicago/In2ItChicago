@@ -82,6 +82,7 @@ body{
 }
 
 .filter-label{
+	font-size: 18px;
 	margin-bottom:0px;
 	color:#fff;
 	font-weight: bold;
