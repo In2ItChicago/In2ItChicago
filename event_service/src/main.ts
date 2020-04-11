@@ -22,14 +22,16 @@ async function bootstrap() {
   app.use(json({ limit: '50mb' }));
   // The supplied parameters are the whitelist of routes not to authorize
   // Otherwise, any route requires auth by default
-  app.use(auth([
-    { method: RequestMethod.GET, path: '/' },
-    { method: RequestMethod.GET, path: '/docs*' },
-    { method: RequestMethod.GET, path: '/geocode*' },
-    { method: RequestMethod.GET, path: '/events' },
-    { method: RequestMethod.GET, path: '/status' },
-    { method: RequestMethod.POST, path: '/auth/login' }
-  ]));
+  if (process.env.BYPASS_AUTH !== '1') {
+    app.use(auth([
+      { method: RequestMethod.GET, path: '/' },
+      { method: RequestMethod.GET, path: '/docs*' },
+      { method: RequestMethod.GET, path: '/geocode*' },
+      { method: RequestMethod.GET, path: '/events' },
+      { method: RequestMethod.GET, path: '/status' },
+      { method: RequestMethod.POST, path: '/auth/login' }
+    ]));
+  }
   // TODO: use this for auth with cookies from ui?
   //app.use(csurf());
   app.enableCors();

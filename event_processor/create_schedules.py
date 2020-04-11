@@ -3,7 +3,7 @@ import time
 from scrapy import spiderloader
 from scrapy.utils import project
 from event_processor.config import config
-from jobs import jobs
+from jobs import get_jobs
 from requests.exceptions import ConnectionError
 from event_processor.util.http_utils import HttpUtils
 
@@ -63,7 +63,7 @@ class ScheduleBuilder:
             self.add_schedule(schedule)
     
     def add_other_schedules(self):
-        for job in jobs:
+        for job in get_jobs():
             self.add_schedule(Schedule(job['name'], job['job_class'], job['minute'], job['hour'], job['args']))
 
     def add_schedule(self, schedule):

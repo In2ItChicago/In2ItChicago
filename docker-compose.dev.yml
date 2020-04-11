@@ -31,8 +31,11 @@ services:
       - SCHEDULE_INTERVAL=5
       - SPIDER_NAME=${SPIDER_NAME}
       - ENABLE_RESPONSE_CACHE=${ENABLE_RESPONSE_CACHE}
-      - SCRAPER_USERNAME=scraper@in2itchicago.com
-      - SCRAPER_PASSWORD=string
+      - SCRAPER_USERNAME=${SCRAPER_USERNAME}
+      - SCRAPER_PASSWORD=${SCRAPER_PASSWORD}
+      - SYSTEM_USERNAME=${SYSTEM_USERNAME}
+      - SYSTEM_PASSWORD=${SYSTEM_PASSWORD}
+      - BYPASS_AUTH=${BYPASS_AUTH:-1}
     volumes:
       - ./event_processor:/usr/src/app/event_processor
       - event_processor_data:/usr/src/app/event_processor/data/
@@ -46,6 +49,7 @@ services:
       - ./.in2it_site/vscode_server:/root/.vscode-server
     environment:
       - IN2IT_API_URL=${IN2IT_API_URL:-http://api.localhost}
+      - BYPASS_AUTH=${BYPASS_AUTH:-1}
       - FIREBASE_API_KEY=${FIREBASE_API_KEY_BROWSER}
       - FIREBASE_AUTH_DOMAIN=${FIREBASE_AUTH_DOMAIN}
       - FIREBASE_DATABASE_URL=${FIREBASE_DATABASE_URL}

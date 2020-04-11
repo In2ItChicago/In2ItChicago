@@ -90,7 +90,11 @@ class EventSavePipeline:
         if spider.is_errored:
             spider.logger.info('Errors occurred during processing so events will not be saved')
         else:
-            response = self.session.post(config.put_events, json={'events': event_list}, headers={'Authorization': f'Bearer {spider.token}'})
+            kwargs = {'events': event_list}
+            authorization = None
+            if spider.token != None:
+                authorization = f'Bearer {spider.token}'
+            response = self.session.post(config.put_events, json={'events': event_list}, headers={'Authorization': authorization})
             if not response.ok:
                 raise Exception(response.text)
             else:
