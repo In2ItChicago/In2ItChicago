@@ -11,7 +11,7 @@ module.exports = {
 		meta: [
 			{ charset: 'utf-8' },
 			{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
-			{ hid: 'description', name: 'description', content: pkg.description }
+			{ hid: 'description', name: 'description', content: 'Make an impact in your Neighborhood, Community and City. Find ways to get civically involved, contribute your skills, make a difference.' }
 		],
 		link: [
 			{ rel: 'icon', type: 'image/x-icon', href: '/img/favicon.jpg' },
@@ -55,6 +55,7 @@ module.exports = {
 		'@nuxtjs/axios',
 		// Doc: https://bootstrap-vue.js.org/docs/
 		'bootstrap-vue/nuxt',
+		'@nuxtjs/vuetify',
 		['nuxt-env', {
 			keys: ['IN2IT_API_URL', 'FIREBASE_API_KEY', 'FIREBASE_AUTH_DOMAIN', 'FIREBASE_DATABASE_URL', 
 			'FIREBASE_PROJECT_ID', 'FIREBASE_STORAGE_BUCKET', 'FIREBASE_MESSAGING_SENDER_ID', 'FIREBASE_APP_ID', 'FIREBASE_MEASUREMENT_ID']

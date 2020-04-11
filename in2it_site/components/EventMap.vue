@@ -62,7 +62,7 @@
                     let infoContent = 
                         "<h2>" + events[i].title + "</h2>" +
                         "<h4>" + events[i].address + "</h4>" +
-                        "<h4>" + this.getFormattedTime(events[i].startTime) + "</h4>" +
+                        "<h4>" + events[i].startDate + ' ' + this.getFormattedTime(events[i].startTime) + "</h4>" +
                         "<p class='event-marker-description'>" + events[i].description + "</p>" +
                         "<a class='event-marker-link' href=" + events[i].url + " target=" + "_blank" + ">" + "Visit event site" + "<img class='event-marker-outgoing-link-icon' src='https://img.icons8.com/metro/26/000000/external-link.png'></a>";
 

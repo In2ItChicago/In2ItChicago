@@ -1,4 +1,5 @@
-FROM node:13.10.1-alpine AS in2it_site_common
+FROM node:13.2-alpine AS in2it_site_common
+RUN apk add python3 make g++
 
 FROM in2it_site_common AS in2it_site_dev
 WORKDIR /usr/src/app/.site_modules
@@ -12,5 +13,4 @@ WORKDIR /usr/src/app/in2it_site
 FROM in2it_site_common AS in2it_site_prod
 WORKDIR /usr/src/app/in2it_site
 COPY . ./
-RUN yarn install --production && yarn cache clean
-RUN yarn run build
+RUN yarn install --production && yarn cache clean && yarn run build && apk --purge del python3 make g++

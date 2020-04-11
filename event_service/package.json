@@ -10,7 +10,6 @@
     "start": "ts-node -r tsconfig-paths/register src/main.ts",
     "start:dev": "concurrently --handle-input \"wait-on dist/main.js && nodemon\" \"tsc -w -p tsconfig.build.json\" ",
     "start:debug": "tsnd -r tsconfig-paths/register --respawn --transpileOnly --inspect=[::]:5858 src/main.ts",
-    "prestart:prod": "rimraf dist && npm run build",
     "start:prod": "node -r ts-node/register/transpile-only -r tsconfig-paths/register dist/main.js",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "test": "jest",
