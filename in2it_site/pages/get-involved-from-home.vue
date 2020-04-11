@@ -2,7 +2,7 @@
     <div class="container">
         <div class="content-col col-md-8 offset-md-2 col-sm-12">
             <h1 class="get-involved-title">Get involved, even from home!</h1>
-            <h2 class="get-involved-subtitle">Below are awesome projects that you can contribute to from home.</h2>
+            <h2 class="get-involved-subtitle">Some awesome projects that you can contribute to from home.</h2>
 
             <v-card v-for="project in projects" :key="project.id" class="d-flex mt-4">
                 <v-row>
@@ -77,6 +77,7 @@ export default {
 
 <style scoped>
     .get-involved-title{
+        font-size:48px;
         text-align: center;
     }
     .get-involved-subtitle{

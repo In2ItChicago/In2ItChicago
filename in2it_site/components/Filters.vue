@@ -209,7 +209,7 @@
 
 	.date-arrow{
 		width:56px;
-		height:56px;
+		height:57px;
 		margin-top:3px;
 		display:flex;
 		align-self: center;
