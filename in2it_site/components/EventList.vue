@@ -6,7 +6,7 @@
 					color="#53a6aa"
 					class="event-pagination"
 					v-model="pageNum"
-					:length="4"
+					:length="pageCount"
 					@input="paginateHandler"
 				></v-pagination>
 				<div v-for="event in eventResult.events">
