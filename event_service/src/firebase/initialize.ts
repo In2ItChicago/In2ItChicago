@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin'
 
-export default admin.initializeApp({
+export default process.env.BYPASS_AUTH == '1' ? null : admin.initializeApp({
   credential: admin.credential.cert({
     projectId: process.env.FIREBASE_PROJECT_ID,
     privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),

@@ -9,9 +9,11 @@ services:
       caddy.address: api.localhost:80
     environment:
       - HOST=postgres
+      - BYPASS_AUTH=${BYPASS_AUTH:-1}
+      - PROFILE_QUERIES=${PROFILE_QUERIES:-0}
+      - IN2IT_API_URL=${IN2IT_API_URL:-http://api.localhost}
       - FIREBASE_PRIVATE_KEY=${FIREBASE_PRIVATE_KEY}
       - FIREBASE_CLIENT_EMAIL=${FIREBASE_CLIENT_EMAIL}
-      - IN2IT_API_URL=${IN2IT_API_URL:-http://api.localhost}
       - FIREBASE_API_KEY=${FIREBASE_API_KEY_SERVER}
       - FIREBASE_AUTH_DOMAIN=${FIREBASE_AUTH_DOMAIN}
       - FIREBASE_DATABASE_URL=${FIREBASE_DATABASE_URL}
@@ -20,7 +22,6 @@ services:
       - FIREBASE_MESSAGING_SENDER_ID=${FIREBASE_MESSAGING_SENDER_ID}
       - FIREBASE_APP_ID=${FIREBASE_APP_ID}
       - FIREBASE_MEASUREMENT_ID=${FIREBASE_MEASUREMENT_ID}
-      - PROFILE_QUERIES=${PROFILE_QUERIES:-0}
     tty: true
   event_processor:
     command: sh -c "chmod +x entrypoint.sh && nodemon --exec ./entrypoint.sh"

@@ -22,5 +22,5 @@ var firebaseConfig = {
 const app = firebase.apps.length
     ? firebase.app()
     : firebase.initializeApp(firebaseConfig);
-//firebase.analytics();
+
 export const db = app.database();
