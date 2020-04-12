@@ -45,11 +45,12 @@ async function bootstrap() {
   // TODO: use this for auth with cookies from ui?
   //app.use(csurf());
   app.enableCors();
-  app.use(
-    rateLimit({
-      windowMs:  5 * 60 * 1000, // 1 minute
-      max: 5000
-    }));
+  // TODO: maybe use Caddy to do this instead
+  // app.use(
+  //   rateLimit({
+  //     windowMs:  5 * 60 * 1000, // 1 minute
+  //     max: 5000
+  //   }));
   app.useGlobalFilters(new GenericFilter());
   app.useGlobalPipes(new ValidationPipe());
 
