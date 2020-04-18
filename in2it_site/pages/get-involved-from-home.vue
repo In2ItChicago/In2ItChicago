@@ -6,11 +6,6 @@
         <v-card v-for="project in projects" :key="project.id" class="d-flex mt-4">
             <v-row>
                 <v-col cols="12" lg="6">
-                    <a :href="project.projectUrl">
-                        <v-img cover class="project-image" :src="project.imageUrl"></v-img>
-                    </a>
-                </v-col>
-                <v-col cols="12" lg="6">
                     <v-card-title class="project-title">
                         {{ project.title }}
                     </v-card-title>
@@ -20,6 +15,14 @@
                     <v-card-text class="project-description">
                         {{ project.description }}
                     </v-card-text>
+                    <v-card-text class="project-url">
+                        <a :href="project.projectUrl" _target="blank">Event Details</a>
+                    </v-card-text>
+                </v-col>
+                <v-col cols="12" lg="6" align-self="center">
+                    <a :href="project.projectUrl">
+                        <v-img cover class="project-image" :src="project.imageUrl"></v-img>
+                    </a>
                 </v-col>
             </v-row>
         </v-card>
@@ -90,6 +93,14 @@ export default {
     }
     .project-description{
         font-size:18px;
+    }
+    .project-image{
+        margin:10px;
+    }
+
+    .project-url{
+        padding:0px 15px 0px 15px;
+        font-size:20px;
     }
 
     @media(max-width:767px){
