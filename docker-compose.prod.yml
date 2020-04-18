@@ -1,7 +1,7 @@
 version: '3.6'
 services:
   event_processor:
-    image: in2itchicago/event_processor:20200411.1
+    image: in2itchicago/event_processor:20200418.1
     command: sh -c "chmod +x entrypoint.sh && ./entrypoint.sh"
     environment:
       - DEBUG=0
@@ -9,19 +9,21 @@ services:
       - SCHEDULE_INTERVAL=120
       - RUN_SCHEDULER=1
       - ENABLE_RESPONSE_CACHE=1
+      - BYPASS_AUTH=0
     deploy:
       resources:
         limits:
           cpus: '0.7'
           memory: '200M'
   event_service:
-    image: in2itchicago/event_service:20200411.1
+    image: in2itchicago/event_service:20200418.1
     command: "yarn run start:prod"
     labels:
       caddy.address: api.${SERVER_NAME:-localhost}:${SERVER_PORT:-80}
     environment:
       - HOST=/var/run/postgresql
       - PROFILE_QUERIES=0
+      - BYPASS_AUTH=0
     volumes:
       - /var/run/postgresql:/var/run/postgresql
     deploy:
@@ -30,10 +32,11 @@ services:
           cpus: '0.7'
           memory: '200M'
   in2it_site:
-    image: in2itchicago/in2it_site:20200411.1
+    image: in2itchicago/in2it_site:20200418.1
     command: "yarn run start"
     environment:
       - "IN2IT_API_URL=${IN2IT_API_URL_PROD:-http://api.localhost}"
+      - BYPASS_AUTH=0
     labels:
       caddy.address: ${SERVER_NAME:-localhost}:${SERVER_PORT:-80} www.${SERVER_NAME:-localhost}:${SERVER_PORT:-80}
     deploy:
@@ -42,7 +45,7 @@ services:
           cpus: '0.7'
           memory: '200M'
   ndscheduler:
-    image: in2itchicago/ndscheduler:20200411.1
+    image: in2itchicago/ndscheduler:20200418.1
     command: "python -u simple_scheduler/scheduler.py"
     environment:
       - DEBUG=0
