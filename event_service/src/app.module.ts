@@ -11,17 +11,20 @@ import { GeocodeDAL } from '@src/DAL/geocodeDAL';
 import { GeocodeDALModule } from '@src/DAL/geocodeDAL.module';
 import { EventDALModule } from '@src/DAL/eventDAL.module';
 import { EventDAL } from '@src/DAL/eventDAL';
-import { SchedulerController } from './scheduler/scheduler.controller';
-import { SchedulerModule } from './scheduler/scheduler.module';
-import { SchedulerService } from './scheduler/scheduler.service';
-import { SchedulerDAL } from './DAL/schedulerDAL';
+import { SchedulerController } from '@src/scheduler/scheduler.controller';
+import { SchedulerModule } from '@src/scheduler/scheduler.module';
+import { SchedulerService } from '@src/scheduler/scheduler.service';
+import { SchedulerDAL } from '@src/DAL/schedulerDAL';
+import { AuthController } from '@src/auth/auth.controller';
+import { AuthService } from '@src/auth/auth.service';
+import { AuthModule } from '@src/auth/auth.module';
 
 @Module({
-  imports: [HttpModule, GeocodeModule, EventModule, GeocodeDALModule, EventDALModule, SchedulerModule],
-  controllers: [GeocodeController, EventController, AppController, SchedulerController],
-  providers: [GeocodeService, EventService, AppService, SchedulerService, GeocodeDAL, EventDAL, SchedulerDAL],
+  imports: [HttpModule, GeocodeModule, EventModule, GeocodeDALModule, EventDALModule, SchedulerModule, AuthModule],
+  controllers: [GeocodeController, EventController, AppController, SchedulerController, AuthController],
+  providers: [GeocodeService, EventService, AppService, SchedulerService, GeocodeDAL, EventDAL, SchedulerDAL, AuthService],
 })
-export class AppModule {
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {}
   constructor(private readonly appService: AppService) {}
-  
 }

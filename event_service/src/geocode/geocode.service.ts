@@ -55,7 +55,7 @@ export class GeocodeService {
                 await sleep(diff);
             }
             let response: AxiosResponse<CoordPair[]>;
-            response = await this.httpService.get<CoordPair[]>(encodeURI(`${baseUrl}?q=${request.address}&format=json`)).toPromise();;
+            response = await this.httpService.get<CoordPair[]>(encodeURI(`${baseUrl}?q=${request.address}&format=json`)).toPromise();
 
             this.lastExecuted = new Date();
 

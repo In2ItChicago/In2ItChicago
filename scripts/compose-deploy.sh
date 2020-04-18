@@ -10,6 +10,7 @@ EXCLUDE="ndscheduler"
 RUN_SCHEDULER=0
 ENV="dev"
 SPIDER_NAME=""
+ENABLE_RESPONSE_CACHE=1
 while (( "$#" )); do
   case "$1" in
     -c|--scheduler-debug)
@@ -39,6 +40,10 @@ while (( "$#" )); do
       ;;
     -p|--profile-queries)
       PROFILE_QUERIES=1
+      shift
+      ;;
+    -r|--disable-response-cache)
+      ENABLE_RESPONSE_CACHE=0
       shift
       ;;
     --) # end argument parsing
@@ -80,4 +85,5 @@ VERBOSE_OUTPUT=$VERBOSE_OUTPUT \
 RUN_SCHEDULER=$RUN_SCHEDULER \
 SPIDER_NAME=$SPIDER_NAME \
 PROFILE_QUERIES=$PROFILE_QUERIES \
+ENABLE_RESPONSE_CACHE=$ENABLE_RESPONSE_CACHE \
 docker-compose -f docker-compose.yml -f docker-compose.${ENV}.yml up $SERVICES

@@ -1,4 +1,4 @@
-import { Injectable, HttpService, Inject } from '@nestjs/common';
+import { Injectable, HttpService, Inject, HttpStatus } from '@nestjs/common';
 import { EventDAL } from '@src/DAL/eventDAL';
 import { timestampToDate } from '@src/utilities';
 import { GetEventsRequest } from '@src/DTO/getEventsRequest';
@@ -9,6 +9,7 @@ import { GetEventsResponse } from '@src/DTO/getEventsResponse';
 import { plainToClass } from 'class-transformer';
 import { GetGeocodeResponse } from '@src/DTO/getGeocodeResponse';
 import { CreateEventRequest } from '@src/DTO/createEventRequest';
+import { HttpException } from '@nestjs/common/exceptions/http.exception'
 
 @Injectable()
 export class EventService {
@@ -40,12 +41,6 @@ export class EventService {
     }
 
     async createEvents(contextData: CreateEventRequest[]) {
-        const invalid = contextData.filter(data => !(
-            data.organization && 
-            data.eventTime && 
-            (data.eventTime.startTimestamp || data.eventTime.startTimestamp === 0) &&
-            (data.eventTime.endTimestamp || data.eventTime.endTimestamp === 0)));
-
         for (let i = 0; i < contextData.length; i++) {
             Object.assign(contextData[i], {
                 start_time: timestampToDate(contextData[i].eventTime.startTimestamp),
@@ -64,7 +59,7 @@ export class EventService {
             await this.eventDAL.deleteEvents(organizations);
         }
 
-        this.eventDAL.createEvents(contextData);
+        await this.eventDAL.createEvents(contextData);
     }
 
     async clearAllEvents() {

@@ -9,10 +9,17 @@ services:
       - in2it
     labels:
       caddy.targetport: 5000 
-      caddy.rewrite:
-      caddy.rewrite.if: "{method} not GET"
-      caddy.rewrite.to: /method_not_allowed
-      caddy.status: "405 /method_not_allowed"
+    environment:
+      - FIREBASE_PRIVATE_KEY=${FIREBASE_PRIVATE_KEY}
+      - FIREBASE_CLIENT_EMAIL=${FIREBASE_CLIENT_EMAIL}
+      - FIREBASE_API_KEY=${FIREBASE_API_KEY_SERVER}
+      - FIREBASE_AUTH_DOMAIN=${FIREBASE_AUTH_DOMAIN}
+      - FIREBASE_DATABASE_URL=${FIREBASE_DATABASE_URL}
+      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
+      - FIREBASE_STORAGE_BUCKET=${FIREBASE_STORAGE_BUCKET}
+      - FIREBASE_MESSAGING_SENDER_ID=${FIREBASE_MESSAGING_SENDER_ID}
+      - FIREBASE_APP_ID=${FIREBASE_APP_ID}
+      - FIREBASE_MEASUREMENT_ID=${FIREBASE_MEASUREMENT_ID}
   event_processor:
     image: event_processor_dev
     ports:
@@ -20,6 +27,11 @@ services:
       - "5860:5860"
     networks: 
       - in2it
+    environment:
+      - SCRAPER_USERNAME=${SCRAPER_USERNAME}
+      - SCRAPER_PASSWORD=${SCRAPER_PASSWORD}
+      - SYSTEM_USERNAME=${SYSTEM_USERNAME}
+      - SYSTEM_PASSWORD=${SYSTEM_PASSWORD}
   splash:
     image: "scrapinghub/splash:3.4.1"
     ports:
@@ -36,6 +48,15 @@ services:
       - in2it
     labels:
       caddy.targetport: 3000 
+    environment:
+      - FIREBASE_API_KEY=${FIREBASE_API_KEY_BROWSER}
+      - FIREBASE_AUTH_DOMAIN=${FIREBASE_AUTH_DOMAIN}
+      - FIREBASE_DATABASE_URL=${FIREBASE_DATABASE_URL}
+      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
+      - FIREBASE_STORAGE_BUCKET=${FIREBASE_STORAGE_BUCKET}
+      - FIREBASE_MESSAGING_SENDER_ID=${FIREBASE_MESSAGING_SENDER_ID}
+      - FIREBASE_APP_ID=${FIREBASE_APP_ID}
+      - FIREBASE_MEASUREMENT_ID=${FIREBASE_MEASUREMENT_ID}
   caddy:
     image: lucaslorentz/caddy-docker-proxy:0.3.6-alpine
     command: -log stdout -agree -email in2itchicago@gmail.com

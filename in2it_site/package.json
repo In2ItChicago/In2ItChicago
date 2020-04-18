@@ -19,6 +19,7 @@
     "@nuxtjs/vuetify": "^1.10.3",
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.1.0",
+    "firebase": "7.9.3",
     "nuxt": "^2.10.2",
     "nuxt-env": "^0.1.0",
     "nuxt-google-maps-module": "^1.6.0",

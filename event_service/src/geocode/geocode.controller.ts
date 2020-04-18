@@ -1,10 +1,13 @@
 import { Controller, Get, Query, UseInterceptors, Post, Delete } from '@nestjs/common';
 import { GeocodeService } from '@src/geocode/geocode.service';
 import { GetGeocodeRequest } from '@src/DTO/getGeocodeRequest';
-import { ApiTags, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { GetGeocodeResponse } from '@src/DTO/getGeocodeResponse';
 import { SearchNeighborhoodRequest } from '@src/DTO/searchNeighborhoodRequest';
+import { Roles } from '@src/decorators/roles.decorator';
+import { UserMetadata } from '@src/enums/userMetadata';
 
+@ApiBearerAuth()
 @ApiTags('geocode')
 @Controller('geocode')
 export class GeocodeController {
@@ -34,6 +37,7 @@ export class GeocodeController {
         return await this.geocodeService.listNeighborhoods();
     }
 
+    @Roles(UserMetadata.SystemAdmin)
     @Delete('/clearAllGeocodes')
     @ApiResponse({status: 200, description: 'Deleted'})
     async clear() {

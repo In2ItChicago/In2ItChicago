@@ -9,7 +9,9 @@ services:
       caddy.address: api.localhost:80
     environment:
       - HOST=postgres
+      - BYPASS_AUTH=${BYPASS_AUTH:-1}
       - PROFILE_QUERIES=${PROFILE_QUERIES:-0}
+      - IN2IT_API_URL=${IN2IT_API_URL:-http://api.localhost}
     tty: true
   event_processor:
     command: sh -c "chmod +x entrypoint.sh && nodemon --exec ./entrypoint.sh"
@@ -19,6 +21,8 @@ services:
       - RUN_SCHEDULER=${RUN_SCHEDULER}
       - SCHEDULE_INTERVAL=5
       - SPIDER_NAME=${SPIDER_NAME}
+      - ENABLE_RESPONSE_CACHE=${ENABLE_RESPONSE_CACHE}
+      - BYPASS_AUTH=${BYPASS_AUTH:-1}
     volumes:
       - ./event_processor:/usr/src/app/event_processor
       - event_processor_data:/usr/src/app/event_processor/data/
@@ -32,6 +36,7 @@ services:
       - ./.in2it_site/vscode_server:/root/.vscode-server
     environment:
       - IN2IT_API_URL=${IN2IT_API_URL:-http://api.localhost}
+      - BYPASS_AUTH=${BYPASS_AUTH:-1}
     labels:
       caddy.address: localhost:80
   postgres:

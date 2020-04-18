@@ -11,7 +11,8 @@ class Config:
 
         self.enable_scrapy_cache = True
         self.scrapy_cache_expiration = 3600
-        self.verbose_scrapy_output = self.get_env_var('VERBOSE_OUTPUT', False)
+
+        self.enable_response_cache = self.get_env_bool('ENABLE_RESPONSE_CACHE', True)
 
         self.event_service_url = 'http://event_service:5000'
 
@@ -19,9 +20,16 @@ class Config:
         self.put_events = self.event_service_url + '/events'
         self.get_geocode = self.event_service_url + '/geocode'
         self.service_status = self.event_service_url + '/status'
-        self.cleanup_events = self.event_service_url + '/events/CleanupEvents'
-        self.cleanup_scheduler = self.event_service_url + '/scheduler/CleanupScheduler'
+        self.cleanup_events = self.event_service_url + '/events/cleanupEvents'
+        self.cleanup_scheduler = self.event_service_url + '/scheduler/cleanupScheduler'
+        self.login = self.event_service_url + '/auth/login'
 
+        self.scraper_username = self.get_env_var('SCRAPER_USERNAME')
+        self.scraper_password = self.get_env_var('SCRAPER_PASSWORD')
+        self.system_username = self.get_env_var('SYSTEM_USERNAME')
+        self.system_password = self.get_env_var('SYSTEM_PASSWORD')
+        self.bypass_auth = self.get_env_bool('BYPASS_AUTH', False)
+        
         self.scheduler_url = 'http://ndscheduler:8888/api/v1'
         self.scheduler_spider_complete = self.scheduler_url + '/spiderComplete'
         self.scheduler_jobs = self.scheduler_url + '/jobs'
