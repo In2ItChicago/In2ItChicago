@@ -1,30 +1,28 @@
 <template>
     <div class="container">
-        <div class="content-col col-md-8 offset-md-2 col-sm-12">
-            <h1 class="get-involved-title">Get involved, even from home!</h1>
-            <h2 class="get-involved-subtitle">Some awesome projects that you can contribute to from home.</h2>
+        <h1 class="get-involved-title">Get involved, even from home!</h1>
+        <h2 class="get-involved-subtitle">Some awesome projects that you can contribute to from home.</h2>
 
-            <v-card v-for="project in projects" :key="project.id" class="d-flex mt-4">
-                <v-row>
-                    <v-col>
-                        <v-card-title class="project-title">
-                            {{ project.title }}
-                        </v-card-title>
-                        <v-card-subtitle class="project-subtitle">
-                            {{ project.subtitle }}
-                        </v-card-subtitle>
-                        <v-card-text class="project-description">
-                            {{ project.description }}
-                        </v-card-text>
-                    </v-col>
-                    <v-col>
-                        <a :href="project.projectUrl">
-                            <v-img :src="project.imageUrl"></v-img>
-                        </a>
-                    </v-col>
-                </v-row>
-            </v-card>
-        </div>
+        <v-card v-for="project in projects" :key="project.id" class="d-flex mt-4">
+            <v-row>
+                <v-col cols="12" lg="6">
+                    <a :href="project.projectUrl">
+                        <v-img cover class="project-image" :src="project.imageUrl"></v-img>
+                    </a>
+                </v-col>
+                <v-col cols="12" lg="6">
+                    <v-card-title class="project-title">
+                        {{ project.title }}
+                    </v-card-title>
+                    <v-card-subtitle class="project-subtitle">
+                        {{ project.subtitle }}
+                    </v-card-subtitle>
+                    <v-card-text class="project-description">
+                        {{ project.description }}
+                    </v-card-text>
+                </v-col>
+            </v-row>
+        </v-card>
     </div>
 </template>
 
@@ -92,5 +90,20 @@ export default {
     }
     .project-description{
         font-size:18px;
+    }
+
+    @media(max-width:767px){
+        .project-image{
+            max-width:500px;
+        }
+    }
+
+    @media(max-width:691px){
+        .project-image{
+            min-width:400px;
+            max-width:450px;
+            margin-left:auto;
+            margin-right:auto;
+        }
     }
 </style>
