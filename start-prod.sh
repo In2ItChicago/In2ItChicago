@@ -8,5 +8,5 @@ docker container prune -f
 sleep 5
 
 docker build -f db/Dockerfile -t db_deploy db
-./scripts/stack-deploy.sh prod
+source .env-prod && ./scripts/stack-deploy.sh prod
 ./db/run.sh PROD
