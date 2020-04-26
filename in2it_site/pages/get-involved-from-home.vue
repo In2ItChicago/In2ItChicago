@@ -5,7 +5,7 @@
 
         <v-card v-for="project in projects" :key="project.id" class="d-flex mt-4">
             <v-row>
-                <v-col cols="12" lg="6">
+                <v-col cols="12" lg="6" sm="12">
                     <v-card-title class="project-title">
                         {{ project.title }}
                     </v-card-title>
@@ -16,12 +16,15 @@
                         {{ project.description }}
                     </v-card-text>
                     <v-card-text class="project-url">
-                        <a :href="project.projectUrl" _target="blank">Event Details</a>
+                        <a :href="project.projectUrl" _target="blank" class="learn-more-link">
+                            Learn More
+                            <img class='outgoing-link-icon' src='https://img.icons8.com/metro/26/000000/external-link.png'>
+                        </a>
                     </v-card-text>
                 </v-col>
-                <v-col cols="12" lg="6" align-self="center">
+                <v-col cols="12" lg="6" sm="12" align-self="center">
                     <a :href="project.projectUrl">
-                        <v-img cover class="project-image" :src="project.imageUrl"></v-img>
+                        <v-img class="project-image" :src="project.imageUrl"></v-img>
                     </a>
                 </v-col>
             </v-row>
@@ -34,6 +37,13 @@ export default {
     data () {
         return {
             projects: [
+                {
+                    title: 'My Block My Hood My City',
+                    subtitle: 'Chicago - Wellness calls for seniors',
+                    description: 'My Block My Hood My City will be ensuring seniors have access to hand sanitizer, health supplements, toiletries, and food. Seniors and those living with disability are most at risk in the event of the continued spread of the virus. Volunteers can sign up to do wellness check-in calls for seniors.',
+                    projectUrl: 'https://www.formyblock.org/viralresponse',
+                    imageUrl: 'img/for-my-block.png'
+                },
                 {
                     id: 0,
                     title: 'Zooniverse',
@@ -56,13 +66,7 @@ export default {
                     projectUrl: 'https://fold.it/portal/puzzles',
                     imageUrl: 'img/fold-it.jpg'
                 },
-                {
-                    title: 'My Block My Hood My City',
-                    subtitle: 'Wellness calls for seniors',
-                    description: 'My Block My Hood My City will be ensuring seniors have access to hand sanitizer, health supplements, toiletries, and food. Seniors and those living with disability are most at risk in the event of the continued spread of the virus. Volunteers can sign up to do wellness check-in calls for seniors.',
-                    projectUrl: 'https://www.formyblock.org/viralresponse',
-                    imageUrl: 'img/for-my-block.png'
-                },
+                
                 {
                     title: 'Crisis Text Line',
                     subtitle: 'Become a Crisis Counselor',
@@ -103,6 +107,21 @@ export default {
         font-size:20px;
     }
 
+    .learn-more-link{
+        color:#173450;
+    }
+
+    .learn-more-link:hover{
+        color:#4ec0c5;
+    }
+
+    .outgoing-link-icon{
+        margin-top:-4px;
+        margin-left:4px;
+        height:15px;
+        width:15px;
+    }
+
     @media(max-width:767px){
         .project-image{
             max-width:500px;
@@ -113,6 +132,24 @@ export default {
         .project-image{
             min-width:400px;
             max-width:450px;
+            margin-left:auto;
+            margin-right:auto;
+        }
+    }
+
+    @media(max-width:414px){
+        .project-image{
+            min-width:250px;
+            max-width:340px;
+            margin-left:auto;
+            margin-right:auto;
+        }
+    }
+
+    @media(max-width:320px){
+        .project-image{
+            min-width:180px;
+            max-width:280px;
             margin-left:auto;
             margin-right:auto;
         }
