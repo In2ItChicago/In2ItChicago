@@ -38,6 +38,13 @@ export default {
         return {
             projects: [
                 {
+                    title: 'My Block My Hood My City',
+                    subtitle: 'Chicago - Wellness calls for seniors',
+                    description: 'My Block My Hood My City will be ensuring seniors have access to hand sanitizer, health supplements, toiletries, and food. Seniors and those living with disability are most at risk in the event of the continued spread of the virus. Volunteers can sign up to do wellness check-in calls for seniors.',
+                    projectUrl: 'https://www.formyblock.org/viralresponse',
+                    imageUrl: 'img/for-my-block.png'
+                },
+                {
                     id: 0,
                     title: 'Zooniverse',
                     subtitle: 'People-Powered Research',
@@ -59,13 +66,7 @@ export default {
                     projectUrl: 'https://fold.it/portal/puzzles',
                     imageUrl: 'img/fold-it.jpg'
                 },
-                {
-                    title: 'My Block My Hood My City',
-                    subtitle: 'Wellness calls for seniors',
-                    description: 'My Block My Hood My City will be ensuring seniors have access to hand sanitizer, health supplements, toiletries, and food. Seniors and those living with disability are most at risk in the event of the continued spread of the virus. Volunteers can sign up to do wellness check-in calls for seniors.',
-                    projectUrl: 'https://www.formyblock.org/viralresponse',
-                    imageUrl: 'img/for-my-block.png'
-                },
+                
                 {
                     title: 'Crisis Text Line',
                     subtitle: 'Become a Crisis Counselor',
