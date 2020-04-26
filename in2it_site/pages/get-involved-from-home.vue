@@ -16,7 +16,10 @@
                         {{ project.description }}
                     </v-card-text>
                     <v-card-text class="project-url">
-                        <a :href="project.projectUrl" _target="blank">Event Details</a>
+                        <a :href="project.projectUrl" _target="blank">
+                            Learn More
+                            <img class='outgoing-link-icon' src='https://img.icons8.com/metro/26/000000/external-link.png'>
+                        </a>
                     </v-card-text>
                 </v-col>
                 <v-col cols="12" lg="6" align-self="center">
@@ -101,6 +104,13 @@ export default {
     .project-url{
         padding:0px 15px 0px 15px;
         font-size:20px;
+    }
+
+    .outgoing-link-icon{
+        margin-top:-4px;
+        margin-left:4px;
+        height:15px;
+        width:15px;
     }
 
     @media(max-width:767px){
