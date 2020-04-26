@@ -28,7 +28,7 @@ export default {
 
 <style scoped>
   .covid-alert{
-    color: #ff5252 !important;
+    color: #9E0000 !important;
     background-color: #ffe9eb;
   }
 
