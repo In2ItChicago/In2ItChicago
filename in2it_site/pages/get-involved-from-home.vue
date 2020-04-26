@@ -16,7 +16,7 @@
                         {{ project.description }}
                     </v-card-text>
                     <v-card-text class="project-url">
-                        <a :href="project.projectUrl" _target="blank">
+                        <a :href="project.projectUrl" _target="blank" class="learn-more-link">
                             Learn More
                             <img class='outgoing-link-icon' src='https://img.icons8.com/metro/26/000000/external-link.png'>
                         </a>
@@ -105,6 +105,14 @@ export default {
     .project-url{
         padding:0px 15px 0px 15px;
         font-size:20px;
+    }
+
+    .learn-more-link{
+        color:#173450;
+    }
+
+    .learn-more-link:hover{
+        color:#4ec0c5;
     }
 
     .outgoing-link-icon{
