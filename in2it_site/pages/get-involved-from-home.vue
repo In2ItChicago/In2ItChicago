@@ -5,7 +5,7 @@
 
         <v-card v-for="project in projects" :key="project.id" class="d-flex mt-4">
             <v-row>
-                <v-col cols="12" lg="6">
+                <v-col cols="12" lg="6" sm="12">
                     <v-card-title class="project-title">
                         {{ project.title }}
                     </v-card-title>
@@ -22,9 +22,9 @@
                         </a>
                     </v-card-text>
                 </v-col>
-                <v-col cols="12" lg="6" align-self="center">
+                <v-col cols="12" lg="6" sm="12" align-self="center">
                     <a :href="project.projectUrl">
-                        <v-img cover class="project-image" :src="project.imageUrl"></v-img>
+                        <v-img class="project-image" :src="project.imageUrl"></v-img>
                     </a>
                 </v-col>
             </v-row>
@@ -124,6 +124,24 @@ export default {
         .project-image{
             min-width:400px;
             max-width:450px;
+            margin-left:auto;
+            margin-right:auto;
+        }
+    }
+
+    @media(max-width:414px){
+        .project-image{
+            min-width:250px;
+            max-width:340px;
+            margin-left:auto;
+            margin-right:auto;
+        }
+    }
+
+    @media(max-width:320px){
+        .project-image{
+            min-width:180px;
+            max-width:280px;
             margin-left:auto;
             margin-right:auto;
         }

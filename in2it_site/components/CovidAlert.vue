@@ -1,13 +1,15 @@
 <template>    
     <v-alert v-if="shouldDisplay" prominent class="covid-alert">
         <v-row align="center">
-            <v-col class="d-flex flex-row">
+            <v-col cols="12" sm="11" class="d-flex flex-row">
                 <v-icon>
                     mdi-alert-circle
                 </v-icon>
                 <div class="covid-alert-text">
                     To help in the fight against COVID-19, we recommend avoiding in-person civic activities. Instead, consider <a href="/get-involved-from-home" class="alert-link">these projects</a> that you can contribute to from home.
                 </div>
+            </v-col>
+            <v-col cols="12" sm="1">
                 <v-btn class="d-flex get-involved-btn" href="/get-involved-from-home">
                     View Projects
                 </v-btn>
