@@ -6,7 +6,7 @@
                     mdi-alert-circle
                 </v-icon>
                 <div class="covid-alert-text">
-                    To help in the fight against COVID-19, we recommend avoiding in-person civic activities. Instead, consider <a href="/get-involved-from-home">these projects</a> that you can contribute to from home.
+                    To help in the fight against COVID-19, we recommend avoiding in-person civic activities. Instead, consider <a href="/get-involved-from-home" class="alert-link">these projects</a> that you can contribute to from home.
                 </div>
                 <v-btn class="d-flex get-involved-btn" href="/get-involved-from-home">
                     View Projects
@@ -38,7 +38,7 @@ export default {
   }
 
   .covid-alert i {
-    color: red;
+    color: #9E0000;
   }
 
   .get-involved-btn{
@@ -48,5 +48,10 @@ export default {
 
   .get-involved-btn:hover{
     text-decoration: none;
+  }
+
+  .alert-link{
+    color:#004A99;
+    font-weight:normal;
   }
 </style>
