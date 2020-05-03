@@ -12,6 +12,9 @@
                     <v-card-subtitle class="project-subtitle">
                         {{ project.subtitle }}
                     </v-card-subtitle>
+                    <v-card-subtitle class="project-location">
+                        Impact Region: {{ project.location }}
+                    </v-card-subtitle>
                     <v-card-text class="project-description">
                         {{ project.description }}
                     </v-card-text>
@@ -39,29 +42,33 @@ export default {
             projects: [
                 {
                     title: 'My Block My Hood My City',
-                    subtitle: 'Chicago - Wellness calls for seniors',
+                    subtitle: 'Wellness calls for seniors',
+                    location: 'Chicago',
                     description: 'My Block My Hood My City will be ensuring seniors have access to hand sanitizer, health supplements, toiletries, and food. Seniors and those living with disability are most at risk in the event of the continued spread of the virus. Volunteers can sign up to do wellness check-in calls for seniors.',
                     projectUrl: 'https://www.formyblock.org/viralresponse',
                     imageUrl: 'img/for-my-block.png'
                 },
                 {
-                    id: 0,
-                    title: 'Zooniverse',
-                    subtitle: 'People-Powered Research',
-                    description: "The Zooniverse is the world's largest and most popular platform for people-powered research. This research is made possible by volunteers - hundreds of thousands of people around the world who come together to assist professional researchers. Their goal is to enable research that wouldn't be possible, or practical, otherwise. Zooniverse research results in new discoveries, datasets useful to the wider research community and many publications.",
-                    projectUrl: 'https://www.zooniverse.org/projects',
-                    imageUrl: 'img/zooniverse.png'
-                },
-                {
                     title: 'The Newberry',
                     subtitle: 'Transcribing',
+                    location: 'Chicago',
                     description: "Newberry Transcribe lets you contribute to historical scholarship, while learning about the everyday lives of individuals from a wide variety of backgrounds in the 19th and early 20th centuries. By transcribing handwritten letters, diaries, and other materials from the Newberry's Modern Manuscript Collections, you're helping to preserve these voices from the past - making their stories easier to find, search, and read.",
                     projectUrl: 'https://publications.newberry.org/digital/mms-transcribe/index',
                     imageUrl: 'img/newberry-transcribe.png'
                 },
                 {
+                    id: 0,
+                    title: 'Zooniverse',
+                    subtitle: 'People-Powered Research',
+                    location: 'Worldwide',
+                    description: "The Zooniverse is the world's largest and most popular platform for people-powered research. This research is made possible by volunteers - hundreds of thousands of people around the world who come together to assist professional researchers. Their goal is to enable research that wouldn't be possible, or practical, otherwise. Zooniverse research results in new discoveries, datasets useful to the wider research community and many publications.",
+                    projectUrl: 'https://www.zooniverse.org/projects',
+                    imageUrl: 'img/zooniverse.png'
+                },
+                {
                     title: 'Foldit',
                     subtitle: 'Crowdsourced Research Games',
+                    location: 'National',
                     description: "Foldit is a revolutionary crowdsourcing computer game enabling you to contribute to important scientific research. We're collecting data to find out if humans' pattern-recognition and puzzle-solving abilities make them more efficient than existing computer programs at pattern-folding tasks. If this turns out to be true, we can then teach human strategies to computers and fold proteins faster than ever!",
                     projectUrl: 'https://fold.it/portal/puzzles',
                     imageUrl: 'img/fold-it.jpg'
@@ -70,6 +77,7 @@ export default {
                 {
                     title: 'Crisis Text Line',
                     subtitle: 'Become a Crisis Counselor',
+                    location: 'National',
                     description: "Crisis Text Line is the free, 24/7 text line for people in crisis in the United States. The service is powered by volunteer Crisis Counselors who work remotely—anywhere with a computer and secure internet connection works. Crisis Counselors answer texts from people in crisis, bringing them from a hot moment to a cool calm through active listening, collaborative problem solving, and safety planning.",
                     projectUrl: 'https://www.crisistextline.org/become-a-volunteer/',
                     imageUrl: 'img/crisis-text-line.png'
@@ -94,6 +102,11 @@ export default {
     .project-subtitle{
         margin-top:4px;
         font-size:24px;
+    }
+    .project-location{
+        font-size:20px;
+        margin-top:0px;
+        padding-top:0px;
     }
     .project-description{
         font-size:18px;
