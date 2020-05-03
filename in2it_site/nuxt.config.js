@@ -40,10 +40,11 @@ module.exports = {
 	/*
 	** Plugins to load before mounting the App
 	*/
+	// don't load firebase plugin if env var isn't set
 	plugins: [
 		{src: '~/plugins/notifications.client.js'},
 		{src: '~/plugins/firebase.js'}
-	],
+	].filter(o => !o.src.endsWith('firebase.js') || process.env.FIREBASE_API_KEY),
 
 	/*
 	** Nuxt.js modules
