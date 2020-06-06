@@ -521,6 +521,7 @@
             },
             submitEvent: function () {
                 this.prepareEventPayload();
+                console.log(this.event);
                 axios.post(this.submitUrl, this.event)
                 .then((res) => {
                     this.submissionCompleted = true;
