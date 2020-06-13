@@ -7,6 +7,7 @@ import { ApiTags, ApiBody, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { Roles } from '@src/decorators/roles.decorator';
 import { OrganizationsGuard } from '@src/guards/organizations.guard';
 import { UserMetadata } from '@src/enums/userMetadata';
+import { CreateRecurringEventRequest } from '@src/DTO/createRecurringEventRequest';
 
 /**
  * An interface class to get, create, or clear events. 
@@ -29,6 +30,14 @@ export class EventController {
     @ApiResponse({status: 201, description: 'Created'})
     async createEvents(@Body() request: CreateEventsRequest) {
         await this.eventService.createEvents(request.events);
+    }
+
+    @Post('recurringEvent')
+    @UseGuards(OrganizationsGuard)
+    @Roles(UserMetadata.EventCreator, UserMetadata.EventAdmin)
+    @ApiResponse({status: 201, description: 'Created'})
+    async createRecurringEvent(@Body() request: CreateRecurringEventRequest) {
+        await this.eventService.createRecurringEvent(request);
     }
 
     @Roles(UserMetadata.SystemAdmin)

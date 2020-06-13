@@ -13,6 +13,7 @@ import { HttpException } from '@nestjs/common/exceptions/http.exception'
 import { Schedule } from './rschedule';
 import * as moment from 'moment';
 import { RRule, RRuleSet, rrulestr } from 'rrule'
+import { CreateRecurringEventRequest } from '@src/DTO/createRecurringEventRequest';
 
 @Injectable()
 export class EventService {
@@ -113,6 +114,53 @@ export class EventService {
             return mappedEvents;
         }
         return new GetEventsResponse();
+    }
+
+    async createRecurringEvent(eventRequest: CreateRecurringEventRequest) {
+        let mapping = new Map([
+            ['Monday', RRule.MO], 
+            ['Tuesday', RRule.TU], 
+            ['Wednesday', RRule.WE],
+            ['Thursday', RRule.TH],
+            ['Friday', RRule.FR],
+            ['Saturday', RRule.SA],
+            ['Sunday', RRule.SU]
+        ]);
+
+        let today = new Date();
+        let end = new Date(today.setMonth(today.getMonth() + 3));
+        
+        if (eventRequest.isWeekly) {
+            let rule = new RRule({
+                freq: RRule.WEEKLY,
+                interval: 1,
+                byweekday: eventRequest.weeklyRecurringDays.map(d => mapping[d]),
+                dtstart: today,
+                until: end
+            });
+            console.log(rule.all());
+        }
+        else if (eventRequest.isByWeekday){
+            const rule = new RRule({
+                freq: RRule.MONTHLY,
+                interval: 1,
+                bysetpos: eventRequest.monthlyRecurringWeekNumber,
+                byweekday: [mapping[eventRequest.monthlyRecurringWeekday]],
+                dtstart: today,
+                until: end
+            });
+            console.log(rule.all());
+        }
+        else {
+            const rule = new RRule({
+                freq: RRule.MONTHLY,
+                interval: 1,
+                bymonthday: eventRequest.monthlyRecurringDay,
+                dtstart: today,
+                until: end
+            });
+            console.log(rule.all());
+        }
     }
 
     async createEvents(contextData: CreateEventRequest[]) {

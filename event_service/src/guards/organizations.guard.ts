@@ -10,12 +10,13 @@ export class OrganizationsGuard implements CanActivate {
         if (process.env.BYPASS_AUTH === '1') {
             return true;
         }
+
         const request = context.switchToHttp().getRequest();
         const isEventAdmin = request.firebaseUser && request.firebaseUser[UserMetadata.EventAdmin];
-        if (!(isEventAdmin || request?.firebaseUser?.allowedOrgs) || !request?.body?.events) {
+        if (!(isEventAdmin || request?.firebaseUser?.allowedOrgs)) {
             return false;
         }
-        
+
         if (request.firebaseUser[UserMetadata.GodUser] || isEventAdmin) {
             return true;
         }
