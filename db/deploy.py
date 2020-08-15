@@ -15,12 +15,22 @@ def get_sql(file):
     with open(file, 'r') as f:
         return f.read()
 
+def get_file_order(filename):
+    try:
+        return float(filename.split('-')[0])
+    except ValueError:
+        return float('inf')
+
 def run_all(folder, s_target):
     sql_queue = SimpleQueue()
     size = 0
-    for filename in glob.iglob(f'{folder}/**/*.sql', recursive=True):
+    # Ordered scripts are formatted like {number}-name.sql
+    # Scripts without a number prefix will be ran last
+    for filename in sorted(glob.iglob(f'{folder}/**/*.sql', recursive=True), key=get_file_order):
         sql_queue.put(get_sql(filename))
         size += 1
+    if size == 0:
+        return
     num_tries = 0
     max_tries = size * 2
     while not sql_queue.empty() and num_tries < max_tries:
@@ -61,6 +71,7 @@ def sync(database):
     with temp_db(temp_db_url) as s_target_temp:
         create_database(db_url)
         with S(db_url) as s_current, S(s_target_temp) as s_target:
+            run_all(f'{database}/migrations', s_current)
             run_all(f'{database}/schemas', s_target)
             run_all(f'{database}/tables', s_target)
             m = Migration(s_current, s_target)
