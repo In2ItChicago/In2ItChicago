@@ -11,15 +11,18 @@ import os
 databases = ['events', 'scheduler']
 sync_attempts = 100
 
+
 def get_sql(file):
     with open(file, 'r') as f:
         return f.read()
+
 
 def get_file_order(filename):
     try:
         return float(filename.split('-')[0])
     except ValueError:
         return float('inf')
+
 
 def run_all(folder, s_target):
     sql_queue = SimpleQueue()
@@ -49,8 +52,10 @@ def run_all(folder, s_target):
             else:
                 raise
     if num_tries >= max_tries:
-        print(f'Number of attempts exceeded configured threshold of {max_tries}')
+        print(
+            f'Number of attempts exceeded configured threshold of {max_tries}')
         sys.exit(1)
+
 
 @contextmanager
 def temp_db(url):
@@ -61,11 +66,12 @@ def temp_db(url):
     finally:
         drop_database(url)
 
+
 def sync(database):
     if os.getenv('HOSTINGENV') == 'DEV':
-        db_url_format = 'postgresql://postgres:postgres@postgres:5432/%s' 
+        db_url_format = 'postgresql://postgres:postgres@postgres:5432/%s'
     else:
-        db_url_format = 'postgresql://postgres:postgres@/%s?host=/var/run/postgresql' 
+        db_url_format = 'postgresql://postgres:postgres@/%s?host=/var/run/postgresql'
     temp_db_url = db_url_format % f'{database}temp'
     db_url = db_url_format % database
     with temp_db(temp_db_url) as s_target_temp:
@@ -90,6 +96,7 @@ def sync(database):
             else:
                 print('Already synced.')
 
+
 def try_sync(database):
     # Wait for the database to become operational
     for i in range(sync_attempts):
@@ -99,8 +106,10 @@ def try_sync(database):
         except OperationalError as e:
             if i == sync_attempts - 1:
                 raise e
+            time.sleep(1)
             continue
 
-for database in databases: 
+
+for database in databases:
     print(f'Syncing {database}...')
     try_sync(database)
