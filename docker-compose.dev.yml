@@ -10,7 +10,7 @@ services:
     environment:
       - HOST=postgres
       - BYPASS_AUTH=${BYPASS_AUTH:-1}
-      - PROFILE_QUERIES=${PROFILE_QUERIES:-0}
+      - PROFILE_QUERIES=${PROFILE_QUERIES:-1}
       - IN2IT_API_URL=${IN2IT_API_URL:-http://api.localhost}
     tty: true
   event_processor:
@@ -45,8 +45,8 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     ports:
-      - "5432:5432"
-    networks: 
+      - '5432:5432'
+    networks:
       - in2it
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -68,20 +68,20 @@ services:
     volumes:
       - pgadmin_data:/var/lib/pgadmin
     ports:
-      - "7000:7000"
+      - '7000:7000'
     # pgadmin spams logs with http request notifications
     logging:
       driver: none
-    networks: 
+    networks:
       - in2it
   portainer:
-    image: "portainer/portainer:1.23.1"
+    image: 'portainer/portainer:1.23.1'
     ports:
-      - "9000:9000"
+      - '9000:9000'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
-    networks: 
+    networks:
       - in2it
 volumes:
   ndscheduler_modules:
