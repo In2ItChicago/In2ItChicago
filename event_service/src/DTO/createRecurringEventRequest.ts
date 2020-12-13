@@ -1,69 +1,67 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsNumber, ValidateNested, Matches } from 'class-validator';
 import { Type } from 'class-transformer';
+import { EventTime } from '@src/DTO/eventTime';
 
 export class CreateRecurringEventRequest {
-    @IsNotEmpty()
-    @ApiProperty()
-    title: string;
+  @IsNotEmpty()
+  @ApiProperty()
+  title: string;
 
-    @IsNotEmpty()
-    @ApiProperty()
-    address: string;
+  @IsNotEmpty()
+  @ApiProperty()
+  address: string;
 
-    @ApiProperty()
-    url: string;
+  @ApiProperty()
+  url: string;
 
-    @IsNumber()
-    @Type(() => Number)
-    @ApiProperty()
-    cost: number;
+  @IsNumber()
+  @Type(() => Number)
+  @ApiProperty()
+  cost: number;
 
-    @IsNotEmpty()
-    @ApiProperty()
-    description: string;
+  @IsNotEmpty()
+  @ApiProperty()
+  description: string;
 
-    @IsNotEmpty()
-    @ApiProperty()
-    startDate: Date;
+  @IsNotEmpty()
+  @ApiProperty()
+  @ValidateNested()
+  @Type(() => EventTime)
+  eventTime: EventTime;
 
-    @IsNotEmpty()
-    @ApiProperty()
-    endDate: Date;
+  @IsNotEmpty()
+  @ApiProperty()
+  isHandicapAccessible: boolean;
 
-    @IsNotEmpty()
-    @ApiProperty()
-    isHandicapAccessible: boolean;
+  @IsNotEmpty()
+  @ApiProperty()
+  organization: string;
 
-    @IsNotEmpty()
-    @ApiProperty()
-    organization: string;
+  @Matches(/weekly|weekday/i, {
+    message: 'mode must be either "weekly" or "weekday"',
+  })
+  @IsNotEmpty()
+  @ApiProperty()
+  mode: 'weekly' | 'weekday';
 
-    @IsNotEmpty()
-    @ApiProperty()
-    isWeekly: boolean;
+  @ApiProperty()
+  monthlyRecurringWeekday: string;
 
-    @IsNotEmpty()
-    @ApiProperty()
-    isByWeekday: boolean;
+  @IsNumber()
+  @Type(() => Number)
+  @ApiProperty()
+  monthlyRecurringWeekNumber: number;
 
-    @ApiProperty()
-    monthlyRecurringWeekday: string;
+  @IsNumber()
+  @Type(() => Number)
+  @ApiProperty()
+  monthlyRecurringDay: number;
 
-    @IsNumber()
-    @Type(() => Number)
-    @ApiProperty()
-    monthlyRecurringWeekNumber: number;
+  @IsNotEmpty()
+  @ApiProperty()
+  requiresPhysicalActivities: boolean;
 
-    @IsNumber()
-    @Type(() => Number)
-    @ApiProperty()
-    monthlyRecurringDay: number;
-
-    @IsNotEmpty()
-    @ApiProperty()
-    requiresPhysicalActivities: boolean;
-
-    @ApiProperty()
-    weeklyRecurringDays: string[];
+  @ApiProperty()
+  weeklyRecurringDays: string[];
 }

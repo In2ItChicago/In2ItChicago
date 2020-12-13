@@ -1,4 +1,4 @@
-CREATE TABLE events.Organization
+CREATE TABLE events.organization
 (
     id SERIAL,
     name VARCHAR(256) NOT NULL,

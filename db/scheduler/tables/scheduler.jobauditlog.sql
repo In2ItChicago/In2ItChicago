@@ -1,6 +1,6 @@
-CREATE TABLE scheduler.JobAuditLog
+CREATE TABLE scheduler.jobauditlog
 (
-    job_id text COLLATE pg_catalog."default" NOT NULL REFERENCES scheduler.Jobs(id),
+    job_id text COLLATE pg_catalog."default" NOT NULL REFERENCES scheduler.jobs(id),
     job_name text COLLATE pg_catalog."default" NOT NULL,
     event integer NOT NULL,
     "user" text COLLATE pg_catalog."default",
@@ -12,5 +12,5 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE scheduler.JobAuditlog
+ALTER TABLE scheduler.jobauditlog
     OWNER to postgres;

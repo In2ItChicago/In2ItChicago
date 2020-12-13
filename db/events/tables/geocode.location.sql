@@ -1,4 +1,4 @@
-CREATE TABLE geocode.Location (
+CREATE TABLE geocode.location (
     id SERIAL,
     address VARCHAR(256) NOT NULL,
     lat DECIMAL(23,20),
@@ -13,7 +13,7 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE geocode.Location
+ALTER TABLE geocode.location
     OWNER to postgres;
 
 CREATE EXTENSION cube schema pg_catalog;

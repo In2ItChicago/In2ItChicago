@@ -51,6 +51,10 @@ export class EventService {
   }
 
   async createRecurringEvent(eventRequest: CreateRecurringEventRequest) {
+    this.generateSchedules(eventRequest);
+  }
+
+  private generateSchedules(eventRequest: CreateRecurringEventRequest) {
     let mapping = new Map([
       ['Monday', RRule.MO],
       ['Tuesday', RRule.TU],
@@ -65,7 +69,7 @@ export class EventService {
     let end = new Date();
     end.setMonth(end.getMonth() + 3);
 
-    if (eventRequest.isWeekly) {
+    if (eventRequest.mode === 'weekly') {
       let rule = new RRule({
         freq: RRule.WEEKLY,
         interval: 1,
@@ -74,7 +78,7 @@ export class EventService {
         until: end,
       });
       console.log(rule.all());
-    } else if (eventRequest.isByWeekday) {
+    } else if (eventRequest.mode === 'weekday') {
       const rule = new RRule({
         freq: RRule.MONTHLY,
         interval: 1,
