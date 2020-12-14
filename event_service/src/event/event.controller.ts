@@ -43,8 +43,8 @@ export class EventController {
   @UseGuards(OrganizationsGuard)
   @Roles(UserMetadata.EventCreator, UserMetadata.EventAdmin)
   @ApiResponse({ status: 201, description: 'Created' })
-  async createEvents(@Body() request: CreateEventRequest) {
-    await this.eventService.createEvents(request);
+  async createEvent(@Body() request: CreateEventRequest) {
+    await this.eventService.createEvent(request);
   }
 
   @Post('recurringEvent')

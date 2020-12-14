@@ -12,7 +12,8 @@ CREATE TABLE events.recurring_event
     requires_physical_activities BOOLEAN NOT NULL DEFAULT FALSE,
     handicap_accessible BOOLEAN NOT NULL DEFAULT FALSE,
     created_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT events_recurring_event_pkey PRIMARY KEY (id)
+    CONSTRAINT events_recurring_event_pkey PRIMARY KEY (id),
+    UNIQUE(title, organization_id, geocode_id, start_time, end_time)
 )
 WITH (
     OIDS = FALSE

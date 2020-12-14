@@ -61,7 +61,7 @@ export class EventDAL {
     return { totalCount: resultCount.count, events: result };
   }
 
-  async createEvents(
+  async createEvent(
     data: CreateEventRequest,
     orgId: number,
     geocodeId: number,
@@ -76,6 +76,25 @@ export class EventDAL {
       startTime: data.eventTime.startTimestamp,
       endTime: data.eventTime.endTimestamp,
     });
+  }
+
+  async createEvents(data: any[]): Promise<void> {
+    const { sql, bindings } = db('events.event')
+      .insert(
+        data.map((d) => ({
+          title: d.title,
+          url: d.url,
+          description: d.description,
+          organizationId: d.organizationId,
+          price: d.price,
+          geocodeId: d.geocodeId,
+          startTime: d.startTime,
+          endTime: d.endTime,
+        })),
+      )
+      .toSQL();
+
+    await db.raw(`${sql} on conflict do nothing`, bindings);
   }
 
   // async deleteEvents(organizations: string[]): Promise<any> {

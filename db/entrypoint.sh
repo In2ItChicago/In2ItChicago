@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 if [ "$HOSTINGENV" = "DEV" ]
 then
     until psql postgresql://postgres:postgres@postgres:5432/postgres -c "select 1" > /dev/null 2>&1; do

@@ -2,7 +2,8 @@ CREATE TABLE events.organization
 (
     id SERIAL,
     name TEXT NOT NULL,
-    CONSTRAINT events_organization_pkey PRIMARY KEY (id)
+    CONSTRAINT events_organization_pkey PRIMARY KEY (id),
+    UNIQUE(name)
 )
 WITH (
     OIDS = FALSE

@@ -12,7 +12,8 @@ CREATE TABLE events.event
     handicap_accessible BOOLEAN NOT NULL DEFAULT FALSE,
     requires_physical_activities BOOLEAN NOT NULL DEFAULT FALSE,
     created_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT events_event_pkey PRIMARY KEY (id)
+    CONSTRAINT events_event_pkey PRIMARY KEY (id),
+    UNIQUE(title, organization_id, geocode_id, start_time, end_time)
 )
 WITH (
     OIDS = FALSE

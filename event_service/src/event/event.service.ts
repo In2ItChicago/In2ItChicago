@@ -125,14 +125,16 @@ export class EventService {
       weeklyRecurringSchedules,
       (s) => this.getWeeklySchedules(s.startTime, s.weekday),
     );
-
+    //console.log(allWeeklySchedules);
     let allSchedules = [
       allMonthlySchedulesByWeek,
       allMonthlySchedulesByDay,
       allWeeklySchedules,
     ].flat();
 
-    console.log(allSchedules);
+    //console.log(allSchedules);
+
+    await this.eventDAL.createEvents(allSchedules);
   }
 
   private generateAllSchedules(
@@ -141,7 +143,8 @@ export class EventService {
   ) {
     return schedules
       .map((s) => ({ dates: scheduleFunc(s).all(), data: s }))
-      .map((d) => this.fillSchedules(d.data, d.dates));
+      .map((d) => this.fillSchedules(d.data, d.dates))
+      .flat();
   }
 
   private fillSchedules(data: any, dates: Date[]) {
@@ -251,7 +254,7 @@ export class EventService {
     }
   }
 
-  async createEvents(contextData: CreateEventRequest) {
+  async createEvent(contextData: CreateEventRequest) {
     let geocode = await this.geocodeService.getGeocode({
       address: contextData.address,
       lat: null,
@@ -260,7 +263,7 @@ export class EventService {
 
     let orgId = await this.eventDAL.getOrgId(contextData.organization);
 
-    await this.eventDAL.createEvents(contextData, orgId, geocode.id);
+    await this.eventDAL.createEvent(contextData, orgId, geocode.id);
   }
 
   async clearAllEvents() {

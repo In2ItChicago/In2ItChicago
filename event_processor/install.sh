@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 if [ "$BUILD_ENV" = "dev" ]
 then
     pipenv lock --verbose 

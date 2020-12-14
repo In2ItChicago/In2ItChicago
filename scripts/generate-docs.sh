@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # dummy environment variables
 export SCHEDULE_INTERVAL=5 
 

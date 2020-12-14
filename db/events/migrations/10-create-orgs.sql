@@ -23,7 +23,7 @@ THEN
     )
     TABLESPACE pg_default;
 
-    ALTER TABLE events.Organization
+    ALTER TABLE events.organization
     OWNER to postgres;
 
     INSERT INTO events.organization(name)
