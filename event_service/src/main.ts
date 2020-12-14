@@ -16,7 +16,8 @@ import { RolesGuard } from './guards/roles.guard';
 import { auth } from '@src/middleware/auth.middleware';
 
 async function bootstrap() {
-  const bypassAuth = process.env.BYPASS_AUTH == '1';
+  const bypassAuth =
+    process.env.BYPASS_AUTH === '1' && process.env.NODE_ENV === 'development';
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.set('trust proxy', 1);
   app.use(helmet());
@@ -24,23 +25,26 @@ async function bootstrap() {
   // The supplied parameters are the whitelist of routes not to authorize
   // Otherwise, any route requires auth by default
   if (bypassAuth) {
-    app.use(auth([
-      { method: RequestMethod.GET, path: '/*' },
-      { method: RequestMethod.POST, path: '/*' },
-      { method: RequestMethod.DELETE, path: '/*' },
-      { method: RequestMethod.PUT, path: '/*' },
-      { method: RequestMethod.PATCH, path: '/*' },
-    ]));
-  }
-  else {
-    app.use(auth([
-      { method: RequestMethod.GET, path: '/' },
-      { method: RequestMethod.GET, path: '/docs*' },
-      { method: RequestMethod.GET, path: '/geocode*' },
-      { method: RequestMethod.GET, path: '/events' },
-      { method: RequestMethod.GET, path: '/status' },
-      { method: RequestMethod.POST, path: '/auth/login' }
-    ]));
+    app.use(
+      auth([
+        { method: RequestMethod.GET, path: '/*' },
+        { method: RequestMethod.POST, path: '/*' },
+        { method: RequestMethod.DELETE, path: '/*' },
+        { method: RequestMethod.PUT, path: '/*' },
+        { method: RequestMethod.PATCH, path: '/*' },
+      ]),
+    );
+  } else {
+    app.use(
+      auth([
+        { method: RequestMethod.GET, path: '/' },
+        { method: RequestMethod.GET, path: '/docs*' },
+        { method: RequestMethod.GET, path: '/geocode*' },
+        { method: RequestMethod.GET, path: '/events' },
+        { method: RequestMethod.GET, path: '/status' },
+        { method: RequestMethod.POST, path: '/auth/login' },
+      ]),
+    );
   }
   // TODO: use this for auth with cookies from ui?
   //app.use(csurf());
@@ -57,7 +61,7 @@ async function bootstrap() {
   if (!bypassAuth) {
     app.useGlobalGuards(new RolesGuard(new Reflector()));
   }
-  
+
   const options = new DocumentBuilder()
     .addBearerAuth()
     .setTitle('Event API')

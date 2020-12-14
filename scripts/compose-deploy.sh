@@ -10,6 +10,13 @@ RUN_SCHEDULER=0
 ENV="dev"
 SPIDER_NAME=""
 ENABLE_RESPONSE_CACHE=1
+BYPASS_AUTH=1
+
+# use auth if auth keys exist
+if test -f "$(dirname $0)/../.env"; then 
+  BYPASS_AUTH=0
+fi
+
 while (( "$#" )); do
   case "$1" in
     -c|--scheduler-debug)
@@ -80,4 +87,5 @@ VERBOSE_OUTPUT=$VERBOSE_OUTPUT \
 RUN_SCHEDULER=$RUN_SCHEDULER \
 SPIDER_NAME=$SPIDER_NAME \
 ENABLE_RESPONSE_CACHE=$ENABLE_RESPONSE_CACHE \
+BYPASS_AUTH=$BYPASS_AUTH \
 docker-compose -f docker-compose.yml -f docker-compose.${ENV}.yml up $SERVICES

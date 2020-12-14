@@ -12,7 +12,7 @@ AND NOT EXISTS (
 	AND table_name = 'organization'
 )
 THEN
-    CREATE TABLE events.Organization
+    CREATE TABLE events.organization
     (
         id SERIAL,
         name VARCHAR(256) NOT NULL,

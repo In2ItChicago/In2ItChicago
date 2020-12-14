@@ -68,4 +68,11 @@ export class EventController {
   async cleanupEvents() {
     await this.eventService.cleanupEvents();
   }
+
+  @Roles(UserMetadata.SystemAdmin)
+  @Post('generateSchedules')
+  @ApiResponse({ status: 201, description: 'Created' })
+  async generateSchedules() {
+    await this.eventService.generateSchedules();
+  }
 }

@@ -160,8 +160,63 @@ export class EventDAL {
     }
   }
 
-  async getRecurringSchedules() {
-    await db('');
+  async getWeeklyRecurringSchedules() {
+    let res = await db('events.recurring_event as re')
+      .select(
+        're.title',
+        're.url',
+        're.description',
+        're.price',
+        're.geocode_id',
+        're.organization_id',
+        're.start_time',
+        're.end_time',
+        're.requires_physical_activities',
+        're.handicap_accessible',
+        'mrs.week_number',
+        'mrs.day_of_month',
+        'mrs.weekday as monthly_weekday',
+        'wrs.weekday',
+      )
+      .leftOuterJoin(
+        'events.monthly_recurring_schedule as mrs',
+        're.id',
+        'mrs.recurring_event_id',
+      )
+      .leftOuterJoin(
+        'events.weekly_recurring_schedule as wrs',
+        're.id',
+        'wrs.recurring_event_id',
+      );
+
+    return res;
+  }
+
+  async getMonthlyRecurringSchedules(byWeek: boolean) {
+    let res = await db('events.recurring_event as re')
+      .select(
+        're.title',
+        're.url',
+        're.description',
+        're.price',
+        're.geocode_id',
+        're.organization_id',
+        're.start_time',
+        're.end_time',
+        're.requires_physical_activities',
+        're.handicap_accessible',
+        'mrs.week_number',
+        'mrs.day_of_month',
+        'mrs.weekday',
+      )
+      .innerJoin(
+        'events.monthly_recurring_schedule as mrs',
+        're.id',
+        'mrs.recurring_event_id',
+      )
+      .whereNotNull(byWeek ? 'weekday' : 'day_of_month');
+
+    return res;
   }
 
   private queryEvents(
