@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, ValidateNested, Matches } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  ValidateNested,
+  Matches,
+  IsOptional,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { EventTime } from '@src/DTO/eventTime';
 
@@ -38,12 +44,12 @@ export class CreateRecurringEventRequest {
   @ApiProperty()
   organization: string;
 
-  @Matches(/weekly|weekday/i, {
-    message: 'mode must be either "weekly" or "weekday"',
+  @Matches(/week|dayOfMonth|weekOfMonth/, {
+    message: 'mode must be either "week", "dayOfMonth", or "weekOfMonth"',
   })
   @IsNotEmpty()
   @ApiProperty()
-  mode: 'weekly' | 'weekday';
+  mode: 'week' | 'dayOfMonth' | 'weekOfMonth';
 
   @ApiProperty()
   monthlyRecurringWeekday: string;
@@ -59,9 +65,16 @@ export class CreateRecurringEventRequest {
   monthlyRecurringDay: number;
 
   @IsNotEmpty()
+  @Type(() => Boolean)
   @ApiProperty()
   requiresPhysicalActivities: boolean;
 
   @ApiProperty()
   weeklyRecurringDays: string[];
+
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  @ApiProperty()
+  price?: number;
 }

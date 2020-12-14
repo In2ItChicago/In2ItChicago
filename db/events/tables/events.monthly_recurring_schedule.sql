@@ -1,9 +1,9 @@
 CREATE TABLE events.monthly_recurring_schedule
 (
     id SERIAL,
-    week_day TEXT,
+    weekday TEXT,
     week_number INT,
-    month_day INT,
+    day_of_month INT,
     CONSTRAINT events_monthly_recurring_schedule_pkey PRIMARY KEY (id)
 )
 WITH (

@@ -3,6 +3,7 @@ import { GetEventsRequest } from '@src/DTO/getEventsRequest';
 import { GetGeocodeResponse } from '@src/DTO/getGeocodeResponse';
 import { getDb } from '@src/DAL/setup';
 import { CreateEventRequest } from '@src/DTO/createEventRequest';
+import { CreateRecurringEventRequest } from '@src/DTO/createRecurringEventRequest';
 
 const DEFAULT_LIMIT = 25;
 const MILES_TO_METERS = 1609.34;
@@ -62,24 +63,9 @@ export class EventDAL {
 
   async createEvents(
     data: CreateEventRequest,
+    orgId: number,
     geocodeId: number,
   ): Promise<void> {
-    let orgId: number;
-    let orgs = await db('events.organization as org')
-      .select('org.id')
-      .where('org.name', data.organization);
-
-    if (orgs.length === 0) {
-      let newIds = await db('events.organization as org')
-        .insert({
-          name: data.organization,
-        })
-        .returning('id');
-      orgId = newIds[0].id;
-    } else {
-      orgId = orgs[0].id;
-    }
-
     await db('events.event').insert({
       title: data.title,
       url: data.url,
@@ -87,17 +73,17 @@ export class EventDAL {
       organizationId: orgId,
       price: data.price,
       geocodeId: geocodeId,
-      start_time: data.eventTime.startTimestamp,
+      startTime: data.eventTime.startTimestamp,
       endTime: data.eventTime.endTimestamp,
     });
   }
 
-  async deleteEvents(organizations: string[]): Promise<any> {
-    const val = await db('events.event')
-      .whereIn('organization', organizations)
-      .del();
-    return val;
-  }
+  // async deleteEvents(organizations: string[]): Promise<any> {
+  //   const val = await db('events.event')
+  //     .whereIn('organization', organizations)
+  //     .del();
+  //   return val;
+  // }
 
   async nullifyGeocodeIds() {
     await db('events.event').update('geocodeId', null);
@@ -109,6 +95,68 @@ export class EventDAL {
 
   async cleanupEvents() {
     await db('events.event').where('end_time', '<', new Date()).del();
+  }
+
+  async createMonthlyRecurringEvent(
+    weekday: string | null,
+    weekNumber: number | null,
+    dayOfMonth: number | null,
+  ): Promise<number> {
+    let scheduleIds = await db('events.monthly_recurring_schedule')
+      .insert({ weekday, weekNumber, dayOfMonth })
+      .returning('id');
+    return scheduleIds[0];
+  }
+
+  async createRecurringEvent(
+    data: CreateRecurringEventRequest,
+    orgId: number,
+    geocodeId: number,
+    monthlyScheduleId: number | null,
+  ): Promise<number> {
+    let ids = await db('events.recurring_event')
+      .insert({
+        title: data.title,
+        url: data.url,
+        description: data.description,
+        organizationId: orgId,
+        price: data.price,
+        geocodeId: geocodeId,
+        startTime: data.eventTime.startTimestamp,
+        endTime: data.eventTime.endTimestamp,
+        requiresPhysicalActivities: data.requiresPhysicalActivities,
+        handicapAccessible: data.isHandicapAccessible,
+        monthlyRecurringScheduleId: monthlyScheduleId,
+      })
+      .returning('id');
+
+    return ids[0];
+  }
+
+  async createWeeklyRecurringSchedules(scheduleId: number, weekdays: string[]) {
+    await db('events.weekly_recurring_schedule_day').insert(
+      weekdays.map((d) => ({
+        recurringEventId: scheduleId,
+        weekday: d,
+      })),
+    );
+  }
+
+  async getOrgId(orgName: string): Promise<number> {
+    let orgs = await db('events.organization as org')
+      .select('org.id')
+      .where('org.name', orgName);
+
+    if (orgs.length === 0) {
+      let newIds = await db('events.organization as org')
+        .insert({
+          name: orgName,
+        })
+        .returning('id');
+      return newIds[0].id;
+    } else {
+      return orgs[0].id;
+    }
   }
 
   private queryEvents(

@@ -51,7 +51,52 @@ export class EventService {
   }
 
   async createRecurringEvent(eventRequest: CreateRecurringEventRequest) {
-    this.generateSchedules(eventRequest);
+    //this.generateSchedules(eventRequest);
+    let geocode = await this.geocodeService.getGeocode({
+      address: eventRequest.address,
+      lat: null,
+      lon: null,
+    });
+    let orgId = await this.eventDAL.getOrgId(eventRequest.organization);
+
+    if (eventRequest.mode === 'week') {
+      let recurringEventId = await this.eventDAL.createRecurringEvent(
+        eventRequest,
+        orgId,
+        geocode.id,
+        null,
+      );
+      await this.eventDAL.createWeeklyRecurringSchedules(
+        recurringEventId,
+        eventRequest.weeklyRecurringDays,
+      );
+    } else if (eventRequest.mode === 'weekOfMonth') {
+      let monthlyEventId = await this.eventDAL.createMonthlyRecurringEvent(
+        eventRequest.monthlyRecurringWeekday,
+        eventRequest.monthlyRecurringWeekNumber,
+        null,
+      );
+
+      let recurringEventId = await this.eventDAL.createRecurringEvent(
+        eventRequest,
+        orgId,
+        geocode.id,
+        monthlyEventId,
+      );
+    } else {
+      let monthlyEventId = await this.eventDAL.createMonthlyRecurringEvent(
+        null,
+        null,
+        eventRequest.monthlyRecurringDay,
+      );
+
+      await this.eventDAL.createRecurringEvent(
+        eventRequest,
+        orgId,
+        geocode.id,
+        monthlyEventId,
+      );
+    }
   }
 
   private generateSchedules(eventRequest: CreateRecurringEventRequest) {
@@ -78,7 +123,7 @@ export class EventService {
         until: end,
       });
       console.log(rule.all());
-    } else if (eventRequest.mode === 'weekday') {
+    } else if (eventRequest.mode === 'byWeekOfMonth') {
       const rule = new RRule({
         freq: RRule.MONTHLY,
         interval: 1,
@@ -106,6 +151,8 @@ export class EventService {
       lat: null,
       lon: null,
     });
+
+    let orgId = await this.eventDAL.getOrgId(contextData.organization);
     // Object.assign(contextData[i], {
     //   // start_time: timestampToDate(contextData[i].eventTime.startTimestamp),
     //   // end_time: timestampToDate(contextData[i].eventTime.endTimestamp),
@@ -123,7 +170,7 @@ export class EventService {
     //     await this.eventDAL.deleteEvents(organizations);
     // }
 
-    await this.eventDAL.createEvents(contextData, geocode.id);
+    await this.eventDAL.createEvents(contextData, orgId, geocode.id);
   }
 
   async clearAllEvents() {

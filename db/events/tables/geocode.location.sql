@@ -1,9 +1,9 @@
 CREATE TABLE geocode.location (
     id SERIAL,
-    address VARCHAR(256) NOT NULL,
+    address TEXT NOT NULL,
     lat DECIMAL(23,20),
     lon DECIMAL(23,20),
-    neighborhood VARCHAR(256),
+    neighborhood TEXT,
     expire_at TIMESTAMP WITH TIME ZONE NOT NULL,
     CONSTRAINT geocode_Location_pkey PRIMARY KEY (id)
 )

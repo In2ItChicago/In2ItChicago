@@ -1,7 +1,7 @@
 CREATE TABLE events.organization
 (
     id SERIAL,
-    name VARCHAR(256) NOT NULL,
+    name TEXT NOT NULL,
     CONSTRAINT events_organization_pkey PRIMARY KEY (id)
 )
 WITH (
