@@ -11,7 +11,6 @@ CREATE TABLE events.recurring_event
     end_time TIMESTAMP NOT NULL,
     requires_physical_activities BOOLEAN NOT NULL DEFAULT FALSE,
     handicap_accessible BOOLEAN NOT NULL DEFAULT FALSE,
-    monthly_recurring_schedule_id INT REFERENCES events.monthly_recurring_schedule(id),
     created_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT events_recurring_event_pkey PRIMARY KEY (id)
 )

@@ -98,21 +98,32 @@ export class EventDAL {
   }
 
   async createMonthlyRecurringEvent(
+    recurringEventId: number,
     weekday: string | null,
     weekNumber: number | null,
     dayOfMonth: number | null,
-  ): Promise<number> {
-    let scheduleIds = await db('events.monthly_recurring_schedule')
-      .insert({ weekday, weekNumber, dayOfMonth })
-      .returning('id');
-    return scheduleIds[0];
+  ) {
+    await db('events.monthly_recurring_schedule').insert({
+      recurringEventId,
+      weekday,
+      weekNumber,
+      dayOfMonth,
+    });
+  }
+
+  async createWeeklyRecurringSchedules(scheduleId: number, weekdays: string[]) {
+    await db('events.weekly_recurring_schedule').insert(
+      weekdays.map((d) => ({
+        recurringEventId: scheduleId,
+        weekday: d,
+      })),
+    );
   }
 
   async createRecurringEvent(
     data: CreateRecurringEventRequest,
     orgId: number,
     geocodeId: number,
-    monthlyScheduleId: number | null,
   ): Promise<number> {
     let ids = await db('events.recurring_event')
       .insert({
@@ -126,20 +137,10 @@ export class EventDAL {
         endTime: data.eventTime.endTimestamp,
         requiresPhysicalActivities: data.requiresPhysicalActivities,
         handicapAccessible: data.isHandicapAccessible,
-        monthlyRecurringScheduleId: monthlyScheduleId,
       })
       .returning('id');
 
     return ids[0];
-  }
-
-  async createWeeklyRecurringSchedules(scheduleId: number, weekdays: string[]) {
-    await db('events.weekly_recurring_schedule_day').insert(
-      weekdays.map((d) => ({
-        recurringEventId: scheduleId,
-        weekday: d,
-      })),
-    );
   }
 
   async getOrgId(orgName: string): Promise<number> {
@@ -157,6 +158,10 @@ export class EventDAL {
     } else {
       return orgs[0].id;
     }
+  }
+
+  async getRecurringSchedules() {
+    await db('');
   }
 
   private queryEvents(

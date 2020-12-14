@@ -59,42 +59,30 @@ export class EventService {
     });
     let orgId = await this.eventDAL.getOrgId(eventRequest.organization);
 
+    let recurringEventId = await this.eventDAL.createRecurringEvent(
+      eventRequest,
+      orgId,
+      geocode.id,
+    );
+
     if (eventRequest.mode === 'week') {
-      let recurringEventId = await this.eventDAL.createRecurringEvent(
-        eventRequest,
-        orgId,
-        geocode.id,
-        null,
-      );
       await this.eventDAL.createWeeklyRecurringSchedules(
         recurringEventId,
         eventRequest.weeklyRecurringDays,
       );
     } else if (eventRequest.mode === 'weekOfMonth') {
-      let monthlyEventId = await this.eventDAL.createMonthlyRecurringEvent(
+      await this.eventDAL.createMonthlyRecurringEvent(
+        recurringEventId,
         eventRequest.monthlyRecurringWeekday,
         eventRequest.monthlyRecurringWeekNumber,
         null,
       );
-
-      let recurringEventId = await this.eventDAL.createRecurringEvent(
-        eventRequest,
-        orgId,
-        geocode.id,
-        monthlyEventId,
-      );
     } else {
-      let monthlyEventId = await this.eventDAL.createMonthlyRecurringEvent(
+      await this.eventDAL.createMonthlyRecurringEvent(
+        recurringEventId,
         null,
         null,
         eventRequest.monthlyRecurringDay,
-      );
-
-      await this.eventDAL.createRecurringEvent(
-        eventRequest,
-        orgId,
-        geocode.id,
-        monthlyEventId,
       );
     }
   }
