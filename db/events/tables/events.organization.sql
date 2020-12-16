@@ -2,6 +2,7 @@ CREATE TABLE events.organization
 (
     id SERIAL,
     name TEXT NOT NULL,
+    created_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT events_organization_pkey PRIMARY KEY (id),
     UNIQUE(name)
 )

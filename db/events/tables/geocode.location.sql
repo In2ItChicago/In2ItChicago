@@ -5,6 +5,7 @@ CREATE TABLE geocode.location (
     lon DECIMAL(23,20),
     neighborhood TEXT,
     expire_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    created_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT geocode_Location_pkey PRIMARY KEY (id)
 )
 

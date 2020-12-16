@@ -61,7 +61,6 @@ export class EventService {
   }
 
   async createRecurringEvent(eventRequest: CreateRecurringEventRequest) {
-    //this.generateSchedules(eventRequest);
     let geocode = await this.geocodeService.getGeocode({
       address: eventRequest.address,
       lat: null,
@@ -95,16 +94,22 @@ export class EventService {
         eventRequest.monthlyRecurringDay,
       );
     }
+
+    await this.generateSchedules(recurringEventId);
   }
 
-  async generateSchedules() {
+  async generateSchedules(scheduleId?: number) {
     let monthlyRecurringSchedulesByWeekday = await this.eventDAL.getMonthlyRecurringSchedules(
       true,
+      scheduleId,
     );
     let monthlyRecurringSchedulesByDayOfMonth = await this.eventDAL.getMonthlyRecurringSchedules(
       false,
+      scheduleId,
     );
-    let weeklyRecurringSchedules = await this.eventDAL.getWeeklyRecurringSchedules();
+    let weeklyRecurringSchedules = await this.eventDAL.getWeeklyRecurringSchedules(
+      scheduleId,
+    );
 
     let allMonthlySchedulesByWeek = this.generateAllSchedules(
       monthlyRecurringSchedulesByWeekday,
@@ -125,14 +130,12 @@ export class EventService {
       weeklyRecurringSchedules,
       (s) => this.getWeeklySchedules(s.startTime, s.weekday),
     );
-    //console.log(allWeeklySchedules);
+
     let allSchedules = [
       allMonthlySchedulesByWeek,
       allMonthlySchedulesByDay,
       allWeeklySchedules,
     ].flat();
-
-    //console.log(allSchedules);
 
     await this.eventDAL.createEvents(allSchedules);
   }

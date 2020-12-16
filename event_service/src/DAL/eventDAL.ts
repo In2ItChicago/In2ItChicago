@@ -29,7 +29,6 @@ export class EventDAL {
           'event.price',
           'event.startTime',
           'event.endTime',
-          'event.category',
           'event.createdDate',
           'geo.address',
           'geo.lat',
@@ -90,6 +89,7 @@ export class EventDAL {
           geocodeId: d.geocodeId,
           startTime: d.startTime,
           endTime: d.endTime,
+          recurringEventId: d.id,
         })),
       )
       .toSQL();
@@ -179,9 +179,10 @@ export class EventDAL {
     }
   }
 
-  async getWeeklyRecurringSchedules() {
-    let res = await db('events.recurring_event as re')
+  async getWeeklyRecurringSchedules(scheduleId: number | undefined) {
+    let query = db('events.recurring_event as re')
       .select(
+        're.id',
         're.title',
         're.url',
         're.description',
@@ -192,28 +193,27 @@ export class EventDAL {
         're.end_time',
         're.requires_physical_activities',
         're.handicap_accessible',
-        'mrs.week_number',
-        'mrs.day_of_month',
-        'mrs.weekday as monthly_weekday',
         'wrs.weekday',
       )
-      .leftOuterJoin(
-        'events.monthly_recurring_schedule as mrs',
-        're.id',
-        'mrs.recurring_event_id',
-      )
-      .leftOuterJoin(
+      .innerJoin(
         'events.weekly_recurring_schedule as wrs',
         're.id',
         'wrs.recurring_event_id',
       );
-
+    if (scheduleId !== null) {
+      query = query.where('re.id', scheduleId);
+    }
+    let res = await query;
     return res;
   }
 
-  async getMonthlyRecurringSchedules(byWeek: boolean) {
-    let res = await db('events.recurring_event as re')
+  async getMonthlyRecurringSchedules(
+    byWeek: boolean,
+    scheduleId: number | undefined,
+  ) {
+    let query = db('events.recurring_event as re')
       .select(
+        're.id',
         're.title',
         're.url',
         're.description',
@@ -234,7 +234,10 @@ export class EventDAL {
         'mrs.recurring_event_id',
       )
       .whereNotNull(byWeek ? 'weekday' : 'day_of_month');
-
+    if (scheduleId !== null) {
+      query = query.andWhere('re.id', scheduleId);
+    }
+    let res = await query;
     return res;
   }
 

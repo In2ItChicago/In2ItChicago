@@ -16,6 +16,7 @@ THEN
     (
         id SERIAL,
         name VARCHAR(256) NOT NULL,
+        created_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
         CONSTRAINT events_organization_pkey PRIMARY KEY (id)
     )
     WITH (
