@@ -27,6 +27,7 @@ async function bootstrap() {
   if (bypassAuth) {
     app.use(
       auth([
+        { method: RequestMethod.OPTIONS, path: '/*' },
         { method: RequestMethod.GET, path: '/*' },
         { method: RequestMethod.POST, path: '/*' },
         { method: RequestMethod.DELETE, path: '/*' },
@@ -37,6 +38,8 @@ async function bootstrap() {
   } else {
     app.use(
       auth([
+        // OPTIONS request don't use auth per the CORS spec
+        { method: RequestMethod.OPTIONS, path: '/*' },
         { method: RequestMethod.GET, path: '/' },
         { method: RequestMethod.GET, path: '/docs*' },
         { method: RequestMethod.GET, path: '/geocode*' },

@@ -6,11 +6,11 @@
       <button @click.prevent="logout">Logout</button>
     </div>
     <div v-else>
-      <input type="radio" id="hasAccount" :value="false" v-model="needsAccount" />
-      <label for="hasAccount">I have an account</label>
+      <input type="radio" id="hasAccountInput" :value="false" v-model="needsAccount" />
+      <label for="hasAccountInput">I have an account</label>
       <br />
-      <input type="radio" id="needsAccount" :value="true" v-model="needsAccount" />
-      <label for="needsAccount">I need an account</label>
+      <input type="radio" id="needsAccountInput" :value="true" v-model="needsAccount" />
+      <label for="needsAccountInput">I need an account</label>
       <form @submit.prevent="loginOrRegister">
         <input type="email" v-model="email" placeholder="Your email address" />
         <input type="password" v-model="password" placeholder="Your password" />
@@ -53,7 +53,7 @@ export default {
     login() {
       firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(function() {
         firebase.auth().currentUser.getIdToken().then(function(idToken) {
-          console.log(idToken);
+          document.cookie='token=' + idToken;
         }).catch(function(error) {
           // Handle error
         });
@@ -69,6 +69,7 @@ export default {
     },
     logout() {
       firebase.auth().signOut()
+      document.cookie="token=;expires=Thu, 01 Jan 1970 00:00:01 GMT";
     }
   },
   created() {

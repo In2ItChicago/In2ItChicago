@@ -481,7 +481,7 @@
             },
             submitUrl: function() {
 				const eventURL = process.server ? 'http://event_service:5000' : this.$env.IN2IT_API_URL;
-				return `${eventURL}/events/submitEvent`;
+				return `${eventURL}/events`;
 			},
         },
         methods: {
@@ -521,8 +521,12 @@
             },
             submitEvent: function () {
                 this.prepareEventPayload();
+                const token = this.getCookie('token');
                 console.log(this.event);
-                axios.post(this.submitUrl, this.event)
+                const config = {
+                    headers: { Authorization: `Bearer ${token}` }
+                };
+                axios.post(this.submitUrl, this.event, config)
                 .then((res) => {
                     this.submissionCompleted = true;
                 });
@@ -551,6 +555,21 @@
             },
             setNeighborhood: function (neighborhood) {
                 this.event.neighborhood = neighborhood;
+            },
+            getCookie: function(cname) {
+                var name = cname + "=";
+                var decodedCookie = decodeURIComponent(document.cookie);
+                var ca = decodedCookie.split(';');
+                for(var i = 0; i <ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                    }
+                    if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                    }
+                }
+                return "";
             }
         },
         components: {
