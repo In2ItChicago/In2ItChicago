@@ -70,7 +70,8 @@
                         <v-row>
                             <v-col>
                                 <v-label>
-                                    Cost (Optional)
+                                    Cost
+                                    <span class="required-star"> *</span>
                                 </v-label>
                                 <v-text-field
                                     v-model="event.cost"
@@ -109,17 +110,6 @@
                                     v-model="addressLine2"
                                     outlined
                                 ></v-text-field>
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col>
-                                <v-label>Neighborhood (Optional)</v-label>
-                                <neighborhood-autocomplete 
-                                    @changed="setNeighborhood"
-                                    textfieldClass="event-neighborhood-autocomplete"
-                                    resultsClass="event-neighborhood-autocomplete-results"
-                                    hint="Input the Chicago neighborhood this event will be taking place in (i.e. Logan Square, Wrigleyville, etc.)">
-                                </neighborhood-autocomplete>
                             </v-col>
                         </v-row>
                         <v-row>
@@ -529,12 +519,18 @@
                 axios.post(this.submitUrl, this.event, config)
                 .then((res) => {
                     this.submissionCompleted = true;
+                    alert('Success');
+                })
+                .catch((err) => {
+                    alert(err);
                 });
             },
             prepareEventPayload: function () {
                 this.event.address = this.address;
-                this.event.startDateTime = this.startDateTime;
-                this.event.endDateTime = this.endDateTime;
+                this.event.eventTime = {
+                    startTimestamp: this.startDateTime,
+                    endTimestamp: this.endDateTime
+                };
             },
             getOrdinalSuffix: function (i) {
                 let j = i % 10,
@@ -552,9 +548,6 @@
             },
             getDayName: function (dateObject) {
                 return dateObject.toLocaleDateString('en-US', { weekday: 'long' });
-            },
-            setNeighborhood: function (neighborhood) {
-                this.event.neighborhood = neighborhood;
             },
             getCookie: function(cname) {
                 var name = cname + "=";

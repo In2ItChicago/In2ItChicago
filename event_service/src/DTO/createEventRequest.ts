@@ -28,7 +28,6 @@ export class CreateEventRequest {
   @ApiProperty()
   title: string;
 
-  @IsNotEmpty()
   @ApiProperty()
   address: string;
 

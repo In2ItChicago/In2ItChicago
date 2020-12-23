@@ -70,10 +70,26 @@ export default {
     logout() {
       firebase.auth().signOut()
       document.cookie="token=;expires=Thu, 01 Jan 1970 00:00:01 GMT";
+    },
+    containsCookie(name) {
+      debugger;
+      return decodeURIComponent(document.cookie)
+        .split(';')
+        .map(s => s.trim())
+        .some(c => c.startsWith(`${name}=`))
     }
   },
   created() {
-    firebase.auth().onAuthStateChanged(user => (this.authenticatedUser = user))
+    firebase.auth().onAuthStateChanged(user => {
+      debugger;
+      if (this.containsCookie('token')) {
+        this.authenticatedUser = user;
+      }
+      else {
+        this.authenticatedUser = null;
+      }
+    });
+    
   }
 }
 </script>

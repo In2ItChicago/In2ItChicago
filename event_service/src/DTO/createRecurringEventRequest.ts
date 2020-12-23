@@ -23,7 +23,6 @@ export class CreateRecurringEventRequest {
   @ApiProperty()
   title: string;
 
-  @IsNotEmpty()
   @ApiProperty()
   address: string | null;
 

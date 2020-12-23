@@ -8,9 +8,6 @@ import { GetEventsResponse } from '@src/DTO/getEventsResponse';
 import { plainToClass } from 'class-transformer';
 import { GetGeocodeResponse } from '@src/DTO/getGeocodeResponse';
 import { CreateEventRequest } from '@src/DTO/createEventRequest';
-import { HttpException } from '@nestjs/common/exceptions/http.exception';
-import { Schedule } from './rschedule';
-import * as moment from 'moment';
 import { RRule, RRuleSet, rrulestr, Weekday } from 'rrule';
 import { CreateRecurringEventRequest } from '@src/DTO/createRecurringEventRequest';
 
@@ -209,52 +206,6 @@ export class EventService {
     });
 
     return rule;
-  }
-
-  private generateSchedules2(eventRequest: CreateRecurringEventRequest) {
-    let mapping = new Map([
-      ['Monday', RRule.MO],
-      ['Tuesday', RRule.TU],
-      ['Wednesday', RRule.WE],
-      ['Thursday', RRule.TH],
-      ['Friday', RRule.FR],
-      ['Saturday', RRule.SA],
-      ['Sunday', RRule.SU],
-    ]);
-
-    let today = new Date();
-    let end = new Date();
-    end.setMonth(end.getMonth() + 3);
-
-    if (eventRequest.mode === 'week') {
-      let rule = new RRule({
-        freq: RRule.WEEKLY,
-        interval: 1,
-        byweekday: eventRequest.weeklyRecurringDays.map((d) => mapping.get(d)),
-        dtstart: today,
-        until: end,
-      });
-      console.log(rule.all());
-    } else if (eventRequest.mode === 'weekOfMonth') {
-      const rule = new RRule({
-        freq: RRule.MONTHLY,
-        interval: 1,
-        bysetpos: eventRequest.monthlyRecurringWeekNumber,
-        byweekday: [mapping.get(eventRequest.monthlyRecurringWeekday)],
-        dtstart: today,
-        until: end,
-      });
-      console.log(rule.all());
-    } else {
-      const rule = new RRule({
-        freq: RRule.MONTHLY,
-        interval: 1,
-        bymonthday: eventRequest.monthlyRecurringDay,
-        dtstart: today,
-        until: end,
-      });
-      console.log(rule.all());
-    }
   }
 
   async createEvent(contextData: CreateEventRequest) {
