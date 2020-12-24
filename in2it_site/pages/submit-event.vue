@@ -341,6 +341,7 @@
 <script>
     import axios from 'axios';
     import NeighborhoodAutocomplete from '~/components/NeighborhoodAutocomplete';
+    import firebase from 'firebase'
 
     export default{
         data() {
@@ -509,10 +510,16 @@
                 }
                 return hourInt;
             },
-            submitEvent: function () {
+            submitEvent: async function () {
                 this.prepareEventPayload();
-                const token = this.getCookie('token');
                 console.log(this.event);
+                
+                const auth = await firebase.auth();
+                if (!auth.currentUser) {
+                    // Not logged in
+                    return;
+                }
+                const token = await auth.currentUser.getIdToken();
                 const config = {
                     headers: { Authorization: `Bearer ${token}` }
                 };
@@ -548,21 +555,6 @@
             },
             getDayName: function (dateObject) {
                 return dateObject.toLocaleDateString('en-US', { weekday: 'long' });
-            },
-            getCookie: function(cname) {
-                var name = cname + "=";
-                var decodedCookie = decodeURIComponent(document.cookie);
-                var ca = decodedCookie.split(';');
-                for(var i = 0; i <ca.length; i++) {
-                    var c = ca[i];
-                    while (c.charAt(0) == ' ') {
-                    c = c.substring(1);
-                    }
-                    if (c.indexOf(name) == 0) {
-                    return c.substring(name.length, c.length);
-                    }
-                }
-                return "";
             }
         },
         components: {

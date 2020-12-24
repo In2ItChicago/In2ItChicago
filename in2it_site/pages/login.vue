@@ -50,15 +50,8 @@ export default {
         // display error message
       }
     },
-    login() {
-      firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(function() {
-        firebase.auth().currentUser.getIdToken().then(function(idToken) {
-          document.cookie='token=' + idToken;
-        }).catch(function(error) {
-          // Handle error
-        });
-      });
-      
+    async login() {
+      await firebase.auth().signInWithEmailAndPassword(this.email, this.password);
     },
     loginOrRegister() {
       if (this.needsAccount) {
@@ -68,26 +61,12 @@ export default {
       }
     },
     logout() {
-      firebase.auth().signOut()
-      document.cookie="token=;expires=Thu, 01 Jan 1970 00:00:01 GMT";
-    },
-    containsCookie(name) {
-      debugger;
-      return decodeURIComponent(document.cookie)
-        .split(';')
-        .map(s => s.trim())
-        .some(c => c.startsWith(`${name}=`))
+      firebase.auth().signOut();
     }
   },
   created() {
     firebase.auth().onAuthStateChanged(user => {
-      debugger;
-      if (this.containsCookie('token')) {
-        this.authenticatedUser = user;
-      }
-      else {
-        this.authenticatedUser = null;
-      }
+      this.authenticatedUser = user;
     });
     
   }

@@ -22,6 +22,7 @@ async function bootstrap() {
   app.set('trust proxy', 1);
   app.use(helmet());
   app.use(json({ limit: '50mb' }));
+  app.enableCors();
   // The supplied parameters are the whitelist of routes not to authorize
   // Otherwise, any route requires auth by default
   if (bypassAuth) {
@@ -49,9 +50,10 @@ async function bootstrap() {
       ]),
     );
   }
+
   // TODO: use this for auth with cookies from ui?
   //app.use(csurf());
-  app.enableCors();
+
   // TODO: maybe use Caddy to do this instead
   // app.use(
   //   rateLimit({

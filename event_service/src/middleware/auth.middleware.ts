@@ -37,29 +37,19 @@ export const auth = (whitelist: RouteInfo[]) => (
   }
   const { authorization } = req.headers;
   if (!authorization) {
-    throw new HttpException(
-      { message: 'No auth supplied' },
-      HttpStatus.UNAUTHORIZED,
-    );
+    next(new HttpException('No auth supplied', HttpStatus.UNAUTHORIZED));
+    return;
   }
   const token = authorization.slice(7);
 
-  try {
-    firebase
-      .auth()
-      .verifyIdToken(token)
-      .then((user) => {
-        req.firebaseUser = user;
-        next();
-      })
-      .catch((err) => {
-        res.status(HttpStatus.UNAUTHORIZED).send('validation failed').end();
-        // throw new HttpException(
-        //   { message: 'Input data validation failed', err },
-        //   HttpStatus.UNAUTHORIZED,
-        // );
-      });
-  } catch (e) {
-    throw e;
-  }
+  firebase
+    .auth()
+    .verifyIdToken(token)
+    .then((user) => {
+      req.firebaseUser = user;
+      next();
+    })
+    .catch((err) => {
+      next(new HttpException(err.message ?? err, HttpStatus.UNAUTHORIZED));
+    });
 };
