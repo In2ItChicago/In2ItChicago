@@ -59,10 +59,11 @@ export class GeocodeService {
       let response: AxiosResponse<CoordPair[]>;
       response = await this.httpService
         .get<CoordPair[]>(
-          encodeURI(`${baseUrl}?q=${request.address}&format=json`),
+          encodeURI(
+            `${baseUrl}?q=${request.address}&format=json&viewbox=42.501071,-90.514282,41.456413,-87.125550`,
+          ),
         )
         .toPromise();
-      console.log('response', response);
 
       this.lastExecuted = new Date();
 

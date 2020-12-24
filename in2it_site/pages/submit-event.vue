@@ -70,11 +70,11 @@
                         <v-row>
                             <v-col>
                                 <v-label>
-                                    Cost
+                                    Price
                                     <span class="required-star"> *</span>
                                 </v-label>
                                 <v-text-field
-                                    v-model="event.cost"
+                                    v-model="event.price"
                                     prepend-inner-icon="mdi-currency-usd"
                                     outlined
                                 ></v-text-field>
@@ -307,8 +307,8 @@
                                     <span class="required-star"> *</span>
                                 </v-label>
                                 <v-radio-group v-model="event.isHandicapAccessible" row>
-                                    <v-radio label="Yes" value="1"></v-radio>
-                                    <v-radio label="No" value="0"></v-radio>
+                                    <v-radio label="Yes" v-bind:value=true></v-radio>
+                                    <v-radio label="No" v-bind:value=false></v-radio>
                                 </v-radio-group>
                             </v-col>
                         </v-row>
@@ -320,8 +320,8 @@
                                     <span class="required-star"> *</span>
                                 </v-label>
                                 <v-radio-group v-model="event.requiresPhysicalActivities" row>
-                                    <v-radio label="Yes" value="1"></v-radio>
-                                    <v-radio label="No" value="0"></v-radio>
+                                    <v-radio label="Yes" v-bind:value=true></v-radio>
+                                    <v-radio label="No" v-bind:value=false></v-radio>
                                 </v-radio-group>
                             </v-col>
                         </v-row>
@@ -374,7 +374,7 @@
                     address: '',
                     neighborhood: '',
                     url: '',
-                    cost: '',
+                    price: '',
                     isHiddenFromPublic: false,
                     isMultiDayEvent: false,
                     startDateTime: '',

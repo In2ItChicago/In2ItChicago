@@ -38,18 +38,20 @@ export class CreateEventRequest {
   @ApiProperty()
   description: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsNumber()
   @Type(() => Number)
   @ApiProperty()
-  price?: number;
+  price: number;
 
   @IsNotEmpty()
+  @IsBoolean()
   @ApiProperty()
   @Type(() => Boolean)
   isHandicapAccessible: boolean;
 
   @IsNotEmpty()
+  @IsBoolean()
   @Type(() => Boolean)
   @ApiProperty()
   requiresPhysicalActivities: boolean;

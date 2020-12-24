@@ -5,6 +5,7 @@ import {
   ValidateNested,
   Matches,
   IsOptional,
+  IsBoolean,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { EventTime } from '@src/DTO/eventTime';
@@ -29,10 +30,11 @@ export class CreateRecurringEventRequest {
   @ApiProperty()
   url: string;
 
+  @IsNotEmpty()
   @IsNumber()
   @Type(() => Number)
   @ApiProperty()
-  cost: number;
+  price: number;
 
   @IsNotEmpty()
   @ApiProperty()
@@ -43,10 +45,6 @@ export class CreateRecurringEventRequest {
   @ValidateNested()
   @Type(() => EventTime)
   eventTime: EventTime;
-
-  @IsNotEmpty()
-  @ApiProperty()
-  isHandicapAccessible: boolean;
 
   @IsOptional()
   @ApiProperty()
@@ -79,6 +77,13 @@ export class CreateRecurringEventRequest {
   monthlyRecurringDay: number;
 
   @IsNotEmpty()
+  @IsBoolean()
+  @ApiProperty()
+  @Type(() => Boolean)
+  isHandicapAccessible: boolean;
+
+  @IsNotEmpty()
+  @IsBoolean()
   @Type(() => Boolean)
   @ApiProperty()
   requiresPhysicalActivities: boolean;
@@ -91,10 +96,4 @@ export class CreateRecurringEventRequest {
   })
   @ApiProperty()
   weeklyRecurringDays: Weekday[];
-
-  @IsOptional()
-  @IsNumber()
-  @Type(() => Number)
-  @ApiProperty()
-  price?: number;
 }

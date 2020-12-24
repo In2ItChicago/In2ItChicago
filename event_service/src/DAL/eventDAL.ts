@@ -74,6 +74,8 @@ export class EventDAL {
       geocodeId: geocodeId,
       startTime: data.eventTime.startTimestamp,
       endTime: data.eventTime.endTimestamp,
+      handicapAccessible: data.isHandicapAccessible,
+      requiresPhysicalActivities: data.requiresPhysicalActivities,
     });
   }
 
@@ -90,6 +92,8 @@ export class EventDAL {
           startTime: d.startTime,
           endTime: d.endTime,
           recurringEventId: d.id,
+          handicapAccessible: d.isHandicapAccessible,
+          requiresPhysicalActivities: d.requiresPhysicalActivities,
         })),
       )
       .toSQL();
