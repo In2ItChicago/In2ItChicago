@@ -48,7 +48,7 @@ export class CreateEventRequest {
   @IsBoolean()
   @ApiProperty()
   @Type(() => Boolean)
-  isHandicapAccessible: boolean;
+  handicapAccessible: boolean;
 
   @IsNotEmpty()
   @IsBoolean()

@@ -80,7 +80,7 @@ export class CreateRecurringEventRequest {
   @IsBoolean()
   @ApiProperty()
   @Type(() => Boolean)
-  isHandicapAccessible: boolean;
+  handicapAccessible: boolean;
 
   @IsNotEmpty()
   @IsBoolean()

@@ -74,7 +74,7 @@ export class EventDAL {
       geocodeId: geocodeId,
       startTime: data.eventTime.startTimestamp,
       endTime: data.eventTime.endTimestamp,
-      handicapAccessible: data.isHandicapAccessible,
+      handicapAccessible: data.handicapAccessible,
       requiresPhysicalActivities: data.requiresPhysicalActivities,
     });
   }
@@ -92,7 +92,7 @@ export class EventDAL {
           startTime: d.startTime,
           endTime: d.endTime,
           recurringEventId: d.id,
-          handicapAccessible: d.isHandicapAccessible,
+          handicapAccessible: d.handicapAccessible,
           requiresPhysicalActivities: d.requiresPhysicalActivities,
         })),
       )
@@ -159,7 +159,7 @@ export class EventDAL {
         startTime: data.eventTime.startTimestamp,
         endTime: data.eventTime.endTimestamp,
         requiresPhysicalActivities: data.requiresPhysicalActivities,
-        handicapAccessible: data.isHandicapAccessible,
+        handicapAccessible: data.handicapAccessible,
       })
       .returning('id');
 
@@ -204,7 +204,7 @@ export class EventDAL {
         're.id',
         'wrs.recurring_event_id',
       );
-    if (scheduleId !== null) {
+    if (scheduleId != null) {
       query = query.where('re.id', scheduleId);
     }
     let res = await query;
@@ -238,7 +238,7 @@ export class EventDAL {
         'mrs.recurring_event_id',
       )
       .whereNotNull(byWeek ? 'weekday' : 'day_of_month');
-    if (scheduleId !== null) {
+    if (scheduleId != null) {
       query = query.andWhere('re.id', scheduleId);
     }
     let res = await query;

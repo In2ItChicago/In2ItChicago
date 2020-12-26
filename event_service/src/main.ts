@@ -16,13 +16,17 @@ import { RolesGuard } from './guards/roles.guard';
 import { auth } from '@src/middleware/auth.middleware';
 
 async function bootstrap() {
-  const bypassAuth =
-    process.env.BYPASS_AUTH === '1' && process.env.NODE_ENV === 'development';
+  const isDev = process.env.NODE_ENV === 'development';
+  const bypassAuth = process.env.BYPASS_AUTH === '1' && isDev;
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.set('trust proxy', 1);
   app.use(helmet());
   app.use(json({ limit: '50mb' }));
-  app.enableCors();
+  app.enableCors({
+    origin: isDev
+      ? ['http://localhost', 'http://localhost:3000']
+      : 'https://in2itchicago.com',
+  });
   // The supplied parameters are the whitelist of routes not to authorize
   // Otherwise, any route requires auth by default
   if (bypassAuth) {

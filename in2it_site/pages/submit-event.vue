@@ -238,7 +238,7 @@
                         <div v-if="event.isRecurring">
                             <v-row>
                                 <v-col>
-                                    <v-label>This is event is held</v-label>
+                                    <v-label>This event is held</v-label>
                                     <v-select :items="recurringTimeIntervals" v-model="event.recurringTimeInterval" outlined></v-select>
                                 </v-col>
                             </v-row>
@@ -290,9 +290,9 @@
                             </v-row>
                             <v-row v-if="event.recurringTimeInterval == 'Monthly'">
                                 <v-col>
-                                    <v-radio-group v-model="event.monthlyRecurringValue">
-                                        <v-radio :label="recurringDayNumLabel" :value="recurringDayNumValue"></v-radio>
-                                        <v-radio :label="recurringNthDayLabel" :value="recurringNthDayValue"></v-radio>
+                                    <v-radio-group v-model="isWeekOfMonth">
+                                        <v-radio :label="recurringDayNumLabel" :value=false></v-radio>
+                                        <v-radio :label="recurringNthDayLabel" :value=true></v-radio>
                                     </v-radio-group>
                                 </v-col>
                             </v-row>
@@ -306,7 +306,7 @@
                                     Is this event handicap accessible?
                                     <span class="required-star"> *</span>
                                 </v-label>
-                                <v-radio-group v-model="event.isHandicapAccessible" row>
+                                <v-radio-group v-model="event.handicapAccessible" row>
                                     <v-radio label="Yes" v-bind:value=true></v-radio>
                                     <v-radio label="No" v-bind:value=false></v-radio>
                                 </v-radio-group>
@@ -367,6 +367,7 @@
                 endTimeHrs: '12',
                 endTimeMins: '00',
                 endTimeAmPm: 'PM',
+                isWeekOfMonth: false,
 				event: {
                     organization: '',
                     title: '',
@@ -380,10 +381,11 @@
                     startDateTime: '',
                     endDateTime: '',
                     isRecurring: false,
+                    mode: '',
                     recurringTimeInterval: '',
                     weeklyRecurringDays: [],
                     monthlyRecurringValue: '',
-                    isHandicapAccessible: false,
+                    handicapAccessible: false,
                     requiresPhysicalActivities: false
                 }
 			};
@@ -416,6 +418,17 @@
                     endHourInt,
                     parseInt(this.endTimeMins)
                 );
+            },
+            mode: function() {
+                if (this.event.recurringTimeInterval === 'Weekly') {
+                    return 'week';
+                }
+                else if (this.event.recurringTimeInterval === 'Month' && this.isWeekOfMonth) {
+                    return 'weekOfMonth';
+                }
+                else {
+                    return 'dayOfMonth';
+                }
             },
             recurringDayNumLabel: function () {
                 return 'The ' + this.getOrdinalSuffix(this.startDate.getDate()) + ' of every month';
@@ -472,7 +485,7 @@
             },
             submitUrl: function() {
 				const eventURL = process.server ? 'http://event_service:5000' : this.$env.IN2IT_API_URL;
-				return `${eventURL}/events`;
+				return `${eventURL}/events${this.event.isRecurring ? '/recurringEvent' : ''}`;
 			},
         },
         methods: {
@@ -538,6 +551,7 @@
                     startTimestamp: this.startDateTime,
                     endTimestamp: this.endDateTime
                 };
+                this.event.mode = this.mode;
             },
             getOrdinalSuffix: function (i) {
                 let j = i % 10,

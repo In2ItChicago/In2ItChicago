@@ -64,7 +64,6 @@ export class EventService {
       lon: null,
     });
     let orgId = await this.eventDAL.getOrgId(eventRequest.organization);
-
     let recurringEventId = await this.eventDAL.createRecurringEvent(
       eventRequest,
       orgId,

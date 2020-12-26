@@ -6,7 +6,7 @@ CREATE TABLE events.recurring_event
     description TEXT NOT NULL,
     price DECIMAL(5,2) NOT NULL,
     geocode_id INT NOT NULL REFERENCES geocode.location(id),
-    organization_id INT REFERENCES events.organization(id),
+    organization_id INT NOT NULL REFERENCES events.organization(id),
     start_time TIMESTAMP NOT NULL,
     end_time TIMESTAMP NOT NULL,
     requires_physical_activities BOOLEAN NOT NULL,
