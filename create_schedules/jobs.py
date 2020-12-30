@@ -19,5 +19,12 @@ def get_jobs():
             'hour': 0,
             'minute': 15,
             'args': [config.cleanup_scheduler,'DELETE', system_username, system_password, config.login]
+        },
+        {
+            'name': 'generateSchedules',
+            'job_class': CURL_CLASS,
+            'hour': 0,
+            'minute': 30,
+            'args': [config.generate_schedules,'POST', system_username, system_password, config.login]
         }
     ]

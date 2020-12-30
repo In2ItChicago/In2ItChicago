@@ -19,17 +19,6 @@ class Schedule:
         self.minute = minute
         self.hour = hour
         self.args = args
-    
-    @classmethod
-    def from_interval(cls, name, job_class, interval, delta, offset, args):
-        current_offset = int(delta * offset)
-        if interval >= MINUTES_IN_HOUR:
-            minute = current_offset % MINUTES_IN_HOUR
-            hour = f'{current_offset // MINUTES_IN_HOUR}-{HOURS_IN_DAY - 1}/{interval // MINUTES_IN_HOUR}'
-        else:
-            minute = f'{current_offset}-{MINUTES_IN_HOUR - 1}/{interval}'
-            hour = '*'
-        return cls(name, job_class, minute, hour, args)
 
 class ScheduleBuilder:
     def __init__(self):
@@ -43,10 +32,6 @@ class ScheduleBuilder:
         self.jobs_dict = {job['name']: job for job in jobs_json['jobs']}
     
     def add_schedules(self):
-        self.add_other_schedules()
-
-    
-    def add_other_schedules(self):
         for job in get_jobs():
             self.add_schedule(Schedule(job['name'], job['job_class'], job['minute'], job['hour'], job['args']))
 

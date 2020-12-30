@@ -3,7 +3,6 @@ import time
 from requests.exceptions import ConnectionError
 
 class Config:
-    """Event procesor configuration"""
     def __init__(self):
         self.system_username = self.get_env_var('SYSTEM_USERNAME')
         self.system_password = self.get_env_var('SYSTEM_PASSWORD')
@@ -17,12 +16,12 @@ class Config:
 
         self.cleanup_events = self.event_service_url + '/events/cleanupEvents'
         self.cleanup_scheduler = self.event_service_url + '/scheduler/cleanupScheduler'
+        self.generate_schedules = self.event_service_url + '/events/generateSchedules'
         self.login = self.event_service_url + '/auth/login'
         
         self.debug = self.get_env_bool('DEBUG', False)
 
     def get_env_bool(self, name, default_value=None, error_if_null=False):
-        """??? Utility function for reading environment variables as a boolean value"""
         value = self.get_env_var(name, default_value, error_if_null)
         if value == '0':
                 return False
@@ -33,7 +32,6 @@ class Config:
         raise KeyError(f'Boolean variable {name} returned {value}. Should be 0, 1, True, or False')
 
     def get_env_var(self, name, default_value=None, error_if_null=False):
-        """??? Utility function for reading environment variables"""
         try:
             # KeyError occurs if value is not present in os
             # Because of how environment variables are passed to Docker, they will appear as '' if they are not set
@@ -46,17 +44,5 @@ class Config:
                 raise KeyError(f'Error: environment variable {name} not set. If this value was recently set, close all python processes and try again')
             else:
                 return default_value
-    
-    # def connect_to_client(self):
-    #     """??? connect the configuration to a local session (why?)"""
-    #     session = HttpUtils.get_session()
-    #     while True:
-    #         try:
-    #             session.get(self.service_status)
-    #             print('Connection successful')
-    #             return True
-    #         except ConnectionError:
-    #             time.sleep(0.5)
-    #             continue
 
 config = Config()
