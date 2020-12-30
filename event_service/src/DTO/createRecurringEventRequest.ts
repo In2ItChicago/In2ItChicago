@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsNotEmpty,
+  IsNotIn,
   IsNumber,
   ValidateNested,
   Matches,
@@ -24,9 +25,11 @@ export class CreateRecurringEventRequest {
   @ApiProperty()
   title: string;
 
+  @IsNotIn([null, undefined])
   @ApiProperty()
-  address: string | null;
+  address: string;
 
+  @IsNotIn([null, undefined])
   @ApiProperty()
   url: string;
 
@@ -46,7 +49,7 @@ export class CreateRecurringEventRequest {
   @Type(() => EventTime)
   eventTime: EventTime;
 
-  @IsOptional()
+  @IsNotIn([null, undefined])
   @ApiProperty()
   organization: string;
 

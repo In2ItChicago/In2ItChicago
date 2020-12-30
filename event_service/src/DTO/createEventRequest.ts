@@ -3,6 +3,7 @@ import { EventTime } from '@src/DTO/eventTime';
 import {
   IsBoolean,
   IsNotEmpty,
+  IsNotIn,
   IsNumber,
   IsOptional,
   ValidateNested,
@@ -28,12 +29,15 @@ export class CreateEventRequest {
   @ApiProperty()
   title: string;
 
+  @IsNotIn([null, undefined])
   @ApiProperty()
   address: string;
 
+  @IsNotIn([null, undefined])
   @ApiProperty()
   url: string;
 
+  @IsNotEmpty()
   @ApiProperty()
   description: string;
 
