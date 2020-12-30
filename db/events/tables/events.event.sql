@@ -12,6 +12,7 @@ CREATE TABLE events.event
     handicap_accessible BOOLEAN NOT NULL,
     requires_physical_activities BOOLEAN NOT NULL,
     recurring_event_id INT REFERENCES events.recurring_event(id),
+    author_id INT REFERENCES events.author(id) NOT NULL,
     created_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT events_event_pkey PRIMARY KEY (id),
     UNIQUE(title, organization_id, geocode_id, start_time, end_time)

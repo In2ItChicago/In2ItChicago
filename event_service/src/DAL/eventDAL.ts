@@ -63,6 +63,7 @@ export class EventDAL {
   async createEvent(
     data: CreateEventRequest,
     orgId: number,
+    authorId: number,
     geocodeId: number,
   ): Promise<void> {
     await db('events.event').insert({
@@ -70,6 +71,7 @@ export class EventDAL {
       url: data.url,
       description: data.description,
       organizationId: orgId,
+      authorId,
       price: data.price,
       geocodeId: geocodeId,
       startTime: data.eventTime.startTimestamp,
@@ -87,6 +89,7 @@ export class EventDAL {
           url: d.url,
           description: d.description,
           organizationId: d.organizationId,
+          authorId: d.authorId,
           price: d.price,
           geocodeId: d.geocodeId,
           startTime: d.startTime,
@@ -146,6 +149,7 @@ export class EventDAL {
   async createRecurringEvent(
     data: CreateRecurringEventRequest,
     orgId: number,
+    authorId: number,
     geocodeId: number,
   ): Promise<number> {
     let ids = await db('events.recurring_event')
@@ -154,6 +158,7 @@ export class EventDAL {
         url: data.url,
         description: data.description,
         organizationId: orgId,
+        authorId,
         price: data.price,
         geocodeId: geocodeId,
         startTime: data.eventTime.startTimestamp,
@@ -167,19 +172,27 @@ export class EventDAL {
   }
 
   async getOrgId(orgName: string): Promise<number> {
-    let orgs = await db('events.organization as org')
-      .select('org.id')
-      .where('org.name', orgName);
+    return await this.getIdFromName(orgName, 'organization');
+  }
 
-    if (orgs.length === 0) {
-      let newIds = await db('events.organization as org')
+  async getAuthorId(authorName: string): Promise<number> {
+    return await this.getIdFromName(authorName, 'author');
+  }
+
+  private async getIdFromName(name: string, table: string) {
+    const tableExpr = `events.${table} as t`;
+    let entries = await db(tableExpr).select('t.id').where('t.name', name);
+
+    if (entries.length === 0) {
+      let newIds = await db(tableExpr)
         .insert({
-          name: orgName,
+          name,
         })
         .returning('id');
-      return newIds[0].id;
+
+      return newIds[0];
     } else {
-      return orgs[0].id;
+      return entries[0].id;
     }
   }
 
@@ -193,6 +206,7 @@ export class EventDAL {
         're.price',
         're.geocode_id',
         're.organization_id',
+        're.author_id',
         're.start_time',
         're.end_time',
         're.requires_physical_activities',
@@ -224,6 +238,7 @@ export class EventDAL {
         're.price',
         're.geocode_id',
         're.organization_id',
+        're.author_id',
         're.start_time',
         're.end_time',
         're.requires_physical_activities',

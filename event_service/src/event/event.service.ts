@@ -10,12 +10,16 @@ import { GetGeocodeResponse } from '@src/DTO/getGeocodeResponse';
 import { CreateEventRequest } from '@src/DTO/createEventRequest';
 import { RRule, RRuleSet, rrulestr, Weekday } from 'rrule';
 import { CreateRecurringEventRequest } from '@src/DTO/createRecurringEventRequest';
+import { REQUEST } from '@nestjs/core';
+import { Request } from 'express';
+import { auth } from '../../dist/middleware/auth.middleware';
 
 @Injectable()
 export class EventService {
   constructor(
     private readonly geocodeService: GeocodeService,
     @Inject('EventDAL') private readonly eventDAL: EventDAL,
+    @Inject(REQUEST) private readonly request: Request,
   ) {}
 
   readonly rruleWeekdays: Map<string, Weekday> = new Map([
@@ -64,9 +68,13 @@ export class EventService {
       lon: null,
     });
     let orgId = await this.eventDAL.getOrgId(eventRequest.organization);
+    let authorId = await this.eventDAL.getAuthorId(
+      this.request.firebaseUser.email,
+    );
     let recurringEventId = await this.eventDAL.createRecurringEvent(
       eventRequest,
       orgId,
+      authorId,
       geocode.id,
     );
 
@@ -215,8 +223,11 @@ export class EventService {
     });
 
     let orgId = await this.eventDAL.getOrgId(contextData.organization);
+    let authorId = await this.eventDAL.getAuthorId(
+      this.request.firebaseUser.email,
+    );
 
-    await this.eventDAL.createEvent(contextData, orgId, geocode.id);
+    await this.eventDAL.createEvent(contextData, orgId, authorId, geocode.id);
   }
 
   async clearAllEvents() {

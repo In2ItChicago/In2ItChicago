@@ -408,7 +408,7 @@
                 if (!this.event.isMultiDayEvent) {
                     //Event ends on same day as start + 3 hours
                     this.endDate = this.startDate;
-                    endHourInt = this.getStartHourInt() + 3;
+                    //endHourInt = this.getStartHourInt() + 3;
                 }
 
                 return new Date(
@@ -423,7 +423,7 @@
                 if (this.event.recurringTimeInterval === 'Weekly') {
                     return 'week';
                 }
-                else if (this.event.recurringTimeInterval === 'Month' && this.isWeekOfMonth) {
+                else if (this.event.recurringTimeInterval === 'Monthly' && this.isWeekOfMonth) {
                     return 'weekOfMonth';
                 }
                 else {
@@ -437,28 +437,11 @@
                 return this.getOrdinalSuffix(this.startDate.getDate());
             },
             recurringNthDayLabel: function () {
-                return this.recurringNthDayValue + ' of every month';
+                const nth = this.getRecurringNthDay();
+                return this.getOrdinalSuffix(nth) + ' ' + this.getDayName(this.startDate) + ' of every month';
             },
             recurringNthDayValue: function () {
-                let nth = 0;
-                let eventDayNum = this.startDate.getDate();
-                let eventMonth = this.startDate.getMonth();
-                let eventDayName = this.getDayName(this.startDate);
-
-                for (let i = 0; i < eventDayNum; ++i) {
-                    //Start at first date of current month
-                    let testDateString = this.startDate.getFullYear() + '-' + (eventMonth + 1) + '-1';
-                    let testDate = this.getDateObjectFromYYYYMMDD(testDateString);
-
-                    //Iterate through days of month
-                    testDate.setDate(testDate.getDate() + i);
-
-                    if (testDate.getMonth() != eventMonth) break; //Reached end of month
-                    if (this.getDayName(testDate) == eventDayName) { //Day name matches
-                        ++nth;
-                    }
-                }
-                return this.getOrdinalSuffix(nth) + ' ' + this.getDayName(this.startDate);
+                return this.getRecurringNthDay();
             },
             weeklyRecurringDaysLabelText: function () {
                 if (this.event.weeklyRecurringDays.length <= 0) {
@@ -548,10 +531,18 @@
             prepareEventPayload: function () {
                 this.event.address = this.address;
                 this.event.eventTime = {
-                    startTimestamp: this.startDateTime,
-                    endTimestamp: this.endDateTime
+                    startTimestamp: this.startDateTime.toLocaleString(),
+                    endTimestamp: this.endDateTime.toLocaleString()
                 };
                 this.event.mode = this.mode;
+                if (this.mode === 'weekOfMonth') {
+                    this.event.monthlyRecurringWeekday = this.getDayName(this.startDate);
+                    this.event.monthlyRecurringWeekNumber = this.getRecurringNthDay();
+                }
+                else if (this.mode === 'dayOfMonth') {
+                    this.event.monthlyRecurringDay = this.startDate.getDate();
+                }
+
             },
             getOrdinalSuffix: function (i) {
                 let j = i % 10,
@@ -568,7 +559,28 @@
                 return i + "th";
             },
             getDayName: function (dateObject) {
-                return dateObject.toLocaleDateString('en-US', { weekday: 'long' });
+                return dateObject.toLocaleDateString('en-US', { weekday: 'long'});
+            },
+            getRecurringNthDay: function() {
+                let nth = 0;
+                let eventDayNum = this.startDate.getDate();
+                let eventMonth = this.startDate.getMonth();
+                let eventDayName = this.getDayName(this.startDate);
+
+                for (let i = 0; i < eventDayNum; ++i) {
+                    //Start at first date of current month
+                    let testDateString = this.startDate.getFullYear() + '-' + (eventMonth + 1) + '-1';
+                    let testDate = this.getDateObjectFromYYYYMMDD(testDateString);
+
+                    //Iterate through days of month
+                    testDate.setDate(testDate.getDate() + i);
+
+                    if (testDate.getMonth() != eventMonth) break; //Reached end of month
+                    if (this.getDayName(testDate) == eventDayName) { //Day name matches
+                        ++nth;
+                    }
+                }
+                return nth;
             }
         },
         components: {
