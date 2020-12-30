@@ -32,6 +32,14 @@ services:
   #     - SCRAPER_PASSWORD=${SCRAPER_PASSWORD}
   #     - SYSTEM_USERNAME=${SYSTEM_USERNAME}
   #     - SYSTEM_PASSWORD=${SYSTEM_PASSWORD}
+  create_schedules:
+    image: create_schedules
+    command: sh -c "chmod +x entrypoint.sh && ./entrypoint.sh"
+    networks:
+      - in2it
+    environment:
+      - SYSTEM_USERNAME=${SYSTEM_USERNAME}
+      - SYSTEM_PASSWORD=${SYSTEM_PASSWORD}
   # splash:
   #   image: "scrapinghub/splash:3.4.1"
   #   ports:

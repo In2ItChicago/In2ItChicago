@@ -16,4 +16,5 @@ DOCKER_BUILDKIT=1 $(build-cmd event_processor .)
 DOCKER_BUILDKIT=1 $(build-cmd in2it_site .)
 DOCKER_BUILDKIT=1 $(build-cmd event_service .)
 
+DOCKER_BUILDKIT=1 docker build -f create_schedules/Dockerfile -t create_schedules create_schedules
 DOCKER_BUILDKIT=1 docker build -f db/Dockerfile -t db_deploy db

@@ -86,12 +86,12 @@
                         <v-row>
                             <v-col>
                                 <v-checkbox
-                                    v-model="event.isHiddenFromPublic"
-                                    label="I don't want this event's location to be shown publicly"
+                                    v-model="isVirtualEvent"
+                                    label="This is a virtual event"
                                 ></v-checkbox>
                             </v-col>
                         </v-row>
-                        <v-row v-if="!event.isHiddenFromPublic">
+                        <v-row v-if="!isVirtualEvent">
                             <v-col>
                                 <v-label>
                                     Event Address Line 1
@@ -103,7 +103,7 @@
                                 ></v-text-field>
                             </v-col>
                         </v-row>
-                        <v-row v-if="!event.isHiddenFromPublic">
+                        <v-row v-if="!isVirtualEvent">
                             <v-col>
                                 <v-label>Event Address Line 2 (Optional)</v-label>
                                 <v-text-field
@@ -368,6 +368,7 @@
                 endTimeMins: '00',
                 endTimeAmPm: 'PM',
                 isWeekOfMonth: false,
+                 isVirtualEvent: false,
 				event: {
                     organization: '',
                     title: '',
@@ -376,7 +377,6 @@
                     neighborhood: '',
                     url: '',
                     price: '',
-                    isHiddenFromPublic: false,
                     isMultiDayEvent: false,
                     startDateTime: '',
                     endDateTime: '',
@@ -529,7 +529,17 @@
                 });
             },
             prepareEventPayload: function () {
-                this.event.address = this.address;
+                if (this.isVirtualEvent) {
+                    this.event.address = '';
+                }
+                else if (this.address.trim()  === '') {
+                    // address not supplied, send null to get a validation error from the api
+                    this.event.address = null;
+                }
+                else {
+                    this.event.address = this.address;
+                }
+
                 this.event.eventTime = {
                     startTimestamp: this.startDateTime.toLocaleString(),
                     endTimestamp: this.endDateTime.toLocaleString()
