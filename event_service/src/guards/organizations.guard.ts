@@ -17,22 +17,20 @@ export class OrganizationsGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const isEventAdmin =
       request.firebaseUser && request.firebaseUser[UserMetadata.EventAdmin];
-    if (!(isEventAdmin || request?.firebaseUser?.allowedOrgs)) {
+    if (!isEventAdmin && !request?.firebaseUser?.allowedOrgs) {
       return false;
     }
 
     if (request.firebaseUser[UserMetadata.GodUser] || isEventAdmin) {
       return true;
     }
-    if (request.body?.events) {
-      return request.body.events.every((event) =>
-        request.firebaseUser.allowedOrgs.includes(event.organization),
-      );
-    }
-    if (request.body?.event) {
+
+    if (request.body?.organization) {
       return request.firebaseUser.allowedOrgs.includes(
-        request.body.event.organization,
+        request.body.organization,
       );
     }
+
+    return false;
   }
 }

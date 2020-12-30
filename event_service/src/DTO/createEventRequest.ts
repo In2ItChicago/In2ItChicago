@@ -31,7 +31,6 @@ export class CreateEventRequest {
   @ApiProperty()
   address: string;
 
-  @IsNotEmpty()
   @ApiProperty()
   url: string;
 
