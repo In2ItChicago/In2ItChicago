@@ -25,11 +25,13 @@ export class EventDAL {
           'event.title',
           'event.url',
           'event.description',
-          'org.name as organization_name',
+          'org.name as organizationName',
           'event.price',
           'event.startTime',
           'event.endTime',
           'event.createdDate',
+          'event.requiresPhysicalActivities',
+          'event.handicapAccessible',
           'geo.address',
           'geo.lat',
           'geo.lon',
@@ -104,19 +106,8 @@ export class EventDAL {
     await db.raw(`${sql} on conflict do nothing`, bindings);
   }
 
-  // async deleteEvents(organizations: string[]): Promise<any> {
-  //   const val = await db('events.event')
-  //     .whereIn('organization', organizations)
-  //     .del();
-  //   return val;
-  // }
-
   async nullifyGeocodeIds() {
     await db('events.event').update('geocodeId', null);
-  }
-
-  async deleteAllEvents() {
-    await db('events.event').del();
   }
 
   async cleanupEvents() {
@@ -204,13 +195,13 @@ export class EventDAL {
         're.url',
         're.description',
         're.price',
-        're.geocode_id',
-        're.organization_id',
-        're.author_id',
-        're.start_time',
-        're.end_time',
-        're.requires_physical_activities',
-        're.handicap_accessible',
+        're.geocodeId',
+        're.organizationId',
+        're.authorId',
+        're.startTime',
+        're.endTime',
+        're.requiresPhysicalActivities',
+        're.handicapAccessible',
         'wrs.weekday',
       )
       .innerJoin(
@@ -237,14 +228,14 @@ export class EventDAL {
         're.description',
         're.price',
         're.geocode_id',
-        're.organization_id',
-        're.author_id',
-        're.start_time',
-        're.end_time',
-        're.requires_physical_activities',
-        're.handicap_accessible',
-        'mrs.week_number',
-        'mrs.day_of_month',
+        're.organizationId',
+        're.authorId',
+        're.startTime',
+        're.endTime',
+        're.requiresPhysicalActivities',
+        're.handicapAccessible',
+        'mrs.weekNumber',
+        'mrs.dayOfMonth',
         'mrs.weekday',
       )
       .innerJoin(
@@ -267,11 +258,7 @@ export class EventDAL {
   ) {
     const res = selectFunc
       .innerJoin('geocode.location as geo', 'event.geocode_id', 'geo.id')
-      .innerJoin(
-        'events.organization as org',
-        'event.organization_id',
-        'org.id',
-      )
+      .innerJoin('events.organization as org', 'event.organizationId', 'org.id')
       .where('event.startTime', '>=', query.startTime || '01-01-1970')
       .andWhere('event.endTime', '<=', query.endTime || '12-31-2099')
       .modify((queryBuilder) => {

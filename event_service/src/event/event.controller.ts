@@ -56,13 +56,6 @@ export class EventController {
   }
 
   @Roles(UserMetadata.SystemAdmin)
-  @Delete('clearAllEvents')
-  @ApiResponse({ status: 200, description: 'Deleted' })
-  async clearAllEvents() {
-    await this.eventService.clearAllEvents();
-  }
-
-  @Roles(UserMetadata.SystemAdmin)
   @Delete('cleanupEvents')
   @ApiResponse({ status: 200, description: 'Deleted' })
   async cleanupEvents() {

@@ -229,11 +229,6 @@ export class EventService {
     await this.eventDAL.createEvent(contextData, orgId, authorId, geocode.id);
   }
 
-  async clearAllEvents() {
-    await this.geocodeService.clearAllGeocodes();
-    await this.eventDAL.deleteAllEvents();
-  }
-
   async cleanupEvents() {
     await this.geocodeService.cleanupGeocodes();
     await this.eventDAL.cleanupEvents();
