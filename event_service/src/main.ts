@@ -25,7 +25,11 @@ async function bootstrap() {
   app.enableCors({
     origin: isDev
       ? ['http://localhost', 'http://localhost:3000']
-      : 'https://in2itchicago.com',
+      : [
+          'http://localhost',
+          'https://in2itchicago.com',
+          '104.207.139.250.vultr.com',
+        ],
   });
   // The supplied parameters are the whitelist of routes not to authorize
   // Otherwise, any route requires auth by default

@@ -15,22 +15,36 @@ export class OrganizationsGuard implements CanActivate {
     }
 
     const request = context.switchToHttp().getRequest();
-    const isEventAdmin =
-      request.firebaseUser && request.firebaseUser[UserMetadata.EventAdmin];
-    if (!isEventAdmin && !request?.firebaseUser?.allowedOrgs) {
+
+    // No auth supplied
+    if (!request.firebaseUser) {
       return false;
     }
 
-    if (request.firebaseUser[UserMetadata.GodUser] || isEventAdmin) {
+    // God user or event admin can use any org
+    if (
+      request.firebaseUser[UserMetadata.GodUser] ||
+      request.firebaseUser[UserMetadata.EventAdmin]
+    ) {
       return true;
     }
 
+    // If not an admin, user must be an event creator and have at least one org
+    if (
+      !request.firebaseUser[UserMetadata.EventCreator] ||
+      !request.firebaseUser.allowedOrgs
+    ) {
+      return false;
+    }
+
+    // User is not an admin but can create, verify requested org is allowed
     if (request.body?.organization) {
       return request.firebaseUser.allowedOrgs.includes(
         request.body.organization,
       );
     }
 
+    // organization parameter not in request
     return false;
   }
 }
