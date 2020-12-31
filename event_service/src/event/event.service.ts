@@ -12,7 +12,6 @@ import { RRule, RRuleSet, rrulestr, Weekday } from 'rrule';
 import { CreateRecurringEventRequest } from '@src/DTO/createRecurringEventRequest';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
-import { auth } from '../../dist/middleware/auth.middleware';
 
 @Injectable()
 export class EventService {

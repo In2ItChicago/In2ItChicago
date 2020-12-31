@@ -40,7 +40,7 @@ services:
     labels:
       caddy.address: localhost:80
   postgres:
-    image: postgres:11.5-alpine
+    image: postgres:12.5-alpine
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres

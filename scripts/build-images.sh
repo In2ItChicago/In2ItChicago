@@ -12,7 +12,6 @@ if [ -f ../ndscheduler/Dockerfile ]
 then
   DOCKER_BUILDKIT=1 $(build-cmd ndscheduler ..)
 fi
-DOCKER_BUILDKIT=1 $(build-cmd event_processor .)
 DOCKER_BUILDKIT=1 $(build-cmd in2it_site .)
 DOCKER_BUILDKIT=1 $(build-cmd event_service .)
 
