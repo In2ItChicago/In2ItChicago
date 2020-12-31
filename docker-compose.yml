@@ -40,6 +40,9 @@ services:
     environment:
       - SYSTEM_USERNAME=${SYSTEM_USERNAME}
       - SYSTEM_PASSWORD=${SYSTEM_PASSWORD}
+    deploy:
+      restart_policy:
+        condition: none
   # splash:
   #   image: "scrapinghub/splash:3.4.1"
   #   ports:
