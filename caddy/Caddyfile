@@ -1,0 +1,12 @@
+{
+    auto_https off
+}
+
+api.{$SERVER_URL} {
+    reverse_proxy event_service:5000
+}
+
+{$SERVER_URL} {
+    reverse_proxy in2it_site:3000
+}
+

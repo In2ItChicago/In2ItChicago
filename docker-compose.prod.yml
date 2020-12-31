@@ -57,9 +57,6 @@ services:
         limits:
           cpus: '0.7'
           memory: '200M'
-  caddy:
-    volumes:
-      - caddy_certs:/root/.caddy
   postgres:
     deploy:
       restart_policy:
