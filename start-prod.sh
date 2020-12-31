@@ -11,4 +11,4 @@ docker build -f db/Dockerfile -t db_deploy db
 docker build -f create_schedules/Dockerfile -t create_schedules create_schedules
 docker build -f caddy/Dockerfile -t caddy_config caddy
 env $(cat .env-prod | xargs) ./scripts/stack-deploy.sh prod
-./db/run.sh PROD
+#./db/run.sh PROD

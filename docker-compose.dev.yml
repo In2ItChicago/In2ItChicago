@@ -39,6 +39,9 @@ services:
       - BYPASS_AUTH=${BYPASS_AUTH:-1}
     labels:
       caddy.address: localhost:80
+  caddy:
+    environment:
+      - 'AUTO_HTTPS=auto_https off'
   postgres:
     image: postgres:12.5-alpine
     environment:

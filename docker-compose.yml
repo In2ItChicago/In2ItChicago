@@ -79,6 +79,7 @@ services:
         mode: host
     environment:
       - SERVER_URL=${SERVER_NAME:-localhost}:${SERVER_PORT:-80}
+      - TLS_CONFIG=
     deploy:
       mode: global
     networks:

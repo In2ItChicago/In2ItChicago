@@ -57,6 +57,10 @@ services:
         limits:
           cpus: '0.7'
           memory: '200M'
+  caddy:
+    environment:
+      - 'AUTO_HTTPS=${AUTO_HTTPS:-auto_https off}'
+      - TLS_CONFIG=${TLS_CONFIG:-}
   postgres:
     deploy:
       restart_policy:
