@@ -140,7 +140,9 @@ export class EventService {
       allWeeklySchedules,
     ].flat();
 
-    await this.eventDAL.createEvents(allSchedules);
+    if (allSchedules.length) {
+      await this.eventDAL.createEvents(allSchedules);
+    }
   }
 
   private generateAllSchedules(
