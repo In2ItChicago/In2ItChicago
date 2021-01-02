@@ -1,5 +1,20 @@
-import { Controller, Post, Body, Delete, Query, Get, Headers, Request } from '@nestjs/common';
-import { ApiTags, ApiBody, ApiResponse, ApiBearerAuth, ApiBasicAuth } from '@nestjs/swagger';
+import {
+  Controller,
+  Post,
+  Body,
+  Delete,
+  Query,
+  Get,
+  Headers,
+  Request,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiBody,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiBasicAuth,
+} from '@nestjs/swagger';
 import { AuthService } from '@src/auth/auth.service';
 import { AuthRequest } from '@src/DTO/authRequest';
 import { EmailRequest } from '@src/DTO/emailRequest';
@@ -11,51 +26,58 @@ import { UserMetadata } from '@src/enums/userMetadata';
 @Controller('auth')
 @ApiTags('auth')
 export class AuthController {
-    constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
-    @Roles(UserMetadata.UserAdmin)
-    @Get('/user')
-    async getUser(@Query() emailRequest: EmailRequest): Promise<object> {
-        const user = await this.authService.getUser(emailRequest);
-        return user;
-    }
+  @Roles(UserMetadata.UserAdmin)
+  @Get('/user')
+  async getUser(@Query() emailRequest: EmailRequest): Promise<object> {
+    const user = await this.authService.getUser(emailRequest);
+    return user;
+  }
 
-    @Roles(UserMetadata.EventCreator)
-    @Get('/allowedOrgs')
-    async getAllowedOrgs(@Request() req) {
-        return req?.firebaseUser?.allowedOrgs ?? [];
-    }
+  @Roles(UserMetadata.UserAdmin)
+  @Get('/users')
+  async getUsers(): Promise<object> {
+    const users = await this.authService.getUsers();
+    return users;
+  }
 
-    @Post('/login')
-    async login(@Body() authRequest: AuthRequest): Promise<string> {
-        const token = await this.authService.login(authRequest);
-        return token;
-    }
+  @Roles(UserMetadata.EventCreator)
+  @Get('/allowedOrgs')
+  async getAllowedOrgs(@Request() req) {
+    return req?.firebaseUser?.allowedOrgs ?? [];
+  }
 
-    @Roles(UserMetadata.UserAdmin)
-    @Post('/createAccount')
-    async createAccount(@Body() authRequest: AuthRequest): Promise<string> {
-        const token = await this.authService.createAccount(authRequest);
-        return token;
-    }
+  @Post('/login')
+  async login(@Body() authRequest: AuthRequest): Promise<string> {
+    const token = await this.authService.login(authRequest);
+    return token;
+  }
 
-    @Roles(UserMetadata.UserAdmin)
-    @Post('/updateClaims')
-    async updateClaims(@Body() claimsRequest: ClaimsRequest): Promise<object> {
-        const claims = await this.authService.updateClaims(claimsRequest);
-        return claims;
-    }
+  @Roles(UserMetadata.UserAdmin)
+  @Post('/createAccount')
+  async createAccount(@Body() authRequest: AuthRequest): Promise<string> {
+    const token = await this.authService.createAccount(authRequest);
+    return token;
+  }
 
-    @Roles(UserMetadata.UserAdmin)
-    @Post('/changePassword')
-    async changePassword(@Body() authRequest: AuthRequest): Promise<object> {
-        const newUser = this.authService.changePassword(authRequest);
-        return newUser;
-    }
+  @Roles(UserMetadata.UserAdmin)
+  @Post('/updateClaims')
+  async updateClaims(@Body() claimsRequest: ClaimsRequest): Promise<object> {
+    const claims = await this.authService.updateClaims(claimsRequest);
+    return claims;
+  }
 
-    @Roles(UserMetadata.UserAdmin)
-    @Delete('/deleteAccount')
-    async deleteAccount(@Query() emailRequest: EmailRequest) {
-        await this.authService.deleteAccount(emailRequest);
-    }
+  @Roles(UserMetadata.UserAdmin)
+  @Post('/changePassword')
+  async changePassword(@Body() authRequest: AuthRequest): Promise<object> {
+    const newUser = this.authService.changePassword(authRequest);
+    return newUser;
+  }
+
+  @Roles(UserMetadata.UserAdmin)
+  @Delete('/deleteAccount')
+  async deleteAccount(@Query() emailRequest: EmailRequest) {
+    await this.authService.deleteAccount(emailRequest);
+  }
 }

@@ -3,12 +3,12 @@ services:
   event_service:
     image: event_service_dev
     ports:
-      - "5000:5000"
-      - "5858:5858"
-    networks: 
+      - '5000:5000'
+      - '5858:5858'
+    networks:
       - in2it
     labels:
-      caddy.targetport: 5000 
+      caddy.targetport: 5000
     environment:
       - FIREBASE_PRIVATE_KEY=${FIREBASE_PRIVATE_KEY}
       - FIREBASE_CLIENT_EMAIL=${FIREBASE_CLIENT_EMAIL}
@@ -20,34 +20,26 @@ services:
       - FIREBASE_MESSAGING_SENDER_ID=${FIREBASE_MESSAGING_SENDER_ID}
       - FIREBASE_APP_ID=${FIREBASE_APP_ID}
       - FIREBASE_MEASUREMENT_ID=${FIREBASE_MEASUREMENT_ID}
-  event_processor:
-    image: event_processor_dev
-    ports:
-      - "6800:6800"
-      - "5860:5860"
-    networks: 
+  create_schedules:
+    image: create_schedules
+    command: sh -c "chmod +x entrypoint.sh && ./entrypoint.sh"
+    networks:
       - in2it
     environment:
-      - SCRAPER_USERNAME=${SCRAPER_USERNAME}
-      - SCRAPER_PASSWORD=${SCRAPER_PASSWORD}
       - SYSTEM_USERNAME=${SYSTEM_USERNAME}
       - SYSTEM_PASSWORD=${SYSTEM_PASSWORD}
-  splash:
-    image: "scrapinghub/splash:3.4.1"
-    ports:
-      - "8050:8050"
-    networks: 
-      - in2it
-    command: --disable-browser-caches --dont-log-args=lua_source
+    deploy:
+      restart_policy:
+        condition: none
   in2it_site:
     image: in2it_site_dev
     ports:
-      - "3000:3000"
-      - "5859:5859"
-    networks: 
+      - '3000:3000'
+      - '5859:5859'
+    networks:
       - in2it
     labels:
-      caddy.targetport: 3000 
+      caddy.targetport: 3000
     environment:
       - FIREBASE_API_KEY=${FIREBASE_API_KEY_BROWSER}
       - FIREBASE_AUTH_DOMAIN=${FIREBASE_AUTH_DOMAIN}
@@ -58,10 +50,7 @@ services:
       - FIREBASE_APP_ID=${FIREBASE_APP_ID}
       - FIREBASE_MEASUREMENT_ID=${FIREBASE_MEASUREMENT_ID}
   caddy:
-    image: lucaslorentz/caddy-docker-proxy:0.3.6-alpine
-    command: -log stdout -agree -email in2itchicago@gmail.com
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock 
+    image: caddy_config
     ports:
       - target: 80
         published: 80
@@ -69,18 +58,21 @@ services:
       - target: 443
         published: 443
         mode: host
+    environment:
+      - SERVER_URL=${SERVER_NAME:-localhost}:${SERVER_PORT:-80}
+      - TLS_CONFIG=
     deploy:
       mode: global
-    networks: 
+    networks:
       - in2it
   ndscheduler:
     image: ndscheduler_dev
-    ports: 
-      - "8888:8888"
-      - "5861:5861"
+    ports:
+      - '8888:8888'
+      - '5861:5861'
     environment:
       - NDSCHEDULER_SETTINGS_MODULE=simple_scheduler.settings
-    networks: 
+    networks:
       - in2it
   # these services are only used in dev
   pgadmin:

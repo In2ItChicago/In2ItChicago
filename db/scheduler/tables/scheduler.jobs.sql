@@ -1,4 +1,4 @@
-CREATE TABLE scheduler.Jobs
+CREATE TABLE scheduler.jobs
 (
     id character varying(191) COLLATE pg_catalog."default" NOT NULL,
     next_run_time double precision,
@@ -10,7 +10,7 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE scheduler.Jobs
+ALTER TABLE scheduler.jobs
     OWNER to postgres;
 
 -- Index: ix_scheduler_jobs_next_run_time

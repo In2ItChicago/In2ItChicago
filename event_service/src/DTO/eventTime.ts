@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber } from 'class-validator';
+import { IsDate } from 'class-validator';
 import { Type } from 'class-transformer';
 
 /**
@@ -7,13 +7,13 @@ import { Type } from 'class-transformer';
  * Note: Why is this not being used in the other response or request models??
  */
 export class EventTime {
-    @IsNumber()
-    @Type(() => Number)
-    @ApiProperty()
-    startTimestamp: number;
-    
-    @IsNumber()
-    @Type(() => Number)
-    @ApiProperty()
-    endTimestamp: number;
+  @IsDate()
+  @Type(() => Date)
+  @ApiProperty()
+  startTimestamp: Date;
+
+  @IsDate()
+  @Type(() => Date)
+  @ApiProperty()
+  endTimestamp: Date;
 }

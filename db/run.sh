@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 if [ "$1" = "DEV" ]
 then 
     $(dirname $0)/../scripts/compose-deploy.sh --env dev postgres &

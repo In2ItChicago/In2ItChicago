@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 if [ "$3" = "PROD" ]
 then
     VOL="-v /var/run/postgresql:/var/run/postgresql"

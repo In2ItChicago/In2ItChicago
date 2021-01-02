@@ -1,23 +1,8 @@
 version: '3.6'
 services:
-  event_processor:
-    image: in2itchicago/event_processor:20200503.1
-    command: sh -c "chmod +x entrypoint.sh && ./entrypoint.sh"
-    environment:
-      - DEBUG=0
-      - VERBOSE_OUTPUT=0
-      - SCHEDULE_INTERVAL=120
-      - RUN_SCHEDULER=1
-      - ENABLE_RESPONSE_CACHE=1
-      - BYPASS_AUTH=0
-    deploy:
-      resources:
-        limits:
-          cpus: '0.7'
-          memory: '200M'
   event_service:
-    image: in2itchicago/event_service:20200503.1
-    command: "yarn run start:prod"
+    image: in2itchicago/event_service:20210102.2
+    command: 'yarn run start:prod'
     labels:
       caddy.address: api.${SERVER_NAME:-localhost}:${SERVER_PORT:-80}
     environment:
@@ -32,10 +17,10 @@ services:
           cpus: '0.7'
           memory: '200M'
   in2it_site:
-    image: in2itchicago/in2it_site:20200503.1
-    command: "yarn run start"
+    image: in2itchicago/in2it_site:20210102.2
+    command: 'yarn run start'
     environment:
-      - "IN2IT_API_URL=${IN2IT_API_URL_PROD:-http://api.localhost}"
+      - 'IN2IT_API_URL=${IN2IT_API_URL_PROD:-http://api.localhost}'
       - BYPASS_AUTH=0
     labels:
       caddy.address: ${SERVER_NAME:-localhost}:${SERVER_PORT:-80} www.${SERVER_NAME:-localhost}:${SERVER_PORT:-80}
@@ -45,8 +30,8 @@ services:
           cpus: '0.7'
           memory: '200M'
   ndscheduler:
-    image: in2itchicago/ndscheduler:20200503.1
-    command: "python -u simple_scheduler/scheduler.py"
+    image: in2itchicago/ndscheduler:20210102.2
+    command: 'python -u simple_scheduler/scheduler.py'
     environment:
       - DEBUG=0
       - HOSTNAME=/var/run/postgresql
@@ -58,8 +43,9 @@ services:
           cpus: '0.7'
           memory: '200M'
   caddy:
-    volumes:
-      - caddy_certs:/root/.caddy
+    environment:
+      - 'AUTO_HTTPS=${AUTO_HTTPS:-auto_https off}'
+      - TLS_CONFIG=${TLS_CONFIG:-}
   postgres:
     deploy:
       restart_policy:

@@ -1,5 +1,10 @@
-
-import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  ExceptionFilter,
+  Catch,
+  ArgumentsHost,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 
 /**
  * A filter for service requests to catch any invalid requests???
@@ -18,11 +23,11 @@ export class GenericFilter implements ExceptionFilter {
 
     const errorJson = {
       statusCode: status,
-      message: exception.message,
+      message: JSON.stringify(exception.message),
       timestamp: new Date().toISOString(),
       path: request.url,
     };
-    
+
     console.log(errorJson);
     console.log(exception.stack);
     response.status(status).json(errorJson);

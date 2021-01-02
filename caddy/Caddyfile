@@ -1,0 +1,14 @@
+{
+    {$AUTO_HTTPS}
+}
+
+api.{$SERVER_URL} {
+    reverse_proxy event_service:5000
+    {$TLS_CONFIG}
+}
+
+{$SERVER_URL} {
+    reverse_proxy in2it_site:3000
+    {$TLS_CONFIG}
+}
+

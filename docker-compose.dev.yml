@@ -10,25 +10,9 @@ services:
     environment:
       - HOST=postgres
       - BYPASS_AUTH=${BYPASS_AUTH:-1}
-      - PROFILE_QUERIES=${PROFILE_QUERIES:-0}
+      - PROFILE_QUERIES=${PROFILE_QUERIES:-1}
       - IN2IT_API_URL=${IN2IT_API_URL:-http://api.localhost}
     tty: true
-  event_processor:
-    command: sh -c "chmod +x entrypoint.sh && nodemon --exec ./entrypoint.sh"
-    environment:
-      - DEBUG=${EVENT_PROCESSOR_DEBUG}
-      - VERBOSE_OUTPUT=${VERBOSE_OUTPUT}
-      - RUN_SCHEDULER=${RUN_SCHEDULER}
-      - SCHEDULE_INTERVAL=5
-      - SPIDER_NAME=${SPIDER_NAME}
-      - ENABLE_RESPONSE_CACHE=${ENABLE_RESPONSE_CACHE}
-      - BYPASS_AUTH=${BYPASS_AUTH:-1}
-    volumes:
-      - ./event_processor:/usr/src/app/event_processor
-      - event_processor_data:/usr/src/app/event_processor/data/
-      - event_processor_lock:/usr/src/app/event_processor/lock/
-      - event_processor_scrapy:/usr/src/app/event_processor/.scrapy/
-      - ./.event_processor_data/vscode_server:/root/.vscode-server
   in2it_site:
     command: sh -c "chmod +x entrypoint.sh && ./entrypoint.sh"
     volumes:
@@ -39,14 +23,17 @@ services:
       - BYPASS_AUTH=${BYPASS_AUTH:-1}
     labels:
       caddy.address: localhost:80
+  caddy:
+    environment:
+      - 'AUTO_HTTPS=auto_https off'
   postgres:
-    image: postgres:11.5-alpine
+    image: postgres:12.5-alpine
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     ports:
-      - "5432:5432"
-    networks: 
+      - '5432:5432'
+    networks:
       - in2it
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -60,7 +47,7 @@ services:
       - DEBUG=${SCHEDULER_DEBUG}
       - HOSTNAME=postgres
   pgadmin:
-    image: dpage/pgadmin4:4.19
+    image: dpage/pgadmin4:4.29
     environment:
       - PGADMIN_DEFAULT_EMAIL=user@domain.com
       - PGADMIN_DEFAULT_PASSWORD=pgadmin
@@ -68,26 +55,26 @@ services:
     volumes:
       - pgadmin_data:/var/lib/pgadmin
     ports:
-      - "7000:7000"
+      - '7000:7000'
     # pgadmin spams logs with http request notifications
     logging:
       driver: none
-    networks: 
+    networks:
       - in2it
   portainer:
-    image: "portainer/portainer:1.23.1"
+    image: 'portainer/portainer:1.24.1'
     ports:
-      - "9000:9000"
+      - '9000:9000'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
-    networks: 
+    networks:
       - in2it
 volumes:
   ndscheduler_modules:
   postgres_data:
-  event_processor_data:
-  event_processor_lock:
-  event_processor_scrapy:
+  # event_processor_data:
+  # event_processor_lock:
+  # event_processor_scrapy:
   portainer_data:
   pgadmin_data:

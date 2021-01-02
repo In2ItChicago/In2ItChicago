@@ -70,10 +70,11 @@
                         <v-row>
                             <v-col>
                                 <v-label>
-                                    Cost (Optional)
+                                    Price
+                                    <span class="required-star"> *</span>
                                 </v-label>
                                 <v-text-field
-                                    v-model="event.cost"
+                                    v-model="event.price"
                                     prepend-inner-icon="mdi-currency-usd"
                                     outlined
                                 ></v-text-field>
@@ -85,12 +86,12 @@
                         <v-row>
                             <v-col>
                                 <v-checkbox
-                                    v-model="event.isHiddenFromPublic"
-                                    label="I don't want this event's location to be shown publicly"
+                                    v-model="isVirtualEvent"
+                                    label="This is a virtual event"
                                 ></v-checkbox>
                             </v-col>
                         </v-row>
-                        <v-row v-if="!event.isHiddenFromPublic">
+                        <v-row v-if="!isVirtualEvent">
                             <v-col>
                                 <v-label>
                                     Event Address Line 1
@@ -102,24 +103,13 @@
                                 ></v-text-field>
                             </v-col>
                         </v-row>
-                        <v-row v-if="!event.isHiddenFromPublic">
+                        <v-row v-if="!isVirtualEvent">
                             <v-col>
                                 <v-label>Event Address Line 2 (Optional)</v-label>
                                 <v-text-field
                                     v-model="addressLine2"
                                     outlined
                                 ></v-text-field>
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col>
-                                <v-label>Neighborhood (Optional)</v-label>
-                                <neighborhood-autocomplete 
-                                    @changed="setNeighborhood"
-                                    textfieldClass="event-neighborhood-autocomplete"
-                                    resultsClass="event-neighborhood-autocomplete-results"
-                                    hint="Input the Chicago neighborhood this event will be taking place in (i.e. Logan Square, Wrigleyville, etc.)">
-                                </neighborhood-autocomplete>
                             </v-col>
                         </v-row>
                         <v-row>
@@ -248,7 +238,7 @@
                         <div v-if="event.isRecurring">
                             <v-row>
                                 <v-col>
-                                    <v-label>This is event is held</v-label>
+                                    <v-label>This event is held</v-label>
                                     <v-select :items="recurringTimeIntervals" v-model="event.recurringTimeInterval" outlined></v-select>
                                 </v-col>
                             </v-row>
@@ -300,9 +290,9 @@
                             </v-row>
                             <v-row v-if="event.recurringTimeInterval == 'Monthly'">
                                 <v-col>
-                                    <v-radio-group v-model="event.monthlyRecurringValue">
-                                        <v-radio :label="recurringDayNumLabel" :value="recurringDayNumValue"></v-radio>
-                                        <v-radio :label="recurringNthDayLabel" :value="recurringNthDayValue"></v-radio>
+                                    <v-radio-group v-model="isWeekOfMonth">
+                                        <v-radio :label="recurringDayNumLabel" :value=false></v-radio>
+                                        <v-radio :label="recurringNthDayLabel" :value=true></v-radio>
                                     </v-radio-group>
                                 </v-col>
                             </v-row>
@@ -316,9 +306,9 @@
                                     Is this event handicap accessible?
                                     <span class="required-star"> *</span>
                                 </v-label>
-                                <v-radio-group v-model="event.isHandicapAccessible" row>
-                                    <v-radio label="Yes" value="1"></v-radio>
-                                    <v-radio label="No" value="0"></v-radio>
+                                <v-radio-group v-model="event.handicapAccessible" row>
+                                    <v-radio label="Yes" v-bind:value=true></v-radio>
+                                    <v-radio label="No" v-bind:value=false></v-radio>
                                 </v-radio-group>
                             </v-col>
                         </v-row>
@@ -330,8 +320,8 @@
                                     <span class="required-star"> *</span>
                                 </v-label>
                                 <v-radio-group v-model="event.requiresPhysicalActivities" row>
-                                    <v-radio label="Yes" value="1"></v-radio>
-                                    <v-radio label="No" value="0"></v-radio>
+                                    <v-radio label="Yes" v-bind:value=true></v-radio>
+                                    <v-radio label="No" v-bind:value=false></v-radio>
                                 </v-radio-group>
                             </v-col>
                         </v-row>
@@ -351,6 +341,8 @@
 <script>
     import axios from 'axios';
     import NeighborhoodAutocomplete from '~/components/NeighborhoodAutocomplete';
+    import firebase from 'firebase/app'
+    import 'firebase/auth'
 
     export default{
         data() {
@@ -376,6 +368,8 @@
                 endTimeHrs: '12',
                 endTimeMins: '00',
                 endTimeAmPm: 'PM',
+                isWeekOfMonth: false,
+                 isVirtualEvent: false,
 				event: {
                     organization: '',
                     title: '',
@@ -383,16 +377,16 @@
                     address: '',
                     neighborhood: '',
                     url: '',
-                    cost: '',
-                    isHiddenFromPublic: false,
+                    price: '',
                     isMultiDayEvent: false,
                     startDateTime: '',
                     endDateTime: '',
                     isRecurring: false,
+                    mode: '',
                     recurringTimeInterval: '',
                     weeklyRecurringDays: [],
                     monthlyRecurringValue: '',
-                    isHandicapAccessible: false,
+                    handicapAccessible: false,
                     requiresPhysicalActivities: false
                 }
 			};
@@ -415,7 +409,7 @@
                 if (!this.event.isMultiDayEvent) {
                     //Event ends on same day as start + 3 hours
                     this.endDate = this.startDate;
-                    endHourInt = this.getStartHourInt() + 3;
+                    //endHourInt = this.getStartHourInt() + 3;
                 }
 
                 return new Date(
@@ -426,6 +420,17 @@
                     parseInt(this.endTimeMins)
                 );
             },
+            mode: function() {
+                if (this.event.recurringTimeInterval === 'Weekly') {
+                    return 'week';
+                }
+                else if (this.event.recurringTimeInterval === 'Monthly' && this.isWeekOfMonth) {
+                    return 'weekOfMonth';
+                }
+                else {
+                    return 'dayOfMonth';
+                }
+            },
             recurringDayNumLabel: function () {
                 return 'The ' + this.getOrdinalSuffix(this.startDate.getDate()) + ' of every month';
             },
@@ -433,28 +438,11 @@
                 return this.getOrdinalSuffix(this.startDate.getDate());
             },
             recurringNthDayLabel: function () {
-                return this.recurringNthDayValue + ' of every month';
+                const nth = this.getRecurringNthDay();
+                return this.getOrdinalSuffix(nth) + ' ' + this.getDayName(this.startDate) + ' of every month';
             },
             recurringNthDayValue: function () {
-                let nth = 0;
-                let eventDayNum = this.startDate.getDate();
-                let eventMonth = this.startDate.getMonth();
-                let eventDayName = this.getDayName(this.startDate);
-
-                for (let i = 0; i < eventDayNum; ++i) {
-                    //Start at first date of current month
-                    let testDateString = this.startDate.getFullYear() + '-' + (eventMonth + 1) + '-1';
-                    let testDate = this.getDateObjectFromYYYYMMDD(testDateString);
-
-                    //Iterate through days of month
-                    testDate.setDate(testDate.getDate() + i);
-
-                    if (testDate.getMonth() != eventMonth) break; //Reached end of month
-                    if (this.getDayName(testDate) == eventDayName) { //Day name matches
-                        ++nth;
-                    }
-                }
-                return this.getOrdinalSuffix(nth) + ' ' + this.getDayName(this.startDate);
+                return this.getRecurringNthDay();
             },
             weeklyRecurringDaysLabelText: function () {
                 if (this.event.weeklyRecurringDays.length <= 0) {
@@ -481,7 +469,7 @@
             },
             submitUrl: function() {
 				const eventURL = process.server ? 'http://event_service:5000' : this.$env.IN2IT_API_URL;
-				return `${eventURL}/events/submitEvent`;
+				return `${eventURL}/events${this.event.isRecurring ? '/recurringEvent' : ''}`;
 			},
         },
         methods: {
@@ -519,17 +507,53 @@
                 }
                 return hourInt;
             },
-            submitEvent: function () {
+            submitEvent: async function () {
                 this.prepareEventPayload();
-                axios.post(this.submitUrl, this.event)
+                console.log(this.event);
+                
+                const auth = await firebase.auth();
+                if (!auth.currentUser) {
+                    // Not logged in
+                    return;
+                }
+                const token = await auth.currentUser.getIdToken();
+                const config = {
+                    headers: { Authorization: `Bearer ${token}` }
+                };
+                axios.post(this.submitUrl, this.event, config)
                 .then((res) => {
                     this.submissionCompleted = true;
+                    alert('Success');
+                })
+                .catch((err) => {
+                    alert(err);
                 });
             },
             prepareEventPayload: function () {
-                this.event.address = this.address;
-                this.event.startDateTime = this.startDateTime;
-                this.event.endDateTime = this.endDateTime;
+                if (this.isVirtualEvent) {
+                    this.event.address = '';
+                }
+                else if (this.address.trim()  === '') {
+                    // address not supplied, send null to get a validation error from the api
+                    this.event.address = null;
+                }
+                else {
+                    this.event.address = this.address;
+                }
+
+                this.event.eventTime = {
+                    startTimestamp: this.startDateTime.toLocaleString(),
+                    endTimestamp: this.endDateTime.toLocaleString()
+                };
+                this.event.mode = this.mode;
+                if (this.mode === 'weekOfMonth') {
+                    this.event.monthlyRecurringWeekday = this.getDayName(this.startDate);
+                    this.event.monthlyRecurringWeekNumber = this.getRecurringNthDay();
+                }
+                else if (this.mode === 'dayOfMonth') {
+                    this.event.monthlyRecurringDay = this.startDate.getDate();
+                }
+
             },
             getOrdinalSuffix: function (i) {
                 let j = i % 10,
@@ -546,10 +570,28 @@
                 return i + "th";
             },
             getDayName: function (dateObject) {
-                return dateObject.toLocaleDateString('en-US', { weekday: 'long' });
+                return dateObject.toLocaleDateString('en-US', { weekday: 'long'});
             },
-            setNeighborhood: function (neighborhood) {
-                this.event.neighborhood = neighborhood;
+            getRecurringNthDay: function() {
+                let nth = 0;
+                let eventDayNum = this.startDate.getDate();
+                let eventMonth = this.startDate.getMonth();
+                let eventDayName = this.getDayName(this.startDate);
+
+                for (let i = 0; i < eventDayNum; ++i) {
+                    //Start at first date of current month
+                    let testDateString = this.startDate.getFullYear() + '-' + (eventMonth + 1) + '-1';
+                    let testDate = this.getDateObjectFromYYYYMMDD(testDateString);
+
+                    //Iterate through days of month
+                    testDate.setDate(testDate.getDate() + i);
+
+                    if (testDate.getMonth() != eventMonth) break; //Reached end of month
+                    if (this.getDayName(testDate) == eventDayName) { //Day name matches
+                        ++nth;
+                    }
+                }
+                return nth;
             }
         },
         components: {

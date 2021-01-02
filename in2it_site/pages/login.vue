@@ -6,11 +6,11 @@
       <button @click.prevent="logout">Logout</button>
     </div>
     <div v-else>
-      <input type="radio" id="hasAccount" :value="false" v-model="needsAccount" />
-      <label for="hasAccount">I have an account</label>
+      <input type="radio" id="hasAccountInput" :value="false" v-model="needsAccount" />
+      <label for="hasAccountInput">I have an account</label>
       <br />
-      <input type="radio" id="needsAcctouns" :value="true" v-model="needsAccount" />
-      <label for="needsAcctouns">I need an account</label>
+      <input type="radio" id="needsAccountInput" :value="true" v-model="needsAccount" />
+      <label for="needsAccountInput">I need an account</label>
       <form @submit.prevent="loginOrRegister">
         <input type="email" v-model="email" placeholder="Your email address" />
         <input type="password" v-model="password" placeholder="Your password" />
@@ -26,7 +26,8 @@
   </div>
 </template>
 <script>
-import firebase from 'firebase'
+import firebase from 'firebase/app'
+import 'firebase/auth'
 
 export default {
   name: 'Login',
@@ -50,15 +51,8 @@ export default {
         // display error message
       }
     },
-    login() {
-      firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(function() {
-        firebase.auth().currentUser.getIdToken().then(function(idToken) {
-          console.log(idToken);
-        }).catch(function(error) {
-          // Handle error
-        });
-      });
-      
+    async login() {
+      await firebase.auth().signInWithEmailAndPassword(this.email, this.password);
     },
     loginOrRegister() {
       if (this.needsAccount) {
@@ -68,11 +62,14 @@ export default {
       }
     },
     logout() {
-      firebase.auth().signOut()
+      firebase.auth().signOut();
     }
   },
   created() {
-    firebase.auth().onAuthStateChanged(user => (this.authenticatedUser = user))
+    firebase.auth().onAuthStateChanged(user => {
+      this.authenticatedUser = user;
+    });
+    
   }
 }
 </script>
