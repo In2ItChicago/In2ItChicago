@@ -381,8 +381,8 @@ Now, run `./start-prod.sh` and test to make sure everything is working locally.
 
 Once tested, you can push the images to Dockerhub. Before doing this the first time, you have to run `deploy/login.sh` in order to obtain access to push to Dockerhub. Before doing that, you will need to have `dockerhub_in2itchicago.txt` inside your `deploy` folder.
 
-Once logged in, run `deploy/publish-images.sh` to push the images to Dockerhub. This will take a few minutes depending on the extent of the changes. Dockerhub does a diff with the current published image to see what needs to be pushed.
+Once logged in, run `deploy/publish-images.sh 20190723.1` to push the images to Dockerhub (replace the version number with the one you used in the earlier step). This will take a few minutes depending on the extent of the changes. Dockerhub does a diff with the current published image to see what needs to be pushed.
 
-After a successful push, you're ready to deploy to the server. First, commit your changes to `docker-compose.prod.yml` so they can be picked up by the server. Then, run `deploy/in2it_aws_deploy.sh`. For this to work, you need to have `in2it-key.pem` inside your deploy folder.
+After a successful push, you're ready to deploy to the server. First, commit your changes to `docker-compose.prod.yml` so they can be picked up by the server. Then, run `deploy/vultr_deploy.sh`. For this to work, you need to have the ssh private key installed on your computer at `~/.ssh/id_rsa`.
 
-After the deploy script finishes, you can run `deploy/connect_ports.sh`. This will set up port forwarding to the remote server so you can monitor the applications from your local computer. If anything goes awry, you can use `deploy/in2it_aws.sh` to SSH into the server.
+After the deploy script finishes, you can run `deploy/connect_ports.sh`. This will set up port forwarding to the remote server so you can monitor the applications from your local computer. If anything goes awry, you can use `deploy/ssh_vultr.sh` to SSH into the server.
