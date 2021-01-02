@@ -341,7 +341,8 @@
 <script>
     import axios from 'axios';
     import NeighborhoodAutocomplete from '~/components/NeighborhoodAutocomplete';
-    import firebase from 'firebase'
+    import firebase from 'firebase/app'
+    import 'firebase/auth'
 
     export default{
         data() {
