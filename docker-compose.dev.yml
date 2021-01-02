@@ -13,22 +13,6 @@ services:
       - PROFILE_QUERIES=${PROFILE_QUERIES:-1}
       - IN2IT_API_URL=${IN2IT_API_URL:-http://api.localhost}
     tty: true
-  # event_processor:
-  #   command: sh -c "chmod +x entrypoint.sh && nodemon --exec ./entrypoint.sh"
-  #   environment:
-  #     - DEBUG=${EVENT_PROCESSOR_DEBUG}
-  #     - VERBOSE_OUTPUT=${VERBOSE_OUTPUT}
-  #     - RUN_SCHEDULER=${RUN_SCHEDULER}
-  #     - SCHEDULE_INTERVAL=5
-  #     - SPIDER_NAME=${SPIDER_NAME}
-  #     - ENABLE_RESPONSE_CACHE=${ENABLE_RESPONSE_CACHE}
-  #     - BYPASS_AUTH=${BYPASS_AUTH:-1}
-  #   volumes:
-  #     - ./event_processor:/usr/src/app/event_processor
-  #     - event_processor_data:/usr/src/app/event_processor/data/
-  #     - event_processor_lock:/usr/src/app/event_processor/lock/
-  #     - event_processor_scrapy:/usr/src/app/event_processor/.scrapy/
-  #     - ./.event_processor_data/vscode_server:/root/.vscode-server
   in2it_site:
     command: sh -c "chmod +x entrypoint.sh && ./entrypoint.sh"
     volumes:
