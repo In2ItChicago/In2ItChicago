@@ -353,6 +353,11 @@
     import 'firebase/auth'
 
     export default{
+        asyncData(context){
+            if(!firebase.auth().currentUser){
+                context.redirect('/login');
+            }
+        },
         data() {
 			return {
                 //event object properties are limited to only those accepted by the API

@@ -9,6 +9,7 @@
                     <a class="in2it-nav-link" href="/events">Map</a>
                     <a class="in2it-nav-link" href="/about-us">About Us</a>
                     <a class="in2it-nav-link" href="/join-us">Join Us</a>
+                    <a class="in2it-nav-link" href="/login">Log In</a>
                 </div>
             </div>
         </div>
