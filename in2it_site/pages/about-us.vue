@@ -40,11 +40,13 @@
                 <li>Kevin Hund</li>
                 <li>Lydia Jessup</li>
                 <li>Ryan Klaus</li>
+                <li>Adan Lopez</li>
+                <li>Destinee Oitzinger</li>
                 <li>Kevin Prehn</li>
                 <li>Kim	Schaefer</li>
                 <li>Austin Schey</li>
                 <li>Cameron	Sow</li>
-                <li>Wes	Thorburn</li>
+                <li>Wes	T.</li>
             </ul>
 
             <h3>In2It is a project of Chi Hack Night.</h3>
