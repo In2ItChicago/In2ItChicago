@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="content-col col-md-8 offset-md-2 col-sm-12">
+        <v-col lg="8" offset-lg="2" md="12" offset-md="0" sm="12" cols="12">
             <v-row class="page-heading-row">
                 <v-col>
                     <h1 class="post-event-heading">Post an Event</h1>
@@ -12,7 +12,7 @@
                 lazy-validation
             >
                 <v-row>
-                    <v-col sm="12" md="8">
+                    <v-col cols="12">
                         <v-row>
                             <h2 class="post-event-subheading">General Info</h2>
                         </v-row>
@@ -182,50 +182,58 @@
                         </v-row>
                         <v-row>
                             <v-col>
-                                <v-label>
-                                    Start Time
-                                    <span class="required-star"> *</span>
-                                </v-label>
-                            </v-col>
-                            <v-col>
-                                <v-label>End Time (Optional)</v-label>
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col class="d-flex flex-row">
-                                <v-select
-                                    :items="hourSelectionItems"
-                                    v-model="startTimeHrs"
-                                    outlined
-                                ></v-select>
-                                <v-select
-                                    :items="minuteSelectionItems"
-                                    v-model="startTimeMins"
-                                    outlined
-                                ></v-select>
-                                <v-select
-                                    :items="amPmSelectionItems"
-                                    v-model="startTimeAmPm"
-                                    outlined
-                                ></v-select>
+                                <v-row>
+                                    <v-label>
+                                        Start Time
+                                        <span class="required-star"> *</span>
+                                    </v-label>
+                                </v-row>
+                                <v-row>
+                                    <v-col class="d-flex flex-row">
+                                        <v-select
+                                            :items="hourSelectionItems"
+                                            v-model="startTimeHrs"
+                                            outlined
+                                        ></v-select>
+                                        <v-select
+                                            :items="minuteSelectionItems"
+                                            v-model="startTimeMins"
+                                            outlined
+                                        ></v-select>
+                                        <v-select
+                                            :items="amPmSelectionItems"
+                                            v-model="startTimeAmPm"
+                                            outlined
+                                        ></v-select>
+                                    </v-col>
+                                </v-row>
                             </v-col>
                             
-                            <v-col class="d-flex flex-row">
-                                <v-select
-                                    :items="hourSelectionItems"
-                                    v-model="endTimeHrs"
-                                    outlined
-                                ></v-select>
-                                <v-select
-                                    :items="minuteSelectionItems"
-                                    v-model="endTimeMins"
-                                    outlined
-                                ></v-select>
-                                <v-select
-                                    :items="amPmSelectionItems"
-                                    v-model="endTimeAmPm"
-                                    outlined
-                                ></v-select>
+                            <v-col>
+                                <v-row>
+                                    <v-label>
+                                        End Time (Optional)
+                                    </v-label>
+                                </v-row>
+                                <v-row>
+                                    <v-col class="d-flex flex-row">
+                                        <v-select
+                                            :items="hourSelectionItems"
+                                            v-model="endTimeHrs"
+                                            outlined
+                                        ></v-select>
+                                        <v-select
+                                            :items="minuteSelectionItems"
+                                            v-model="endTimeMins"
+                                            outlined
+                                        ></v-select>
+                                        <v-select
+                                            :items="amPmSelectionItems"
+                                            v-model="endTimeAmPm"
+                                            outlined
+                                        ></v-select>
+                                    </v-col>
+                                </v-row>
                             </v-col>
                         </v-row>
                         <v-row>
@@ -303,7 +311,7 @@
                         <v-row>
                             <v-col>
                                 <v-label>
-                                    Is this event handicap accessible?
+                                    Does this event have accommodations for people with disabilities?
                                     <span class="required-star"> *</span>
                                 </v-label>
                                 <v-radio-group v-model="event.handicapAccessible" row>
@@ -334,7 +342,7 @@
                     </v-col>
                 </v-row>
             </v-form>
-        </div>
+        </v-col>
     </div>
 </template>
 
