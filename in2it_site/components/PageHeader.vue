@@ -9,7 +9,9 @@
                     <a class="in2it-nav-link" href="/events">Map</a>
                     <a class="in2it-nav-link" href="/about-us">About Us</a>
                     <a class="in2it-nav-link" href="/join-us">Join Us</a>
-                    <a class="in2it-nav-link" href="/login">Log In</a>
+                    <a class="in2it-nav-link" v-if="!authenticated" href="/login">Log In</a>
+                    <a class="in2it-nav-link" v-if="authenticated" href="/submit-event">Submit Event</a>
+                    <a class="in2it-nav-link" v-if="authenticated" href="#" @click="logout">Log Out</a>
                 </div>
             </div>
         </div>
@@ -17,7 +19,32 @@
 </template>
 
 <script>
-	export default{};
+    import firebase from 'firebase/app'
+    import 'firebase/auth'
+
+	export default{
+        data() {
+            return {
+                authenticated: false
+            };
+        },
+        methods: {
+            logout() {
+                firebase.auth().signOut();
+                this.$router.push('/');
+            }
+        },
+        created() {
+            firebase.auth().onAuthStateChanged(user => {
+                if (user) {
+                    this.authenticated = true;
+                }
+                else {
+                    this.authenticated = false;
+                }
+            });
+        },
+    };
 </script>
 
 <style scoped>

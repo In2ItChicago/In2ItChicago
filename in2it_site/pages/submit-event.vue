@@ -353,11 +353,6 @@
     import 'firebase/auth'
 
     export default{
-        asyncData(context){
-            if(!firebase.auth().currentUser){
-                context.redirect('/login');
-            }
-        },
         data() {
 			return {
                 //event object properties are limited to only those accepted by the API
@@ -609,7 +604,14 @@
         },
         components: {
             NeighborhoodAutocomplete
-        }
+        },
+        created() {
+            firebase.auth().onAuthStateChanged(user => {
+                if (!user) {
+                    this.$router.push('/login');
+                }
+            });
+        },
     };
 </script>
 
