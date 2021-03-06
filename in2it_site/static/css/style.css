@@ -43,19 +43,6 @@ body{
 	margin:0px;
 }
 
-.landing-page-image-row{
-	margin-top:-100px;
-	margin-bottom:20px;
-}
-
-.landing-page-image{
-	z-index: 1;
-	width:35vw;
-	border-radius: 8px;
-	display:flex;
-	margin:8px;
-}
-
 .content-row{
 	margin-top:20px;
 	display:flex;

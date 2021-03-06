@@ -3,10 +3,25 @@
 		<page-title></page-title>
 		<filters @filterApplied="updateEvents()"></filters>
 
-		<div class="landing-page-image-row row justify-content-center">
-			<img class="landing-page-image" src="/img/landing-page-left.jpg">
-			<img class="landing-page-image" src="/img/landing-page-right.jpg">
-		</div>
+		<v-row style="margin-top:-80px;">
+			<v-col cols="6">
+				<v-img
+					src="/img/landing-page-left.jpg"
+					max-height="415"
+					max-width="620"
+					class="ml-auto"
+					style="border-radius:8px;"
+				></v-img>
+			</v-col>
+			<v-col cols="6">
+				<v-img
+					src="/img/landing-page-right.jpg"
+					max-height="415"
+					max-width="620"
+					style="border-radius:8px;"
+				></v-img>
+			</v-col>
+		</v-row>
 	</div>
 </template>
 
@@ -26,16 +41,3 @@
 		}
 	};
 </script>
-
-<style scoped>
-	@media (max-width: 768px) {
-        .landing-page-image-row{
-            margin-top:0px;
-		}
-		
-		.landing-page-image{
-			width:42vw;
-			height:42vw;
-		}
-    }
-</style>
