@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="content-col col-md-8 offset-md-2 col-sm-12">
-            <h1>About In2It</h1>
+            <h1>About IN2IT</h1>
 
             <p>We are a group of Chicagoans who believe civic engagement matters, and want to remove barriers people face getting involved. IN2IT was created to gather events scattered across the internet, and give people the tools to quickly and easily find what pairs best with their interests, schedule, and skills. Our aim is to help people like you spend less time searching and more time doing.</p>
 
@@ -29,27 +29,31 @@
                 <li>Representative of all Chicago Neighborhoods</li>
             </ul>
 
-            <h2>Contributors</h2>
+            <h2>Current Contributors</h2>
             <ul>
-                <li>Sam	DeFrank</li>
-                <li>Jake Egli</li>
                 <li>Deanna Franklin</li>
-                <li>Brandon	Gorson</li>
-                <li>Holden Greenberg</li>
-                <li>Yvonne Hangsterfer</li>
-                <li>Kevin Hund</li>
-                <li>Lydia Jessup</li>
                 <li>Ryan Klaus</li>
                 <li>Adan Lopez</li>
                 <li>Destinee Oitzinger</li>
-                <li>Kevin Prehn</li>
-                <li>Kim	Schaefer</li>
                 <li>Austin Schey</li>
                 <li>Cameron	Sow</li>
                 <li>Wes	T.</li>
             </ul>
 
-            <h3>In2It is a project of Chi Hack Night.</h3>
+            <h2>Past Contributors</h2>
+            <ul>
+                <li>Sam	DeFrank</li>
+                <li>Jake Egli</li>
+                <li>Brandon	Gorson</li>
+                <li>Holden Greenberg</li>
+                <li>Yvonne Hangsterfer</li>
+                <li>Kevin Hund</li>
+                <li>Lydia Jessup</li>
+                <li>Kevin Prehn</li>
+                <li>Kim	Schaefer</li>
+            </ul>
+
+            <h3>IN2IT is a project of Chi Hack Night.</h3>
             <a target="_blank" href="https://chihacknight.org">chihacknight.org</a>
 
             <p>Chi Hack Night is a free, weekly event in Chicago to build, share and learn about tools to create, support, and serve the public good.</p>
