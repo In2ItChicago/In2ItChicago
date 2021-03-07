@@ -49,11 +49,6 @@
 						</div>
 						
 						<div class="datepicker-input">
-							<label class="filter-label"></label>
-							<img src="/img/arrow.svg" class="date-arrow"/>
-						</div>
-
-						<div class="datepicker-input">
 							<label class="filter-label">
 								Event End Date
 							</label>
@@ -207,16 +202,6 @@
 		margin-top:0px;
 	}
 
-	.date-arrow{
-		width:56px;
-		height:57px;
-		margin-top:3px;
-		display:flex;
-		align-self: center;
-		background-color:#fff;
-		border-radius:0px;
-	}
-
 	@media (max-width: 768px) {
 		.filters{
 			padding: 12px 28px 12px 28px;
@@ -229,12 +214,6 @@
 			margin-top:10px;
 			margin-bottom:0px;
 			width:100%;
-		}
-		.datepicker-input{
-			width:46vw;
-		}
-		.date-arrow{
-			width:8vw;
 		}
     }
 </style>
