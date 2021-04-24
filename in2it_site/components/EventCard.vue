@@ -11,7 +11,7 @@
         <v-card-subtitle class="event-card-subtitle">{{ event.organizationName }}</v-card-subtitle>
         <v-card-subtitle class="event-card-subtitle">{{ event.startDate }} {{ formattedTime }} </v-card-subtitle>
         <v-card-subtitle v-if="event.address.length" class="event-card-subtitle">{{ event.address }}</v-card-subtitle>
-        <v-card-subtitle v-else class="event-card-subtitle">Online</v-card-subtitle>
+        <v-card-subtitle v-else class="event-card-subtitle online-text">Online</v-card-subtitle>
         <v-card-text class="event-card-description">{{ description }}</v-card-text>
     </v-card>
 </template>
@@ -68,6 +68,9 @@
         color: #fff !important;
         padding: 10px 18px 5px 18px;
         font-size: 22px;
+    }
+    .online-text{
+        color: #00ff2b !important;
     }
     .event-card-description {
         margin-top: 10px;
