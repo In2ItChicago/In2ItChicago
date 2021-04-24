@@ -53,6 +53,7 @@
     .event-card-title {
         color: #fff !important;
         font-size: 28px;
+        word-break: normal;
     }
     .event-card-subtitle {
         color: #fff !important;
