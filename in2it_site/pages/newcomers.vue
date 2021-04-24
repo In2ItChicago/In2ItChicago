@@ -30,13 +30,7 @@
                         <li>
                             <h2 class="newcomers-subheading">Want to contribute to development?</h2>
                             <a class="newcomers-link" href="https://github.com/In2ItChicago/In2ItChicago" target="_blank">
-                                Here is our Github
-                            </a>
-                        </li>
-                        <li>
-                            <h2 class="newcomers-subheading">Looking for any other project resources?</h2>
-                            <a class="newcomers-link" href="https://drive.google.com/drive/folders/1SD8HMsjtu8wXYWq5G8jLvlNbN-irHPaZ" target="_blank">
-                                Here is our Google Drive
+                                Here is our Github Repository
                             </a>
                         </li>
                     </ul>
