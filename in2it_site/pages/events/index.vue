@@ -1,7 +1,7 @@
 <template>
     <div>
 		<filters @filterApplied="updateEvents()"></filters>
-		<event-list :eventResult="eventResult" @paginated="updateEvents()"></event-list>
+		<event-list :eventResult="eventResult" @paginated="updateEvents()" ref="eventList"></event-list>
 
 		<client-only>
 			<notifications group="default"/>
@@ -30,6 +30,7 @@
 				})
 				.then((res) => {
 					this.eventResult = res.data;
+					window.scrollTo({top: this.$refs.eventList.$el.offsetTop, behavior: 'smooth'});
 				});
 			}
 		},
