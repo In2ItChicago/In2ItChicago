@@ -42,7 +42,7 @@
     "knex": "^0.20.9",
     "knex-stringcase": "^1.4.1",
     "moment": "^2.26.0",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "pg": "^7.18.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.1",
