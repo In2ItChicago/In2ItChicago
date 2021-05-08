@@ -86,10 +86,13 @@
                     this.markers.push(marker);
                 }
             },
-            setActiveMarker: function(marker) {
+            closeActiveMarker: function() {
                 if (this.activeMarker) {
                     this.activeMarker.infoWindow.close();
                 }
+            },
+            setActiveMarker: function(marker) {
+                this.closeActiveMarker();
                 this.activeMarker = marker;
                 this.updateMarkerFocusState(this.activeMarker.id);
                 this.activeMarker.infoWindow.open(this.map, this.activeMarker);
@@ -155,7 +158,8 @@
                 this.updateMarkerFocusState(id);
             },
             focusedEventId: function (id) {
-                if (!this.$google)  return;
+                if (!this.$google) return;
+                this.closeActiveMarker();
                 for (let i in this.markers) {
                     if (this.markers[i].id != id) continue;
                     this.setActiveMarker(this.markers[i]);
