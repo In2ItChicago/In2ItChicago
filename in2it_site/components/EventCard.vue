@@ -1,15 +1,28 @@
 <template>
     <v-card class="event-card" @click="clickOnEvent()">
-        <span v-if="event.address.length" class="event-card-top-right">
-            In-Person
-        </span>
-        <span v-else class="event-card-top-right">
-            Virtual
+        <span class="event-card-top-right">
+            <span v-if="event.address.length">
+                In-Person
+            </span>
+            <span v-else>
+                Virtual
+            </span>
+
+            <span>
+                <div v-if="event.recurringEventId">
+                    Recurring Event
+                </div>
+                <div v-else>
+                    One-Off Event
+                </div>
+            </span>
         </span>
 
         <v-card-title class="headline event-card-title">{{ title }}</v-card-title>
         <v-card-subtitle class="event-card-subtitle">{{ event.organizationName }}</v-card-subtitle>
-        <v-card-subtitle class="event-card-subtitle">{{ event.startDate }} {{ formattedTime }} </v-card-subtitle>
+        <v-card-subtitle class="event-card-subtitle">
+            {{ event.startDate }} {{ formattedTime }}
+        </v-card-subtitle>
         <v-card-subtitle v-if="event.address.length" class="event-card-subtitle">{{ event.address }}</v-card-subtitle>
         <v-card-subtitle v-else class="event-card-subtitle online-text">Online</v-card-subtitle>
         <v-card-text class="event-card-description">{{ description }}</v-card-text>
@@ -80,6 +93,7 @@
     .event-card-top-right{
         color: #fff !important;
         float:right;
+        text-align:right;
         font-size:18px;
         font-weight:bold;
         padding:16px;

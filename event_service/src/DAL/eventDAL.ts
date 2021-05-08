@@ -32,6 +32,7 @@ export class EventDAL {
           'event.createdDate',
           'event.requiresPhysicalActivities',
           'event.handicapAccessible',
+          'event.recurringEventId',
           'geo.address',
           'geo.lat',
           'geo.lon',
