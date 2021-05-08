@@ -101,6 +101,12 @@
             centerMapOnVisibleMarkers: function() {
                 if(this.markers.length <= 0) return;
 
+                //Default center is Chicago Loop
+                let center = {
+                    lat: 41.88324258145789,
+                    lng: -87.63241624252306
+                };
+
                 let latSum = 0;
                 let lonSum = 0;
                 for (let i in this.markers){
@@ -108,10 +114,10 @@
                     lonSum += this.markers[i].latLng.lng;
                 }
 
-                let center = {
-                    lat: latSum / this.markers.length,
-                    lng: lonSum / this.markers.length
-                };
+                if(latSum > 0 && lonSum > 0){
+                    center.lat = latSum / this.markers.length;
+                    center.lng = lonSum / this.markers.length;
+                }
 
                 this.map.setCenter(center);
             },
