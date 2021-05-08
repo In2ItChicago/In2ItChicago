@@ -106,11 +106,9 @@
 			</div>
 
 			<div class="form-row justify-content-center">
-				<div class="col-md-4 col-lg-2 col-sm-12">
-					<client-only>
-						<button class="search-btn" @click="filter()">SEARCH</button>
-					</client-only>
-				</div>
+				<client-only>
+					<button class="search-btn mb-4" @click="filter()">SEARCH</button>
+				</client-only>
 			</div>
 		</div>
 	</div>
