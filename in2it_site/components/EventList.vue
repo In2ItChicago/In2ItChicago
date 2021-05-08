@@ -10,7 +10,13 @@
 					@input="paginateHandler"
 				></v-pagination>
 				<div v-for="event in eventResult.events">
-					<event-card :event="event" v-on:eventHover="hoveringEventId = $event" v-on:eventClick="focusedEventId = $event"></event-card>
+					<event-card 
+						:event="event" 
+						:focusedEventId="focusedEventId" 
+						v-on:eventHover="hoveringEventId = $event" 
+						v-on:eventClick="focusedEventId = $event"
+					>
+					</event-card>
 				</div>
 			</div>
 			<div v-else class="no-event-message">

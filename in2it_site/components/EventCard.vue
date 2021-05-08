@@ -1,5 +1,5 @@
 <template>
-    <v-card class="event-card" @click="clickOnEvent()">
+    <v-card class="event-card" @click="clickOnEvent()" v-bind:class="{ active: isActive }">
         <span class="event-card-top-right">
             <span v-if="event.address.length">
                 In-Person
@@ -31,7 +31,7 @@
 
 <script>
 	export default {
-        props: ['event'],
+        props: ['event', 'focusedEventId'],
         computed: {
             title: function() {
                 if(this.event.title.length > 50) {
@@ -49,6 +49,9 @@
                     return this.event.description.substr(0, 180) + '...';
                 }
                 return this.event.description;
+            },
+            isActive: function() {
+                return this.event.id == this.focusedEventId;
             }
         },
         methods: {
@@ -69,7 +72,7 @@
         cursor: pointer;
         background-color: #287696;
     }
-    .event-card:hover {
+    .event-card:hover, .event-card.active {
         background-color: #4ec0c5;
     }
     .event-card-title {
