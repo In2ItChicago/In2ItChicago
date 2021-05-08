@@ -9,7 +9,11 @@
             return {
                 markers: [],
                 map: null,
-                activeMarker: null
+                activeMarker: null,
+                center: {
+                    lat: 41.88324258145789,
+                    lng: -87.63241624252306
+                }
             };
         },
         mounted() {
@@ -36,19 +40,22 @@
             },
             createMap: function() {
                 this.map = new google.maps.Map(document.getElementById("map"), {
-                    center: { lat: 41.925, lng: -87.68 },
+                    center: this.center,
                     zoom: 14
                 });
             },
             createMarkers: function() {
                 const events = this.events;
                 for (let i in events) {
+                    let latLng = {lat: events[i].lat, lng: events[i].lon};
+
+                    //Skip creating markers for events without a valid latLng
+                    if(latLng.lat == null || latLng.lng == null) continue;
+
                     let image = {
                         url: "/img/event-marker-unselected.svg",
                         size: new google.maps.Size(35, 50),
                     };
-
-                    let latLng = {lat: events[i].lat, lng: events[i].lon};
 
                     let marker = new google.maps.Marker({
                         position: latLng,
@@ -76,7 +83,6 @@
                     });
 
                     marker.infoWindow = infoWindow;
-
                     this.markers.push(marker);
                 }
             },
@@ -90,7 +96,7 @@
             },
             addMarkersToMap: function() {
                 for (let i in this.markers) {
-                   this.markers[i].setMap(this.map);
+                    this.markers[i].setMap(this.map);
                 }
             },
             centerMapOnMarker: function(marker) {
@@ -102,10 +108,7 @@
                 if(this.markers.length <= 0) return;
 
                 //Default center is Chicago Loop
-                let center = {
-                    lat: 41.88324258145789,
-                    lng: -87.63241624252306
-                };
+                let center = this.center;
 
                 let latSum = 0;
                 let lonSum = 0;
