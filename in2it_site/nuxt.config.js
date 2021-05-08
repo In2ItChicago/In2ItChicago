@@ -13,7 +13,7 @@ module.exports = {
         hid: 'description',
         name: 'description',
         content:
-          'Make an impact in your Neighborhood, Community and City. Find ways to get civically involved, contribute your skills, make a difference.',
+          'Make an impact in your Neighborhood, Community and City in Chicagoland. Find ways to get civically involved, contribute your skills, make a difference.',
       },
     ],
     link: [

@@ -8,7 +8,7 @@
                 <span> City</span>
             </span>
         </div>
-        <h2 class="landing-page-tagline">Find ways to get involved, contribute your skills, make a difference.</h2>
+        <h2 class="landing-page-tagline">Find ways to get involved, contribute your skills, make a difference in Chicagoland.</h2>
     </div>
 </template>
 
