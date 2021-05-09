@@ -1,7 +1,7 @@
 version: '3.6'
 services:
   event_service:
-    image: in2itchicago/event_service:20210307.0
+    image: in2itchicago/event_service:20210509.1
     command: 'yarn run start:prod'
     labels:
       caddy.address: api.${SERVER_NAME:-localhost}:${SERVER_PORT:-80}
@@ -17,7 +17,7 @@ services:
           cpus: '0.7'
           memory: '200M'
   in2it_site:
-    image: in2itchicago/in2it_site:20210307.0
+    image: in2itchicago/in2it_site:20210509.1
     command: 'yarn run start'
     environment:
       - 'IN2IT_API_URL=${IN2IT_API_URL_PROD:-http://api.localhost}'
@@ -30,7 +30,7 @@ services:
           cpus: '0.7'
           memory: '200M'
   ndscheduler:
-    image: in2itchicago/ndscheduler:20210307.0
+    image: in2itchicago/ndscheduler:20210509.1
     command: 'python -u simple_scheduler/scheduler.py'
     environment:
       - DEBUG=0
