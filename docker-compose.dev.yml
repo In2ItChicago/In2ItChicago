@@ -37,6 +37,10 @@ services:
       - in2it
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    command:
+      - "postgres"
+      - "-c"
+      - "log_error_verbosity=TERSE" # https://www.postgresql.org/docs/12/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT
   ndscheduler:
     command: sh -c "chmod +x entrypoint.sh && nodemon --exec ./entrypoint.sh"
     volumes:

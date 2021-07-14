@@ -20,4 +20,8 @@ describe('AppController (e2e)', () => {
       .expect(200)
       .expect('Hello World!');
   });
+
+  // it() TODO: @somersbmatthews write test to trigger sql errors that would under normal 
+  //                postgres verbosity would output sql query, 
+  //                see: https://www.postgresql.org/docs/12/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT
 });
