@@ -8,6 +8,8 @@ import { GetEventsResponse } from '@src/DTO/getEventsResponse';
 import { plainToClass } from 'class-transformer';
 import { GetGeocodeResponse } from '@src/DTO/getGeocodeResponse';
 import { CreateEventRequest } from '@src/DTO/createEventRequest';
+import { UpdateEventRequest } from '@src/DTO/updateEventRequest';
+import { UpdateRecurringEventRequest } from '@src/DTO/updateRecurringEventRequest';
 import { RRule, RRuleSet, rrulestr, Weekday } from 'rrule';
 import { CreateRecurringEventRequest } from '@src/DTO/createRecurringEventRequest';
 import { REQUEST } from '@nestjs/core';
@@ -61,6 +63,47 @@ export class EventService {
   }
 
   async createRecurringEvent(eventRequest: CreateRecurringEventRequest) {
+    let geocode = await this.geocodeService.getGeocode({
+      address: eventRequest.address,
+      lat: null,
+      lon: null,
+    });
+    let orgId = await this.eventDAL.getOrgId(eventRequest.organization);
+    let authorId = await this.eventDAL.getAuthorId(
+      this.request.firebaseUser.email,
+    );
+    let recurringEventId = await this.eventDAL.createRecurringEvent(
+      eventRequest,
+      orgId,
+      authorId,
+      geocode.id,
+    );
+
+    if (eventRequest.mode === 'week') {
+      await this.eventDAL.createWeeklyRecurringSchedules(
+        recurringEventId,
+        eventRequest.weeklyRecurringDays,
+      );
+    } else if (eventRequest.mode === 'weekOfMonth') {
+      await this.eventDAL.createMonthlyRecurringEvent(
+        recurringEventId,
+        eventRequest.monthlyRecurringWeekday,
+        eventRequest.monthlyRecurringWeekNumber,
+        null,
+      );
+    } else {
+      await this.eventDAL.createMonthlyRecurringEvent(
+        recurringEventId,
+        null,
+        null,
+        eventRequest.monthlyRecurringDay,
+      );
+    }
+
+    await this.generateSchedules(recurringEventId);
+  }
+
+  async updateRecurringEvent(eventRequest: UpdateRecurringEventRequest) {
     let geocode = await this.geocodeService.getGeocode({
       address: eventRequest.address,
       lat: null,
@@ -229,6 +272,21 @@ export class EventService {
     );
 
     await this.eventDAL.createEvent(contextData, orgId, authorId, geocode.id);
+  }
+
+  async updateEvent(contextData: UpdateEventRequest) {
+    let geocode = await this.geocodeService.getGeocode({
+      address: contextData.address,
+      lat: null,
+      lon: null,
+    });
+
+    let orgId = await this.eventDAL.getOrgId(contextData.organization);
+    let authorId = await this.eventDAL.getAuthorId(
+      this.request.firebaseUser.email,
+    );
+
+    await this.eventDAL.updateEvent(contextData, orgId, authorId, geocode.id);
   }
 
   async cleanupEvents() {

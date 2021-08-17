@@ -166,7 +166,7 @@ This is an optional step to view what's going on with the database. This doesn't
 
 This step must be done while the code is running and after the database has been initialized (1-2 minutes after the first startup).
 
-Go to pgAdmin at `locahost:7000` and sign in with username `user@domain.com` and password `pgadmin`.
+Go to pgAdmin at `localhost:7000` and sign in with username `user@domain.com` and password `pgadmin`.
 On the left pane, right click on the node called `Servers` and create a new one as shown below.
 
 ![Create Server](images/CreateServer.png?raw=true 'Create Server')

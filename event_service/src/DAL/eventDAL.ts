@@ -83,6 +83,31 @@ export class EventDAL {
       requiresPhysicalActivities: data.requiresPhysicalActivities,
     });
   }
+// TODO change event request to update event request
+  async updateEvent(
+    data: CreateEventRequest,
+    orgId: number,
+    authorId: number,
+    geocodeId: number,
+  ): Promise<void> {
+
+    
+
+
+    await db('events.event').insert({
+      title: data.title,
+      url: data.url,
+      description: data.description,
+      organizationId: orgId,
+      authorId,
+      price: data.price,
+      geocodeId: geocodeId,
+      startTime: data.eventTime.startTimestamp,
+      endTime: data.eventTime.endTimestamp,
+      handicapAccessible: data.handicapAccessible,
+      requiresPhysicalActivities: data.requiresPhysicalActivities,
+    });
+  }
 
   async createEvents(data: any[]): Promise<void> {
     const { sql, bindings } = db('events.event')

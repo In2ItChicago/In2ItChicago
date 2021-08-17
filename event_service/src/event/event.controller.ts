@@ -6,6 +6,7 @@ import {
   Body,
   Delete,
   UseGuards,
+  Put,
 } from '@nestjs/common';
 import { EventService } from '@src/event/event.service';
 import { GetEventsRequest } from '@src/DTO/getEventsRequest';
@@ -16,7 +17,8 @@ import { OrganizationsGuard } from '@src/guards/organizations.guard';
 import { UserMetadata } from '@src/enums/userMetadata';
 import { CreateRecurringEventRequest } from '@src/DTO/createRecurringEventRequest';
 import { CreateEventRequest } from '@src/DTO/createEventRequest';
-
+import { UpdateRecurringEventRequest } from '@src/DTO/updateRecurringEventRequest';
+import { UpdateEventRequest } from '@src/DTO/updateEventRequest';
 /**
  * An interface class to get, create, or clear events.
  */
@@ -47,6 +49,14 @@ export class EventController {
     await this.eventService.createEvent(request);
   }
 
+  @Put()
+  @UseGuards(OrganizationsGuard)
+  @Roles(UserMetadata.EventCreator, UserMetadata.EventAdmin)
+  @ApiResponse({ status: 201, description: 'Updated'})
+  async updateEvent(@Body() request: UpdateEventRequest) {
+    await this.eventService.updateEvent(request)
+  }
+
   @Post('recurringEvent')
   @UseGuards(OrganizationsGuard)
   @Roles(UserMetadata.EventCreator, UserMetadata.EventAdmin)
@@ -55,6 +65,14 @@ export class EventController {
     await this.eventService.createRecurringEvent(request);
   }
 
+  @Put('recurringEvent')
+  @UseGuards(OrganizationsGuard)
+  @Roles(UserMetadata.EventCreator, UserMetadata.EventAdmin)
+  @ApiResponse({ status: 201, description: 'Created' })
+  async updateRecurringEvent(@Body() request: UpdateRecurringEventRequest) {
+    await this.eventService.updateRecurringEvent(request);
+  }
+ 
   @Roles(UserMetadata.SystemAdmin)
   @Delete('cleanupEvents')
   @ApiResponse({ status: 200, description: 'Deleted' })
