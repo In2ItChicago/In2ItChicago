@@ -4,6 +4,7 @@ import { GetGeocodeResponse } from '@src/DTO/getGeocodeResponse';
 import { getDb } from '@src/DAL/setup';
 import { CreateEventRequest } from '@src/DTO/createEventRequest';
 import { CreateRecurringEventRequest } from '@src/DTO/createRecurringEventRequest';
+import { UpdateEventRequest } from '@src/DTO/updateEventRequest';
 
 const DEFAULT_LIMIT = 25;
 const MILES_TO_METERS = 1609.34;
@@ -83,17 +84,13 @@ export class EventDAL {
       requiresPhysicalActivities: data.requiresPhysicalActivities,
     });
   }
-// TODO change event request to update event request
+  // TODO change event request to update event request
   async updateEvent(
-    data: CreateEventRequest,
+    data: UpdateEventRequest,
     orgId: number,
     authorId: number,
     geocodeId: number,
   ): Promise<void> {
-
-    
-
-
     await db('events.event').insert({
       title: data.title,
       url: data.url,
