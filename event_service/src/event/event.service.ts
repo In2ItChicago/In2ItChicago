@@ -119,7 +119,7 @@ export class EventService {
       authorId,
       geocode.id,
     );
-
+    // TODO somersbmatthews : use conditional logic to differentiate update event with weekly or monthly schedule
     if (eventRequest.mode === 'week') {
       await this.eventDAL.createWeeklyRecurringSchedules(
         recurringEventId,
@@ -145,17 +145,12 @@ export class EventService {
   }
 
   async generateSchedules(scheduleId?: number) {
-    let monthlyRecurringSchedulesByWeekday = await this.eventDAL.getMonthlyRecurringSchedules(
-      true,
-      scheduleId,
-    );
-    let monthlyRecurringSchedulesByDayOfMonth = await this.eventDAL.getMonthlyRecurringSchedules(
-      false,
-      scheduleId,
-    );
-    let weeklyRecurringSchedules = await this.eventDAL.getWeeklyRecurringSchedules(
-      scheduleId,
-    );
+    let monthlyRecurringSchedulesByWeekday =
+      await this.eventDAL.getMonthlyRecurringSchedules(true, scheduleId);
+    let monthlyRecurringSchedulesByDayOfMonth =
+      await this.eventDAL.getMonthlyRecurringSchedules(false, scheduleId);
+    let weeklyRecurringSchedules =
+      await this.eventDAL.getWeeklyRecurringSchedules(scheduleId);
 
     let allMonthlySchedulesByWeek = this.generateAllSchedules(
       monthlyRecurringSchedulesByWeekday,
@@ -285,7 +280,7 @@ export class EventService {
     let authorId = await this.eventDAL.getAuthorId(
       this.request.firebaseUser.email,
     );
-
+    // TODO somersbmatthews : check to see if this update function works
     await this.eventDAL.updateEvent(contextData, orgId, authorId, geocode.id);
   }
 
