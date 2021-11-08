@@ -9,6 +9,7 @@ ENV NODE_PATH=/usr/src/app/.site_modules/node_modules
 ENV PATH=/usr/src/app/app/.site_modules/node_modules/.bin:$PATH
 RUN yarn install
 WORKDIR /usr/src/app/in2it_site
+RUN apk add --no-cache bash
 
 FROM in2it_site_common AS in2it_site_prod
 WORKDIR /usr/src/app/in2it_site

@@ -10,7 +10,8 @@
     "start": "NUXT_HOST=0.0.0.0 NUXT_PORT=3000 nuxt start",
     "generate": "nuxt generate",
     "lint": "tslint -p ./tsconfig.json -c ./tslint.json --exclude 'node_modules'",
-    "precommit": "yarn run lint"
+    "precommit": "yarn run lint",
+    "test": "yarn run test"
   },
   "dependencies": {
     "@nuxt/typescript": "^2.8.1",

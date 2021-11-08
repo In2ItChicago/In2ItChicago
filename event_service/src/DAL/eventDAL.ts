@@ -91,7 +91,7 @@ export class EventDAL {
     authorId: number,
     geocodeId: number,
   ): Promise<void> {
-    await db('events.event').insert({
+    await db('events.event').where('id', '=', data.id).update({
       title: data.title,
       url: data.url,
       description: data.description,
