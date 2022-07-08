@@ -41,7 +41,7 @@
     "helmet": "^3.21.3",
     "knex": "^0.20.9",
     "knex-stringcase": "^1.4.1",
-    "moment": "^2.26.0",
+    "moment": "^2.29.4",
     "lodash": "^4.17.19",
     "pg": "^7.18.1",
     "reflect-metadata": "^0.1.13",
